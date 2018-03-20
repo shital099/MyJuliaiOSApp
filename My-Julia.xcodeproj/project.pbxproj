@@ -1631,7 +1631,7 @@
 						CreatedOnToolsVersion = 8.3.2;
 						DevelopmentTeam = B9357KA83X;
 						LastSwiftMigration = 0910;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -2138,7 +2138,7 @@
 				CODE_SIGN_ENTITLEMENTS = "My-Julia/My-Julia.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: GCO (Global Conference Organisers) B.V";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = B9357KA83X;
 				ENABLE_BITCODE = NO;
@@ -2164,11 +2164,11 @@
 					"$(OTHER_LDFLAGS)",
 				);
 				OTHER_SWIFT_FLAGS = "";
-				PRODUCT_BUNDLE_IDENTIFIER = com.gcotechcenter.MyJulia;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gcotechcenter.Gvent;
 				PRODUCT_MODULE_NAME = EventApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "0177abbd-9ffe-4f42-a1b8-8d21698e15b3";
-				PROVISIONING_PROFILE_SPECIFIER = MyJulia_Dev;
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = Event_Briding_Header.h;
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "";
 				SWIFT_REFLECTION_METADATA_LEVEL = none;
@@ -2187,7 +2187,7 @@
 				CODE_SIGN_ENTITLEMENTS = "My-Julia/My-Julia.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: GCO (Global Conference Organisers) B.V";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = B9357KA83X;
 				ENABLE_BITCODE = NO;
@@ -2213,11 +2213,11 @@
 					"$(OTHER_LDFLAGS)",
 				);
 				OTHER_SWIFT_FLAGS = "";
-				PRODUCT_BUNDLE_IDENTIFIER = com.gcotechcenter.MyJulia;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gcotechcenter.Gvent;
 				PRODUCT_MODULE_NAME = EventApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "0177abbd-9ffe-4f42-a1b8-8d21698e15b3";
-				PROVISIONING_PROFILE_SPECIFIER = MyJulia_Dev;
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = Event_Briding_Header.h;
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "";
 				SWIFT_REFLECTION_METADATA_LEVEL = none;

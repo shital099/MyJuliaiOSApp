@@ -1,6 +1,6 @@
 //
 //  ActivityFeedbackViewController.swift
-//  EventApp
+//  My-Julia
 //
 //  Created by GCO on 21/12/2017.
 //  Copyright © 2017 GCO. All rights reserved.
