@@ -11,7 +11,6 @@
 		7E0F59D31ED459F100C89D40 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E0F59D21ED459F100C89D40 /* AVFoundation.framework */; };
 		7E23BB9F20610303003CCF5B /* My_Julia_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E23BB9E20610303003CCF5B /* My_Julia_Tests.swift */; };
 		7E41126C1EC97559009031B9 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E41126B1EC97559009031B9 /* libsqlite3.tbd */; };
-		7E41126D1EC97583009031B9 /* TelerikUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E4112651EC97324009031B9 /* TelerikUI.framework */; };
 		7E41127A1EC984E5009031B9 /* libAFNetworking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E4112791EC984E5009031B9 /* libAFNetworking.a */; };
 		7E5F088620610173002687D0 /* database.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 7E5F072120610172002687D0 /* database.sqlite */; };
 		7E5F088720610173002687D0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7E5F072220610172002687D0 /* Assets.xcassets */; };
@@ -254,7 +253,6 @@
 		7E23BB9E20610303003CCF5B /* My_Julia_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = My_Julia_Tests.swift; sourceTree = "<group>"; };
 		7E23BBA020610303003CCF5B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7E4111121EC97033009031B9 /* My-Julia.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "My-Julia.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		7E4112651EC97324009031B9 /* TelerikUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TelerikUI.framework; sourceTree = "<group>"; };
 		7E41126B1EC97559009031B9 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		7E4112771EC9807F009031B9 /* AFNetworking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AFNetworking.framework; path = "../../../Library/Developer/Xcode/DerivedData/EventApp-bnzckdsfhlarzhgnbusyxnrrnuui/Build/Products/Debug-iphonesimulator/AFNetworking/AFNetworking.framework"; sourceTree = "<group>"; };
 		7E4112791EC984E5009031B9 /* libAFNetworking.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libAFNetworking.a; path = "../../../Library/Developer/Xcode/DerivedData/EventApp-bnzckdsfhlarzhgnbusyxnrrnuui/Build/Products/Debug-iphonesimulator/AFNetworking/libAFNetworking.a"; sourceTree = "<group>"; };
@@ -564,7 +562,6 @@
 				7E70462F1ED6BB99006B30F7 /* libsqlite3.0.tbd in Frameworks */,
 				7E0F59D31ED459F100C89D40 /* AVFoundation.framework in Frameworks */,
 				7E41127A1EC984E5009031B9 /* libAFNetworking.a in Frameworks */,
-				7E41126D1EC97583009031B9 /* TelerikUI.framework in Frameworks */,
 				7E41126C1EC97559009031B9 /* libsqlite3.tbd in Frameworks */,
 				72CC910A4259C3894FAD2048 /* libPods-My-Julia.a in Frameworks */,
 			);
@@ -1562,7 +1559,6 @@
 				7E4112791EC984E5009031B9 /* libAFNetworking.a */,
 				7E4112771EC9807F009031B9 /* AFNetworking.framework */,
 				7E41126B1EC97559009031B9 /* libsqlite3.tbd */,
-				7E4112651EC97324009031B9 /* TelerikUI.framework */,
 				2F1B88252DF3BDAA7884DDEA /* libPods-EventApp.a */,
 				F2BA7FB97160613CB4FCCE35 /* libPods-EventAppTests.a */,
 				B36B23041A0246C60FF9C820 /* libPods-My-Julia.a */,
