@@ -1,6 +1,6 @@
 //
 //  FeedsCommentModel.swift
-//  EventApp
+//  My-Julia
 //
 //  Created by GCO on 19/12/2017.
 //  Copyright © 2017 GCO. All rights reserved.

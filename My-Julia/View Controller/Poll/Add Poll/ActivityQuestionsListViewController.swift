@@ -1,6 +1,6 @@
 //
 //  ActivityQuestionsListViewController.swift
-//  EventApp
+//  My-Julia
 //
 //  Created by gco on 30/01/18.
 //  Copyright © 2018 GCO. All rights reserved.

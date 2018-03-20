@@ -1,6 +1,6 @@
 //
 //  AddPollQuestionsViewController.swift
-//  EventApp
+//  My-Julia
 //
 //  Created by gco on 24/01/18.
 //  Copyright © 2018 GCO. All rights reserved.

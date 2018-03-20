@@ -1,6 +1,6 @@
 //
 //  SideDrawerMenu.swift
-//  EventApp
+//  My-Julia
 //
 //  Created by GCO on 4/11/17.
 //  Copyright © 2017 GCO. All rights reserved.

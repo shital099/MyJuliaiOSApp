@@ -1,6 +1,6 @@
 //
 //  CreateGroupViewController.swift
-//  EventApp
+//  My-Julia
 //
 //  Created by GCO on 8/17/17.
 //  Copyright © 2017 GCO. All rights reserved.

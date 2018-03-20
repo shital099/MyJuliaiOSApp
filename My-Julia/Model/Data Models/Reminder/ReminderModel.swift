@@ -1,6 +1,6 @@
 //
 //  ReminderModel.swift
-//  EventApp
+//  My-Julia
 //
 //  Created by GCO on 09/05/17.
 //  Copyright © 2017 GCO. All rights reserved.

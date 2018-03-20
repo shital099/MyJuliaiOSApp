@@ -1,6 +1,6 @@
 //
 //  Sponsors.swift
-//  EventApp
+//  My-Julia
 //
 //  Created by GCO on 31/05/17.
 //  Copyright © 2017 GCO. All rights reserved.

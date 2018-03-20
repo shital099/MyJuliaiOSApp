@@ -1,6 +1,6 @@
 //
 //  EventListViewController.swift
-//  EventApp
+//  My-Julia
 //
 //  Created by GCO on 08/03/2018.
 //  Copyright © 2018 GCO. All rights reserved.

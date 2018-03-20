@@ -1,7 +1,5 @@
- 
-
 //  AppDelegate.swift
-//  EventApp
+//  My-Julia
 //
 //  Created by GCO on 5/15/17.
 //  Copyright © 2017 GCO. All rights reserved.

@@ -1,6 +1,6 @@
 //
 //  WebsiteModel.swift
-//  EventApp
+//  My-Julia
 //
 //  Created by GCO on 24/07/17.
 //  Copyright © 2017 GCO. All rights reserved.
