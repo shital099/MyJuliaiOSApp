@@ -10,6 +10,7 @@
 		72CC910A4259C3894FAD2048 /* libPods-My-Julia.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B36B23041A0246C60FF9C820 /* libPods-My-Julia.a */; };
 		7E0F59D31ED459F100C89D40 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E0F59D21ED459F100C89D40 /* AVFoundation.framework */; };
 		7E23BB9F20610303003CCF5B /* My_Julia_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E23BB9E20610303003CCF5B /* My_Julia_Tests.swift */; };
+		7E23BBA7206118C8003CCF5B /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E23BBA6206118C8003CCF5B /* MobileCoreServices.framework */; };
 		7E41126C1EC97559009031B9 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E41126B1EC97559009031B9 /* libsqlite3.tbd */; };
 		7E41127A1EC984E5009031B9 /* libAFNetworking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E4112791EC984E5009031B9 /* libAFNetworking.a */; };
 		7E5F088620610173002687D0 /* database.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 7E5F072120610172002687D0 /* database.sqlite */; };
@@ -252,6 +253,7 @@
 		7E23BB9C20610303003CCF5B /* My-Julia™Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "My-Julia™Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E23BB9E20610303003CCF5B /* My_Julia_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = My_Julia_Tests.swift; sourceTree = "<group>"; };
 		7E23BBA020610303003CCF5B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7E23BBA6206118C8003CCF5B /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		7E4111121EC97033009031B9 /* My-Julia.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "My-Julia.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E41126B1EC97559009031B9 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		7E4112771EC9807F009031B9 /* AFNetworking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AFNetworking.framework; path = "../../../Library/Developer/Xcode/DerivedData/EventApp-bnzckdsfhlarzhgnbusyxnrrnuui/Build/Products/Debug-iphonesimulator/AFNetworking/AFNetworking.framework"; sourceTree = "<group>"; };
@@ -548,6 +550,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7E23BBA7206118C8003CCF5B /* MobileCoreServices.framework in Frameworks */,
 				7EF9C1CC1F3DBB2700B3BB93 /* Security.framework in Frameworks */,
 				7E5F08A520610173002687D0 /* TelerikUI.framework in Frameworks */,
 				7E5F089B20610173002687D0 /* libmp3lame.a in Frameworks */,
@@ -1452,9 +1455,9 @@
 			isa = PBXGroup;
 			children = (
 				7E5F086320610173002687D0 /* ViewController.swift */,
+				7E5F086D20610173002687D0 /* EventListViewController.swift */,
 				7E5F086420610173002687D0 /* Terms & Conditions */,
 				7E5F086820610173002687D0 /* Login And OTP */,
-				7E5F086D20610173002687D0 /* EventListViewController.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -1545,6 +1548,7 @@
 		C3654A9F5FB51E6BFD9D7539 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7E23BBA6206118C8003CCF5B /* MobileCoreServices.framework */,
 				7E5F076320610173002687D0 /* TelerikUI.framework */,
 				7EDB7C191F4D52D0005BE305 /* Foundation.framework */,
 				7ED3B11A1F4ABB0900E7C14F /* UserNotifications.framework */,

@@ -143,9 +143,12 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         CommonModel.sharedInstance.showActitvityIndicator()
 
         let parameters : NSDictionary? = [ "SearchText": self.searchBar.text!]
+       // print(" Search event start : ", CommonModel.sharedInstance.getCurrentDateInMM())
 
         NetworkingHelper.postData(urlString:Search_Event_Url, param:parameters!, withHeader: false, isAlertShow: false, controller:self, callback: { response in
             CommonModel.sharedInstance.dissmissActitvityIndicator()
+
+           // print(" After event search : ", CommonModel.sharedInstance.getCurrentDateInMM())
 
             //Remove all objects
             if self.searchListArray.count != 0 {
@@ -158,6 +161,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
             }
             else {
             }
+
         }, errorBack: { error in
             NSLog("error in Auth token: %@", error)
             CommonModel.sharedInstance.dissmissActitvityIndicator()
@@ -165,23 +169,24 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     func parseEventListData(response: AnyObject) {
-            for item in response as! NSArray {
+        for item in response as! NSArray {
 
-                let  dict = item as! NSDictionary
-                let model = EventModel()
+            let  dict = item as! NSDictionary
+            let model = EventModel()
 
-                model.eventId = DBManager.sharedInstance.isNullString(str: dict.value(forKey: "EventId") as Any)
-                model.eventName = DBManager.sharedInstance.isNullString(str: dict.value(forKey: "EventName") as Any)
-                model.eventStartDate = DBManager.sharedInstance.isNullString(str: dict.value(forKey: "StartDateTime") as Any)
-                model.eventEndDate = DBManager.sharedInstance.isNullString(str: dict.value(forKey: "EndDateTime") as Any)
-                model.eventVenue = DBManager.sharedInstance.isNullString(str: dict.value(forKey: "Location") as Any)
-                model.eventLogoUrl = DBManager.sharedInstance.appendImagePath(path: dict.value(forKey: "Logo_ImgPath") as Any)
+            model.eventId = DBManager.sharedInstance.isNullString(str: dict.value(forKey: "EventId") as Any)
+            model.eventName = DBManager.sharedInstance.isNullString(str: dict.value(forKey: "EventName") as Any)
+            model.eventStartDate = DBManager.sharedInstance.isNullString(str: dict.value(forKey: "StartDateTime") as Any)
+            model.eventEndDate = DBManager.sharedInstance.isNullString(str: dict.value(forKey: "EndDateTime") as Any)
+            model.eventVenue = DBManager.sharedInstance.isNullString(str: dict.value(forKey: "Location") as Any)
+            model.eventLogoUrl = DBManager.sharedInstance.appendImagePath(path: dict.value(forKey: "Logo_ImgPath") as Any)
 
-                self.searchListArray.append(model)
-            }
+            self.searchListArray.append(model)
+        }
         self.tableView.reloadData()
 
         print("Search event list : ",self.searchListArray)
+        //print(" After event load in list : ", CommonModel.sharedInstance.getCurrentDateInMM())
     }
 
     func getEventDetailsData() {

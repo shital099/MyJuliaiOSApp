@@ -40,7 +40,7 @@ class CustomAlertView: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         attendeeCodeTextField.becomeFirstResponder()
         self.titleLabel.text = Confirm_Attendee_code
-        self.otpMessageLbl.text = String(format:"You can resend OTP after %d sec",OTP_session_Time)
+        self.otpMessageLbl.text = String(format:"If you still do not receive your OTP after %d seconds, please try again later.",OTP_session_Time)
 
         self.codeCheckbox.layer.borderWidth = 1.0
         self.codeCheckbox.layer.borderColor = UIColor(red: 192.0/255.0, green: 192.0/255.0, blue: 192.0/255.0, alpha: 1).cgColor
