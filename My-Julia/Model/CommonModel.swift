@@ -322,7 +322,16 @@ class CommonModel: NSObject {
         }
         return ""
     }
-    
+
+    func applyDefaultNavigationTheme()  {
+
+        let navigationBarAppearace = UINavigationBar.appearance()
+        navigationBarAppearace.setBackgroundImage(nil, for: .default)
+        navigationBarAppearace.tintColor = UIColor().HexToColor(hexString: "0xffffff", alpha: 1.0)
+        navigationBarAppearace.barTintColor = UIColor().HexToColor(hexString: "0xA30046", alpha: 1.0)
+        navigationBarAppearace.titleTextAttributes = [NSAttributedStringKey.foregroundColor:UIColor().HexToColor(hexString: "0xffffff", alpha: 1.0)]
+    }
+
     func applyNavigationTheme()  {
         
         //Apply back button color

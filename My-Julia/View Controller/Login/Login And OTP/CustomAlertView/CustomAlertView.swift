@@ -15,7 +15,7 @@ class CustomAlertView: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var titleLabel: UILabel!
    // @IBOutlet weak var messageLabel: UILabel!
     @IBOutlet weak var attendeeCodeTextField: UITextField!
-    @IBOutlet weak var otpTextField: UITextField!
+    @IBOutlet weak var otpTextField: CustomUITextField!
     @IBOutlet weak var alertView: UIView!
     @IBOutlet weak var loginView: UIView!
     @IBOutlet weak var codeCheckbox: UIView!
@@ -45,10 +45,14 @@ class CustomAlertView: UIViewController, UITextFieldDelegate {
         self.codeCheckbox.layer.borderWidth = 1.0
         self.codeCheckbox.layer.borderColor = UIColor(red: 192.0/255.0, green: 192.0/255.0, blue: 192.0/255.0, alpha: 1).cgColor
 
-        yPos = self.alertView.frame.maxY
+        //Changes alert frame according to view frame
+        yPos = (self.view.frame.size.height - self.alertView.frame.size.height)/2
+        self.viewBottomContraint.constant = yPos
+        self.alertView.updateConstraintsIfNeeded()
 
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: .UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: .UIKeyboardWillHide, object: nil)
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -71,9 +75,15 @@ class CustomAlertView: UIViewController, UITextFieldDelegate {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             //  self.view.frame.origin.y -= keyboardSize.height
             //if self.attendeeCodeTextField.isFirstResponder || self.otpTextField.isFirstResponder {
+            let yPos = (self.view.frame.size.height - self.alertView.frame.size.height)/2
+            if yPos < keyboardSize.size.height {
                 self.viewBottomContraint.constant = keyboardSize.size.height + 10
-                self.alertView.updateConstraintsIfNeeded()
-           // }
+            }else {
+                self.viewBottomContraint.constant = yPos
+            }
+            self.alertView.updateConstraintsIfNeeded()
+
+            // }
         }
     }
 
@@ -275,4 +285,7 @@ class CustomAlertView: UIViewController, UITextFieldDelegate {
 
         return true
     }
+
 }
+
+

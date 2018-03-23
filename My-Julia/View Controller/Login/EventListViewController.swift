@@ -28,11 +28,15 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
 
         //Fetch event details data from Sqlite database and if it empty show error message
         self.listArray = DBManager.sharedInstance.fetchAllEventsListFromDB() as! [EventModel]
-        print("Event List : ",self.listArray)
+       // print("Event List : ",self.listArray)
 
         //Update dyanamic height of tableview cell
         tableView.estimatedRowHeight = 300
         tableView.rowHeight = UITableViewAutomaticDimension
+
+        //Remove extra lines from tableview
+        self.tableView.tableFooterView = UIView()
+
     }
 
     override func didReceiveMemoryWarning() {
@@ -59,7 +63,6 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     */
 
-
     // MARK: UITableview Methods
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -82,6 +85,30 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         return UITableViewAutomaticDimension
     }
 
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        // Return YES if you want the specified item to be editable.
+        if self.isSearching == true && self.searchListArray.count == 0 {
+            return false
+        }
+        else {
+            return true
+        }
+    }
+
+    // Override to support editing the table view.
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+
+        if editingStyle == UITableViewCellEditingStyle.delete {
+
+            //Delete past event Data
+            let model = self.listArray[indexPath.row] as EventModel!
+            DBManager.sharedInstance.deleteEventAllDetails(eventId: (model?.eventId)!)
+
+            self.listArray.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.bottom)
+        }
+    }
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
         //Show empty cell
@@ -100,21 +127,32 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         let model : EventModel!
         if self.isSearching == false {
             model = self.listArray[indexPath.row] as EventModel
+            cell.downloadBtn.setTitle("Open", for: .normal)
+
+            if model.isPastEvent == true {
+                cell.pastEventview.isHidden = false
+            }
+            else {
+                cell.pastEventview.isHidden = true 
+            }
         }
         else {
             model = self.searchListArray[indexPath.row] as EventModel
+            cell.downloadBtn.setTitle("Download", for: .normal)
+
+            cell.pastEventview.isHidden = true
         }
 
         cell.nameLabel?.text = model.eventName
         cell.addressLbl.text = model.eventVenue
         cell.datesLbl.text = CommonModel.sharedInstance.getEventDate(dateStr: model.eventStartDate).appendingFormat(" - %@", CommonModel.sharedInstance.getEventDate(dateStr: model.eventEndDate))
 
-        if !model.eventLogoUrl.isEmpty {
-            cell.imageview.sd_setImage(with: URL(string:model.eventLogoUrl), placeholderImage: #imageLiteral(resourceName: "event_icon"))
-        }
-        else  {
-            cell.imageview.image = #imageLiteral(resourceName: "event_icon")
-        }
+//        if !model.eventLogoUrl.isEmpty {
+//            cell.imageview.sd_setImage(with: URL(string:model.eventLogoUrl), placeholderImage: #imageLiteral(resourceName: "event_icon"))
+//        }
+//        else  {
+//            cell.imageview.image = #imageLiteral(resourceName: "event_icon")
+//        }
 
         cell.downloadBtnTapped = { [unowned self] (selectedCell) -> Void in
 
@@ -134,6 +172,12 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
             self.present(customAlert, animated: true, completion: nil)
         }
 
+
+//        let blurEffect = UIBlurEffect(style: .light)
+//        let blurredEffectView = UIVisualEffectView(effect: blurEffect)
+//        blurredEffectView.frame = cell.pastEventview.frame
+//        cell.addSubview(blurredEffectView)
+
         return cell
     }
 
@@ -145,8 +189,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         let parameters : NSDictionary? = [ "SearchText": self.searchBar.text!]
        // print(" Search event start : ", CommonModel.sharedInstance.getCurrentDateInMM())
 
-        NetworkingHelper.postData(urlString:Search_Event_Url, param:parameters!, withHeader: false, isAlertShow: false, controller:self, callback: { response in
-            CommonModel.sharedInstance.dissmissActitvityIndicator()
+        NetworkingHelper.postData(urlString:Search_Event_Url, param:parameters!, withHeader: false, isAlertShow: true, controller:self, callback: { response in
 
            // print(" After event search : ", CommonModel.sharedInstance.getCurrentDateInMM())
 
@@ -161,6 +204,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
             }
             else {
             }
+            CommonModel.sharedInstance.dissmissActitvityIndicator()
 
         }, errorBack: { error in
             NSLog("error in Auth token: %@", error)
@@ -186,13 +230,13 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         self.tableView.reloadData()
 
         print("Search event list : ",self.searchListArray)
-        //print(" After event load in list : ", CommonModel.sharedInstance.getCurrentDateInMM())
+       // print(" After event load in list : ", CommonModel.sharedInstance.getCurrentDateInMM())
     }
 
     func getEventDetailsData() {
 
         NetworkingHelper.getRequestFromUrl(name:Get_Login_Details_Url, urlString: Get_Login_Details_Url, callback: { response in
-            // print("\nEvent Theme Details : ",response)
+             //print("\nEvent Theme Details : ",response)
 
             self.getEventModuleData()
 
@@ -400,6 +444,8 @@ class EventsCustomCell: UITableViewCell {
     @IBOutlet var datesLbl : UILabel!
     @IBOutlet var imageview : UIImageView!
     @IBOutlet var downloadBtn : UIButton!
+
+    @IBOutlet var pastEventview : UIView!
 
     @IBAction func downloadBtnTapped(sender: AnyObject) {
         downloadBtnTapped?(self)

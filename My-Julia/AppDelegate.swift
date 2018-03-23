@@ -47,6 +47,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
 
+
 //        // do something with the notification
 //        if launchOptions?[UIApplicationLaunchOptionsKey.remoteNotification] != nil {
 //            // Do what you want to happen when a remote notification is tapped.
@@ -170,7 +171,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         // Convert token to string
         self.deviceToken = deviceToken.reduce("", {$0 + String(format: "%02X", $1)})
-       // print("Device token : ",self.deviceToken)
+        print("Device token : ",self.deviceToken)
     }
     
     // Called when APNs failed to register the device for push notifications

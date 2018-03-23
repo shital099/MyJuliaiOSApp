@@ -21,7 +21,7 @@ class GalleryViewController: TKExamplesExampleViewController, UIImagePickerContr
     var isRefreshList : Bool = true
     var actionSheetContoller : UIAlertController!
     let listView = TKListView()
-    let dataSource = TKDataSource()
+    var dataSource = TKDataSource()
     
     var listArray:[PhotoGallery] = []
     
@@ -42,8 +42,11 @@ class GalleryViewController: TKExamplesExampleViewController, UIImagePickerContr
         
         //Fetch data from Sqlite database
         listArray = DBManager.sharedInstance.fetchGalleryDataFromDB() as! [PhotoGallery]
-        self.dataSource.itemSource = listArray
-        self.showPhotosIntoListView()
+
+//        if listArray.count != 0 {
+//            self.dataSource.itemSource = listArray
+//            self.showPhotosIntoListView()
+//        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -143,15 +146,17 @@ class GalleryViewController: TKExamplesExampleViewController, UIImagePickerContr
                 }
             }
         }
-        
-        self.listView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height: self.view.bounds.size.height)
-        self.listView.backgroundColor = UIColor.clear
-        self.listView.autoresizingMask = UIViewAutoresizing(rawValue: UIViewAutoresizing.flexibleWidth.rawValue | UIViewAutoresizing.flexibleHeight.rawValue)
-        self.listView.dataSource = self.dataSource
-        self.listView.register(AnimationListCell.self, forCellWithReuseIdentifier: "cell")
-        self.view.addSubview(self.listView)
-        
-        self.setListViewItemSize()
+
+            self.listView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height: self.view.bounds.size.height)
+            self.listView.backgroundColor = UIColor.clear
+            self.listView.autoresizingMask = UIViewAutoresizing(rawValue: UIViewAutoresizing.flexibleWidth.rawValue | UIViewAutoresizing.flexibleHeight.rawValue)
+            self.listView.dataSource = self.dataSource
+            self.listView.register(AnimationListCell.self, forCellWithReuseIdentifier: "cell")
+            self.view.addSubview(self.listView)
+
+        if listArray.count != 0 {
+            self.setListViewItemSize()
+        }
     }
     
     func setListViewItemSize() {
@@ -235,14 +240,24 @@ class GalleryViewController: TKExamplesExampleViewController, UIImagePickerContr
                 let arr = DBManager.sharedInstance.fetchGalleryDataFromDB() as! [PhotoGallery]
                 if arr.count != self.listArray.count {
                     self.listArray = arr
-                    self.dataSource.itemSource = self.listArray
-                    self.showPhotosIntoListView()
+                   // if self.listArray.count != 0 {
+                        self.dataSource.itemSource = self.listArray
+                        self.showPhotosIntoListView()
+//                    }
+//                    else {
+//                        self.dataSource = TKDataSource()
+//                        self.showPhotosIntoListView()
+//                    }
                 }
                // DispatchQueue.main.sync  {
                // }
             }
         }, errorBack: { error in
             NSLog("error : %@", error)
+            if self.listArray.count != 0 {
+                self.dataSource.itemSource = self.listArray
+                self.showPhotosIntoListView()
+            }
         })
     }
     

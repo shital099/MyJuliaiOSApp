@@ -27,5 +27,6 @@ class EventModel: NSObject {
     var attendeeId : String = ""
     var attendeeCode : String = ""
     var attendeeStatus : Bool = false
+    var isPastEvent : Bool = false
 
 }

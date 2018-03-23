@@ -456,6 +456,9 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
                             NotificationCenter.default.removeObserver(self, name: ChatNotification, object: nil)
                             NotificationCenter.default.removeObserver(self, name: OtherModuleNotification, object: nil)
 
+                            //Default navigation bar color
+                            CommonModel.sharedInstance.applyDefaultNavigationTheme()
+
                             let navController = self.storyboard?.instantiateViewController(withIdentifier: "InitalViewController") as! UINavigationController
                             AppDelegate.getAppDelegateInstance().window?.rootViewController = navController
                         }

@@ -325,10 +325,10 @@ class DBManager: NSObject {
                     self.saveProfileDataIntoDB(response: dataDict)
                 }
             }
-        }
-        
-        self.database.commit()
-        self.database.close()
+
+            self.database.commit()
+            self.database.close()
+        }        
     }
     
     func saveAllEventDataIntoDB(response: AnyObject, apiNname: String) {
@@ -492,7 +492,7 @@ class DBManager: NSObject {
         
         database.close()
     }
-    
+
     // MARK: - Event details methods
     
     func saveEventDetailsDataIntoDB(responce: AnyObject) {
@@ -547,6 +547,24 @@ class DBManager: NSObject {
                 model.eventEndDate = (results?.string(forColumn: "EndDate"))!
                 model.eventLogoUrl = (results?.string(forColumn: "LogoUrl"))!
                 model.eventCoverImageUrl = (results?.string(forColumn: "CoverImageLogo"))!
+
+
+                //Check event date status
+                let currentDate = Date()
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+                let eventDate = dateFormatter.date(from: model.eventEndDate)
+                dateFormatter.dateFormat = "yyyy-MM-dd"
+                let str = dateFormatter.string(from: eventDate!)
+                let cStr = dateFormatter.string(from: currentDate)
+
+                let eventDate1 = dateFormatter.date(from: str)
+                let currentDate1 = dateFormatter.date(from: cStr)
+
+                if eventDate1!.compare(currentDate1!) == .orderedAscending {
+                    print("event is past ")
+                    model.isPastEvent = true
+                }
                 array.append(model)
             }
             database.close()
@@ -580,6 +598,58 @@ class DBManager: NSObject {
         }
         return model
     }
+
+    func deleteEventAllDetails(eventId : String) {
+
+        if openDatabase() {
+            self.database.beginTransaction()
+
+            //Delete all data of this events
+
+            var sqlQuery = ""
+            sqlQuery += "DELETE FROM ApplicationTheme WHERE EventID = '\(eventId)'; "
+            sqlQuery += "DELETE FROM EventDetails WHERE EventID = '\(eventId)'; "
+            sqlQuery += "DELETE FROM Module WHERE EventID = '\(eventId)'; "
+            sqlQuery += "DELETE FROM Attendees WHERE EventID = '\(eventId)'; "
+            sqlQuery += "DELETE FROM Notes WHERE EventID = '\(eventId)'; "
+            sqlQuery += "DELETE FROM Reminder WHERE EventID = '\(eventId)'; "
+            sqlQuery += "DELETE FROM Speaker WHERE EventID = '\(eventId)'; "
+            sqlQuery += "DELETE FROM Agenda WHERE EventID = '\(eventId)'; "
+            sqlQuery += "DELETE FROM MySchedule WHERE EventID = '\(eventId)'; "
+            sqlQuery += "DELETE FROM Map WHERE EventID = '\(eventId)'; "
+            sqlQuery += "DELETE FROM Feedback WHERE EventID = '\(eventId)'; "
+            sqlQuery += "DELETE FROM ActivityFeedback WHERE EventID = '\(eventId)'; "
+            sqlQuery += "DELETE FROM Gallery WHERE EventID = '\(eventId)'; "
+            sqlQuery += "DELETE FROM Website WHERE EventID = '\(eventId)'; "
+            sqlQuery += "DELETE FROM Sponsors WHERE EventID = '\(eventId)'; "
+            sqlQuery += "DELETE FROM Email WHERE EventID = '\(eventId)'; "
+            sqlQuery += "DELETE FROM Documents WHERE EventID = '\(eventId)'; "
+            sqlQuery += "DELETE FROM EmergencyInfo WHERE EventID = '\(eventId)'; "
+            sqlQuery += "DELETE FROM AttendeeProfile WHERE EventID = '\(eventId)'; "
+            sqlQuery += "DELETE FROM Wifi WHERE EventID = '\(eventId)'; "
+            sqlQuery += "DELETE FROM AgendaSpeakerRelation WHERE EventID = '\(eventId)'; "
+            sqlQuery += "DELETE FROM ChatList WHERE EventID = '\(eventId)'; "
+            sqlQuery += "DELETE FROM ChatHistory WHERE EventID = '\(eventId)'; "
+            sqlQuery += "DELETE FROM PollSpeakerActivity WHERE EventID = '\(eventId)'; "
+            sqlQuery += "DELETE FROM SpeakerPollQuestions WHERE EventID = '\(eventId)'; "
+            sqlQuery += "DELETE FROM ActivityFeedsLikes  WHERE EventID = '\(eventId)'; "
+            sqlQuery += "DELETE FROM ActivityFeedsComments WHERE EventID = '\(eventId)'; "
+            sqlQuery += "DELETE FROM ActivityFeeds WHERE EventID = '\(eventId)'; "
+            sqlQuery += "DELETE FROM Notifications WHERE EventID = '\(eventId)'; "
+            sqlQuery += "DELETE FROM PollQuestions WHERE EventID = '\(eventId)'; "
+            sqlQuery += "DELETE FROM PollActivities WHERE EventID = '\(eventId)'; "
+            sqlQuery += "DELETE FROM QuestionActivities WHERE EventID = '\(eventId)'; "
+            sqlQuery += "DELETE FROM QAQuestions WHERE EventID = '\(eventId)'; "
+
+            if !database.executeStatements(sqlQuery) {
+                // print(database.lastError(), database.lastErrorMessage())
+            }
+
+            database.commit()
+            database.close()
+        }
+    }
+
 
     // MARK: - Application Theme methods
     
@@ -721,60 +791,60 @@ class DBManager: NSObject {
     // MARK: - Module methods
     
     func insertApplicationModulesDataIntoDB(responce: AnyObject) {
-            do {
-                let eventId = EventData.sharedInstance.eventId
-                
-                //  Update isdeleted flag for all module
-                try database.executeUpdate("UPDATE Module SET isDeleted = ? WHERE EventID = ?", values: [true, eventId])
+        do {
+            let eventId = EventData.sharedInstance.eventId
 
-                if (responce.value(forKey:"ModuleRelated") as? NSNull) == nil {
-                    
-                    for item in responce.value(forKey:"ModuleRelated") as! NSArray {
-                        if (item as? NSNull) == nil {
-                            let  dict = item as! NSDictionary
-                            let mId = dict.value(forKey: "ModuleID") as! String
-                            let name = self.isNullString(str: dict.value(forKey: "ModuleName") as Any)
-                            let isUserRelated = false
-                            let isCustom = dict.value(forKey: "IsCustom")
-                            let content = self.isNullString(str: dict.value(forKey: "ModuleDescription") as Any)
-                            let isDeleted = false
+            //  Update isdeleted flag for all module
+            try database.executeUpdate("UPDATE Module SET isDeleted = ? WHERE EventID = ?", values: [true, eventId])
 
-                            let sIconUrl = self.appendImagePath(path: dict.value(forKey: "SIconUrl") as Any)
-                            let lIconUrl = self.appendImagePath(path: dict.value(forKey: "LIconUrl") as Any)
+            if (responce.value(forKey:"ModuleRelated") as? NSNull) == nil {
 
-                            let sequence = dict.value(forKey:"OrderSequence")
-                            
-                            try database.executeUpdate("insert or replace into Module (EventID, ModuleID, ModuleName, LIconUrl, SIconUrl , isUserRelated, isCustomModule, Content, isDeleted, OrderSequence ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", values: [eventId, mId , name  , lIconUrl ,sIconUrl ,isUserRelated, isCustom ?? false, content , isDeleted, sequence ?? 0 ])
-                            //   query = query + "insert or replace into Module EventID = '\(eventId )', ModuleID = '\(mId )', ModuleName = '\(name )', LIconUrl = '\(lIconUrl )', SIconUrl = '\(sIconUrl )', isUserRelated = '\(isUserRelated )', isCustomModule = '\(isCustom )', Content = '\(content )', isDeleted = '\(isDeleted )', OrderSequence = '\(String(describing: sequence ))'; "
-                        }
-                    }
-                }
+                for item in responce.value(forKey:"ModuleRelated") as! NSArray {
+                    if (item as? NSNull) == nil {
+                        let  dict = item as! NSDictionary
+                        let mId = dict.value(forKey: "ModuleID") as! String
+                        let name = self.isNullString(str: dict.value(forKey: "ModuleName") as Any)
+                        let isUserRelated = false
+                        let isCustom = dict.value(forKey: "IsCustom")
+                        let content = self.isNullString(str: dict.value(forKey: "ModuleDescription") as Any)
+                        let isDeleted = false
 
-                if (responce.value(forKey:"UserRelated") as? NSNull) == nil {
-                    
-                    for item in responce.value(forKey:"UserRelated") as! NSArray {
-                        
-                        if (item as? NSNull) == nil {
-                            
-                            let  dict = item as! NSDictionary
-                            let mId = dict.value(forKey: "ModuleID") as! String
-                            let name = dict.value(forKey:"ModuleName") as! String
-                            let isUserRelated = true
-                            let isDeleted = false
-                            let sIconUrl = self.appendImagePath(path: dict.value(forKey: "SIconUrl") as Any)
-                            let lIconUrl = self.appendImagePath(path: dict.value(forKey: "LIconUrl") as Any)
-                            let isCustom = dict.value(forKey:"IsCustom")
-                            let content = self.isNullString(str: dict.value(forKey: "ModuleDescription") as Any)
-                            let sequence = dict.value(forKey:"OrderSequence")
-                            
-                            try database.executeUpdate("insert or replace into Module (EventID, ModuleID, ModuleName, LIconUrl, SIconUrl , isUserRelated, isCustomModule, Content , isDeleted ,OrderSequence) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", values: [eventId, mId , name  , lIconUrl ,sIconUrl , isUserRelated, isCustom ?? false , content, isDeleted, sequence ?? 0 ])
-                        }                    
+                        let sIconUrl = self.appendImagePath(path: dict.value(forKey: "SIconUrl") as Any)
+                        let lIconUrl = self.appendImagePath(path: dict.value(forKey: "LIconUrl") as Any)
+
+                        let sequence = dict.value(forKey:"OrderSequence")
+
+                        try database.executeUpdate("insert or replace into Module (EventID, ModuleID, ModuleName, LIconUrl, SIconUrl , isUserRelated, isCustomModule, Content, isDeleted, OrderSequence ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", values: [eventId, mId , name  , lIconUrl ,sIconUrl ,isUserRelated, isCustom ?? false, content , isDeleted, sequence ?? 0 ])
+                        //   query = query + "insert or replace into Module EventID = '\(eventId )', ModuleID = '\(mId )', ModuleName = '\(name )', LIconUrl = '\(lIconUrl )', SIconUrl = '\(sIconUrl )', isUserRelated = '\(isUserRelated )', isCustomModule = '\(isCustom )', Content = '\(content )', isDeleted = '\(isDeleted )', OrderSequence = '\(String(describing: sequence ))'; "
                     }
                 }
             }
-            catch {
-                print("error = \(error)")
+
+            if (responce.value(forKey:"UserRelated") as? NSNull) == nil {
+
+                for item in responce.value(forKey:"UserRelated") as! NSArray {
+
+                    if (item as? NSNull) == nil {
+
+                        let  dict = item as! NSDictionary
+                        let mId = dict.value(forKey: "ModuleID") as! String
+                        let name = dict.value(forKey:"ModuleName") as! String
+                        let isUserRelated = true
+                        let isDeleted = false
+                        let sIconUrl = self.appendImagePath(path: dict.value(forKey: "SIconUrl") as Any)
+                        let lIconUrl = self.appendImagePath(path: dict.value(forKey: "LIconUrl") as Any)
+                        let isCustom = dict.value(forKey:"IsCustom")
+                        let content = self.isNullString(str: dict.value(forKey: "ModuleDescription") as Any)
+                        let sequence = dict.value(forKey:"OrderSequence")
+
+                        try database.executeUpdate("insert or replace into Module (EventID, ModuleID, ModuleName, LIconUrl, SIconUrl , isUserRelated, isCustomModule, Content , isDeleted ,OrderSequence) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", values: [eventId, mId , name  , lIconUrl ,sIconUrl , isUserRelated, isCustom ?? false , content, isDeleted, sequence ?? 0 ])
+                    }
+                }
             }
+        }
+        catch {
+            print("error = \(error)")
+        }
     }
     
     func fetchModulesDataFromDB() -> NSArray {
@@ -2494,7 +2564,7 @@ class DBManager: NSObject {
     // MARK: - Gallery methods
     
     func saveGalleryDataIntoDB(response: AnyObject) {
-        
+
         if openDatabase() {
             self.database.beginTransaction()
 

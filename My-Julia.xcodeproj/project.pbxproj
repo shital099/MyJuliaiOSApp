@@ -227,6 +227,7 @@
 		7EF9C1CC1F3DBB2700B3BB93 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EF9C1CB1F3DBB2700B3BB93 /* Security.framework */; };
 		7EF9C1CE1F3DBD8200B3BB93 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EF9C1CD1F3DBD8200B3BB93 /* CoreGraphics.framework */; };
 		7EFD29751F1E1AFA004D5343 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EFD29741F1E1AFA004D5343 /* AssetsLibrary.framework */; };
+		7EFF6AFB2063B1F80094F1EF /* CustomUITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EFF6AFA2063B1F80094F1EF /* CustomUITextField.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -532,6 +533,7 @@
 		7EF9C1CB1F3DBB2700B3BB93 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		7EF9C1CD1F3DBD8200B3BB93 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		7EFD29741F1E1AFA004D5343 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		7EFF6AFA2063B1F80094F1EF /* CustomUITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomUITextField.swift; sourceTree = "<group>"; };
 		903D597BFA9F490771E39A69 /* Pods-My-JuliaTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-My-JuliaTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-My-JuliaTests/Pods-My-JuliaTests.release.xcconfig"; sourceTree = "<group>"; };
 		95F6B8CF01CBB4CE715448DA /* libPods-My-JuliaTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-My-JuliaTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B36B23041A0246C60FF9C820 /* libPods-My-Julia.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-My-Julia.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1107,6 +1109,7 @@
 				7E5F07E220610173002687D0 /* Fonts.swift */,
 				7E5F07E320610173002687D0 /* FMResultSet+ResultSet.swift */,
 				7E5F07E420610173002687D0 /* UIColor+AttributedString.swift */,
+				7EFF6AFA2063B1F80094F1EF /* CustomUITextField.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -1456,8 +1459,8 @@
 			children = (
 				7E5F086320610173002687D0 /* ViewController.swift */,
 				7E5F086D20610173002687D0 /* EventListViewController.swift */,
-				7E5F086420610173002687D0 /* Terms & Conditions */,
 				7E5F086820610173002687D0 /* Login And OTP */,
+				7E5F086420610173002687D0 /* Terms & Conditions */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -1629,9 +1632,9 @@
 					};
 					7E4111111EC97033009031B9 = {
 						CreatedOnToolsVersion = 8.3.2;
-						DevelopmentTeam = B9357KA83X;
+						DevelopmentTeam = SKDTAX4HF9;
 						LastSwiftMigration = 0910;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -1767,6 +1770,7 @@
 				7E5F08EB20610173002687D0 /* NetworkingHelper.swift in Sources */,
 				7E5F08D520610173002687D0 /* Notes.swift in Sources */,
 				7E5F08DB20610173002687D0 /* PollModel.swift in Sources */,
+				7EFF6AFB2063B1F80094F1EF /* CustomUITextField.swift in Sources */,
 				7E5F089A20610173002687D0 /* Mp3Recorder.m in Sources */,
 				7E5F091220610173002687D0 /* GalleryViewController.swift in Sources */,
 				7E5F08D020610173002687D0 /* DocumentModel.swift in Sources */,
@@ -2138,9 +2142,9 @@
 				CODE_SIGN_ENTITLEMENTS = "My-Julia/My-Julia.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: GCO (Global Conference Organisers) B.V";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = B9357KA83X;
+				DEVELOPMENT_TEAM = SKDTAX4HF9;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2164,11 +2168,11 @@
 					"$(OTHER_LDFLAGS)",
 				);
 				OTHER_SWIFT_FLAGS = "";
-				PRODUCT_BUNDLE_IDENTIFIER = com.gcotechcenter.Gvent;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gecotechcenter.GEvent;
 				PRODUCT_MODULE_NAME = EventApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "4708fd16-0397-4f5c-ac24-173191d11fff";
+				PROVISIONING_PROFILE_SPECIFIER = GEvent_Developement;
 				SWIFT_OBJC_BRIDGING_HEADER = Event_Briding_Header.h;
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "";
 				SWIFT_REFLECTION_METADATA_LEVEL = none;
@@ -2187,9 +2191,9 @@
 				CODE_SIGN_ENTITLEMENTS = "My-Julia/My-Julia.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: GCO (Global Conference Organisers) B.V";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = B9357KA83X;
+				DEVELOPMENT_TEAM = SKDTAX4HF9;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2213,11 +2217,11 @@
 					"$(OTHER_LDFLAGS)",
 				);
 				OTHER_SWIFT_FLAGS = "";
-				PRODUCT_BUNDLE_IDENTIFIER = com.gcotechcenter.Gvent;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gecotechcenter.GEvent;
 				PRODUCT_MODULE_NAME = EventApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "4708fd16-0397-4f5c-ac24-173191d11fff";
+				PROVISIONING_PROFILE_SPECIFIER = GEvent_Developement;
 				SWIFT_OBJC_BRIDGING_HEADER = Event_Briding_Header.h;
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "";
 				SWIFT_REFLECTION_METADATA_LEVEL = none;
