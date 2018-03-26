@@ -149,7 +149,6 @@
 		7E5F090C20610173002687D0 /* ActivityFeedDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5F081720610173002687D0 /* ActivityFeedDetailsViewController.swift */; };
 		7E5F090D20610173002687D0 /* QuestionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5F081920610173002687D0 /* QuestionsViewController.swift */; };
 		7E5F090E20610173002687D0 /* SessionListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5F081A20610173002687D0 /* SessionListViewController.swift */; };
-		7E5F090F20610173002687D0 /* QuestionsHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5F081B20610173002687D0 /* QuestionsHistoryViewController.swift */; };
 		7E5F091020610173002687D0 /* AnimationListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5F081D20610173002687D0 /* AnimationListCell.swift */; };
 		7E5F091120610173002687D0 /* GDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5F081E20610173002687D0 /* GDetailViewController.swift */; };
 		7E5F091220610173002687D0 /* GalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5F081F20610173002687D0 /* GalleryViewController.swift */; };
@@ -455,7 +454,6 @@
 		7E5F081720610173002687D0 /* ActivityFeedDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityFeedDetailsViewController.swift; sourceTree = "<group>"; };
 		7E5F081920610173002687D0 /* QuestionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuestionsViewController.swift; sourceTree = "<group>"; };
 		7E5F081A20610173002687D0 /* SessionListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionListViewController.swift; sourceTree = "<group>"; };
-		7E5F081B20610173002687D0 /* QuestionsHistoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuestionsHistoryViewController.swift; sourceTree = "<group>"; };
 		7E5F081D20610173002687D0 /* AnimationListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationListCell.swift; sourceTree = "<group>"; };
 		7E5F081E20610173002687D0 /* GDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GDetailViewController.swift; sourceTree = "<group>"; };
 		7E5F081F20610173002687D0 /* GalleryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryViewController.swift; sourceTree = "<group>"; };
@@ -1261,9 +1259,8 @@
 		7E5F081820610173002687D0 /* Q&A */ = {
 			isa = PBXGroup;
 			children = (
-				7E5F081920610173002687D0 /* QuestionsViewController.swift */,
 				7E5F081A20610173002687D0 /* SessionListViewController.swift */,
-				7E5F081B20610173002687D0 /* QuestionsHistoryViewController.swift */,
+				7E5F081920610173002687D0 /* QuestionsViewController.swift */,
 			);
 			path = "Q&A";
 			sourceTree = "<group>";
@@ -1881,7 +1878,6 @@
 				7E5F08BA20610173002687D0 /* SDWebImageDownloaderOperation.m in Sources */,
 				7E5F08A020610173002687D0 /* UUProgressHUD.m in Sources */,
 				7E5F08CD20610173002687D0 /* ReminderModel.swift in Sources */,
-				7E5F090F20610173002687D0 /* QuestionsHistoryViewController.swift in Sources */,
 				7E5F08BF20610173002687D0 /* UIView+WebCacheOperation.m in Sources */,
 				7E5F092720610173002687D0 /* SplitViewController.swift in Sources */,
 				7E5F08F120610173002687D0 /* NotificationView.swift in Sources */,

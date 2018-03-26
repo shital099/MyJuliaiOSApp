@@ -41,6 +41,8 @@ class SessionListViewController: UIViewController, UITableViewDataSource, UITabl
         
         //Remove extra lines from tableview
         tableView.tableFooterView = UIView()
+        self.tableView.tintColor = AppTheme.sharedInstance.menuBackgroundColor.darker(by: 15)
+        
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -193,14 +195,13 @@ class SessionListViewController: UIViewController, UITableViewDataSource, UITabl
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "HeaderCellId") as! CustomHeaderView
-        
-        headerView.backgroundColor = AppTheme.sharedInstance.menuBackgroundColor.darker(by: 15)
-        
+       // headerView.backgroundColor = AppTheme.sharedInstance.menuBackgroundColor.darker(by: 15)
+
         headerView.headerLabel.text = self.sortedSections[section] as? String
         headerView.headerLabel.font = headerView.headerLabel.font.withSize(14)
         
         headerView.setGradientColor()
-        
+
         return headerView
     }
     
@@ -214,7 +215,7 @@ class SessionListViewController: UIViewController, UITableViewDataSource, UITabl
 
         let cell = tableView.dequeueReusableCell(withIdentifier: "CellIdentifier", for: indexPath) as! SessionCustomCell
         cell.bgImage?.layer.cornerRadius = 5.0 
-        cell.backgroundColor = cell.contentView.backgroundColor;
+        //cell.backgroundColor = cell.contentView.backgroundColor;
 
         let model : SessionsModel = ((self.dataList[sortedSections[indexPath.section]]) as! Array)[indexPath.row]
 

@@ -87,22 +87,22 @@ class QuestionsViewController: UIViewController, UITableViewDataSource, UITableV
 
         ///Fetch Questions data from json
         self.fetchActivityQuestionList()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
+
         // Check Session status
         if sessionModel.isActive {
             askQueBtn.isHidden = false
             liveTimer = Timer.scheduledTimer(timeInterval: TimeInterval(Question_History_Time), target: self, selector: #selector(getRunTimedQuestions), userInfo: nil, repeats: true)
             //self.getCurrentTime()
-            
+
             //Check Still activity is live or not
             timer = Timer.scheduledTimer(timeInterval: TimeInterval(Question_History_Time), target: self, selector: #selector(disableLiveSession), userInfo: nil, repeats: true)
-            
         }
         else {
             askQueBtn.isHidden = true
         }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
     }
     
     override func didReceiveMemoryWarning() {

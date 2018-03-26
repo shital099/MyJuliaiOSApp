@@ -20,9 +20,10 @@ class GalleryViewController: TKExamplesExampleViewController, UIImagePickerContr
 
     var isRefreshList : Bool = true
     var actionSheetContoller : UIAlertController!
-    let listView = TKListView()
+    var listView = TKListView()
     var dataSource = TKDataSource()
-    
+    var layout = TKListViewGridLayout()
+
     var listArray:[PhotoGallery] = []
     
     override func viewDidLoad() {
@@ -43,10 +44,10 @@ class GalleryViewController: TKExamplesExampleViewController, UIImagePickerContr
         //Fetch data from Sqlite database
         listArray = DBManager.sharedInstance.fetchGalleryDataFromDB() as! [PhotoGallery]
 
-//        if listArray.count != 0 {
-//            self.dataSource.itemSource = listArray
-//            self.showPhotosIntoListView()
-//        }
+        if listArray.count != 0 {
+            self.dataSource.itemSource = listArray
+            self.showPhotosIntoListView()
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -69,7 +70,11 @@ class GalleryViewController: TKExamplesExampleViewController, UIImagePickerContr
             self.isRefreshList = true
         }
     }
-    
+
+    override func viewDidDisappear(_ animated: Bool) {
+       // self.listView = nil
+    }
+
     func setupMenuBarButtonItems() {
         // self.navigationItem.rightBarButtonItem = self.rightMenuBarButtonItem()
         let barItem = CommonModel.sharedInstance.leftMenuBarButtonItem()
@@ -154,14 +159,13 @@ class GalleryViewController: TKExamplesExampleViewController, UIImagePickerContr
             self.listView.register(AnimationListCell.self, forCellWithReuseIdentifier: "cell")
             self.view.addSubview(self.listView)
 
-        if listArray.count != 0 {
+      //  if listArray.count != 0 {
             self.setListViewItemSize()
-        }
+      //  }
     }
     
     func setListViewItemSize() {
-        
-        let layout = TKListViewGridLayout()
+
         var noOfGrid = 5
         if IS_IPAD {
             noOfGrid = Int((AppDelegate.getAppDelegateInstance().window?.frame.width)! / 120)
@@ -193,7 +197,7 @@ class GalleryViewController: TKExamplesExampleViewController, UIImagePickerContr
         // >> listview-animation-duration-swift
         layout.animationDuration = 0.4
         // << listview-animation-duration-swift
-        
+
         self.listView.layout = layout
         self.listView.reloadData()
     }
@@ -240,17 +244,12 @@ class GalleryViewController: TKExamplesExampleViewController, UIImagePickerContr
                 let arr = DBManager.sharedInstance.fetchGalleryDataFromDB() as! [PhotoGallery]
                 if arr.count != self.listArray.count {
                     self.listArray = arr
-                   // if self.listArray.count != 0 {
+                    // if self.listArray.count != 0 {
+                    DispatchQueue.main.sync  {
                         self.dataSource.itemSource = self.listArray
                         self.showPhotosIntoListView()
-//                    }
-//                    else {
-//                        self.dataSource = TKDataSource()
-//                        self.showPhotosIntoListView()
-//                    }
+                    }
                 }
-               // DispatchQueue.main.sync  {
-               // }
             }
         }, errorBack: { error in
             NSLog("error : %@", error)

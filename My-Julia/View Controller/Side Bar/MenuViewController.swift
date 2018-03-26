@@ -712,41 +712,45 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let moduleId = CommonModel.sharedInstance.fetchModuleIdOfModuleName(moduleName:moduleName)
         let moduleOrder = DBManager.sharedInstance.fetchModuleOrderFromDB(moduleId: moduleId)
         let modulesArray = self.menuArray.mutableCopy() as! NSMutableArray
+
         if moduleOrder != 0 {
             let indexPath = IndexPath.init(row: moduleOrder - 1, section: 1)
             let section = modulesArray[indexPath.section] as! TKSideDrawerSection
-            let item = section.items[indexPath.row] as! SideDrawerMenu
-            print("Notification moduleOrder : ",moduleOrder)
+            //print("Module array count : ",section.items.count)
+            if indexPath.row < section.items.count {
+                let item = section.items[indexPath.row] as! SideDrawerMenu
+                //print("Notification moduleOrder : ",moduleOrder)
 
-            if notification.name == BroadcastNotification {
-                item.dataCount = DBManager.sharedInstance.fetchUnreadNotificationsCount()
-                print("Broadcast data count : ",item.dataCount)
-            }
-            else {
-                item.dataCount = DBManager.sharedInstance.fetchChatUnreadListCount()
-                print("Chat data count : ",item.dataCount)
-            }
-            section.removeItem(item)
-            section.insertItem(item, at: indexPath.row)
-            modulesArray.replaceObject(at: indexPath.section, with: section)
-            self.menuArray = modulesArray
-           // self.tableView.reloadRows(at: [indexPath as IndexPath], with: UITableViewRowAnimation.automatic)
-
-            //Click on notification
-            if (notification.userInfo!["isClickOnNotification"] as! Bool == true) {
-
-                if self.selectedIndexPath.row != -1 {
-                    self.tableView.reloadRows(at: [selectedIndexPath], with: UITableViewRowAnimation.automatic)
+                if notification.name == BroadcastNotification {
+                    item.dataCount = DBManager.sharedInstance.fetchUnreadNotificationsCount()
+                    print("Broadcast data count : ",item.dataCount)
                 }
+                else {
+                    item.dataCount = DBManager.sharedInstance.fetchChatUnreadListCount()
+                    print("Chat data count : ",item.dataCount)
+                }
+                section.removeItem(item)
+                section.insertItem(item, at: indexPath.row)
+                modulesArray.replaceObject(at: indexPath.section, with: section)
+                self.menuArray = modulesArray
+                // self.tableView.reloadRows(at: [indexPath as IndexPath], with: UITableViewRowAnimation.automatic)
 
-                selectedIndexPath = indexPath
-                self.tableView.reloadRows(at: [selectedIndexPath as IndexPath], with: UITableViewRowAnimation.automatic)
+                //Click on notification
+                if (notification.userInfo!["isClickOnNotification"] as! Bool == true) {
 
-                //Call delegate method when menu item selected
-                self.menuItemSelected(index: selectedIndexPath.row, section: selectedIndexPath.section)
-            }
-            else {
-                self.tableView.reloadRows(at: [indexPath as IndexPath], with: UITableViewRowAnimation.automatic)
+                    if self.selectedIndexPath.row != -1 {
+                        self.tableView.reloadRows(at: [selectedIndexPath], with: UITableViewRowAnimation.automatic)
+                    }
+
+                    selectedIndexPath = indexPath
+                    self.tableView.reloadRows(at: [selectedIndexPath as IndexPath], with: UITableViewRowAnimation.automatic)
+
+                    //Call delegate method when menu item selected
+                    self.menuItemSelected(index: selectedIndexPath.row, section: selectedIndexPath.section)
+                }
+                else {
+                    self.tableView.reloadRows(at: [indexPath as IndexPath], with: UITableViewRowAnimation.automatic)
+                }
             }
         }
     }

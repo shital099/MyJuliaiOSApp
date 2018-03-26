@@ -99,13 +99,8 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
 
         if editingStyle == UITableViewCellEditingStyle.delete {
-
-            //Delete past event Data
-            let model = self.listArray[indexPath.row] as EventModel!
-            DBManager.sharedInstance.deleteEventAllDetails(eventId: (model?.eventId)!)
-
-            self.listArray.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.bottom)
+            //Show confiramation alert before delete event from list
+            self.showAlertView(indexPath: indexPath)
         }
     }
 
@@ -179,6 +174,29 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
 //        cell.addSubview(blurredEffectView)
 
         return cell
+    }
+
+    // MARK: - AlertView Methods
+
+    func showAlertView( indexPath: IndexPath) {
+
+        let refreshAlert = UIAlertController(title: "Delete event", message: "Are you sure want to delete event from list? ", preferredStyle: UIAlertControllerStyle.alert)
+
+        refreshAlert.addAction(UIAlertAction(title: "YES", style: .default, handler: { (action: UIAlertAction!) in
+
+            //Delete past event Data
+            let model = self.listArray[indexPath.row] as EventModel!
+            DBManager.sharedInstance.deleteEventAllDetails(eventId: (model?.eventId)!)
+
+            self.listArray.remove(at: indexPath.row)
+            self.tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.bottom)
+        }))
+
+        refreshAlert.addAction(UIAlertAction(title: "NO", style: .default, handler: { (action: UIAlertAction!) in
+            refreshAlert .dismiss(animated: true, completion: nil)
+        }))
+
+        present(refreshAlert, animated: true, completion: nil)
     }
 
     // MARK: - Webservice Methods

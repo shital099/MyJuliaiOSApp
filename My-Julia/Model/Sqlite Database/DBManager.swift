@@ -3294,7 +3294,7 @@ class DBManager: NSObject {
                 model.id = (results?.string(forColumn: "ID"))!
                 model.eventId = results?.string(forColumn: "EventID")
                 model.sessionId = results?.string(forColumn: "SessionId")
-                model.activitySessionId = results?.string(forColumn: "ActivitySesssionId")
+                model.activitySessionId = results?.string(forColumn: "ActivitySessionId")
                 model.activityId = results?.string(forColumn: "ActivityId")
                 model.activityName = results?.string(forColumn: "ActivityName")
                 model.agendaId = results?.string(forColumn: "AgendaId")
@@ -3386,6 +3386,7 @@ class DBManager: NSObject {
                 
                 array.add(model)
             }
+            self.database.commit()
             database.close()
         }
         return array
