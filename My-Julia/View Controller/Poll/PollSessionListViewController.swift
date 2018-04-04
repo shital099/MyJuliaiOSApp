@@ -46,8 +46,7 @@ class PollSessionListViewController: UIViewController, UITableViewDataSource, UI
         //Remove extra lines from tableview
         tableView.tableFooterView = UIView()
         
-        let listArray = DBManager.sharedInstance.fetchPollActivitiesDataFromDB()
-        self.sortData(dataArray: listArray)
+        self.sortData(dataArray: DBManager.sharedInstance.fetchPollActivitiesDataFromDB())
         
        // if listArray.count == 0 {
             //Show Indicator
@@ -125,8 +124,7 @@ class PollSessionListViewController: UIViewController, UITableViewDataSource, UI
         CommonModel.sharedInstance.dissmissActitvityIndicator()
         NetworkingHelper.getRequestFromUrl(name:GetPollActivities__url,  urlString:urlStr, callback: { response in
 
-            let listArray = DBManager.sharedInstance.fetchPollActivitiesDataFromDB()
-            self.sortData(dataArray: listArray)
+            self.sortData(dataArray: DBManager.sharedInstance.fetchPollActivitiesDataFromDB())
         }, errorBack: { error in
             CommonModel.sharedInstance.dissmissActitvityIndicator()
         })

@@ -58,7 +58,7 @@
          iconBtn.frame = CGRectMake(iconX, iconY, iconH, iconH);
         //NOTE: 设置按钮的样式
         [iconBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-        NSDictionary *dic = _headerDataArr[i];
+        //NSDictionary *dic = _headerDataArr[i];
       //  [titBtn setTitle:dic[@"USER_NAME"] forState:UIControlStateNormal];
         iconBtn.tag = 1000+i;
         [iconBtn addTarget:self action:@selector(titBtnClike:) forControlEvents:UIControlEventTouchUpInside];

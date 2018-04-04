@@ -78,8 +78,13 @@ class DBManager: NSObject {
             if database != nil {
                 // Open the database.
                 if database.open() {
-                    
-                    
+
+                    //Create Login Details table
+                    let login_details_sql = "CREATE TABLE IF NOT EXISTS LoginAttendee (EventID text, AttendeeId text, AttendeeCode text, Token text, IsAccept boolean default false, UNIQUE(EventID, AttendeeId) ON CONFLICT REPLACE);"
+
+                    //Create Event Details table
+                    let event_details_sql = "CREATE TABLE IF NOT EXISTS EventDetails (EventID text, AttendeeId text, Name text, EventCode text, Location text, Type text, Status text, StartDate text, EndDate text, LogoUrl text, CoverImageLogo text, UNIQUE(EventID, AttendeeId) ON CONFLICT REPLACE);"
+
                     //Create Event Details table
                     let event_sql_stmt = "CREATE TABLE IF NOT EXISTS ApplicationTheme (ID INTEGER PRIMARY KEY AUTOINCREMENT, EventID text unique, IsHeaderImage text, HeaderImageUrl text, HeaderColor text, HeaderTextColor text ,HeaderFontName text, HeaderFontStyle text , HeaderFontSize Int, IsBackgroundImage text, BackgroundImageUrl text, BackgroundColor text, IsLogoIconImage text, LogoIconImageUrl text, LogoImageUrl text, LogoText text, LogoIconTextColor text, IconTextFontName text, IconTextFontStyle text , IconTextFontSize Int, SideMenuFontName text, SideMenuFontStyle text,  SideMenuFontSize Int, SideMenuColour text, SideMenuTextColor text);"
                     
@@ -123,9 +128,7 @@ class DBManager: NSObject {
                     //Create Sponsors table
                     let sponsor_sql = "CREATE TABLE IF NOT EXISTS Sponsors (EventID text, id text unique, Name text, Description text, IconUrl text, ContactNo text, Email text, Address text, Website text);"
                     
-                    //Create Event Details table
-                    let event_details_sql = "CREATE TABLE IF NOT EXISTS EventDetails (EventID text unique, AttendeeId text, Name text, EventCode text, Location text, Type text, Status text, StartDate text, EndDate text, LogoUrl text, CoverImageLogo text, UNIQUE(EventID, AttendeeId) ON CONFLICT REPLACE);"
-                    
+
                     //Create Email table
                     let email_details_sql = "CREATE TABLE IF NOT EXISTS Email (EventID text, Eid text , eFrom text, eTo text, SentTime text, Content text, Subject text, AttachmentContent text, Attachments text, AttendeeId text,UNIQUE (EventID, AttendeeId, Eid) ON CONFLICT REPLACE);"
                     
@@ -182,7 +185,7 @@ class DBManager: NSObject {
                     //Poll Speaker Act questions
                     let poll_act_question_sql = "CREATE TABLE IF NOT EXISTS SpeakerPollQuestions(id INTEGER PRIMARY KEY AUTOINCREMENT, EventID text, ActivityId text, Question text, QuestionId text, Option1 text, Option2 text, Option3 text, Option4 text, Op1Id text, Op2Id text, Op3Id text, Op4Id text, UNIQUE (EventID, ActivityId, QuestionId ) ON CONFLICT REPLACE );"
 
-                    let sql_stmt = event_sql_stmt + module_sql_stmt + attendee_sql + note_sql + reminder_sql + speaker_sql + map_sql + feedback_sql + sponsor_sql + event_details_sql + document_sql + emergency_sql + gallery_sql + website_sql + wifi_details_sql + email_details_sql + activity_details_sql + profile_sql + sessions_sql + sessions_que_sql + poll_activity_sql + poll_sessions_que_sql + myschedule_sql + agenda_sql + noti_sql + activityFeed_sql + activityFeedComments_sql + activityFeedLikes_sql + act_feedback_sql + chatlist_sql + chathistorySql + poll_speaker_act_sql + poll_act_question_sql
+                    let sql_stmt = login_details_sql + event_sql_stmt + module_sql_stmt + attendee_sql + note_sql + reminder_sql + speaker_sql + map_sql + feedback_sql + sponsor_sql + event_details_sql + document_sql + emergency_sql + gallery_sql + website_sql + wifi_details_sql + email_details_sql + activity_details_sql + profile_sql + sessions_sql + sessions_que_sql + poll_activity_sql + poll_sessions_que_sql + myschedule_sql + agenda_sql + noti_sql + activityFeed_sql + activityFeedComments_sql + activityFeedLikes_sql + act_feedback_sql + chatlist_sql + chathistorySql + poll_speaker_act_sql + poll_act_question_sql
                     
                    // do {
                         success = database.executeStatements(sql_stmt)
@@ -492,6 +495,43 @@ class DBManager: NSObject {
         
         database.close()
     }
+
+    // MARK: - Login attendee details methods
+
+    func saveLoginAttendeeDataIntoDB() {
+
+        if openDatabase() {
+            do {
+                let event = EventData.sharedInstance
+                try database.executeUpdate("INSERT OR REPLACE INTO LoginAttendee (EventID, AttendeeId, AttendeeCode, Token, IsAccept) VALUES (?, ?, ?, ?, ?)", values: [event.eventId, event.attendeeId, event.attendeeCode, event.auth_token, event.attendeeStatus])
+
+            } catch {
+                print("error = \(error)")
+            }
+            database.close()
+        }
+    }
+
+    func fetchLoginAttendeeDetailsFromDB(attendeeCode : String) {
+
+        if openDatabase() {
+
+            let querySQL = "Select * from LoginAttendee where AttendeeCode = ?"
+            let results:FMResultSet? = database.executeQuery(querySQL, withArgumentsIn: [attendeeCode])
+
+            while results?.next() == true {
+
+                let model = EventData.sharedInstance
+                model.eventId = (results?.string(forColumn: "EventID"))!
+                model.attendeeId = (results?.string(forColumn: "AttendeeId"))!
+                model.attendeeCode = (results?.string(forColumn: "AttendeeCode"))!
+                model.auth_token = (results?.string(forColumn: "Token"))!
+                model.attendeeStatus = (results?.bool(forColumn: "IsAccept"))!
+            }
+            database.close()
+        }
+    }
+
 
     // MARK: - Event details methods
     
@@ -1750,7 +1790,6 @@ class DBManager: NSObject {
 
             let eventId = EventData.sharedInstance.eventId
             let attendeeId = EventData.sharedInstance.attendeeId
-
 
             let  dict = response as! NSDictionary
 
@@ -3118,7 +3157,6 @@ class DBManager: NSObject {
 
         if openDatabase() {
             let eventId = EventData.sharedInstance.eventId
-            var activityId = ""
 
             for item in response as! NSArray {
                 do {

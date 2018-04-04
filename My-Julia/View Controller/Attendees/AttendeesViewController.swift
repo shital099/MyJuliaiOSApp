@@ -99,8 +99,9 @@ class AttendeesViewController: UIViewController, UITableViewDelegate, UITableVie
         listArray = DBManager.sharedInstance.fetchAttendeesDataFromDB() as! [PersonModel]
         
         for i in 0...arrIndexSection.count - 1 {
-            
+
             let  index : String = arrIndexSection[i] as! String
+
             let predicate:NSPredicate = NSPredicate(format: "name BEGINSWITH[cd] %@", index)
             let filteredArray = listArray.filter { predicate.evaluate(with: $0) };
             if filteredArray.count != 0 {

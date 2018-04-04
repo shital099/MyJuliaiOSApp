@@ -13,7 +13,7 @@ class DocumentsListViewController: UIViewController, UITableViewDelegate, UITabl
     @IBOutlet weak var bgImageView: UIImageView!
     @IBOutlet weak var tableView: UITableView!
 
-    var listArray = [DocumentModel]()
+    var listArray : NSArray = [] // = [DocumentModel]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,7 +36,7 @@ class DocumentsListViewController: UIViewController, UITableViewDelegate, UITabl
         tableView.rowHeight = UITableViewAutomaticDimension
 
          //Fetch data from Sqlite database
-        listArray = DBManager.sharedInstance.fetchDocumentsListFromDB() as! [DocumentModel]
+        self.listArray = DBManager.sharedInstance.fetchDocumentsListFromDB()
         
         //Set separator color according to background color
         CommonModel.sharedInstance.applyTableSeperatorColor(object: tableView)
@@ -50,7 +50,7 @@ class DocumentsListViewController: UIViewController, UITableViewDelegate, UITabl
 
     override func viewDidAppear(_ animated: Bool) {
         //Fetch updated doc when notification receive
-        self.getActivityFeedInfoListData()
+        self.getDocumentsListData()
     }
     
     // MARK: - Navigation UIBarButtonItems
@@ -80,13 +80,13 @@ class DocumentsListViewController: UIViewController, UITableViewDelegate, UITabl
 
     // MARK: - Webservice Methods
 
-    func getActivityFeedInfoListData() {
+    func getDocumentsListData() {
 
         let urlStr = Get_AllModuleDetails_url.appendingFormat("Flag=%@",Documents_List_url)
         NetworkingHelper.getRequestFromUrl(name:Documents_List_url,  urlString:urlStr, callback: { response in
            // print("Documents data : ",response)
             //Fetch data from Sqlite database
-            self.listArray = DBManager.sharedInstance.fetchDocumentsListFromDB() as! [DocumentModel]
+            self.listArray = DBManager.sharedInstance.fetchDocumentsListFromDB()
             self.tableView.reloadData()
         }, errorBack: { error in
         })
@@ -110,7 +110,7 @@ class DocumentsListViewController: UIViewController, UITableViewDelegate, UITabl
         let cell = tableView.dequeueReusableCell(withIdentifier: "DocumentCustomCell", for: indexPath) as! DocumentCustomCell
         cell.backgroundColor = cell.contentView.backgroundColor;
 
-        let model = listArray[indexPath.row] as DocumentModel
+        let model = listArray[indexPath.row] as! DocumentModel
         cell.titleLbl.text = model.title
         cell.timeLbl.text = String(format:"Valid from : %@ - %@",CommonModel.sharedInstance.getDateAndTime(dateStr: model.startDateStr),  CommonModel.sharedInstance.getDateAndTime(dateStr: model.endDateStr))
 
@@ -118,7 +118,7 @@ class DocumentsListViewController: UIViewController, UITableViewDelegate, UITabl
             do {
                 let attributedText = try NSAttributedString(data: htmlData, options: [NSAttributedString.DocumentReadingOptionKey.documentType: NSAttributedString.DocumentType.html], documentAttributes: nil)
                 cell.descLbl.attributedText = attributedText
-            } catch let _ as NSError {
+            } catch _ as NSError {
             }
         }
 
@@ -130,7 +130,7 @@ class DocumentsListViewController: UIViewController, UITableViewDelegate, UITabl
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
         let viewController = storyboard?.instantiateViewController(withIdentifier: "DocumentDetailsViewController") as! DocumentDetailsViewController
-        viewController.model = listArray[indexPath.row]
+        viewController.model = listArray[indexPath.row] as! DocumentModel
         self.navigationController?.pushViewController(viewController, animated: true)
     }
 

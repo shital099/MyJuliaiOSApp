@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		72CC910A4259C3894FAD2048 /* libPods-My-Julia.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B36B23041A0246C60FF9C820 /* libPods-My-Julia.a */; };
 		7E0F59D31ED459F100C89D40 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E0F59D21ED459F100C89D40 /* AVFoundation.framework */; };
-		7E23BB9F20610303003CCF5B /* My_Julia_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E23BB9E20610303003CCF5B /* My_Julia_Tests.swift */; };
 		7E23BBA7206118C8003CCF5B /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E23BBA6206118C8003CCF5B /* MobileCoreServices.framework */; };
 		7E41126C1EC97559009031B9 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E41126B1EC97559009031B9 /* libsqlite3.tbd */; };
 		7E41127A1EC984E5009031B9 /* libAFNetworking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E4112791EC984E5009031B9 /* libAFNetworking.a */; };
@@ -216,7 +215,6 @@
 		7E5F095320610173002687D0 /* Arial Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7E5F087D20610173002687D0 /* Arial Black.ttf */; };
 		7E5F095420610173002687D0 /* Calibri.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7E5F087E20610173002687D0 /* Calibri.ttf */; };
 		7E5F095520610173002687D0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7E5F088120610173002687D0 /* Main.storyboard */; };
-		7E5F095620610173002687D0 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7E5F088220610173002687D0 /* Info.plist */; };
 		7E63A2921F0B8E6600D87C65 /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E63A2911F0B8E6600D87C65 /* SpriteKit.framework */; };
 		7E70462F1ED6BB99006B30F7 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E70462E1ED6BB99006B30F7 /* libsqlite3.0.tbd */; };
 		7ED3B11B1F4ABB0900E7C14F /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7ED3B11A1F4ABB0900E7C14F /* UserNotifications.framework */; };
@@ -229,16 +227,6 @@
 		7EFF6AFB2063B1F80094F1EF /* CustomUITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EFF6AFA2063B1F80094F1EF /* CustomUITextField.swift */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		7E23BBA120610303003CCF5B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7E41110A1EC97033009031B9 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 7E4111111EC97033009031B9;
-			remoteInfo = "My-Julia";
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
 		0635FA105906ABA80A04D868 /* Pods-EventApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EventApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-EventApp/Pods-EventApp.release.xcconfig"; sourceTree = "<group>"; };
 		1DA2CEAD307391FDD3016EDA /* Pods-My-JuliaTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-My-JuliaTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-My-JuliaTests/Pods-My-JuliaTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -249,8 +237,6 @@
 		7118F04A0EA98E709669FD6D /* Pods-EventApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EventApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EventApp/Pods-EventApp.debug.xcconfig"; sourceTree = "<group>"; };
 		7D7DEEDBD4C3A4D52D5CE2A1 /* Pods-My-Julia.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-My-Julia.release.xcconfig"; path = "Pods/Target Support Files/Pods-My-Julia/Pods-My-Julia.release.xcconfig"; sourceTree = "<group>"; };
 		7E0F59D21ED459F100C89D40 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		7E23BB972061021B003CCF5B /* My-Julia.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "My-Julia.entitlements"; sourceTree = "<group>"; };
-		7E23BB9C20610303003CCF5B /* My-Julia™Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "My-Julia™Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E23BB9E20610303003CCF5B /* My_Julia_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = My_Julia_Tests.swift; sourceTree = "<group>"; };
 		7E23BBA020610303003CCF5B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7E23BBA6206118C8003CCF5B /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
@@ -258,6 +244,8 @@
 		7E41126B1EC97559009031B9 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		7E4112771EC9807F009031B9 /* AFNetworking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AFNetworking.framework; path = "../../../Library/Developer/Xcode/DerivedData/EventApp-bnzckdsfhlarzhgnbusyxnrrnuui/Build/Products/Debug-iphonesimulator/AFNetworking/AFNetworking.framework"; sourceTree = "<group>"; };
 		7E4112791EC984E5009031B9 /* libAFNetworking.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libAFNetworking.a; path = "../../../Library/Developer/Xcode/DerivedData/EventApp-bnzckdsfhlarzhgnbusyxnrrnuui/Build/Products/Debug-iphonesimulator/AFNetworking/libAFNetworking.a"; sourceTree = "<group>"; };
+		7E5835A6206B8E60001B94BC /* My_JuliaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = My_JuliaTests.swift; sourceTree = "<group>"; };
+		7E5835A8206B8E60001B94BC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7E5F072120610172002687D0 /* database.sqlite */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = database.sqlite; sourceTree = "<group>"; };
 		7E5F072220610172002687D0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7E5F072420610172002687D0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -524,6 +512,7 @@
 		7E5F088220610173002687D0 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7E63A2911F0B8E6600D87C65 /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
 		7E70462E1ED6BB99006B30F7 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
+		7ED2B4A320749B05002F009B /* My-Julia.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "My-Julia.entitlements"; sourceTree = "<group>"; };
 		7ED3B11A1F4ABB0900E7C14F /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		7EDB7C191F4D52D0005BE305 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		7EEF42501EE55079000FA378 /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
@@ -539,13 +528,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		7E23BB9920610303003CCF5B /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		7E41110F1EC97033009031B9 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -602,6 +584,7 @@
 			children = (
 				7E5F072020610172002687D0 /* My-Julia */,
 				7E23BB9D20610303003CCF5B /* My-Julia™Tests */,
+				7E5835A5206B8E60001B94BC /* My-JuliaTests */,
 				7E4111131EC97033009031B9 /* Products */,
 				C3654A9F5FB51E6BFD9D7539 /* Frameworks */,
 				2B3FBB16B4CD51447524C03D /* Pods */,
@@ -612,21 +595,29 @@
 			isa = PBXGroup;
 			children = (
 				7E4111121EC97033009031B9 /* My-Julia.app */,
-				7E23BB9C20610303003CCF5B /* My-Julia™Tests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		7E5835A5206B8E60001B94BC /* My-JuliaTests */ = {
+			isa = PBXGroup;
+			children = (
+				7E5835A6206B8E60001B94BC /* My_JuliaTests.swift */,
+				7E5835A8206B8E60001B94BC /* Info.plist */,
+			);
+			path = "My-JuliaTests";
 			sourceTree = "<group>";
 		};
 		7E5F072020610172002687D0 /* My-Julia */ = {
 			isa = PBXGroup;
 			children = (
+				7ED2B4A320749B05002F009B /* My-Julia.entitlements */,
 				7E5F087B20610173002687D0 /* AppDelegate.swift */,
 				7E5F07EF20610173002687D0 /* View Controller */,
 				7E5F088020610173002687D0 /* Views */,
 				7E5F07A420610173002687D0 /* Model */,
 				7E5F072520610172002687D0 /* Third Party Libraries */,
 				7E5F087C20610173002687D0 /* Fonts */,
-				7E23BB972061021B003CCF5B /* My-Julia.entitlements */,
 				7E5F072120610172002687D0 /* database.sqlite */,
 				7E5F072220610172002687D0 /* Assets.xcassets */,
 				7E5F072320610172002687D0 /* LaunchScreen.storyboard */,
@@ -1216,9 +1207,9 @@
 		7E5F080020610173002687D0 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				7E5F080320610173002687D0 /* ChatListViewController.swift */,
 				7E5F080120610173002687D0 /* ChatViewController.swift */,
 				7E5F080220610173002687D0 /* GroupDetailViewController.swift */,
-				7E5F080320610173002687D0 /* ChatListViewController.swift */,
 				7E5F080420610173002687D0 /* EditGroupDetailsViewController.swift */,
 				7E5F080520610173002687D0 /* AddMemberViewController.swift */,
 				7E5F080620610173002687D0 /* CreateGroupViewController.swift */,
@@ -1247,9 +1238,9 @@
 		7E5F081220610173002687D0 /* Activity Feed */ = {
 			isa = PBXGroup;
 			children = (
+				7E5F081520610173002687D0 /* ActivityFeedListViewController.swift */,
 				7E5F081320610173002687D0 /* ActivityPostLikesViewController.swift */,
 				7E5F081420610173002687D0 /* PostActivityViewController.swift */,
-				7E5F081520610173002687D0 /* ActivityFeedListViewController.swift */,
 				7E5F081620610173002687D0 /* CommentsListViewController.swift */,
 				7E5F081720610173002687D0 /* ActivityFeedDetailsViewController.swift */,
 			);
@@ -1465,8 +1456,8 @@
 		7E5F086420610173002687D0 /* Terms & Conditions */ = {
 			isa = PBXGroup;
 			children = (
-				7E5F086520610173002687D0 /* TermsAndConditionViewController_iPhone.xib */,
 				7E5F086620610173002687D0 /* TermsAndConditionsViewController.swift */,
+				7E5F086520610173002687D0 /* TermsAndConditionViewController_iPhone.xib */,
 				7E5F086720610173002687D0 /* TermsAndConditionViewController_iPad.xib */,
 			);
 			path = "Terms & Conditions";
@@ -1513,9 +1504,9 @@
 		7E5F087220610173002687D0 /* Add Poll */ = {
 			isa = PBXGroup;
 			children = (
+				7E5F087520610173002687D0 /* SpeakerActivityListViewController.swift */,
 				7E5F087320610173002687D0 /* ActivityQuestionsListViewController.swift */,
 				7E5F087420610173002687D0 /* AddPollQuestionsViewController.swift */,
-				7E5F087520610173002687D0 /* SpeakerActivityListViewController.swift */,
 			);
 			path = "Add Poll";
 			sourceTree = "<group>";
@@ -1574,24 +1565,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		7E23BB9B20610303003CCF5B /* My-Julia™Tests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 7E23BBA320610303003CCF5B /* Build configuration list for PBXNativeTarget "My-Julia™Tests" */;
-			buildPhases = (
-				7E23BB9820610303003CCF5B /* Sources */,
-				7E23BB9920610303003CCF5B /* Frameworks */,
-				7E23BB9A20610303003CCF5B /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				7E23BBA220610303003CCF5B /* PBXTargetDependency */,
-			);
-			name = "My-Julia™Tests";
-			productName = "My-Julia™Tests";
-			productReference = 7E23BB9C20610303003CCF5B /* My-Julia™Tests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 		7E4111111EC97033009031B9 /* My-Julia */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7E41112F1EC97033009031B9 /* Build configuration list for PBXNativeTarget "My-Julia" */;
@@ -1619,14 +1592,9 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0920;
-				LastUpgradeCheck = 0830;
+				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = GCO;
 				TargetAttributes = {
-					7E23BB9B20610303003CCF5B = {
-						CreatedOnToolsVersion = 9.2;
-						ProvisioningStyle = Automatic;
-						TestTargetID = 7E4111111EC97033009031B9;
-					};
 					7E4111111EC97033009031B9 = {
 						CreatedOnToolsVersion = 8.3.2;
 						DevelopmentTeam = SKDTAX4HF9;
@@ -1657,19 +1625,11 @@
 			projectRoot = "";
 			targets = (
 				7E4111111EC97033009031B9 /* My-Julia */,
-				7E23BB9B20610303003CCF5B /* My-Julia™Tests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		7E23BB9A20610303003CCF5B /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		7E4111101EC97033009031B9 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1694,7 +1654,6 @@
 				7E5F088620610173002687D0 /* database.sqlite in Resources */,
 				7E5F08F220610173002687D0 /* NotificationView.xib in Resources */,
 				7E5F090520610173002687D0 /* ListTableViewCell.xib in Resources */,
-				7E5F095620610173002687D0 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1751,14 +1710,6 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		7E23BB9820610303003CCF5B /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				7E23BB9F20610303003CCF5B /* My_Julia_Tests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		7E41110E1EC97033009031B9 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1949,14 +1900,6 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		7E23BBA220610303003CCF5B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 7E4111111EC97033009031B9 /* My-Julia */;
-			targetProxy = 7E23BBA120610303003CCF5B /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
 /* Begin PBXVariantGroup section */
 		7E5F072320610172002687D0 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
@@ -1969,59 +1912,6 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		7E23BBA420610303003CCF5B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = "My-Julia™Tests/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "g.My-Julia-Tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/My-Julia.app/My-Julia";
-			};
-			name = Debug;
-		};
-		7E23BBA520610303003CCF5B /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = "My-Julia™Tests/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "g.My-Julia-Tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/My-Julia.app/My-Julia";
-			};
-			name = Release;
-		};
 		7E41112D1EC97033009031B9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2032,23 +1922,33 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: GCO (Global Conference Organisers) B.V";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: GCO (Global Conference Organisers) B.V";
+				CODE_SIGN_IDENTITY = "iPhone Developer: appledev@gcoeurope.com (7D7SZFY4D5)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: appledev@gcoeurope.com (7D7SZFY4D5)";
+				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = JXRWYTY242;
 				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -2066,11 +1966,12 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
 				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME)";
+				PROVISIONING_PROFILE = "ce5ad652-cb58-4611-8b81-688c6a46fe0b";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -2088,23 +1989,33 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: GCO (Global Conference Organisers) B.V";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: GCO (Global Conference Organisers) B.V";
+				CODE_SIGN_IDENTITY = "iPhone Developer: appledev@gcoeurope.com (7D7SZFY4D5)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: appledev@gcoeurope.com (7D7SZFY4D5)";
+				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = JXRWYTY242;
 				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -2116,13 +2027,14 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
 				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME)";
+				PROVISIONING_PROFILE = "ce5ad652-cb58-4611-8b81-688c6a46fe0b";
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -2136,8 +2048,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = "My-Julia/My-Julia.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: GCO (Global Conference Organisers) B.V";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Marco Kenson (3AS5P9L25L)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Marco Kenson (3AS5P9L25L)";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = SKDTAX4HF9;
@@ -2151,7 +2063,7 @@
 					"$(PROJECT_DIR)/My-Julia/Third\\ Party\\ Libraries",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/My-Julia/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2164,11 +2076,11 @@
 					"$(OTHER_LDFLAGS)",
 				);
 				OTHER_SWIFT_FLAGS = "";
-				PRODUCT_BUNDLE_IDENTIFIER = com.gecotechcenter.GEvent;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gcotechcenter.MyJulia;
 				PRODUCT_MODULE_NAME = EventApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "4708fd16-0397-4f5c-ac24-173191d11fff";
-				PROVISIONING_PROFILE_SPECIFIER = GEvent_Developement;
+				PROVISIONING_PROFILE = "ce5ad652-cb58-4611-8b81-688c6a46fe0b";
+				PROVISIONING_PROFILE_SPECIFIER = MyJulia_Dev_Enterprise;
 				SWIFT_OBJC_BRIDGING_HEADER = Event_Briding_Header.h;
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "";
 				SWIFT_REFLECTION_METADATA_LEVEL = none;
@@ -2185,8 +2097,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = "My-Julia/My-Julia.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: GCO (Global Conference Organisers) B.V";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Marco Kenson (3AS5P9L25L)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Marco Kenson (3AS5P9L25L)";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = SKDTAX4HF9;
@@ -2200,7 +2112,7 @@
 					"$(PROJECT_DIR)/My-Julia/Third\\ Party\\ Libraries",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/My-Julia/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2213,11 +2125,11 @@
 					"$(OTHER_LDFLAGS)",
 				);
 				OTHER_SWIFT_FLAGS = "";
-				PRODUCT_BUNDLE_IDENTIFIER = com.gecotechcenter.GEvent;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gcotechcenter.MyJulia;
 				PRODUCT_MODULE_NAME = EventApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "4708fd16-0397-4f5c-ac24-173191d11fff";
-				PROVISIONING_PROFILE_SPECIFIER = GEvent_Developement;
+				PROVISIONING_PROFILE = "ce5ad652-cb58-4611-8b81-688c6a46fe0b";
+				PROVISIONING_PROFILE_SPECIFIER = MyJulia_Dev_Enterprise;
 				SWIFT_OBJC_BRIDGING_HEADER = Event_Briding_Header.h;
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "";
 				SWIFT_REFLECTION_METADATA_LEVEL = none;
@@ -2229,15 +2141,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		7E23BBA320610303003CCF5B /* Build configuration list for PBXNativeTarget "My-Julia™Tests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				7E23BBA420610303003CCF5B /* Debug */,
-				7E23BBA520610303003CCF5B /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
 		7E41110D1EC97033009031B9 /* Build configuration list for PBXProject "My-Julia" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

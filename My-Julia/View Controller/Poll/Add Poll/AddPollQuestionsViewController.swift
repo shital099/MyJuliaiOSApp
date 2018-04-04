@@ -101,20 +101,18 @@ class AddPollQuestionsViewController: UIViewController, UITableViewDataSource, U
         
         print("post poll parameter", parameter)
         NetworkingHelper.postData(urlString: Add_Poll_Speaker_Question, param:parameter as AnyObject, withHeader: false, isAlertShow: true, controller:self,
-        callback: { response in
-        //dissmiss Indicator
-        CommonModel.sharedInstance.dissmissActitvityIndicator()
-          // self.fetchLatestPollQuestionList()
-        CommonModel.sharedInstance.showAlertWithStatus(title: Alert_Sucess, message: Poll_Question_Add, vc: self)
+                                  callback: { response in
+                                    //dissmiss Indicator
+                                    CommonModel.sharedInstance.dissmissActitvityIndicator()
+                                    // self.fetchLatestPollQuestionList()
+                                    CommonModel.sharedInstance.showAlertWithStatus(title: Alert_Sucess, message: Poll_Question_Add, vc: self)
                                     
         }, errorBack: { error in
         })
     }
-    
-    
+
     
     func updatePollQuestion(index : NSInteger) {
-        
         
         //Show Indicator
         CommonModel.sharedInstance.showActitvityIndicator()

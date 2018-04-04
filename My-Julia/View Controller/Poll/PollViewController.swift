@@ -123,7 +123,7 @@ class PollViewController: UIViewController, UITableViewDataSource, UITableViewDe
        // var isQuestionRemaining : Bool = false
         
         for item in response as! NSArray{
-            let  dict = item as! NSDictionary
+            let dict = item as! NSDictionary
             
             let model = PollModel()
             model.questionText = dict.value(forKey: "Questions") as! String!

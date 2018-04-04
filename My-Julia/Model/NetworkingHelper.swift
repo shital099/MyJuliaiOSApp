@@ -2,7 +2,7 @@
 //
 //  AFNetworkingHelper.swift
 //  My-Julia
-//
+// 
 //  Created by GCO on 4/11/17. 
 //  Copyright © 2017 GCO. All rights reserved.
 //
@@ -12,11 +12,11 @@ import UIKit
 //BASE URL AND Auth Key
 //let BASE_URL = "http://srv01:2300/"
 
-let BASE_URL = "http://srv01.gcotechcenter.local:1400/"  //SRV 1
-//let BASE_URL = "http://srv01.gcotechcenter.local:2400/"     //SRV 2
+//let BASE_URL = "http://srv01.gcotechcenter.local:1400/"  //SRV 1
+let BASE_URL = "http://srv01.gcotechcenter.local:2400/"     //SRV 2
 //let BASE_URL = "http://roshan.gcotechcenter.local:800
 //let BASE_URL = "http://10.3.2.152:1110/"
-//let BASE_URL = "http://priyanka.gcotechcenter.local:1000/"
+//let BASE_URL = "https://apps.gcotechcenter.com/"
 
 //let BASE_URL = "http://srv01.gcotechcenter.local:5400/"     //Production
 
@@ -186,20 +186,19 @@ class NetworkingHelper: NSObject {
 //        }
 
         let url = BASE_URL + urlString
-        let manager = AFHTTPSessionManager()
-       // var paramStr : String = ""
-        manager.requestSerializer = AFJSONRequestSerializer()
+       weak var manager = AFHTTPSessionManager()
+        manager?.requestSerializer = AFJSONRequestSerializer()
 
         if urlString != Get_AuthToken_Url {
-            manager.requestSerializer.setValue("Basic ".appending(EventData.sharedInstance.auth_token), forHTTPHeaderField: "Authorization")
+            manager?.requestSerializer.setValue("Basic ".appending(EventData.sharedInstance.auth_token), forHTTPHeaderField: "Authorization")
         }
-        manager.requestSerializer.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        manager.requestSerializer.setValue("application/json", forHTTPHeaderField: "Accept")
+        manager?.requestSerializer.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        manager?.requestSerializer.setValue("application/json", forHTTPHeaderField: "Accept")
         
-        manager.responseSerializer = AFJSONResponseSerializer()
+        manager?.responseSerializer = AFJSONResponseSerializer()
        // print("Post URL : ",urlString)
 
-        manager.post(url, parameters: param, progress: nil, success: { (task: URLSessionDataTask, responseObject: Any) in
+        manager?.post(url, parameters: param, progress: nil, success: { (task: URLSessionDataTask, responseObject: Any) in
             
             if urlString == Get_Latest_Questions_List_url {
                 //Add Question Activity List in database
@@ -281,15 +280,15 @@ class NetworkingHelper: NSObject {
 //        if !AFNetworkReachabilityManager.shared().isReachable {
 //        }
 
-        let manager = AFHTTPSessionManager()
+        weak var manager = AFHTTPSessionManager()
         if urlString != Search_Event_Url {
-            manager.requestSerializer.setValue("Basic ".appending(EventData.sharedInstance.auth_token), forHTTPHeaderField: "Authorization")
+            manager?.requestSerializer.setValue("Basic ".appending(EventData.sharedInstance.auth_token), forHTTPHeaderField: "Authorization")
         }
 
         let url = BASE_URL + urlString
        // print("GET URL : ",urlString)
 
-        manager.get(url, parameters: nil, progress: nil, success: { (task: URLSessionTask!, responseObject: Any?) in
+        manager?.get(url, parameters: nil, progress: nil, success: { (task: URLSessionTask!, responseObject: Any?) in
 
             //All event Details
             if name == Get_Login_Details_Url {

@@ -37,6 +37,17 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         //Remove extra lines from tableview
         self.tableView.tableFooterView = UIView()
 
+        //Open last open event automatically if attendee credential is stored
+        let userCredential = CredentialHelper.shared.defaultCredential
+        print("Default credential : ",userCredential?.user ?? "")
+
+        if userCredential?.user != nil {
+            //Fetch login attendee details from database
+            DBManager.sharedInstance.fetchLoginAttendeeDetailsFromDB(attendeeCode: (userCredential?.user)!)
+            
+            //Check last login attendee status and open event
+            self.checkLoginAttendeeStatus()
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -126,9 +137,11 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
 
             if model.isPastEvent == true {
                 cell.pastEventview.isHidden = false
+                cell.currentEventview.alpha = 0.3
             }
             else {
-                cell.pastEventview.isHidden = true 
+                cell.pastEventview.isHidden = true
+                cell.currentEventview.alpha = 1.0
             }
         }
         else {
@@ -136,6 +149,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
             cell.downloadBtn.setTitle("Download", for: .normal)
 
             cell.pastEventview.isHidden = true
+            cell.currentEventview.alpha = 1.0
         }
 
         cell.nameLabel?.text = model.eventName
@@ -171,6 +185,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
 //        let blurEffect = UIBlurEffect(style: .light)
 //        let blurredEffectView = UIVisualEffectView(effect: blurEffect)
 //        blurredEffectView.frame = cell.pastEventview.frame
+//        blurredEffectView.backgroundColor = .gray
 //        cell.addSubview(blurredEffectView)
 
         return cell
@@ -306,19 +321,6 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
 
     func checkLoginAttendeeStatus() {
 
-        //Fetch event details data from Sqlite database and if it empty show error message
-        _ = DBManager.sharedInstance.fetchEventDetailsDataFromDB()
-        _ = DBManager.sharedInstance.fetchProfileDataFromDB()
-
-        //Fetch application theme data from Sqlite database
-        _ = DBManager.sharedInstance.fetchAppThemeDataFromDB()
-
-        // inject an authorisation header for images
-        SDWebImageDownloader.shared().setValue("Basic ".appending(EventData.sharedInstance.auth_token), forHTTPHeaderField: "Authorization")
-
-        //Apply navigation theme
-        CommonModel.sharedInstance.applyNavigationTheme()
-
         CommonModel.sharedInstance.dissmissActitvityIndicator()
 
         // self.fetchContentFromServer()
@@ -349,6 +351,24 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
 
         //App login
         isAppLogin = true
+
+//        //Store Attendee credential for auto login
+//        UserDefaults.standard.set("StoreCrential", forKey: "isAppUninstall")
+//        UserDefaults.standard.synchronize()
+//        CredentialHelper.shared.storeDefaultCredential(key: EventData.sharedInstance.attendeeCode, value: EventData.sharedInstance.eventId)
+
+        //Fetch event details data from Sqlite database and if it empty show error message
+        _ = DBManager.sharedInstance.fetchEventDetailsDataFromDB()
+        _ = DBManager.sharedInstance.fetchProfileDataFromDB()
+
+        //Fetch application theme data from Sqlite database
+        _ = DBManager.sharedInstance.fetchAppThemeDataFromDB()
+
+        // inject an authorisation header for images
+        SDWebImageDownloader.shared().setValue("Basic ".appending(EventData.sharedInstance.auth_token), forHTTPHeaderField: "Authorization")
+
+        //Apply navigation theme
+        CommonModel.sharedInstance.applyNavigationTheme()
 
         let appDelegate = AppDelegate.getAppDelegateInstance();
         if IS_IPHONE {
@@ -444,6 +464,14 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         //Download event details
         CommonModel.sharedInstance.showActitvityIndicator()
 
+        //Save Login credintial in database
+        DBManager.sharedInstance.saveLoginAttendeeDataIntoDB()
+
+        //Store Attendee credential for auto login
+        UserDefaults.standard.set("StoreCrential", forKey: "isAppUninstall")
+        UserDefaults.standard.synchronize()
+        CredentialHelper.shared.storeDefaultCredential(key: EventData.sharedInstance.attendeeCode, value: EventData.sharedInstance.eventId)
+
         self.getEventDetailsData()
     }
 
@@ -463,6 +491,7 @@ class EventsCustomCell: UITableViewCell {
     @IBOutlet var imageview : UIImageView!
     @IBOutlet var downloadBtn : UIButton!
 
+    @IBOutlet var currentEventview : UIView!
     @IBOutlet var pastEventview : UIView!
 
     @IBAction func downloadBtnTapped(sender: AnyObject) {

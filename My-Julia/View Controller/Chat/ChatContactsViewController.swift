@@ -109,8 +109,7 @@ class ChatContactsViewController: UIViewController, headerDelegate, UISearchBarD
         //Fetch user list
        // self.fetchAllContactsList()
         //Fetch data from Sqlite database
-        self.listArray = DBManager.sharedInstance.fetchAllContactDataFromDB() as! [ChatGroupModel]
-        tableView.allDataArr = NSMutableArray(array: self.listArray)
+        tableView.allDataArr = NSMutableArray(array: DBManager.sharedInstance.fetchAllContactDataFromDB() as! [ChatGroupModel])
     }
     
     override func viewWillDisappear(_ animated: Bool) {

@@ -114,7 +114,7 @@
             // 刚刷新完毕
             CGFloat animDuration = MJRefreshAnimationDuration;
             CGFloat deltaH = [self contentBreakView];
-            CGPoint tempOffset;
+            CGPoint tempOffset = CGPointMake(0, 0);
             
             if (MJRefreshStateRefreshing == oldState && deltaH > 0 && !_withoutIdle) {
                 tempOffset = _scrollView.contentOffset;

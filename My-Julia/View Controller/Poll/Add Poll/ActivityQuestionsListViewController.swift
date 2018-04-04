@@ -48,7 +48,7 @@ class ActivityQuestionsListViewController : UIViewController, UITableViewDataSou
         //        listArray = DBManager.sharedInstance.saveSpeakerActivitiesIntoDB(response: AnyObject as AnyObject)
         
         //Fetch data from Sqlite database
-        self.fetchLatestPollQuestionList()
+       // self.fetchLatestPollQuestionList()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -57,6 +57,8 @@ class ActivityQuestionsListViewController : UIViewController, UITableViewDataSou
         }
 //        //Show Indicator
 //        CommonModel.sharedInstance.showActitvityIndicator()
+        self.listArray = DBManager.sharedInstance.fetchSpeakerPollQuestions(activityId: self.model.activityId) as! [PollModel]
+        self.tableView.reloadData()
 
         //Fetch data from Sqlite database
         self.fetchLatestPollQuestionList()
@@ -109,7 +111,7 @@ class ActivityQuestionsListViewController : UIViewController, UITableViewDataSou
 //        print(" fetch latest poll Parameter list", paramDict)
         NetworkingHelper.postData(urlString: Get_Speaker_latest_Poll, param:paramDict as AnyObject, withHeader: true, isAlertShow: false, controller:self, callback:
             { response in
-            print("activities Questions list", response)
+           // print("activities Questions list", response)
             if response is Array<Any> {
 //            self.parseActivityData(response: response)
                 self.listArray = DBManager.sharedInstance.fetchSpeakerPollQuestions(activityId: self.model.activityId) as! [PollModel]

@@ -157,7 +157,7 @@ class SpeakerActivityListViewController: UIViewController, UITableViewDataSource
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
         let viewController = storyboard?.instantiateViewController(withIdentifier: "ActivityQuestionsListViewController") as! ActivityQuestionsListViewController
-        viewController.model = self.listArray[indexPath.row]
+        viewController.model = ((self.dataList[sortedSections[indexPath.section]]) as! Array)[indexPath.row]
         self.navigationController?.pushViewController(viewController, animated: true)
     }
   
@@ -169,8 +169,7 @@ class SpeakerActivityListViewController: UIViewController, UITableViewDataSource
         NetworkingHelper.postData(urlString: Get_Speaker_Activity_url, param: parameter as AnyObject, withHeader: true, isAlertShow: false, controller:self, callback: { response in
 //            print("Speakers_list :", response)
             if response is Array<Any> {
-                self.listArray = DBManager.sharedInstance.fetchSpeakerPollActListFromDB() as! [AgendaModel]
-                self.sortData(dataArray: self.listArray as NSArray)
+                self.sortData(dataArray: DBManager.sharedInstance.fetchSpeakerPollActListFromDB() as! [AgendaModel] as NSArray)
                 self.tableView.reloadData()
 //                self.parseSpeakerData(response: response)
             }

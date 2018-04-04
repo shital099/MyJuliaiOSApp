@@ -309,8 +309,7 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
                 self.deleteMsgArray.removeAllObjects()
 
                 //Fetch all chat history from database
-                let listArray:[UUMessageFrame] = DBManager.sharedInstance.fetchChatHistoryMessages(groupId: self.chatGroupModel.groupId, fromId: self.chatGroupModel.fromId, isGroupChat: self.chatGroupModel.isGroupChat, lastFetchTime: "All") as! [UUMessageFrame]
-                self.chatModel.dataSource = NSMutableArray(array: listArray)
+                self.chatModel.dataSource = NSMutableArray(array: DBManager.sharedInstance.fetchChatHistoryMessages(groupId: self.chatGroupModel.groupId, fromId: self.chatGroupModel.fromId, isGroupChat: self.chatGroupModel.isGroupChat, lastFetchTime: "All") as! [UUMessageFrame])
                 self.chatTableView?.reloadData()
                 self.tableViewScrollToBottom()
 
@@ -374,13 +373,12 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
             //            self.chatModel.dataSource = listArray
             //            self.chatTableView?.reloadData()
             //            self.tableViewScrollToBottom()
-            let listArray:[UUMessageFrame] = DBManager.sharedInstance.fetchChatHistoryMessages(groupId: self.chatGroupModel.groupId, fromId: self.chatGroupModel.fromId, isGroupChat: self.chatGroupModel.isGroupChat, lastFetchTime: "All") as! [UUMessageFrame]
-            self.chatModel.dataSource = NSMutableArray(array: listArray)
+            self.chatModel.dataSource = NSMutableArray(array: DBManager.sharedInstance.fetchChatHistoryMessages(groupId: self.chatGroupModel.groupId, fromId: self.chatGroupModel.fromId, isGroupChat: self.chatGroupModel.isGroupChat, lastFetchTime: "All") as! [UUMessageFrame])
             self.chatTableView?.reloadData()
             self.tableViewScrollToBottom()
             
-            if listArray.count != 0 {
-                self.previousTime = (listArray.last?.message.messageDate)!
+            if self.chatModel.dataSource.count != 0 {
+                self.previousTime = (( self.chatModel.dataSource.lastObject as! UUMessageFrame).message.messageDate)!
             }
         }
         else {

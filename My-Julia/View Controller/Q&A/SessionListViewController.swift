@@ -47,8 +47,7 @@ class SessionListViewController: UIViewController, UITableViewDataSource, UITabl
 
     override func viewDidAppear(_ animated: Bool) {
         //Fetch all completed activity from db
-        let listArray = DBManager.sharedInstance.fetchAllPastActivitiesDataFromDB()
-        self.sortData(dataArray: listArray)
+        self.sortData(dataArray: DBManager.sharedInstance.fetchAllPastActivitiesDataFromDB())
         
         //   if listArray.count == 0 {
         //Show Indicator
@@ -111,8 +110,7 @@ class SessionListViewController: UIViewController, UITableViewDataSource, UITabl
             // Bounce back to the main thread to update the UI
             DispatchQueue.main.async {
                 //Fetch all completed activity from db
-                let listArray = DBManager.sharedInstance.fetchAllPastActivitiesDataFromDB()
-                self.sortData(dataArray: listArray)
+                self.sortData(dataArray: DBManager.sharedInstance.fetchAllPastActivitiesDataFromDB())
             }
         }, errorBack: { error in
             NSLog("error : %@", error)
