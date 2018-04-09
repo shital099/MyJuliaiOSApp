@@ -225,6 +225,7 @@ class ActivityFeedListViewController: UIViewController, UITableViewDataSource, U
                 }
             } else {
                 print("Error in post like")
+                selectedCell.likesButton.isSelected = !likeStatus
             }
         })
     }

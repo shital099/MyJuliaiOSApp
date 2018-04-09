@@ -83,7 +83,9 @@ class DBManager: NSObject {
                     let login_details_sql = "CREATE TABLE IF NOT EXISTS LoginAttendee (EventID text, AttendeeId text, AttendeeCode text, Token text, IsAccept boolean default false, UNIQUE(EventID, AttendeeId) ON CONFLICT REPLACE);"
 
                     //Create Event Details table
-                    let event_details_sql = "CREATE TABLE IF NOT EXISTS EventDetails (EventID text, AttendeeId text, Name text, EventCode text, Location text, Type text, Status text, StartDate text, EndDate text, LogoUrl text, CoverImageLogo text, UNIQUE(EventID, AttendeeId) ON CONFLICT REPLACE);"
+//                    let event_details_sql = "CREATE TABLE IF NOT EXISTS EventDetails (EventID text, AttendeeId text, Name text, EventCode text, Location text, Type text, Status text, StartDate text, EndDate text, LogoUrl text, CoverImageLogo text, UNIQUE(EventID, AttendeeId) ON CONFLICT REPLACE);"
+
+                    let event_details_sql = "CREATE TABLE IF NOT EXISTS EventDetails (EventID text unique, AttendeeId text, Name text, EventCode text, Location text, Type text, Status text, StartDate text, EndDate text, LogoUrl text, CoverImageLogo text);"
 
                     //Create Event Details table
                     let event_sql_stmt = "CREATE TABLE IF NOT EXISTS ApplicationTheme (ID INTEGER PRIMARY KEY AUTOINCREMENT, EventID text unique, IsHeaderImage text, HeaderImageUrl text, HeaderColor text, HeaderTextColor text ,HeaderFontName text, HeaderFontStyle text , HeaderFontSize Int, IsBackgroundImage text, BackgroundImageUrl text, BackgroundColor text, IsLogoIconImage text, LogoIconImageUrl text, LogoImageUrl text, LogoText text, LogoIconTextColor text, IconTextFontName text, IconTextFontStyle text , IconTextFontSize Int, SideMenuFontName text, SideMenuFontStyle text,  SideMenuFontSize Int, SideMenuColour text, SideMenuTextColor text);"
@@ -142,7 +144,7 @@ class DBManager: NSObject {
                     let profile_sql = "CREATE TABLE IF NOT EXISTS AttendeeProfile (id INTEGER PRIMARY KEY AUTOINCREMENT, EventID text, AttendeeId text unique, AttendeeName text, AttendeeCode text, AttendeeEmail text, ContactNo text, ProfileSetting bool default true, QRCode text, GroupsName text, Department text, ImgPath text, DNDSetting boolean default false, isSpeaker boolean default false, SpeakerId text);"
                     
                     //Create Wifi table
-                    let wifi_details_sql = "CREATE TABLE IF NOT EXISTS Wifi (EventID text, Id text unique, Name text, Network text, Password text, Note text);"
+                    let wifi_details_sql = "CREATE TABLE IF NOT EXISTS Wifi (EventID text, Id text unique, Name text, Network text, Password text, Note text, CreatedDate text);"
                     
                     //Create Agenda and Speaker Relational table
                     let activity_details_sql = "CREATE TABLE IF NOT EXISTS AgendaSpeakerRelation (id INTEGER PRIMARY KEY AUTOINCREMENT, EventID text, ActivityId text, SpeakerId text, AttendeeId text, UNIQUE (EventID, ActivityId, SpeakerId) ON CONFLICT REPLACE);"
@@ -1590,8 +1592,9 @@ class DBManager: NSObject {
                     let network = self.isNullString(str: dict.value(forKey: "Network") as Any)
                     let password = self.isNullString(str: dict.value(forKey: "Password") as Any)
                     let note = self.isNullString(str: dict.value(forKey: "Note") as Any)
-                    
-                    try database.executeUpdate("INSERT OR REPLACE INTO Wifi (EventID, Id, Name, Network, Password, Note) VALUES (?, ?, ?, ?, ?, ?)", values: [eventId, id ,name , network , password , note ])
+                    let date = self.isNullString(str: dict.value(forKey: "CreatedDate") as Any)
+
+                    try database.executeUpdate("INSERT OR REPLACE INTO Wifi (EventID, Id, Name, Network, Password, Note, CreatedDate) VALUES (?, ?, ?, ?, ?, ?, ?)", values: [eventId, id ,name , network , password , note, date ])
                     
                 } catch {
                     print("error = \(error)")
@@ -1608,7 +1611,7 @@ class DBManager: NSObject {
         
         if openDatabase() {
             
-            let querySQL = "Select * from Wifi where EventID = ?"
+            let querySQL = "Select * from Wifi where EventID = ? Order by CreatedDate DESC"
             let results:FMResultSet? = database.executeQuery(querySQL, withArgumentsIn: [EventData.sharedInstance.eventId])
             
             while results?.next() == true {
@@ -1619,7 +1622,7 @@ class DBManager: NSObject {
                 model.network = (results?.string(forColumn: "Network"))!
                 model.password = (results?.string(forColumn: "Password"))!
                 model.note = (results?.string(forColumn: "Note"))!
-                
+
                 array.append(model)
             }
             database.close()

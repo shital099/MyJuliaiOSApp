@@ -22,7 +22,7 @@ class ActivityPostLikesViewController: UIViewController, UITableViewDelegate, UI
 
         self.title = "Likes"
 
-        //apply application theme on screen
+        //apply application theme on screen77
         CommonModel.sharedInstance.applyThemeOnScreen(viewController: self, bgImage: bgImageView)
 
         tableView.tableFooterView = UIView()
@@ -82,7 +82,6 @@ class ActivityPostLikesViewController: UIViewController, UITableViewDelegate, UI
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-
         return UITableViewAutomaticDimension
     }
 

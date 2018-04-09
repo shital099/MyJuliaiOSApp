@@ -195,51 +195,51 @@ static char UIScrollViewTwitterCover;
 }
 
 -(UIImage *)boxblurImageWithBlur:(CGFloat)blur withImage:(UIImage*)newImage{
-    
+
     //NSData *imageData = UIImageJPEGRepresentation(self, 1); // convert to jpeg
     NSData *imageData = UIImagePNGRepresentation(newImage);
     UIImage* destImage = [UIImage imageWithData:imageData];
-    
-    
+
+
     if (blur < 0.f || blur > 1.f) {
         blur = 0.5f;
     }
     int boxSize = (int)(blur * 40);
     boxSize = boxSize - (boxSize % 2) + 1;
-    
+
     CGImageRef img = destImage.CGImage;
-    
+
     vImage_Buffer inBuffer, outBuffer;
-    
+
     vImage_Error error;
-    
+
     void *pixelBuffer;
-    
-    
+
+
     //create vImage_Buffer with data from CGImageRef
-    
+
     CGDataProviderRef inProvider = CGImageGetDataProvider(img);
     CFDataRef inBitmapData = CGDataProviderCopyData(inProvider);
-    
-    
+
+
     inBuffer.width = CGImageGetWidth(img);
     inBuffer.height = CGImageGetHeight(img);
     inBuffer.rowBytes = CGImageGetBytesPerRow(img);
-    
+
     inBuffer.data = (void*)CFDataGetBytePtr(inBitmapData);
 
     //create vImage_Buffer for output
-    
+
     pixelBuffer = malloc(CGImageGetBytesPerRow(img) * CGImageGetHeight(img));
-    
+
     if(pixelBuffer == NULL)
         NSLog(@"No pixelbuffer");
-    
+
     outBuffer.data = pixelBuffer;
     outBuffer.width = CGImageGetWidth(img);
     outBuffer.height = CGImageGetHeight(img);
     outBuffer.rowBytes = CGImageGetBytesPerRow(img);
-    
+
     // Create a third buffer for intermediate processing
     void *pixelBuffer2 = malloc(CGImageGetBytesPerRow(img) * CGImageGetHeight(img));
     vImage_Buffer outBuffer2;
@@ -247,7 +247,7 @@ static char UIScrollViewTwitterCover;
     outBuffer2.width = CGImageGetWidth(img);
     outBuffer2.height = CGImageGetHeight(img);
     outBuffer2.rowBytes = CGImageGetBytesPerRow(img);
-    
+
     //perform convolution
     error = vImageBoxConvolve_ARGB8888(&inBuffer, &outBuffer2, NULL, 0, 0, boxSize, boxSize, NULL, kvImageEdgeExtend);
     if (error) {
@@ -261,7 +261,7 @@ static char UIScrollViewTwitterCover;
     if (error) {
         NSLog(@"error from convolution %ld", error);
     }
-    
+
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     CGContextRef ctx = CGBitmapContextCreate(outBuffer.data,
                                              outBuffer.width,
@@ -272,20 +272,17 @@ static char UIScrollViewTwitterCover;
                                              (CGBitmapInfo)kCGImageAlphaNoneSkipLast);
     CGImageRef imageRef = CGBitmapContextCreateImage (ctx);
     UIImage *returnImage = [UIImage imageWithCGImage:imageRef];
-    
+
     //clean up
-    CGContextRelease(ctx);
-    CGColorSpaceRelease(colorSpace);
+    // CGContextRelease(ctx);
+    // CGColorSpaceRelease(colorSpace);
 
-    free(pixelBuffer);
-    free(pixelBuffer2);
-    CFRelease(inBitmapData);
-
-    CGImageRelease(imageRef);
-    inProvider = nil;
-    inBitmapData = nil;
-
- //   NSLog(@"Return image : %@",returnImage);
+    //    free(pixelBuffer);
+    //    free(pixelBuffer2);
+    //    CFRelease(inBitmapData);
+    //
+    //    CGImageRelease(imageRef);
+    NSLog(@"REturn image : %@",returnImage);
     return returnImage;
 }
 
@@ -294,51 +291,50 @@ static char UIScrollViewTwitterCover;
 @implementation UIImage (Blur)
 
 -(UIImage *)boxblurImageWithBlur:(CGFloat)blur {
-    
+
     NSData *imageData = UIImageJPEGRepresentation(self, 1); // convert to jpeg
     UIImage* destImage = [UIImage imageWithData:imageData];
-    
 
-    
+
     if (blur < 0.f || blur > 1.f) {
         blur = 0.5f;
     }
     int boxSize = (int)(blur * 40);
     boxSize = boxSize - (boxSize % 2) + 1;
-    
+
     CGImageRef img = destImage.CGImage;
-    
+
     vImage_Buffer inBuffer, outBuffer;
-    
+
     vImage_Error error;
-    
+
     void *pixelBuffer;
-    
-    
+
+
     //create vImage_Buffer with data from CGImageRef
-    
+
     CGDataProviderRef inProvider = CGImageGetDataProvider(img);
     CFDataRef inBitmapData = CGDataProviderCopyData(inProvider);
-    
-    
+
+
     inBuffer.width = CGImageGetWidth(img);
     inBuffer.height = CGImageGetHeight(img);
     inBuffer.rowBytes = CGImageGetBytesPerRow(img);
-    
+
     inBuffer.data = (void*)CFDataGetBytePtr(inBitmapData);
 
     //create vImage_Buffer for output
-    
+
     pixelBuffer = malloc(CGImageGetBytesPerRow(img) * CGImageGetHeight(img));
-    
+
     if(pixelBuffer == NULL)
         NSLog(@"No pixelbuffer");
-    
+
     outBuffer.data = pixelBuffer;
     outBuffer.width = CGImageGetWidth(img);
     outBuffer.height = CGImageGetHeight(img);
     outBuffer.rowBytes = CGImageGetBytesPerRow(img);
-    
+
     // Create a third buffer for intermediate processing
     void *pixelBuffer2 = malloc(CGImageGetBytesPerRow(img) * CGImageGetHeight(img));
     vImage_Buffer outBuffer2;
@@ -346,7 +342,7 @@ static char UIScrollViewTwitterCover;
     outBuffer2.width = CGImageGetWidth(img);
     outBuffer2.height = CGImageGetHeight(img);
     outBuffer2.rowBytes = CGImageGetBytesPerRow(img);
-    
+
     //perform convolution
     error = vImageBoxConvolve_ARGB8888(&inBuffer, &outBuffer2, NULL, 0, 0, boxSize, boxSize, NULL, kvImageEdgeExtend);
     if (error) {
@@ -360,7 +356,7 @@ static char UIScrollViewTwitterCover;
     if (error) {
         NSLog(@"error from convolution %ld", error);
     }
-    
+
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     CGContextRef ctx = CGBitmapContextCreate(outBuffer.data,
                                              outBuffer.width,
@@ -371,20 +367,16 @@ static char UIScrollViewTwitterCover;
                                              (CGBitmapInfo)kCGImageAlphaNoneSkipLast);
     CGImageRef imageRef = CGBitmapContextCreateImage (ctx);
     UIImage *returnImage = [UIImage imageWithCGImage:imageRef];
-    
+
     //clean up
     CGContextRelease(ctx);
     CGColorSpaceRelease(colorSpace);
 
-    CFRelease(inBitmapData);
-
-    free(pixelBuffer);
-    free(pixelBuffer2);
-
-    CGImageRelease(imageRef);
-
-    inProvider = nil;
-    inBitmapData = nil;
+    //    free(pixelBuffer);
+    //    free(pixelBuffer2);
+    //    CFRelease(inBitmapData);
+    //
+    //    CGImageRelease(imageRef);
 
     return returnImage;
 }

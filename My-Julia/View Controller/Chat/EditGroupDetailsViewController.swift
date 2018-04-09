@@ -200,7 +200,7 @@ class EditGroupDetailsViewController: UIViewController, UIImagePickerControllerD
                 //Show updated group name in group detail screen
                 if self.isIconEdit == false {
                     //Update group name and image into db
-                    let iconImage = DBManager.sharedInstance.appendImagePath(path: response.value(forKey: "ImgPath") as Any)
+                    let iconImage = DBManager.sharedInstance.appendImagePath(path: response.value(forKey: "ImagePath") as Any)
 
                     DBManager.sharedInstance.updateGroupNameIntoDB(groupName: self.textField.text!, groupIcon:iconImage, groupId: self.chatGroupModel.groupId)
                     (self.delegate as! GroupDetailViewController).updateGroupName(groupName: self.textField.text!, groupIcon : iconImage)

@@ -672,7 +672,7 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         NetworkingHelper.getRequestFromUrl(name:Get_Login_Details_Url, urlString: Get_Login_Details_Url, callback: { response in
             
-            print("App theme data : ",response)
+           // print("App theme data : ",response)
             
             //Fetch profile data
             _ = DBManager.sharedInstance.fetchProfileDataFromDB()

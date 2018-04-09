@@ -611,7 +611,6 @@
 		7E5F072020610172002687D0 /* My-Julia */ = {
 			isa = PBXGroup;
 			children = (
-				7ED2B4A320749B05002F009B /* My-Julia.entitlements */,
 				7E5F087B20610173002687D0 /* AppDelegate.swift */,
 				7E5F07EF20610173002687D0 /* View Controller */,
 				7E5F088020610173002687D0 /* Views */,
@@ -620,6 +619,7 @@
 				7E5F087C20610173002687D0 /* Fonts */,
 				7E5F072120610172002687D0 /* database.sqlite */,
 				7E5F072220610172002687D0 /* Assets.xcassets */,
+				7ED2B4A320749B05002F009B /* My-Julia.entitlements */,
 				7E5F072320610172002687D0 /* LaunchScreen.storyboard */,
 				7E5F088220610173002687D0 /* Info.plist */,
 			);
@@ -1942,13 +1942,13 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: appledev@gcoeurope.com (7D7SZFY4D5)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: appledev@gcoeurope.com (7D7SZFY4D5)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: GCO (Global Conference Organisers) B.V";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: GCO (Global Conference Organisers) B.V";
 				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = JXRWYTY242;
+				DEVELOPMENT_TEAM = B9357KA83X;
 				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -1971,7 +1971,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
 				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME)";
-				PROVISIONING_PROFILE = "ce5ad652-cb58-4611-8b81-688c6a46fe0b";
+				PROVISIONING_PROFILE = "2ebfbfee-ffaf-46d6-b53a-11da2b080368";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -2009,13 +2009,13 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: appledev@gcoeurope.com (7D7SZFY4D5)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: appledev@gcoeurope.com (7D7SZFY4D5)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: GCO (Global Conference Organisers) B.V";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: GCO (Global Conference Organisers) B.V";
 				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = JXRWYTY242;
+				DEVELOPMENT_TEAM = B9357KA83X;
 				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -2032,7 +2032,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
 				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME)";
-				PROVISIONING_PROFILE = "ce5ad652-cb58-4611-8b81-688c6a46fe0b";
+				PROVISIONING_PROFILE = "2ebfbfee-ffaf-46d6-b53a-11da2b080368";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
