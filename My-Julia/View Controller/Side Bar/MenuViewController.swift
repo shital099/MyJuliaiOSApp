@@ -459,6 +459,13 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
                             //Default navigation bar color
                             CommonModel.sharedInstance.applyDefaultNavigationTheme()
 
+                            //App log out
+                            isAppLogin = false
+
+                            //Clear privious attendee and eventdetails
+                            EventData.sharedInstance.resetEventDetails()
+                            AttendeeInfo.sharedInstance.resetAttendeeDetails()
+
                             let navController = self.storyboard?.instantiateViewController(withIdentifier: "InitalViewController") as! UINavigationController
                             AppDelegate.getAppDelegateInstance().window?.rootViewController = navController
                         }

@@ -38,7 +38,7 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
         UIColor().setIconColorImageToButton(button: addButton, image:"Add_chat")
         
         //Set segment tint color
-        self.segmentControl.tintColor = AppTheme.sharedInstance.backgroundColor.darker(by: 40)!
+        self.segmentControl.tintColor = AppTheme.sharedInstance.backgroundColor.darker(by: 55)!
         
         //Remove extra lines from tableview
         tableView.tableFooterView = UIView()

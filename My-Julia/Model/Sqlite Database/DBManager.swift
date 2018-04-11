@@ -620,8 +620,10 @@ class DBManager: NSObject {
         if openDatabase() {
             
             let querySQL = "Select * from EventDetails where EventID = ? AND AttendeeId = ?"
-            let results:FMResultSet? = database.executeQuery(querySQL, withArgumentsIn: [model.eventId,EventData.sharedInstance.attendeeId])
-            
+            let results:FMResultSet? = database.executeQuery(querySQL, withArgumentsIn: [model.eventId,model.attendeeId])
+            print("Event id : ",model.eventId)
+            print("Attendee id : ",model.attendeeId)
+
             while results?.next() == true {
                 
                 model.eventId = (results?.string(forColumn: "EventID"))!

@@ -37,6 +37,13 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         //Remove extra lines from tableview
         self.tableView.tableFooterView = UIView()
 
+        //App log out
+        isAppLogin = false
+
+        //Clear privious attendee and eventdetails
+        EventData.sharedInstance.resetEventDetails()
+        AttendeeInfo.sharedInstance.resetAttendeeDetails()
+
         //Open last open event automatically if attendee credential is stored
         let userCredential = CredentialHelper.shared.defaultCredential
         print("Default credential : ",userCredential?.user ?? "")
@@ -44,7 +51,8 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         if userCredential?.user != nil {
             //Fetch login attendee details from database
             DBManager.sharedInstance.fetchLoginAttendeeDetailsFromDB(attendeeCode: (userCredential?.user)!)
-            
+
+            print("Event id.... : ",EventData.sharedInstance.eventId)
             //Check last login attendee status and open event
             self.checkLoginAttendeeStatus()
         }
@@ -56,12 +64,6 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        //App log out
-        isAppLogin = false
-
-        //Clear privious attendee and eventdetails
-        EventData.sharedInstance.resetEventDetails()
-        AttendeeInfo.sharedInstance.resetAttendeeDetails()
     }
 
     /*
@@ -361,6 +363,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         _ = DBManager.sharedInstance.fetchEventDetailsDataFromDB()
         _ = DBManager.sharedInstance.fetchProfileDataFromDB()
 
+        print("After fetching event details : ",EventData.sharedInstance.eventId)
         //Fetch application theme data from Sqlite database
         _ = DBManager.sharedInstance.fetchAppThemeDataFromDB()
 
