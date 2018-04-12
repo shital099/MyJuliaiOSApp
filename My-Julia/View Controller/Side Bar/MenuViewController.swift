@@ -92,6 +92,11 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     override func viewDidAppear(_ animated: Bool) {
 
+        //Add observer
+        self.addNotificationObserver()
+    }
+
+    func addNotificationObserver()  {
         //Change notification and chat message read/unread count
         NotificationCenter.default.addObserver(self, selector:#selector(MenuViewController.changeSideMenuCountInSideMenu(notification:)), name:BroadcastNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(MenuViewController.changeSideMenuCountInSideMenu(notification:)), name:ChatNotification, object: nil)
@@ -221,7 +226,8 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
         isAgendaPresent = false
         isMyNotesPresent = false
         isRemainderPresent = false
-        
+        isChatPresent = false
+
         //Fetch all module list from server
         menuArray = self.fetchModuleListFromDB()
         
@@ -297,6 +303,7 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 else if viewController is ChatListViewController {
                    self.chatCount = DBManager.sharedInstance.fetchChatUnreadListCount()
                     sideDrawerItem.dataCount = self.chatCount
+                    isChatPresent = true
                 }
                 else if viewController is NotificationViewController {
                     sideDrawerItem.dataCount = DBManager.sharedInstance.fetchUnreadNotificationsCount()
@@ -446,15 +453,16 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
                         let responseCode = Int(response.value(forKey: "responseCode") as! String)
                         if responseCode == 0 {
                             isAppLogin = false
+                            //Remove notification observer
                             self.clearAllObserver()
 
                             //Remove all credential off login in attendee
                             CredentialHelper.shared.removeAllCredentials()
 
                             //Remove notification observer
-                            NotificationCenter.default.removeObserver(self, name: BroadcastNotification, object: nil)
-                            NotificationCenter.default.removeObserver(self, name: ChatNotification, object: nil)
-                            NotificationCenter.default.removeObserver(self, name: OtherModuleNotification, object: nil)
+//                            NotificationCenter.default.removeObserver(self, name: BroadcastNotification, object: nil)
+//                            NotificationCenter.default.removeObserver(self, name: ChatNotification, object: nil)
+//                            NotificationCenter.default.removeObserver(self, name: OtherModuleNotification, object: nil)
 
                             //Default navigation bar color
                             CommonModel.sharedInstance.applyDefaultNavigationTheme()
@@ -803,7 +811,10 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         //Remove all observer and invalite timers
         self.clearAllObserver()
-        
+
+        //Add observer
+        self.addNotificationObserver()
+
        // let array = DBManager.sharedInstance.fetchCurrentActivity()
         let array = DBManager.sharedInstance.fetchAllCurrentAndFutureActivity()
         for item in array  {

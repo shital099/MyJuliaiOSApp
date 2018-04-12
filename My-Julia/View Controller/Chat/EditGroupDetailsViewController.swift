@@ -161,6 +161,11 @@ class EditGroupDetailsViewController: UIViewController, UIImagePickerControllerD
 
     func updateGroupInfo() {
 
+        if (self.textField.text?.trimmingCharacters(in: .whitespaces).isEmpty)! {
+            CommonModel.sharedInstance.showAlertWithStatus(title: "", message: GroupName_Validation_Message, vc: self)
+            return
+        }
+
         //Show Indicator
         CommonModel.sharedInstance.showActitvityIndicator()
         //Rotate image

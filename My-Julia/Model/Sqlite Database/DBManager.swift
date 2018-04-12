@@ -312,7 +312,7 @@ class DBManager: NSObject {
                     self.insertApplicationModulesDataIntoDB(responce: moduleDict as AnyObject)
                 }
                 
-                //Save Attendee Profile
+                //Save Login Attendee Profile
                 if (dict.value(forKey:"profile") as? NSNull) == nil {
                     
                     var dataDict : NSDictionary!
@@ -407,6 +407,8 @@ class DBManager: NSObject {
 
                         //Save Chat Attendee List
                         if (dict.value(forKey:"attChatList") as? NSNull) == nil {
+                            print("Chat List : ",dict.value(forKey:"attChatList"))
+                            
                             //Delete chat list
                             self.updateChatListDataFromDB()
                              self.saveChatListIntoDB(response: dict.value(forKey:"attChatList") as AnyObject, isGroupChat: 0)
@@ -506,6 +508,21 @@ class DBManager: NSObject {
             do {
                 let event = EventData.sharedInstance
                 try database.executeUpdate("INSERT OR REPLACE INTO LoginAttendee (EventID, AttendeeId, AttendeeCode, Token, IsAccept) VALUES (?, ?, ?, ?, ?)", values: [event.eventId, event.attendeeId, event.attendeeCode, event.auth_token, event.attendeeStatus])
+
+            } catch {
+                print("error = \(error)")
+            }
+            database.close()
+        }
+    }
+
+
+    func updateTermsAndCoditionsAttendeeStatusIntoDB() {
+
+        if openDatabase() {
+            do {
+                let event = EventData.sharedInstance
+                try database.executeUpdate("UPDATE LoginAttendee SET IsAccept = ? where AttendeeId = ? and EventID = ?", values: [1, event.attendeeId, event.eventId])
 
             } catch {
                 print("error = \(error)")
@@ -843,6 +860,7 @@ class DBManager: NSObject {
 
             if (responce.value(forKey:"ModuleRelated") as? NSNull) == nil {
 
+                var orderSequence : Int = 1
                 for item in responce.value(forKey:"ModuleRelated") as! NSArray {
                     if (item as? NSNull) == nil {
                         let  dict = item as! NSDictionary
@@ -856,10 +874,12 @@ class DBManager: NSObject {
                         let sIconUrl = self.appendImagePath(path: dict.value(forKey: "SIconUrl") as Any)
                         let lIconUrl = self.appendImagePath(path: dict.value(forKey: "LIconUrl") as Any)
 
-                        let sequence = dict.value(forKey:"OrderSequence")
+                       // let sequence = dict.value(forKey:"OrderSequence")
 
-                        try database.executeUpdate("insert or replace into Module (EventID, ModuleID, ModuleName, LIconUrl, SIconUrl , isUserRelated, isCustomModule, Content, isDeleted, OrderSequence ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", values: [eventId, mId , name  , lIconUrl ,sIconUrl ,isUserRelated, isCustom ?? false, content , isDeleted, sequence ?? 0 ])
+                        try database.executeUpdate("insert or replace into Module (EventID, ModuleID, ModuleName, LIconUrl, SIconUrl , isUserRelated, isCustomModule, Content, isDeleted, OrderSequence ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", values: [eventId, mId , name  , lIconUrl ,sIconUrl ,isUserRelated, isCustom ?? false, content , isDeleted, orderSequence ])
                         //   query = query + "insert or replace into Module EventID = '\(eventId )', ModuleID = '\(mId )', ModuleName = '\(name )', LIconUrl = '\(lIconUrl )', SIconUrl = '\(sIconUrl )', isUserRelated = '\(isUserRelated )', isCustomModule = '\(isCustom )', Content = '\(content )', isDeleted = '\(isDeleted )', OrderSequence = '\(String(describing: sequence ))'; "
+
+                        orderSequence += 1
                     }
                 }
             }
@@ -938,7 +958,6 @@ class DBManager: NSObject {
 
             while results?.next() == true {
 
-                let model = Modules()
                 index = Int((results?.int(forColumn: "OrderSequence"))!)
             }
             database.close()
@@ -956,7 +975,6 @@ class DBManager: NSObject {
 
             while results?.next() == true {
 
-                let model = Modules()
                 index = Int((results?.int(forColumn: "OrderSequence"))!)
             }
             database.close()

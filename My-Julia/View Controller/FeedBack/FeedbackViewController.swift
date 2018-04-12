@@ -145,8 +145,8 @@ class FeedbackViewController: UIViewController, UITableViewDataSource, UITableVi
 
     func checkUserFeedback() {
 
-        let urlStr = Check_User_Feedback_url.appendingFormat("%@/%@",EventData.sharedInstance.attendeeId,EventData.sharedInstance.eventId)
-        NetworkingHelper.getRequestFromUrl(name:Check_User_Feedback_url,  urlString: urlStr, callback: { response in
+//        let urlStr = Check_User_Feedback_url.appendingFormat("%@/%@",EventData.sharedInstance.attendeeId,EventData.sharedInstance.eventId)
+        NetworkingHelper.getRequestFromUrl(name:Check_User_Feedback_url,  urlString: Check_User_Feedback_url, callback: { response in
 
             if response is NSDictionary {
                 if response.value(forKey: "responseCode") as! Bool == true {
@@ -172,7 +172,6 @@ class FeedbackViewController: UIViewController, UITableViewDataSource, UITableVi
                 }
             }
         }, errorBack: { error in
-
         })
     }
 

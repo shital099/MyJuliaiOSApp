@@ -19,7 +19,7 @@ let Event_Error_Message = "Please enter valid attendee code"
 //General
 let Internet_Error_Message = "There was a problem connecting to the server. Please check your internet connection and try again."
 let Internal_Server_Error_Message = "Internet server error"
-let ServerConnection_Error_Message = "There was a problem connecting to the server. Please check your internet connection and try again."
+let ServerConnection_Error_Message = "There was a problem connecting to the server. Please try again."
 let Server_Error_Message = "Failed!"
 let Alert_Error = "Failed"
 let Alert_Warning = "Warning"
@@ -80,6 +80,7 @@ let Ask_Valid_Question = "Question can't be post empty"
 let Empty_Group_Member_Message = "Please select atleast one group member"
 let Empty_Group_Name_Message = "Please enter group name"
 let Disable_chat_message = "You can't send messages because this user 'Do not disturb' setting is activated"
+let GroupName_Validation_Message = "Group name should not be empty"
 
 //Reminder
 let No_Reminder_Text = "No Reminder Added"

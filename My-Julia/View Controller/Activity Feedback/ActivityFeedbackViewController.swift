@@ -51,10 +51,14 @@ class ActivityFeedbackViewController: UIViewController, UITableViewDataSource, U
         //Make button theme
         sendBtn.showButtonTheme()
         
-        self.submittedMessageLbl.text = Activity_No_Feedback_Added
+        self.submittedMessageLbl.text = "" //Activity_No_Feedback_Added
 
         //Fetch data from Sqlite database
         self.listArray = DBManager.sharedInstance.fetchActivityFeedbackDataFromDB(activityId:self.activityId) as! [FeedbackModel]
+
+        if self.listArray.count == 0 {
+            self.submittedMessageLbl.text = Activity_No_Feedback_Added
+        }
 
         //Fetch activity feedback from server
         self.fetchActivityFeedbackList()
@@ -145,7 +149,7 @@ class ActivityFeedbackViewController: UIViewController, UITableViewDataSource, U
                 else {
                     self.submittedMessageLbl.text = Activity_No_Feedback_Added
                     self.topView.isHidden = true
-                }
+                }   
             }
         }, errorBack: { error in
             NSLog("error : %@", error)

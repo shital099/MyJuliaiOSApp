@@ -23,6 +23,7 @@ class AddPollQuestionsViewController: UIViewController, UITableViewDataSource, U
     var activityId : String = ""
     var isAddPoll : Bool = true
 
+    var delegate : ActivityQuestionsListViewController!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,17 +55,20 @@ class AddPollQuestionsViewController: UIViewController, UITableViewDataSource, U
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: .UIKeyboardWillHide, object: nil)
         
     }
-    
-    @objc func hideKeyboard() {
-        tableView.endEditing(true)
-    }
-    
-    
-    @objc func dismissKeyboard() {
-        view.endEditing(true)
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
     }
 
     // MARK: - Keyboard NSNotification Methods
+
+    @objc func hideKeyboard() {
+        tableView.endEditing(true)
+    }
+
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
 
     @objc func keyboardWillShow(notification: NSNotification) {
         if ((notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
@@ -104,9 +108,13 @@ class AddPollQuestionsViewController: UIViewController, UITableViewDataSource, U
                                   callback: { response in
                                     //dissmiss Indicator
                                     CommonModel.sharedInstance.dissmissActitvityIndicator()
-                                    // self.fetchLatestPollQuestionList()
-                                    CommonModel.sharedInstance.showAlertWithStatus(title: Alert_Sucess, message: Poll_Question_Add, vc: self)
-                                    
+
+                                    DispatchQueue.main.async {
+                                        self.navigationController?.popViewController(animated: true)
+                                        //Show status alert
+                                        self.delegate.updateQuestionDelegateCall(isAddPoll: self.isAddPoll)
+                                    }
+
         }, errorBack: { error in
         })
     }
@@ -121,10 +129,10 @@ class AddPollQuestionsViewController: UIViewController, UITableViewDataSource, U
 //            ] as [String : Any]
         
         let parameter = ["Id": questionModel.questionsId, "EventId": EventData.sharedInstance.eventId, "ActivityId": activityId, "Session":0, "Questions" : questionModel.questionText, "QuestionType" : "Multiple", "ModifiedBy": AttendeeInfo.sharedInstance.attendeeId, "Options" : [
-            [ "QuestionId" : questionModel.questionsId,  "OptionValue" : questionModel.opt1, "OptionOrder" : "1", "OptionId": questionModel.op1Id, "EventId" : EventData.sharedInstance.eventId, "ModifiedBy": AttendeeInfo.sharedInstance.attendeeId],
-            [ "QuestionId" : questionModel.questionsId,  "OptionValue" : questionModel.opt2, "OptionOrder" : "2", "OptionId": questionModel.opt2Id, "EventId" : EventData.sharedInstance.eventId, "ModifiedBy": AttendeeInfo.sharedInstance.attendeeId],
-            [ "QuestionId" : questionModel.questionsId,  "OptionValue" : questionModel.opt3, "OptionOrder" : "3", "OptionId": questionModel.opt3Id, "EventId" : EventData.sharedInstance.eventId, "ModifiedBy": AttendeeInfo.sharedInstance.attendeeId],
-            [ "QuestionId" : questionModel.questionsId,  "OptionValue" : questionModel.opt4, "OptionOrder" : "4", "OptionId": questionModel.opt4Id, "EventId" : EventData.sharedInstance.eventId, "ModifiedBy": AttendeeInfo.sharedInstance.attendeeId]
+            [ "QuestionId" : questionModel.questionsId,  "OptionValue" : questionModel.opt1, "OptionOrder" : 1, "OptionId": questionModel.op1Id, "EventId" : EventData.sharedInstance.eventId, "ModifiedBy": AttendeeInfo.sharedInstance.attendeeId],
+            [ "QuestionId" : questionModel.questionsId,  "OptionValue" : questionModel.opt2, "OptionOrder" : 2, "OptionId": questionModel.opt2Id, "EventId" : EventData.sharedInstance.eventId, "ModifiedBy": AttendeeInfo.sharedInstance.attendeeId],
+            [ "QuestionId" : questionModel.questionsId,  "OptionValue" : questionModel.opt3, "OptionOrder" : 3, "OptionId": questionModel.opt3Id, "EventId" : EventData.sharedInstance.eventId, "ModifiedBy": AttendeeInfo.sharedInstance.attendeeId],
+            [ "QuestionId" : questionModel.questionsId,  "OptionValue" : questionModel.opt4, "OptionOrder" : 4, "OptionId": questionModel.opt4Id, "EventId" : EventData.sharedInstance.eventId, "ModifiedBy": AttendeeInfo.sharedInstance.attendeeId]
             
             ]
             ] as [String : Any]
@@ -137,10 +145,14 @@ class AddPollQuestionsViewController: UIViewController, UITableViewDataSource, U
          //dissmiss Indicator
         CommonModel.sharedInstance.dissmissActitvityIndicator()
          DBManager.sharedInstance.updateSpeakerPollQuestionsDataIntoDB(question: self.questionModel.questionText, opt1: self.questionModel.opt1, opt2: self.questionModel.opt2, opt3: self.questionModel.opt3, opt4: self.questionModel.opt4, questionsId: self.questionModel.questionsId)
-                            
-//         self.fetchLatestPollQuestionList()
-        CommonModel.sharedInstance.showAlertWithStatus(title: Alert_Sucess, message: Update_Poll_success, vc: self)
-                                    
+
+                                    // CommonModel.sharedInstance.showAlertWithStatus(title: Alert_Sucess, message: Update_Poll_success, vc: self)
+                                    DispatchQueue.main.async {
+                                        self.navigationController?.popViewController(animated: true)
+                                        //Show status alert
+                                        self.delegate.updateQuestionDelegateCall(isAddPoll: self.isAddPoll)
+                                   }
+
         }, errorBack: { error in
         })
         
@@ -300,8 +312,7 @@ class AddPollQuestionsViewController: UIViewController, UITableViewDataSource, U
             return
         }
         
-        else if
-        tablecell.opt3txt.text == tablecell.opt4txt.text  {
+        else if tablecell.opt3txt.text == tablecell.opt4txt.text  {
             CommonModel.sharedInstance.showAlertWithStatus(title: "", message: "Enter unique option to proceed", vc: self)
             return
         }
@@ -309,7 +320,6 @@ class AddPollQuestionsViewController: UIViewController, UITableViewDataSource, U
             self.postPollQuestion()
         }
         
-        self.navigationController?.popViewController(animated: true)
     }
     
     
@@ -319,7 +329,6 @@ class AddPollQuestionsViewController: UIViewController, UITableViewDataSource, U
     
     @IBAction func onClickOfUpdateBtn(_ sender: UIButton) {
         
-
         let index = sender.tag
         tablecell.sendBtn.isHidden = true
         tablecell.updateBtn.isHidden = false
@@ -358,23 +367,14 @@ class AddPollQuestionsViewController: UIViewController, UITableViewDataSource, U
             CommonModel.sharedInstance.showAlertWithStatus(title: "", message: "Enter unique option to proceed", vc: self)
             return
         }
-            
         else if tablecell.opt3txt.text == tablecell.opt4txt.text  {
             CommonModel.sharedInstance.showAlertWithStatus(title: "", message: "Enter unique option to proceed", vc: self)
             return
         }
-        
-        
+
         if !tablecell.questInputView.text.isEmpty {
             self.updatePollQuestion(index: index)
         }
-//            self.tableView.reloadData()
-        self.navigationController?.popViewController(animated: true)
-
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
     }
 }
 

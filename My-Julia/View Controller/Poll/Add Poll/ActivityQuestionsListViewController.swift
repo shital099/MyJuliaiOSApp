@@ -22,6 +22,7 @@ class ActivityQuestionsListViewController : UIViewController, UITableViewDataSou
     var alert : TKAlert!
     var listArray : [PollModel] = []
 
+
    override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -63,9 +64,23 @@ class ActivityQuestionsListViewController : UIViewController, UITableViewDataSou
         //Fetch data from Sqlite database
         self.fetchLatestPollQuestionList()
     }
-    
 
-    // MARK: - UITableView Delegate Methods
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+    }
+
+    // MARK: - Button Action Methods
+
+    @IBAction func addPollQuestion(_ sender: UIBarButtonItem) {
+        let viewController = storyboard?.instantiateViewController(withIdentifier: "AddPollQuestionsViewController") as! AddPollQuestionsViewController
+        viewController.activityId = model.activityId
+        viewController.isAddPoll = true
+        viewController.delegate = self
+        self.navigationController?.pushViewController(viewController, animated: true)
+    }
+
+    // MARK: - UITableView DataSource Methods
+
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -84,16 +99,12 @@ class ActivityQuestionsListViewController : UIViewController, UITableViewDataSou
         cell.bgImage?.layer.cornerRadius = 5.0
         let questionModel = listArray[indexPath.row]
         cell.actnameLbl.text = questionModel.questionText
-//        cell.opt1lbl.text = questionModel.opt1
-//        cell.opt2lbl.text = questionModel.opt2
-//        cell.opt3lbl.text = questionModel.opt3
-//        cell.opt4lbl.text = questionModel.opt4
-
-//        cell.editPollBtn.tag = indexPath.row
         cell.selectionStyle = UITableViewCellSelectionStyle.none
         return cell
     }
-    
+
+    // MARK: - UITableView Delegate Methods
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
 //        let index = sender.tag
@@ -101,6 +112,7 @@ class ActivityQuestionsListViewController : UIViewController, UITableViewDataSou
         viewController.questionModel = self.listArray[indexPath.row]
         viewController.activityId = model.activityId
         viewController.isAddPoll = false
+        viewController.delegate = self
         self.navigationController?.pushViewController(viewController, animated: true)
     }
     
@@ -122,62 +134,17 @@ class ActivityQuestionsListViewController : UIViewController, UITableViewDataSou
         })
     }
     
-    
-//    func parseActivityData(response : AnyObject)
-//    {
-//        for item in response as! NSArray{
-//            let dict = item as! NSDictionary
-//            let questionModel = PollModel()
-//
-//            questionModel.questionText = dict.value(forKey: "Questions") as! String!
-//            questionModel.questionsId = dict.value(forKey: "Id") as! String!
-////            questionModel.optionsArr = (dict.value(forKey: "Options") as! NSArray) as! Array<Any>
-//
-//            // new try
-//            questionModel.opt1 = dict.value(forKey: "Option1") as! String!
-//            questionModel.opt2 = dict.value(forKey: "Option2") as! String!
-//            questionModel.opt3 = dict.value(forKey: "Option3") as! String!
-//            questionModel.opt4 = dict.value(forKey: "Option4") as! String!
-//            questionModel.op1Id = dict.value(forKey: "Option1Id") as! String!
-//            questionModel.opt2Id = dict.value(forKey: "Option2Id") as! String!
-//            questionModel.opt3Id = dict.value(forKey: "Option3Id") as! String!
-//            questionModel.opt4Id = dict.value(forKey: "Option4Id") as! String!
-//
-//            //            let optionDict = model.optionsArray[indexPath.row] as! NSDictionary
-//            //            model.opt1 = optionDict["OptionValue"] as! String
-//            //            ansDict.setValue(optionDict["Id"], forKey: model.quesId)
-//            //            print("Ans Dict - ", self.ansDict)
-//
-//            self.listArray.add(questionModel)
-//        }
-//        self.tableView.reloadData()
-//    }
-    
-    // MARK: - Button Action Methods
-    
-    @IBAction func addPollQuestion(_ sender: UIBarButtonItem) {
-        let viewController = storyboard?.instantiateViewController(withIdentifier: "AddPollQuestionsViewController") as! AddPollQuestionsViewController
-        viewController.activityId = model.activityId
-        viewController.isAddPoll = true
-        self.navigationController?.pushViewController(viewController, animated: true)
+
+    func updateQuestionDelegateCall(isAddPoll : Bool)  {
+
+        if isAddPoll {
+           CommonModel.sharedInstance.showAlertWithStatus(title: Alert_Sucess, message: Poll_Question_Add, vc: self)
+        }
+        else {
+            CommonModel.sharedInstance.showAlertWithStatus(title: Alert_Sucess, message: Update_Poll_success, vc: self)
+        }
     }
 
-//    @IBAction func editPollQuest(_ sender: UIButton) {
-////        isUpdate = true
-//        let index = sender.tag
-//        let viewController = storyboard?.instantiateViewController(withIdentifier: "AddPollQuestionsViewController") as! AddPollQuestionsViewController
-//        viewController.questionModel = self.listArray[index] as! PollModel
-//        viewController.activityId = model.activityId
-//        isAddPoll = false
-//        self.navigationController?.pushViewController(viewController, animated: true)
-//
-//        //        self.updatePollQuestion(index : index)
-//    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-   
 }
 
 // MARK: - Custom Cell Classes

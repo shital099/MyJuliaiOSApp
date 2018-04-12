@@ -55,7 +55,7 @@ class EventDetailsVC: UIViewController, UITableViewDataSource, UITableViewDelega
         
         //This tableHeaderView plays the placeholder role here.
         self.tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: CGFloat(CHTwitterCoverViewHeight)))
-        self.tableView.addTwitterCover(with: UIImage(named:"event_placeholder"))
+       // self.tableView.addTwitterCover(with: UIImage(named:"event_placeholder"))
         
         self.coverImageView.sd_setImage(with: url, placeholderImage: nil, options: SDWebImageOptions(rawValue: 0), completed: { (image, error, cacheType, imageURL) in
             // Perform operation.

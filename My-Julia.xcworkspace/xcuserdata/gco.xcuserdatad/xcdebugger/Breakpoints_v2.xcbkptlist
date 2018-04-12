@@ -52,7 +52,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "My-Julia/View Controller/Login/EventListViewController.swift"
-            timestampString = "544969546.897717"
+            timestampString = "545231524.324554"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "195"
@@ -67,12 +67,28 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "My-Julia/View Controller/Chat/EditGroupDetailsViewController.swift"
-            timestampString = "544619688.260862"
+            filePath = "My-Julia/View Controller/Poll/Add Poll/ActivityQuestionsListViewController.swift"
+            timestampString = "545231524.324636"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "197"
-            endingLineNumber = "197"
+            startingLineNumber = "140"
+            endingLineNumber = "140"
+            landmarkName = "updateQuestionDelegateCall(isAddPoll:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "My-Julia/View Controller/Chat/EditGroupDetailsViewController.swift"
+            timestampString = "545231524.324695"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "217"
+            endingLineNumber = "217"
             landmarkName = "updateGroupInfo()"
             landmarkType = "7">
          </BreakpointContent>

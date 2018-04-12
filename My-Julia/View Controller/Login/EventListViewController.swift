@@ -310,6 +310,10 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
 
             if responseCode == 0 {
                 EventData.sharedInstance.attendeeStatus = true
+
+                //Update terms and condiiton status in database
+                DBManager.sharedInstance.updateTermsAndCoditionsAttendeeStatusIntoDB()
+
                 self.navigateToNextScreen()
             }
         }, errorBack: { error in

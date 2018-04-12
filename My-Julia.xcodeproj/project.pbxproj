@@ -1180,9 +1180,9 @@
 			isa = PBXGroup;
 			children = (
 				7E5F07F720610173002687D0 /* AttendeesViewController.swift */,
+				7E5F07FA20610173002687D0 /* AttendeeDetailsViewController.swift */,
 				7E5F07F820610173002687D0 /* CustomHeaderView.xib */,
 				7E5F07F920610173002687D0 /* CustomHeaderView.swift */,
-				7E5F07FA20610173002687D0 /* AttendeeDetailsViewController.swift */,
 			);
 			path = Attendees;
 			sourceTree = "<group>";
@@ -1213,8 +1213,8 @@
 				7E5F080420610173002687D0 /* EditGroupDetailsViewController.swift */,
 				7E5F080520610173002687D0 /* AddMemberViewController.swift */,
 				7E5F080620610173002687D0 /* CreateGroupViewController.swift */,
-				7E5F080720610173002687D0 /* ChatSelectionView */,
 				7E5F081120610173002687D0 /* ChatContactsViewController.swift */,
+				7E5F080720610173002687D0 /* ChatSelectionView */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -2048,8 +2048,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = "My-Julia/My-Julia.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Marco Kenson (3AS5P9L25L)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Marco Kenson (3AS5P9L25L)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: GCO (Global Conference Organisers) B.V";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: GCO (Global Conference Organisers) B.V";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = SKDTAX4HF9;
@@ -2079,8 +2079,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.gcotechcenter.MyJulia;
 				PRODUCT_MODULE_NAME = EventApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "ce5ad652-cb58-4611-8b81-688c6a46fe0b";
-				PROVISIONING_PROFILE_SPECIFIER = MyJulia_Dev_Enterprise;
+				PROVISIONING_PROFILE = "2ebfbfee-ffaf-46d6-b53a-11da2b080368";
+				PROVISIONING_PROFILE_SPECIFIER = MyJulia_Prod_Enterprise;
 				SWIFT_OBJC_BRIDGING_HEADER = Event_Briding_Header.h;
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "";
 				SWIFT_REFLECTION_METADATA_LEVEL = none;
@@ -2097,8 +2097,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = "My-Julia/My-Julia.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Marco Kenson (3AS5P9L25L)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Marco Kenson (3AS5P9L25L)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: GCO (Global Conference Organisers) B.V";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: GCO (Global Conference Organisers) B.V";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = SKDTAX4HF9;
@@ -2128,8 +2128,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.gcotechcenter.MyJulia;
 				PRODUCT_MODULE_NAME = EventApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "ce5ad652-cb58-4611-8b81-688c6a46fe0b";
-				PROVISIONING_PROFILE_SPECIFIER = MyJulia_Dev_Enterprise;
+				PROVISIONING_PROFILE = "2ebfbfee-ffaf-46d6-b53a-11da2b080368";
+				PROVISIONING_PROFILE_SPECIFIER = MyJulia_Prod_Enterprise;
 				SWIFT_OBJC_BRIDGING_HEADER = Event_Briding_Header.h;
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "";
 				SWIFT_REFLECTION_METADATA_LEVEL = none;

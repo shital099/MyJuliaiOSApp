@@ -212,7 +212,6 @@ class UserProfileViewController: UIViewController, UINavigationControllerDelegat
         else {
             paramDict = ["EventId" : EventData.sharedInstance.eventId, "AttendeeId" : EventData.sharedInstance.attendeeId, "IsVisible" : switchSet.isOn, "IsDND" : dndSwitchSet.isOn] as [String : Any]
         }
-        print("Update profile : ",paramDict)
         
         NetworkingHelper.postData(urlString: Post_Visiblity_url, param: paramDict as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { response in
             

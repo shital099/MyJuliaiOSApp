@@ -177,6 +177,7 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
         var newFrame : CGRect = IFView.frame;
         newFrame.origin.y = size.height - 45
         newFrame.size.width = size.width
+
         IFView.frame = newFrame;
         IFView.changeInputViewFrame(IFView.frame)
         UIView.commitAnimations()
@@ -592,10 +593,10 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
 
         var size : CGSize = self.view.frame.size
 
-        if UIDevice.current.orientation.isLandscape {
-            size.height -= 64
-        } else {
-        }
+//        if UIDevice.current.orientation.isLandscape {
+//            size.height -= 64
+//        } else {
+//        }
 
         //Calculate bottom view size
 //        if IS_IPAD {
@@ -603,6 +604,8 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
 //        }
 
         if IS_IPAD {
+            size.height -= 64
+
             if self.splitViewController?.displayMode == UISplitViewControllerDisplayMode.allVisible {
                 size.width -= SPLIT_WIDTH
             }

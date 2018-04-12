@@ -30,7 +30,8 @@ var isActivityFeedPresent : Bool = false
 var isAgendaPresent : Bool = false
 var profileSettingVisible : Bool = true
 var isLiveQuestionScreenOpen : Bool = false
-
+var isChatPresent : Bool = false
+;
 extension UIApplication {
     
     var statusBarView: UIView? {
@@ -251,7 +252,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             else if (data["Notification"] != nil)
             {
                 let alertBody = DBManager.sharedInstance.convertToJsonData(text: data["Notification"] as! String) as! NSDictionary
-                print("Notification body : ",alertBody )
+                //print("Notification body : ",alertBody )
                 DBManager.sharedInstance.saveBroadCastNotification(data : alertBody)
 
                 if application.applicationState == UIApplicationState.active {

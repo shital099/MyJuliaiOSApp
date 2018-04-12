@@ -305,7 +305,21 @@ class AttendeeDetailsViewController: UIViewController, UITableViewDataSource, UI
 
         cell.nameLabel?.text = personModel.name
         cell.designationLabel.text = personModel.designation
-        
+
+        // Hide chat button if chat module is associated  in this event by admin
+        if isChatPresent == false {
+//            cell.messageBtn.isHidden = true
+//            cell.messageBtn.size.width = 0
+//            cell.messageBtn.updateConstraintsIfNeeded()
+//            var frame = cell.messageBtn.frame
+//            frame.origin.x = (cell.frame.size.width - frame.size.width ) / 2
+//            cell.callBtn.frame = frame
+//            cell.callBtn.updateConstraintsIfNeeded()
+
+            cell.messageBtn.isEnabled = false
+            cell.messageBtn.alpha = 0.5
+        }
+
         if personModel.privacySetting == true {
             cell.imageview.sd_setImage(with: URL(string:personModel.iconUrl), placeholderImage: #imageLiteral(resourceName: "user"))
             cell.imageview?.layer.cornerRadius = cell.imageview.frame.size.height/2
