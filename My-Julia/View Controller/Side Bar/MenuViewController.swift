@@ -124,114 +124,114 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
     // MARK: - Operation queue oberver
     func setMenuList()  {
         
+        DispatchQueue.main.async  {
+            //Change header color
+            if IS_IPHONE {
+                var navController = UINavigationController()
+                //Back Button
+                //            navController.navigationBar.backIndicatorImage = UIImage(named: "nav_back_button")
+                //            navController.navigationBar.backIndicatorTransitionMaskImage = UIImage(named: "nav_back_button")
+                //            navController.navigationBar.backItem?.title = " "
 
-        //Change header color
-        if IS_IPHONE {
-            var navController = UINavigationController()
-            //Back Button
-//            navController.navigationBar.backIndicatorImage = UIImage(named: "nav_back_button")
-//            navController.navigationBar.backIndicatorTransitionMaskImage = UIImage(named: "nav_back_button")
-//            navController.navigationBar.backItem?.title = " "
+                navController = (self.menuContainerViewController.centerViewController as? UINavigationController)!
+                // Set Navigation bar background Image
+                if AppTheme.sharedInstance.isHeaderColor == false {
+                    if AppTheme.sharedInstance.headerImage != "" {
+                        if let url = NSURL(string: AppTheme.sharedInstance.headerImage) {
+                            var request = URLRequest(url: url as URL)
+                            request.addValue("Basic ".appending(EventData.sharedInstance.auth_token), forHTTPHeaderField: "Authorization")
+                            let queue = OperationQueue()
 
-            navController = (self.menuContainerViewController.centerViewController as? UINavigationController)!
-            // Set Navigation bar background Image
-            if AppTheme.sharedInstance.isHeaderColor == false {
-                if AppTheme.sharedInstance.headerImage != "" {
-                    if let url = NSURL(string: AppTheme.sharedInstance.headerImage) {
-                        var request = URLRequest(url: url as URL)
-                        request.addValue("Basic ".appending(EventData.sharedInstance.auth_token), forHTTPHeaderField: "Authorization")
-                        let queue = OperationQueue()
-                        
-                        NSURLConnection.sendAsynchronousRequest(request, queue: queue) {
-                            response, data, error -> Void in
-                            if (data as NSData?) != nil {
-                                navController.navigationBar.setBackgroundImage(UIImage(data: (data)!), for: .default)
+                            NSURLConnection.sendAsynchronousRequest(request, queue: queue) {
+                                response, data, error -> Void in
+                                if (data as NSData?) != nil {
+                                    navController.navigationBar.setBackgroundImage(UIImage(data: (data)!), for: .default)
+                                }
                             }
                         }
+                    }
+                    else {
+                        navController.navigationBar.setBackgroundImage(nil, for: .default)
+                        navController.navigationBar.barTintColor = AppTheme.sharedInstance.headerColor
                     }
                 }
                 else {
                     navController.navigationBar.setBackgroundImage(nil, for: .default)
+                    navController = (self.menuContainerViewController.centerViewController as? UINavigationController)!
                     navController.navigationBar.barTintColor = AppTheme.sharedInstance.headerColor
                 }
+
+                //Apply back button color
+                navController.navigationBar.tintColor = AppTheme.sharedInstance.headerTextColor
+
+                //Apply header text color and Font
+                let font : UIFont = UIFont.getFont(fontName: AppTheme.sharedInstance.headerFontName, fontStyle: AppTheme.sharedInstance.headerFontStyle, fontSize: CGFloat(AppTheme.sharedInstance.headerFontSize))
+
+                navController.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor:AppTheme.sharedInstance.headerTextColor, NSAttributedStringKey.font: font ]
+
             }
             else {
-                navController.navigationBar.setBackgroundImage(nil, for: .default)
-                navController = (self.menuContainerViewController.centerViewController as? UINavigationController)!
-                navController.navigationBar.barTintColor = AppTheme.sharedInstance.headerColor
+                //        //Apply navigation theme
+                CommonModel.sharedInstance.applyNavigationTheme()
+                //navController = (self.splitViewController?.navigationController)!
+
             }
-            
-            //Apply back button color
-            navController.navigationBar.tintColor = AppTheme.sharedInstance.headerTextColor
-            
-            //Apply header text color and Font
-            let font : UIFont = UIFont.getFont(fontName: AppTheme.sharedInstance.headerFontName, fontStyle: AppTheme.sharedInstance.headerFontStyle, fontSize: CGFloat(AppTheme.sharedInstance.headerFontSize))
-            
-            navController.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor:AppTheme.sharedInstance.headerTextColor, NSAttributedStringKey.font: font ]
-            
-        }
-        else {
-            //        //Apply navigation theme
-            CommonModel.sharedInstance.applyNavigationTheme()
-            //navController = (self.splitViewController?.navigationController)!
-            
-        }
 
+            SDImageCache.shared().clearMemory()
+            SDImageCache.shared().clearDisk()
 
+            //Show user porfile picture
+            self.userProfileIcon.sd_setImage(with: URL(string:AttendeeInfo.sharedInstance.iconUrl), placeholderImage: UIImage(named: "user-profile"))
 
-        SDImageCache.shared().clearMemory()
-        SDImageCache.shared().clearDisk()
-
-        //Show user porfile picture
-        self.userProfileIcon.sd_setImage(with: URL(string:AttendeeInfo.sharedInstance.iconUrl), placeholderImage: UIImage(named: "user-profile"))
-
-        //Remove background cache image path
-       // if SDImageCache.shared().cachePath(forKey: AppTheme.sharedInstance.backgroundImage, inPath: AppTheme.sharedInstance.backgroundImage) != AppTheme.sharedInstance.backgroundImage {
+            //Remove background cache image path
+            // if SDImageCache.shared().cachePath(forKey: AppTheme.sharedInstance.backgroundImage, inPath: AppTheme.sharedInstance.backgroundImage) != AppTheme.sharedInstance.backgroundImage {
             SDImageCache.shared().removeImage(forKey: AppTheme.sharedInstance.backgroundImage, withCompletion: nil)
-       // }
-        
-        //Apply menu bckground theme color
-        self.bgImageView.backgroundColor = AppTheme.sharedInstance.menuBackgroundColor
-        
-        //Apply navigation theme
-        CommonModel.sharedInstance.applyNavigationTheme()
-        
-        //Check Event name and icon combination OR only icon
-        if AppTheme.sharedInstance.isEventLogoIcon {
-            iconImage.isHidden = false
-            eventNameLbl.isHidden = false
-            eventLogoImage.isHidden = true
-            
-            //Show event Details
-            eventNameLbl.text = AppTheme.sharedInstance.logoText
-            eventNameLbl.textColor = AppTheme.sharedInstance.eventNameTextColor
-            eventNameLbl.font = UIFont.getFont(fontName: AppTheme.sharedInstance.iconTextFontName, fontStyle: AppTheme.sharedInstance.iconTextFontStyle, fontSize: CGFloat(AppTheme.sharedInstance.iconTextFontSize))
+            // }
 
-            SDImageCache.shared().removeImage(forKey: AppTheme.sharedInstance.eventIconImage, withCompletion: nil)
-            iconImage.sd_setImage(with: NSURL(string:AppTheme.sharedInstance.eventIconImage as String)! as URL, placeholderImage: #imageLiteral(resourceName: "noImg_2"))
-        }
-        else {
-            eventNameLbl.isHidden = true
-            iconImage.isHidden = true
-            eventLogoImage.isHidden = false
-            SDImageCache.shared().removeImage(forKey: AppTheme.sharedInstance.eventLogoImage, withCompletion: nil)
-            eventLogoImage.sd_setImage(with: NSURL(string:AppTheme.sharedInstance.eventLogoImage as String)! as URL, placeholderImage: #imageLiteral(resourceName: "noImg_2"))
-        }
-        
-        
-        //Remove all section
-        //   drawer.removeAllSections()
-        
-        isMySchedulesPresent = false
-        isAgendaPresent = false
-        isMyNotesPresent = false
-        isRemainderPresent = false
-        isChatPresent = false
+            //Apply menu bckground theme color
+            self.bgImageView.backgroundColor = AppTheme.sharedInstance.menuBackgroundColor
 
-        //Fetch all module list from server
-        menuArray = self.fetchModuleListFromDB()
-        
-        tableView.reloadData()
+            //Apply navigation theme
+            CommonModel.sharedInstance.applyNavigationTheme()
+
+            //Check Event name and icon combination OR only icon
+            if AppTheme.sharedInstance.isEventLogoIcon {
+                self.iconImage.isHidden = false
+                self.eventNameLbl.isHidden = false
+                self.eventLogoImage.isHidden = true
+
+                //Show event Details
+                self.eventNameLbl.text = AppTheme.sharedInstance.logoText
+                self.eventNameLbl.textColor = AppTheme.sharedInstance.eventNameTextColor
+                self.eventNameLbl.font = UIFont.getFont(fontName: AppTheme.sharedInstance.iconTextFontName, fontStyle: AppTheme.sharedInstance.iconTextFontStyle, fontSize: CGFloat(AppTheme.sharedInstance.iconTextFontSize))
+
+                SDImageCache.shared().removeImage(forKey: AppTheme.sharedInstance.eventIconImage, withCompletion: nil)
+                self.iconImage.sd_setImage(with: NSURL(string:AppTheme.sharedInstance.eventIconImage as String)! as URL, placeholderImage: #imageLiteral(resourceName: "noImg_2"))
+            }
+            else {
+                self.eventNameLbl.isHidden = true
+                self.iconImage.isHidden = true
+                self.eventLogoImage.isHidden = false
+                SDImageCache.shared().removeImage(forKey: AppTheme.sharedInstance.eventLogoImage, withCompletion: nil)
+                self.eventLogoImage.sd_setImage(with: NSURL(string:AppTheme.sharedInstance.eventLogoImage as String)! as URL, placeholderImage: #imageLiteral(resourceName: "noImg_2"))
+            }
+
+
+            //Remove all section
+            //   drawer.removeAllSections()
+
+            isMySchedulesPresent = false
+            isAgendaPresent = false
+            isMyNotesPresent = false
+            isRemainderPresent = false
+            isChatPresent = false
+
+            //Fetch all module list from server
+            self.menuArray = self.fetchModuleListFromDB()
+
+            self.tableView.reloadData()
+        }
+
     }
     
     func fetchModuleListFromDB() -> NSArray {
@@ -738,11 +738,11 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
                 if notification.name == BroadcastNotification {
                     item.dataCount = DBManager.sharedInstance.fetchUnreadNotificationsCount()
-                    print("Broadcast data count : ",item.dataCount)
+                   // print("Broadcast data count : ",item.dataCount)
                 }
                 else {
                     item.dataCount = DBManager.sharedInstance.fetchChatUnreadListCount()
-                    print("Chat data count : ",item.dataCount)
+                  //  print("Chat data count : ",item.dataCount)
                 }
                 section.removeItem(item)
                 section.insertItem(item, at: indexPath.row)
@@ -773,7 +773,6 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
     @objc func openNotificationModuleScreenInSideMenu(notification: NSNotification) {
         let moduleOrder = DBManager.sharedInstance.fetchModuleOrderFromDB(moduleId: notification.userInfo!["moduleId"] as! String) as Int
 
-        print("Notification receive of this module : ",moduleOrder)
         if moduleOrder != 0 {
 
             //Refresh previous selected row
@@ -785,7 +784,6 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
             selectedIndexPath = IndexPath.init(row: moduleOrder - 1, section: 1)
             self.tableView.reloadRows(at: [selectedIndexPath as IndexPath], with: UITableViewRowAnimation.automatic)
 
-            print("Notification module row : ",selectedIndexPath.row)
             //Call delegate method when menu item selected
             self.menuItemSelected(index: selectedIndexPath.row, section: selectedIndexPath.section)
         }

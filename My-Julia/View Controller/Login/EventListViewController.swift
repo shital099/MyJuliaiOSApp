@@ -12,6 +12,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var appVersionName: UILabel!
 
     var listArray:[EventModel] = []
     var searchListArray:[EventModel] = []
@@ -28,7 +29,6 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
 
         //Fetch event details data from Sqlite database and if it empty show error message
         self.listArray = DBManager.sharedInstance.fetchAllEventsListFromDB() as! [EventModel]
-       // print("Event List : ",self.listArray)
 
         //Update dyanamic height of tableview cell
         tableView.estimatedRowHeight = 300
@@ -46,16 +46,18 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
 
         //Open last open event automatically if attendee credential is stored
         let userCredential = CredentialHelper.shared.defaultCredential
-        print("Default credential : ",userCredential?.user ?? "")
+       // print("Default credential : ",userCredential?.user ?? "")
 
         if userCredential?.user != nil {
             //Fetch login attendee details from database
             DBManager.sharedInstance.fetchLoginAttendeeDetailsFromDB(attendeeCode: (userCredential?.user)!)
 
-            print("Event id.... : ",EventData.sharedInstance.eventId)
             //Check last login attendee status and open event
             self.checkLoginAttendeeStatus()
         }
+
+        //Show application version
+        self.appVersionName.text = APP_VERSION
     }
 
     override func didReceiveMemoryWarning() {
@@ -222,18 +224,13 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         CommonModel.sharedInstance.showActitvityIndicator()
 
         let parameters : NSDictionary? = [ "SearchText": self.searchBar.text!]
-       // print(" Search event start : ", CommonModel.sharedInstance.getCurrentDateInMM())
-
         NetworkingHelper.postData(urlString:Search_Event_Url, param:parameters!, withHeader: false, isAlertShow: true, controller:self, callback: { response in
-
-           // print(" After event search : ", CommonModel.sharedInstance.getCurrentDateInMM())
 
             //Remove all objects
             if self.searchListArray.count != 0 {
                 self.searchListArray.removeAll()
             }
 
-            print("\n Search event response : ", response)
             if response is NSArray {
                 self.parseEventListData(response: response)
             }
@@ -289,7 +286,6 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
             //Check login user status accepted terms and conditions
             self.checkLoginAttendeeStatus()
         }, errorBack: { error in
-            NSLog("error in All Data : %@", error)
             CommonModel.sharedInstance.dissmissActitvityIndicator()
             CommonModel.sharedInstance.showAlertWithStatus(title: "Error", message: Internet_Error_Message, vc: self)
         })
@@ -317,7 +313,6 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
                 self.navigateToNextScreen()
             }
         }, errorBack: { error in
-            NSLog("error in Terms and condition : %@", error)
             //dismiss Indicator
             CommonModel.sharedInstance.dissmissActitvityIndicator()
         })
@@ -358,16 +353,10 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         //App login
         isAppLogin = true
 
-//        //Store Attendee credential for auto login
-//        UserDefaults.standard.set("StoreCrential", forKey: "isAppUninstall")
-//        UserDefaults.standard.synchronize()
-//        CredentialHelper.shared.storeDefaultCredential(key: EventData.sharedInstance.attendeeCode, value: EventData.sharedInstance.eventId)
-
         //Fetch event details data from Sqlite database and if it empty show error message
         _ = DBManager.sharedInstance.fetchEventDetailsDataFromDB()
         _ = DBManager.sharedInstance.fetchProfileDataFromDB()
 
-        print("After fetching event details : ",EventData.sharedInstance.eventId)
         //Fetch application theme data from Sqlite database
         _ = DBManager.sharedInstance.fetchAppThemeDataFromDB()
 
@@ -465,7 +454,6 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
 // MARK: - Custom AlertView Delegate methods
-
 
     func loginButtonTapped(selectedOption: String, textFieldValue: String) {
         //Download event details

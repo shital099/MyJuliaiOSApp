@@ -242,17 +242,8 @@ class AttendeesViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func filterContentForSearchText(_ searchText: String) {
         
-//        let filteredKeys = self.dataDict.filter { (key, value) in value.contains(where: { $0.name.contains(searchText.lowercased()) }) }.map { $0.0 }
-//        print("filteredKeys ",filteredKeys);
-
-//        filtered = self.listArray.filter({( model : PersonModel) -> Bool in
-//            return model.name.lowercased().contains(searchText.lowercased())
-//        })
-
         let filteredKeys : [String] = self.dataDict.flatMap { (key, arr) -> String? in
             
-            //if arr.contains(where: { $0.name.contains(searchText.lowercased()) }) {
-            //print("arr ",arr.count);
             let filteredArr = arr.filter({( model : PersonModel) -> Bool in
                 return model.name.lowercased().contains(searchText.lowercased())
             })
@@ -278,28 +269,6 @@ class AttendeesViewController: UIViewController, UITableViewDelegate, UITableVie
     
 }
 
-//
-//extension UILocalizedIndexedCollation {
-//    //func for partition array in sections
-//    func partitionObjects(array:[AnyObject], collationStringSelector:Selector) -> [AnyObject] {
-//        var unsortedSections = [[AnyObject]]()
-//        //1. Create a array to hold the data for each section
-//        for _ in self.sectionTitles {
-//            unsortedSections.append([]) //appending an empty array
-//        }
-//        //2. put each objects into a section
-//        for item in array {
-//            let index:Int = self.section(for: item, collationStringSelector:collationStringSelector)
-//            unsortedSections[index].append(item)
-//        }
-//        //3. sort the array of each sections
-//        var sections = [AnyObject]()
-//        for index in 0 ..< unsortedSections.count {
-//            sections.append(self.sortedArray(from: unsortedSections[index], collationStringSelector: collationStringSelector) as AnyObject)
-//        }
-//        return sections
-//    }
-//}
 // MARK: - Custom Cell Classes
 
 class AttendeesCustomCell: UITableViewCell {

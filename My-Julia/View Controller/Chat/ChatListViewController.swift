@@ -86,7 +86,6 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
             
             let touchPoint = gestureRecognizer.location(in: self.tableView)
             if (self.tableView?.indexPathForRow(at: touchPoint)) != nil {
-                print("long pressed in cell only")
                 let indexPath : IndexPath = (self.tableView?.indexPathForRow(at: touchPoint))!
                 self.changeCellStatus(indexPath: indexPath)
             }
@@ -200,11 +199,8 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
             let paramDict = ["FromId": model.fromId as String,"ToId": model.groupId as String,"EventId":EventData.sharedInstance.eventId as String]
             paramArray.append(paramDict)
         }
-        
-        print("Delete List ",paramArray)
 
         NetworkingHelper.postData(urlString:Chat_Delete_Conversession, param:paramArray as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { response in
-            print("Delete Chat List response : ", response)
 
             let responseCode = Int(response.value(forKey: "responseCode") as! String)
             if responseCode == 0 {
@@ -218,7 +214,6 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
             }
         },
                                   errorBack: { error in
-                                    print("Delete chat List errror...",error)
         })
     }
 
@@ -229,7 +224,6 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
         let urlStr = Get_AllModuleDetails_url.appendingFormat("Flag=%@",Chat_Contact_List)
         NetworkingHelper.getRequestFromUrl(name:Chat_Contact_List,  urlString:urlStr, callback: { response in
             if response is Array<Any> {
-              //  print("Chat List : ",response)
                 //Update side menu row
                 self.changeChatCount()
 
@@ -238,9 +232,6 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
                 self.dataDict["Groups"] = DBManager.sharedInstance.fetchChatListDataFromDB(isGroupList: true) as? [ChatGroupModel]
                 self.tableView.reloadData()
 
-                //                if response is NSArray {
-                //                    self.parseChatData(response: response)
-                //                }
             }
         }, errorBack: { error in
             NSLog("error : %@", error)
@@ -255,7 +246,6 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
             let rawDict = arr[0] as! NSDictionary
             
             //Parse chat contacts
-            //        for item in response["Contacts"] as! NSArray {
             if (rawDict.value(forKey:"attChatList") as? NSNull) == nil {
                 for item in rawDict["attChatList"] as! NSArray {
                     let  dict = item as! NSDictionary

@@ -406,9 +406,7 @@ class DBManager: NSObject {
                         }
 
                         //Save Chat Attendee List
-                        if (dict.value(forKey:"attChatList") as? NSNull) == nil {
-                            print("Chat List : ",dict.value(forKey:"attChatList"))
-                            
+                        if (dict.value(forKey:"attChatList") as? NSNull) == nil {                            
                             //Delete chat list
                             self.updateChatListDataFromDB()
                              self.saveChatListIntoDB(response: dict.value(forKey:"attChatList") as AnyObject, isGroupChat: 0)

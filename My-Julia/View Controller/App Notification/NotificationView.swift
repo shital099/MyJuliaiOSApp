@@ -22,7 +22,6 @@ class NotificationView: UIView {
         if UIImage.init(named: "AppIcon20x20", in: Bundle.main, compatibleWith: nil) != nil
         {
            let appIcon  = UIImage.init(named: "AppIcon20x20", in: Bundle.main, compatibleWith: nil)
-           // print("app icon size : ",appIcon?.size.width)
             self.appIconImage.image = CommonModel.sharedInstance.resizeImage(image: appIcon!, newWidth: 20)
             self.appIconImage.contentMode = UIViewContentMode.scaleToFill
         }

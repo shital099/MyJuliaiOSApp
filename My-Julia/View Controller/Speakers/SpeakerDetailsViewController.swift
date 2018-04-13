@@ -66,14 +66,11 @@ class SpeakerDetailsViewController: UIViewController, UITableViewDataSource, UIT
     func getSpeakerDetailsData() {
         
         NetworkingHelper.getRequestFromUrl(name:Speakers_Details_url,  urlString: Speakers_Details_url.appendingFormat(self.personModel.speakerId), callback: { response in
-            print("Speakers : ",response)
-            
+
             self.personModel = DBManager.sharedInstance.fetchSpeakersDetailsFromDB(speakerId: self.personModel.speakerId, attendeeId: self.personModel.personId)
-            NSLog("self.personModel.activities.count : %d", self.personModel.activities.count)
-            
+
             self.tableViewObj.reloadData()
         }, errorBack: { error in
-            NSLog("error : %@", error)
         })
     }
     
@@ -118,9 +115,6 @@ class SpeakerDetailsViewController: UIViewController, UITableViewDataSource, UIT
         if section == 0 {
             return 0
         }
-//        else if section == 1 && personModel.activities.count == 0 {
-//            return 1
-//        }
         else if section == 2 && personModel.bioInfo == "" {
             return 0
         }

@@ -221,19 +221,19 @@ class CustomAlertView: UIViewController, UITextFieldDelegate {
             print("Validate OTP response : ", response)
             let responseCode = Int(response.value(forKey: "responseCode") as! String)
 
-            self.attendeeCodeTextField.resignFirstResponder()
-            self.delegate?.loginButtonTapped(selectedOption: "", textFieldValue: self.attendeeCodeTextField.text!)
-            self.dismiss(animated: true, completion: nil)
+//            self.attendeeCodeTextField.resignFirstResponder()
+//            self.delegate?.loginButtonTapped(selectedOption: "", textFieldValue: self.attendeeCodeTextField.text!)
+//            self.dismiss(animated: true, completion: nil)
 
-//            if responseCode == 0 {
-//                self.attendeeCodeTextField.resignFirstResponder()
-//                self.delegate?.loginButtonTapped(selectedOption: "", textFieldValue: self.attendeeCodeTextField.text!)
-//                self.dismiss(animated: true, completion: nil)
-//            }
-//            else {
-//                CommonModel.sharedInstance.dissmissActitvityIndicator()
-//                CommonModel.sharedInstance.showAlertWithStatus(title: "", message:response.value(forKey: "responseMsg") as! String, vc: self)
-//            }
+            if responseCode == 0 {
+                self.attendeeCodeTextField.resignFirstResponder()
+                self.delegate?.loginButtonTapped(selectedOption: "", textFieldValue: self.attendeeCodeTextField.text!)
+                self.dismiss(animated: true, completion: nil)
+            }
+            else {
+                CommonModel.sharedInstance.dissmissActitvityIndicator()
+                CommonModel.sharedInstance.showAlertWithStatus(title: "", message:response.value(forKey: "responseMsg") as! String, vc: self)
+            }
         }, errorBack: { error in
             NSLog("error in Validate OTP : %@ ≤", error)
         })
@@ -286,7 +286,6 @@ class CustomAlertView: UIViewController, UITextFieldDelegate {
                 self.downloadButton.isEnabled = false
             }
         }
-
         return true
     }
 

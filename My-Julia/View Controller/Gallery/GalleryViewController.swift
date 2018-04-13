@@ -245,7 +245,7 @@ class GalleryViewController: TKExamplesExampleViewController, UIImagePickerContr
                 if arr.count != self.listArray.count {
                     self.listArray = arr
                     // if self.listArray.count != 0 {
-                   // DispatchQueue.main.sync  {
+                   // DispatchQueue.main.async  {
                         self.dataSource.itemSource = self.listArray
                         self.showPhotosIntoListView()
                    // }

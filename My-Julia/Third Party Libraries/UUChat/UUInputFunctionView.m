@@ -59,7 +59,7 @@
         
         self.btnSendMessage = [UIButton buttonWithType:UIButtonTypeCustom];
         //  self.btnSendMessage.frame = CGRectMake(frame.size.width-40, 5, 30, 30);
-        self.btnSendMessage.frame = CGRectMake(frame.size.width-35, 0, 45, 45);
+        self.btnSendMessage.frame = CGRectMake(frame.size.width-45, 0, 45, 45);
         self.isAbleToSendTextMessage = NO;
         [self.btnSendMessage setTitle:@"" forState:UIControlStateNormal];
         [self.btnSendMessage setImage:[UIImage imageNamed:@"send_message"] forState:UIControlStateNormal];

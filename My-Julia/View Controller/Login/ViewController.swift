@@ -45,7 +45,7 @@ class ViewController: UIViewController, UITextFieldDelegate, TKAlertDelegate {
         //Login automatically if attendee credential is stored
          // let userCredential = CredentialHelper.init(host: APP_NAME).defaultCredential
         let userCredential = CredentialHelper.shared.defaultCredential
-        print("Default credential : ",userCredential?.user ?? "")
+       // print("Default credential : ",userCredential?.user ?? "")
         if userCredential?.user != nil {
             inputText.text = userCredential?.user
             self.onClickOfLoginButton()
@@ -120,10 +120,8 @@ class ViewController: UIViewController, UITextFieldDelegate, TKAlertDelegate {
         let parameters : NSMutableDictionary? = [ "AttendeeCode": inputText.text!, "DeviceToken":AppDelegate.getAppDelegateInstance().deviceToken, "TimeZone" : timezone ?? ""]
 
         NetworkingHelper.postData(urlString:Get_AuthToken_Url, param:parameters!, withHeader: false, isAlertShow: true, controller:self, callback: { response in
-            
-         //   print("\nAuth token response - ",CommonModel.sharedInstance.getCurrentDateInMM())
 
-            print("\nAuth token Details response : ", response)
+           // print("\nAuth token Details response : ", response)
             let responseCode = Int(response.value(forKey: "responseCode") as! String)
 
             if responseCode == 0 {
@@ -188,8 +186,6 @@ class ViewController: UIViewController, UITextFieldDelegate, TKAlertDelegate {
         NetworkingHelper.postData(urlString:Post_TermsAndCondition_Url, param:parameters!, withHeader: false, isAlertShow: true, controller:self, callback: { response in
             //dismiss Indicator
             CommonModel.sharedInstance.dissmissActitvityIndicator()
-
-            print("\n Terms and condition response : ", response)
             let responseCode = Int(response.value(forKey: "responseCode") as! String)
 
             if responseCode == 0 {
@@ -197,7 +193,6 @@ class ViewController: UIViewController, UITextFieldDelegate, TKAlertDelegate {
                 self.navigateToNextScreen()
             }
         }, errorBack: { error in
-            NSLog("error in Terms and condition : %@", error)
             //dismiss Indicator
             CommonModel.sharedInstance.dissmissActitvityIndicator()
         })

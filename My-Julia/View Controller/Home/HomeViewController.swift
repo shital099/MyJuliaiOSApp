@@ -132,15 +132,12 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
             if array.count != 0 {
                 
                 let sections = array.first as! TKSideDrawerSection
-              //  print("sections :" , sections)
-                
+
                 pred = NSPredicate(format: "moduleId CONTAINS[c] %@", (dict?["ModuleID"])!)
                 let arr = sections.items.filter { pred.evaluate(with: $0) };
                 if arr.count != 0 {
                     let item = arr.first as! SideDrawerMenu
-                   // homeMenu = arr.first as! SideDrawerMenu
                     sections.removeItem(item)
-                  //  print("homeMenu object", item.moduleTitle)
                 }
                 
                 let index = modulesArray.index(of: sections)

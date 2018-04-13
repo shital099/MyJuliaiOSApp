@@ -172,7 +172,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         // Convert token to string
         self.deviceToken = deviceToken.reduce("", {$0 + String(format: "%02X", $1)})
-        print("Device token : ",self.deviceToken)
     }
     
     // Called when APNs failed to register the device for push notifications
@@ -210,7 +209,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if (data["Chat"] != nil) {
                 let body = data["Chat"]
                 let alertBody = data["aps"] as? NSDictionary
-                print("Chat notification : ",body )
+               // print("Chat notification : ",body )
 
                 let chatM = DBManager.sharedInstance.convertToJsonData(text: body as! String) as? NSDictionary
 
@@ -266,7 +265,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 self.showNotificationAlertMessage(title: APP_NAME, message:  alertBody["Message"] as! String, application: application)
             }
             else {
-                print("Other notification : ",data)
+               // print("Other notification : ",data)
 
                 let moduleId = data["ModuleId"] as? String
                 if application.applicationState == UIApplicationState.active {
@@ -287,7 +286,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if (data["Chat"] != nil) {
                 let body = data["Chat"]
                 let alertBody = data["aps"] as? NSDictionary
-                print("Chat notification : ",body )
+              //  print("Chat notification : ",body )
 
                 let chatM = DBManager.sharedInstance.convertToJsonData(text: body as! String) as? NSDictionary
 
@@ -329,7 +328,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             else if (data["Notification"] != nil)
             {
                 let alertBody = DBManager.sharedInstance.convertToJsonData(text: data["Notification"] as! String) as! NSDictionary
-                print("Notification body : ",alertBody )
+               // print("Notification body : ",alertBody )
                 DBManager.sharedInstance.saveBroadCastNotification(data : alertBody)
 
                 if application.applicationState == UIApplicationState.active {
@@ -343,7 +342,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 self.showNotificationAlertMessage(title: APP_NAME, message:  alertBody["Message"] as! String, application: application)
             }
             else {
-                print("Other notification : ",data)
+               // print("Other notification : ",data)
 
                 let moduleId = data["ModuleId"] as? String
                 if application.applicationState == UIApplicationState.active {
@@ -433,7 +432,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         if #available(iOS 10.0, *) {
             UNUserNotificationCenter.current().getDeliveredNotifications(completionHandler: {(notifications: [UNNotification]) in
-                print("All received Notifications : ",notifications)
+                //print("All received Notifications : ",notifications)
             })
         } else {
             // Fallback on earlier versions
