@@ -44,20 +44,17 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         EventData.sharedInstance.resetEventDetails()
         AttendeeInfo.sharedInstance.resetAttendeeDetails()
 
+        //Show application version
+        self.appVersionName.text = APP_VERSION
+
         //Open last open event automatically if attendee credential is stored
         let userCredential = CredentialHelper.shared.defaultCredential
-       // print("Default credential : ",userCredential?.user ?? "")
+        // print("Default credential : ",userCredential?.user ?? "")
 
         if userCredential?.user != nil {
             //Fetch login attendee details from database
             DBManager.sharedInstance.fetchLoginAttendeeDetailsFromDB(attendeeCode: (userCredential?.user)!)
-
-            //Check last login attendee status and open event
-            self.checkLoginAttendeeStatus()
         }
-
-        //Show application version
-        self.appVersionName.text = APP_VERSION
     }
 
     override func didReceiveMemoryWarning() {
@@ -66,6 +63,12 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     override func viewDidAppear(_ animated: Bool) {
+        //Check logged in user details found or not in db
+        if EventData.sharedInstance.eventId != "" {
+            //Check last login attendee status and open event
+            CommonModel.sharedInstance.showActitvityIndicator()
+            self.checkLoginAttendeeStatus()
+        }
     }
 
     /*
@@ -322,12 +325,9 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
 
     func checkLoginAttendeeStatus() {
 
-        CommonModel.sharedInstance.dissmissActitvityIndicator()
-
-        // self.fetchContentFromServer()
-
         //Call terms and condition accept view
         if EventData.sharedInstance.attendeeStatus == false {
+            CommonModel.sharedInstance.dissmissActitvityIndicator()
 
             let alertView : TKAlert! = self.initialiseTermsAndConditionAlert()
             var vc : TermsAndConditionsViewController!
@@ -349,6 +349,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     func navigateToNextScreen() {
+        CommonModel.sharedInstance.dissmissActitvityIndicator()
 
         //App login
         isAppLogin = true
@@ -365,6 +366,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
 
         //Apply navigation theme
         CommonModel.sharedInstance.applyNavigationTheme()
+
 
         let appDelegate = AppDelegate.getAppDelegateInstance();
         if IS_IPHONE {

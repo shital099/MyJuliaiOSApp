@@ -162,7 +162,7 @@ class AddMemberViewController: UIViewController,UITableViewDelegate, UITableView
             model = self.listArray[indexPath.row] 
         }
 
-        let message = String(format: "%@ added to \"%@\" group?",model.name, self.chatGroupModel.name)
+        let message = String(format: "Add %@ to group?",model.name)
         if #available(iOS 8.0, *) {
             let alert = UIAlertController(title: "", message: message, preferredStyle: UIAlertControllerStyle.alert)
             alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler:{ (UIAlertAction)in

@@ -374,6 +374,7 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
             //            self.chatModel.dataSource = listArray
             //            self.chatTableView?.reloadData()
             //            self.tableViewScrollToBottom()
+
             self.chatModel.dataSource = NSMutableArray(array: DBManager.sharedInstance.fetchChatHistoryMessages(groupId: self.chatGroupModel.groupId, fromId: self.chatGroupModel.fromId, isGroupChat: self.chatGroupModel.isGroupChat, lastFetchTime: "All") as! [UUMessageFrame])
             self.chatTableView?.reloadData()
             self.tableViewScrollToBottom()
@@ -592,6 +593,8 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
         //self.chatModel.populateRandomDataSource()
 
         var size : CGSize = self.view.frame.size
+        print("View frame : ",self.view.frame)
+        print("Window frame : ",AppDelegate.getAppDelegateInstance().window?.frame ?? "")
 
 //        if UIDevice.current.orientation.isLandscape {
 //            size.height -= 64
@@ -604,7 +607,7 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
 //        }
 
         if IS_IPAD {
-            size.height -= 64
+           //  size.height -= 64
 
             if self.splitViewController?.displayMode == UISplitViewControllerDisplayMode.allVisible {
                 size.width -= SPLIT_WIDTH

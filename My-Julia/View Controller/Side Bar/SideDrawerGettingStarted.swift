@@ -76,7 +76,6 @@ class SideDrawerGettingStarted: UIViewController, TKSideDrawerDelegate {
         }
     }
     
-    
     @objc func showSideDrawer() {
         sideDrawerView.sideDrawers[0].show()
     }

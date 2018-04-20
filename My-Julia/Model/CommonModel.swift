@@ -388,6 +388,9 @@ class CommonModel: NSObject {
             //Change header color
             UINavigationBar.appearance().barTintColor = AppTheme.sharedInstance.headerColor
         }
+
+        //add this line because chat bottom bar hides when image added on navigation bar
+        UINavigationBar.appearance().isTranslucent = true
     }
     
     public func imageFromUrl(urlString: String) {
@@ -400,6 +403,7 @@ class CommonModel: NSObject {
                 response, data, error -> Void in
                 if (data as NSData?) != nil {
                     UINavigationBar.appearance().setBackgroundImage(UIImage(data: (data)!), for: .default)
+                   // UINavigationBar.appearance().shadowImage = UIImage()
                 }
                 else {
                     UINavigationBar.appearance().setBackgroundImage(nil, for: .default)

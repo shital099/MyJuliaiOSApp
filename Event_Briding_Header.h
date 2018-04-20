@@ -53,4 +53,8 @@
 #import "UIViewExt.h"
 #import "NameListTableView.h"
 
+#import "HTMLConverter.h"
+#import "RTLabel.h"
+
 #endif /* Event_Briding_Header_h */
+

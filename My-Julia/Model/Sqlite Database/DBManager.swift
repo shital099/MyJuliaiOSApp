@@ -54,7 +54,7 @@ class DBManager: NSObject {
             }
         }
         else {
-            print("DB Copy error message ")
+            //print("DB Copy error message ")
             //Add 1 colum in Attendee Table
             _ = addDBColumn(sTable:"Attendees", sColumnName:"DNDSetting", type: "boolean", value : false)
         
@@ -113,7 +113,7 @@ class DBManager: NSObject {
                    // CREATE TABLE name (column defs, UNIQUE (col_name1, col_name2) ON CONFLICT REPLACE);
 
                     //Create Map table
-                    let map_sql = "CREATE TABLE IF NOT EXISTS Map (EventID text, Id text unique, Name text, FloorPlanImage text );"
+                    let map_sql = "CREATE TABLE IF NOT EXISTS Map (EventID text, Id text, Name text, FloorPlanImage text, AttendeeId text, IsRead boolean, UNIQUE (EventID, Id) ON CONFLICT REPLACE);"
 
                     //Create Feedback table
                     let feedback_sql = "CREATE TABLE IF NOT EXISTS Feedback (EventID text, QuestionId text unique, Question text, OptionArray text, QuestionType text);"
@@ -263,7 +263,6 @@ class DBManager: NSObject {
     func saveLoginEventDataIntoDB(response: AnyObject) {
         
         if openDatabase() {
-            
             self.database.beginTransaction()
             
             if response is NSDictionary {
@@ -532,6 +531,7 @@ class DBManager: NSObject {
     func fetchLoginAttendeeDetailsFromDB(attendeeCode : String) {
 
         if openDatabase() {
+            database.beginTransaction()
 
             let querySQL = "Select * from LoginAttendee where AttendeeCode = ?"
             let results:FMResultSet? = database.executeQuery(querySQL, withArgumentsIn: [attendeeCode])
@@ -545,6 +545,7 @@ class DBManager: NSObject {
                 model.auth_token = (results?.string(forColumn: "Token"))!
                 model.attendeeStatus = (results?.bool(forColumn: "IsAccept"))!
             }
+            database.commit()
             database.close()
         }
     }
@@ -633,11 +634,10 @@ class DBManager: NSObject {
         let model = EventData.sharedInstance
         
         if openDatabase() {
-            
+            self.database.beginTransaction()
+
             let querySQL = "Select * from EventDetails where EventID = ? AND AttendeeId = ?"
             let results:FMResultSet? = database.executeQuery(querySQL, withArgumentsIn: [model.eventId,model.attendeeId])
-            print("Event id : ",model.eventId)
-            print("Attendee id : ",model.attendeeId)
 
             while results?.next() == true {
                 
@@ -653,6 +653,7 @@ class DBManager: NSObject {
                 model.eventCoverImageUrl = (results?.string(forColumn: "CoverImageLogo"))!
                 
             }
+            database.commit()
             database.close()
         }
         return model
@@ -769,7 +770,8 @@ class DBManager: NSObject {
         appTheme.setDefaultSetting()
         
         if openDatabase() {
-            
+            self.database.beginTransaction()
+
             let querySQL = "Select * from ApplicationTheme where EventID = ?"
             let results:FMResultSet? = database.executeQuery(querySQL, withArgumentsIn: [EventData.sharedInstance.eventId])
             
@@ -842,6 +844,7 @@ class DBManager: NSObject {
                     appTheme.menuFontStyle = (results?.string(forColumn: "SideMenuFontStyle"))!
                 }
             }
+            database.commit()
             database.close()
         }
         return appTheme
@@ -914,7 +917,8 @@ class DBManager: NSObject {
         var array = [Modules]()
         
         if openDatabase() {
-            
+            database.beginTransaction()
+
             let querySQL = "Select * from Module where EventID = ? AND isDeleted = ? ORDER BY OrderSequence ASC"
             let results:FMResultSet? = database.executeQuery(querySQL, withArgumentsIn: [EventData.sharedInstance.eventId,false])
             
@@ -940,7 +944,8 @@ class DBManager: NSObject {
             }
             catch {
             }
-            
+
+            database.commit()            
             database.close()
         }
         return array as NSArray
@@ -1020,7 +1025,8 @@ class DBManager: NSObject {
         let model = AttendeeInfo.sharedInstance
         
         if openDatabase() {
-            
+            database.beginTransaction()
+
             let querySQL = "Select * from AttendeeProfile where EventID = ? AND AttendeeId = ?"
             let results:FMResultSet? = database.executeQuery(querySQL, withArgumentsIn: [EventData.sharedInstance.eventId, EventData.sharedInstance.attendeeId])
             
@@ -1041,6 +1047,7 @@ class DBManager: NSObject {
                 model.isSpeaker = (results?.bool(forColumn:"isSpeaker"))!
                 model.speakerId = (results?.string(forColumn: "SpeakerId"))!
             }
+            database.commit()
             database.close()
         }
         return model
@@ -1070,12 +1077,12 @@ class DBManager: NSObject {
             let eventId = EventData.sharedInstance.eventId
             
             //Delete local data which is deleted from admin
-            do {
-                try database.executeUpdate("DELETE FROM Map WHERE EventID = ?", values: [eventId])
-                
-            } catch {
-                print("error = \(error)")
-            }
+//            do {
+//                try database.executeUpdate("DELETE FROM Map WHERE EventID = ?", values: [eventId])
+//
+//            } catch {
+//                print("error = \(error)")
+//            }
 
             for item in response as! NSArray {
                 
@@ -1085,7 +1092,7 @@ class DBManager: NSObject {
                     let name = self.isNullString(str: dict.value(forKey: "Location") as Any)
                     let image = self.appendImagePath(path: dict.value(forKey: "ImagePath") as Any)
                     
-                    try database.executeUpdate("INSERT OR REPLACE INTO Map (EventID, Id, Name, FloorPlanImage) VALUES (?, ?, ?, ?)", values: [eventId, id, name, image])
+                    try database.executeUpdate("INSERT OR REPLACE INTO Map (EventID, AttendeeId, Id, Name, FloorPlanImage, IsRead) VALUES (?, ?, ?, ?, ?, ?)", values: [eventId,EventData.sharedInstance.attendeeId, id, name, image, 1])
                     
                 } catch {
                     print("error = \(error)")
@@ -1110,14 +1117,45 @@ class DBManager: NSObject {
                 model.id = results?.string(forColumn: "Id")
                 model.name = results?.string(forColumn: "Name")
                 model.iconUrl = results?.string(forColumn: "FloorPlanImage")
-                
+                model.isRead = results?.bool(forColumn: "IsRead")
+
                 array.append(model)
             }
             database.close()
         }
         return array as NSArray
     }
-    
+
+    func fetchMapUnreadListCount() -> Int {
+
+        var count : Int = 0
+        if openDatabase() {
+            let querySQL = "Select Count(IsRead) from Map Where IsRead = ? AND AttendeeId = ? AND EventID = ?"
+            let results:FMResultSet = database.executeQuery(querySQL, withArgumentsIn: [0, EventData.sharedInstance.attendeeId, EventData.sharedInstance.eventId])
+            while results.next() == true {
+                count = results.object(forColumnIndex: 0) as! Int
+            }
+            //  count = database.intForQuery(sql: querySQL)
+
+            database.close()
+        }
+        return count
+    }
+
+    func updateMapNotificationStatus(mapId : String) {
+        if openDatabase() {
+
+            //Update read status data
+            do {
+                try database.executeUpdate("Update Map SET IsRead = ? Where Id = ?  AND EventID = ?", values: [1, mapId, EventData.sharedInstance.eventId])
+            } catch {
+                print("error = \(error)")
+            }
+
+            database.close()
+        }
+    }
+
     // MARK: - Sponsors methods
 
     func saveSponsorsDataIntoDB(responce: AnyObject) {
@@ -1577,7 +1615,7 @@ class DBManager: NSObject {
 
             //Delete local data which is deleted from admin
             do {
-                try database.executeUpdate("Update Notifications SET IsRead = ? Where EventID = ?", values: [0, EventData.sharedInstance.eventId])
+                try database.executeUpdate("Update Notifications SET IsRead = ? Where EventID = ?", values: [1, EventData.sharedInstance.eventId])
             } catch {
                 print("error = \(error)")
             }
@@ -2432,7 +2470,7 @@ class DBManager: NSObject {
                 
                 //  try database.executeUpdate("INSERT OR REPLACE INTO ActivityFeeds (EventID, ActivityFeedID, Message, LikeCount, CommentCount, CreatedDate, IsImageDeleted, PostImagePath, PostUserName, PostUserImage, PostUserId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )", values: [eventId, aId ,message,likesCount, commentsCount, postDateStr, isDeleted, image, username, usericon, userId])
                 
-                sqlQuery += "INSERT OR REPLACE INTO ActivityFeeds (EventID, ActivityFeedID, Message, LikeCount, CommentCount, CreatedDate, IsImageDeleted, PostImagePath, PostUserName, PostUserImage, PostUserId) VALUES ('\(eventId)', '\(aId)', \"\(message)\", '\(likesCount)', '\(commentsCount)','\(postDateStr)', \(isDeleted),'\(image)',\"\(username)\",'\(usericon)','\(userId)');"
+                sqlQuery += "INSERT OR REPLACE INTO ActivityFeeds (EventID, ActivityFeedID, Message, LikeCount, CommentCount, CreatedDate, IsImageDeleted, PostImagePath, PostUserName, PostUserImage, PostUserId) VALUES ('\(eventId)', '\(aId)', '\(message)', '\(likesCount)', '\(commentsCount)','\(postDateStr)', \(isDeleted),'\(image)',\"\(username)\",'\(usericon)','\(userId)');"
                 
             }
             
@@ -3006,7 +3044,6 @@ class DBManager: NSObject {
             database.commit()
             self.database.close()
         }
-        self.database.close()
     }
     
     func fetchPollActivitiesDataFromDB() -> NSArray {

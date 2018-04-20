@@ -73,18 +73,71 @@ class PostTextViewController: UIViewController, UITextViewDelegate {
         self.postNewFeed()
     }
     
-    
+//    func convertHtml(str : String) -> NSAttributedString{
+//
+//        let attrStr = NSAttributedString(string: str)
+//       // let documentAttributes = [NSAttributedString.DocumentAttributeKey:NSAttributedString.DocumentType.html]
+//
+//        let documentAttributes = [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType]
+//
+//        do {
+//            let htmlData = try attrStr.dataFromRange(NSMakeRange(0, attrStr.length), documentAttributes:documentAttributes)
+//            if let htmlString = String(data:htmlData, encoding:NSUTF8StringEncoding) {
+//                print("htmlString : ",htmlString)
+//            }
+//        }
+//        catch {
+//            print("error creating HTML from Attributed String")
+//        }
+//
+//    }
+
     // MARK: - Webservice Methods
     
     func postNewFeed() {
-        
+
+        //let str = self.convertHtml(str: textField.text )
+       // print("String : ",str)
+
         //Show Indicator
         CommonModel.sharedInstance.showActitvityIndicator()
         
         let event = EventData.sharedInstance
-        
-        let paramDict : NSMutableDictionary? = ["Comment":textField.text ,"AttendeeId":AttendeeInfo.sharedInstance.attendeeId, "EventId":event.eventId]
-        
+
+        // Create an instance of HTMLConverter.
+        let converter : HTMLConverter = HTMLConverter()
+
+        // Prepare an input text.
+        let input : String = textField.text
+
+        // Convert the plain text into an HTML text using the converter.
+        let output : String = converter.toHTML(input)
+        print("html Output : ",output)
+
+        let paramDict : NSMutableDictionary? = ["Comment":output ,"AttendeeId":AttendeeInfo.sharedInstance.attendeeId, "EventId":event.eventId]
+        print("Post Data : ",paramDict ?? "")
+
+//        var testString =  String(format: "<h> %@ </h>",textField.text )
+//
+//        print("Post text : ",testString )
+//        do {
+//            let detector = try NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
+//            let range = NSRange(location: 0, length: (testString.count))
+//            let block = { (result: NSTextCheckingResult?, flags: NSRegularExpression.MatchingFlags, stop: UnsafeMutablePointer<ObjCBool>) -> Void in
+//                if let newResult = result, newResult.resultType == NSTextCheckingResult.CheckingType.link {
+//                    print("Found link: ",(newResult.url?.isFileURL)! ? newResult.url?.path : newResult.url?.absoluteString ?? "")
+//                    let htmlLessString: String = detector.stringByReplacingMatches(in: testString, options: NSRegularExpression.MatchingOptions(), range:range, withTemplate: String(format: "<a href='%@'>%@</a>",newResult.url! as CVarArg,newResult.url! as CVarArg ))
+//                    print("htmlLessString  : ",htmlLessString)
+//                 // testString = testString.replacingOccurrences(of: String(format: "%@",result! ), with: String(format: "<a href='%@'>%@</a>",newResult.url! as CVarArg,newResult.url! as CVarArg ), options: NSString.CompareOptions.literal, range: nil)
+//                }
+//            }
+//            detector.enumerateMatches(in: testString, options: [], range: range, using: block)
+//        } catch {
+//            print(error)
+//        }
+//
+//        print("After editing text : ",testString )
+
         NetworkingHelper.postData(urlString:Post_Activity_Feed_url, param:paramDict as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { response in
             //dissmiss Indicator
             CommonModel.sharedInstance.dissmissActitvityIndicator()

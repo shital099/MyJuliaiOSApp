@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		72CC910A4259C3894FAD2048 /* libPods-My-Julia.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B36B23041A0246C60FF9C820 /* libPods-My-Julia.a */; };
 		7E0F59D31ED459F100C89D40 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E0F59D21ED459F100C89D40 /* AVFoundation.framework */; };
+		7E1C5D5A2085EEDE00E32201 /* HTMLConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E1C5D592085EEDD00E32201 /* HTMLConverter.m */; };
+		7E1C5D5E2085F80000E32201 /* RTLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E1C5D5D2085F80000E32201 /* RTLabel.m */; };
 		7E23BBA7206118C8003CCF5B /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E23BBA6206118C8003CCF5B /* MobileCoreServices.framework */; };
 		7E41126C1EC97559009031B9 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E41126B1EC97559009031B9 /* libsqlite3.tbd */; };
 		7E41127A1EC984E5009031B9 /* libAFNetworking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E4112791EC984E5009031B9 /* libAFNetworking.a */; };
@@ -217,6 +219,7 @@
 		7E5F095520610173002687D0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7E5F088120610173002687D0 /* Main.storyboard */; };
 		7E63A2921F0B8E6600D87C65 /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E63A2911F0B8E6600D87C65 /* SpriteKit.framework */; };
 		7E70462F1ED6BB99006B30F7 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E70462E1ED6BB99006B30F7 /* libsqlite3.0.tbd */; };
+		7E7DD514208482B0006F2109 /* LazyImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7DD513208482AF006F2109 /* LazyImage.swift */; };
 		7ED3B11B1F4ABB0900E7C14F /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7ED3B11A1F4ABB0900E7C14F /* UserNotifications.framework */; };
 		7EDB7C1A1F4D52D0005BE305 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EDB7C191F4D52D0005BE305 /* Foundation.framework */; };
 		7EEF42511EE55079000FA378 /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EEF42501EE55079000FA378 /* Photos.framework */; };
@@ -237,6 +240,10 @@
 		7118F04A0EA98E709669FD6D /* Pods-EventApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EventApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EventApp/Pods-EventApp.debug.xcconfig"; sourceTree = "<group>"; };
 		7D7DEEDBD4C3A4D52D5CE2A1 /* Pods-My-Julia.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-My-Julia.release.xcconfig"; path = "Pods/Target Support Files/Pods-My-Julia/Pods-My-Julia.release.xcconfig"; sourceTree = "<group>"; };
 		7E0F59D21ED459F100C89D40 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		7E1C5D582085EEDD00E32201 /* HTMLConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTMLConverter.h; sourceTree = "<group>"; };
+		7E1C5D592085EEDD00E32201 /* HTMLConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTMLConverter.m; sourceTree = "<group>"; };
+		7E1C5D5C2085F80000E32201 /* RTLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RTLabel.h; sourceTree = "<group>"; };
+		7E1C5D5D2085F80000E32201 /* RTLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RTLabel.m; sourceTree = "<group>"; };
 		7E23BB9E20610303003CCF5B /* My_Julia_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = My_Julia_Tests.swift; sourceTree = "<group>"; };
 		7E23BBA020610303003CCF5B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7E23BBA6206118C8003CCF5B /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
@@ -512,6 +519,7 @@
 		7E5F088220610173002687D0 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7E63A2911F0B8E6600D87C65 /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
 		7E70462E1ED6BB99006B30F7 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
+		7E7DD513208482AF006F2109 /* LazyImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LazyImage.swift; sourceTree = "<group>"; };
 		7ED2B4A320749B05002F009B /* My-Julia.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "My-Julia.entitlements"; sourceTree = "<group>"; };
 		7ED3B11A1F4ABB0900E7C14F /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		7EDB7C191F4D52D0005BE305 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -570,6 +578,15 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		7E1C5D5B2085F80000E32201 /* RTLabel */ = {
+			isa = PBXGroup;
+			children = (
+				7E1C5D5C2085F80000E32201 /* RTLabel.h */,
+				7E1C5D5D2085F80000E32201 /* RTLabel.m */,
+			);
+			path = RTLabel;
+			sourceTree = "<group>";
+		};
 		7E23BB9D20610303003CCF5B /* My-Julia™Tests */ = {
 			isa = PBXGroup;
 			children = (
@@ -611,6 +628,8 @@
 		7E5F072020610172002687D0 /* My-Julia */ = {
 			isa = PBXGroup;
 			children = (
+				7E1C5D582085EEDD00E32201 /* HTMLConverter.h */,
+				7E1C5D592085EEDD00E32201 /* HTMLConverter.m */,
 				7E5F087B20610173002687D0 /* AppDelegate.swift */,
 				7E5F07EF20610173002687D0 /* View Controller */,
 				7E5F088020610173002687D0 /* Views */,
@@ -629,6 +648,8 @@
 		7E5F072520610172002687D0 /* Third Party Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				7E1C5D5B2085F80000E32201 /* RTLabel */,
+				7E7DD512208482AF006F2109 /* LazyImageLibrary */,
 				7E5F072620610172002687D0 /* Encryption */,
 				7E5F072B20610172002687D0 /* MFSideMenu */,
 				7E5F073320610172002687D0 /* CCActivityHUD */,
@@ -1131,6 +1152,7 @@
 				7E5F07FD20610173002687D0 /* Speakers */,
 				7E5F080020610173002687D0 /* Chat */,
 				7E5F081220610173002687D0 /* Activity Feed */,
+				7E5F085520610173002687D0 /* Content Capture */,
 				7E5F081820610173002687D0 /* Q&A */,
 				7E5F081C20610173002687D0 /* Gallery */,
 				7E5F082020610173002687D0 /* Emails */,
@@ -1147,7 +1169,6 @@
 				7E5F084620610173002687D0 /* Event Details */,
 				7E5F084920610173002687D0 /* SpotME */,
 				7E5F085120610173002687D0 /* My Notes */,
-				7E5F085520610173002687D0 /* Content Capture */,
 				7E5F085A20610173002687D0 /* Agenda */,
 				7E5F085D20610173002687D0 /* Activity Feedback */,
 				7E5F085F20610173002687D0 /* Notifications */,
@@ -1170,8 +1191,8 @@
 		7E5F07F320610173002687D0 /* WiFi */ = {
 			isa = PBXGroup;
 			children = (
-				7E5F07F420610173002687D0 /* WiFiDetailsViewController.swift */,
 				7E5F07F520610173002687D0 /* WiFiViewController.swift */,
+				7E5F07F420610173002687D0 /* WiFiDetailsViewController.swift */,
 			);
 			path = WiFi;
 			sourceTree = "<group>";
@@ -1239,10 +1260,10 @@
 			isa = PBXGroup;
 			children = (
 				7E5F081520610173002687D0 /* ActivityFeedListViewController.swift */,
+				7E5F081720610173002687D0 /* ActivityFeedDetailsViewController.swift */,
 				7E5F081320610173002687D0 /* ActivityPostLikesViewController.swift */,
 				7E5F081420610173002687D0 /* PostActivityViewController.swift */,
 				7E5F081620610173002687D0 /* CommentsListViewController.swift */,
-				7E5F081720610173002687D0 /* ActivityFeedDetailsViewController.swift */,
 			);
 			path = "Activity Feed";
 			sourceTree = "<group>";
@@ -1436,8 +1457,8 @@
 		7E5F085F20610173002687D0 /* Notifications */ = {
 			isa = PBXGroup;
 			children = (
-				7E5F086020610173002687D0 /* NotificationDetailsViewController.swift */,
 				7E5F086120610173002687D0 /* NotificationViewController.swift */,
+				7E5F086020610173002687D0 /* NotificationDetailsViewController.swift */,
 			);
 			path = Notifications;
 			sourceTree = "<group>";
@@ -1534,6 +1555,15 @@
 				7E5F088120610173002687D0 /* Main.storyboard */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		7E7DD512208482AF006F2109 /* LazyImageLibrary */ = {
+			isa = PBXGroup;
+			children = (
+				7E7DD513208482AF006F2109 /* LazyImage.swift */,
+			);
+			name = LazyImageLibrary;
+			path = "../../../../../Downloads/LazyImage-master/LazyImage/LazyImageLibrary";
 			sourceTree = "<group>";
 		};
 		C3654A9F5FB51E6BFD9D7539 /* Frameworks */ = {
@@ -1740,6 +1770,7 @@
 				7E5F093220610173002687D0 /* CenterViewController.swift in Sources */,
 				7E5F08A420610173002687D0 /* GradientView.swift in Sources */,
 				7E5F08B120610173002687D0 /* SDWebImageManager.m in Sources */,
+				7E1C5D5E2085F80000E32201 /* RTLabel.m in Sources */,
 				7E5F08ED20610173002687D0 /* SideDrawerMenu.swift in Sources */,
 				7E5F08F920610173002687D0 /* HomeViewController.swift in Sources */,
 				7E5F094E20610173002687D0 /* PollSessionListViewController.swift in Sources */,
@@ -1811,7 +1842,9 @@
 				7E5F08FD20610173002687D0 /* GroupDetailViewController.swift in Sources */,
 				7E5F08BE20610173002687D0 /* SDImageCacheConfig.m in Sources */,
 				7E5F08FB20610173002687D0 /* SpeakerDetailsViewController.swift in Sources */,
+				7E7DD514208482B0006F2109 /* LazyImage.swift in Sources */,
 				7E5F093320610173002687D0 /* SecondViewController.swift in Sources */,
+				7E1C5D5A2085EEDE00E32201 /* HTMLConverter.m in Sources */,
 				7E5F091B20610173002687D0 /* EmergencyDetailsViewController.swift in Sources */,
 				7E5F091320610173002687D0 /* EmailDetailsViewController.swift in Sources */,
 				7E5F08B720610173002687D0 /* SDWebImageCompat.m in Sources */,
@@ -2049,7 +2082,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = "My-Julia/My-Julia.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: GCO (Global Conference Organisers) B.V";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: GCO (Global Conference Organisers) B.V";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Marco Kenson (3AS5P9L25L)";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = SKDTAX4HF9;
@@ -2079,8 +2112,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.gcotechcenter.MyJulia;
 				PRODUCT_MODULE_NAME = EventApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "7631dc5a-acda-4574-8d90-52dc0619e8c5";
-				PROVISIONING_PROFILE_SPECIFIER = MyJulia_Prod_Enterprise;
+				PROVISIONING_PROFILE = "ce5ad652-cb58-4611-8b81-688c6a46fe0b";
+				PROVISIONING_PROFILE_SPECIFIER = MyJulia_Dev_Enterprise;
 				SWIFT_OBJC_BRIDGING_HEADER = Event_Briding_Header.h;
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "";
 				SWIFT_REFLECTION_METADATA_LEVEL = none;
@@ -2097,8 +2130,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = "My-Julia/My-Julia.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: GCO (Global Conference Organisers) B.V";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: GCO (Global Conference Organisers) B.V";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Marco Kenson (3AS5P9L25L)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Marco Kenson (3AS5P9L25L)";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = SKDTAX4HF9;
@@ -2128,8 +2161,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.gcotechcenter.MyJulia;
 				PRODUCT_MODULE_NAME = EventApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "2ebfbfee-ffaf-46d6-b53a-11da2b080368";
-				PROVISIONING_PROFILE_SPECIFIER = MyJulia_Prod_Enterprise;
+				PROVISIONING_PROFILE = "ce5ad652-cb58-4611-8b81-688c6a46fe0b";
+				PROVISIONING_PROFILE_SPECIFIER = MyJulia_Dev_Enterprise;
 				SWIFT_OBJC_BRIDGING_HEADER = Event_Briding_Header.h;
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "";
 				SWIFT_REFLECTION_METADATA_LEVEL = none;

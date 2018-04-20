@@ -41,6 +41,7 @@ class MapViewController: UIViewController, UITableViewDelegate, UITableViewDataS
 
         //Fetch data from Sqlite database
         listArray = DBManager.sharedInstance.fetchMapDataFromDB() as! [Map]
+
     }
     
     // MARK: - Navigation UIBarButtonItems
@@ -56,7 +57,7 @@ class MapViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     @objc func leftSideMenuButtonPressed(sender: UIBarButtonItem) {
         let masterVC : UIViewController!
         if IS_IPHONE {
-            masterVC =  self.menuContainerViewController.leftMenuViewController as! MenuViewController!
+            masterVC =  self.menuContainerViewController.leftMenuViewController as! MenuViewController?
         }
         else {
             masterVC = self.splitViewController?.viewControllers.first
@@ -91,13 +92,27 @@ class MapViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
         tableView.deselectRow(at: indexPath as IndexPath, animated: true)
-        
-        let row = indexPath.row
+
+        //Update map read status
+        DBManager.sharedInstance.updateMapNotificationStatus(mapId: self.listArray[indexPath.row].id)
+
+        //Change notification count in side menu
+        let masterVC : UIViewController!
+        if IS_IPHONE {
+            masterVC =  self.menuContainerViewController.leftMenuViewController as! MenuViewController?
+        }
+        else {
+            masterVC = self.splitViewController?.viewControllers.first
+        }
+
+        if ((masterVC as? MenuViewController) != nil) {
+            (masterVC as! MenuViewController).tableView.reloadRows(at: [IndexPath(item: self.view.tag, section: 1)], with: .top)
+        }
+
         let nextViewController = storyboard?.instantiateViewController(withIdentifier: "MapDetailsViewController") as! MapDetailsViewController
         nextViewController.nameStr = self.listArray[indexPath.row].name
         nextViewController.imgStr = self.listArray[indexPath.row].iconUrl
         self.navigationController?.pushViewController(nextViewController, animated: true)
-        print(listArray[row])
     }
     
     override func didReceiveMemoryWarning() {

@@ -111,6 +111,13 @@ class AttendeesViewController: UIViewController, UITableViewDelegate, UITableVie
         }
       //  print("Attedee Data Dict : ", self.dataDict)
         self.tableView.reloadData()
+
+    let b = self.listArray.filter{( model : PersonModel) -> Bool in
+        (model.name.lowercased().range(of: "9".lowercased()) != nil)
+    }
+    print("Filter A", b) //["Apple", "Amazon"]
+
+
     }
     
     // MARK: - Navigation UIBarButtonItems

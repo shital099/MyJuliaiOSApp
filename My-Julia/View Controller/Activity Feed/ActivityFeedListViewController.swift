@@ -9,6 +9,7 @@
 import UIKit
 import AssetsLibrary
 import MobileCoreServices
+import SafariServices
 
 extension UIImagePickerController
 {
@@ -25,7 +26,7 @@ protocol ActivityCommentDelegate: class {
     func updateCommentCountDelegate( activityIndex : Int, count : String)
 }
 
-class ActivityFeedListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, ActivityCommentDelegate {
+class ActivityFeedListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, ActivityCommentDelegate, SFSafariViewControllerDelegate, RTLabelDelegate {
     
     @IBOutlet weak var tableviewObj: UITableView!
     @IBOutlet weak var bgImageView: UIImageView!
@@ -84,7 +85,7 @@ class ActivityFeedListViewController: UIViewController, UITableViewDataSource, U
         self.feedsModelController.loadItem()
 
         //Fetch data from server
-        self.getActivityFeedInfoListData()
+        //self.getActivityFeedInfoListData()
 
     }
     
@@ -241,6 +242,9 @@ class ActivityFeedListViewController: UIViewController, UITableViewDataSource, U
         if (model?.postImageUrl.isEmpty)! {
             return 170
         }
+        else if model?.messageText == "" {
+            return 415
+        }
         else {
             return 490
         }
@@ -254,10 +258,13 @@ class ActivityFeedListViewController: UIViewController, UITableViewDataSource, U
         if model.postImageUrl.isEmpty {
             cellId = "CellIdentifier"
         }
-        else {
+        else if model.messageText == "" {
             cellId = "ImageCellIdentifier"
         }
-        
+        else {
+            cellId = "ImageWithTextCellId"
+        }
+
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! ActivityCustomCell
         cell.selectionStyle = UITableViewCellSelectionStyle.none
         cell.backgroundColor = cell.contentView.backgroundColor
@@ -284,12 +291,22 @@ class ActivityFeedListViewController: UIViewController, UITableViewDataSource, U
     func configureCell(cell:ActivityCustomCell, model : ActivityFeedsModel, indexPath : IndexPath) {
 
         cell.userNameLabel.text = model.userNameString
-        cell.textLbl.text = model.messageText
         cell.likesLbl.text = model.likesCount
         cell.commentsLbl.text = model.commentsCount
         cell.postDateLbl.text = CommonModel.sharedInstance.getDateAndTime(dateStr: model.postDateStr)
         cell.likesButton.tag = indexPath.row
         cell.commentButton.tag = indexPath.row
+        cell.messageLbl.text = model.messageText
+        cell.messageLbl.delegate = self
+        //cell.textLbl.attributedText =  CommonModel.sharedInstance.stringFromHtml(string: model.messageText)
+        //cell.textLbl.text = model.messageText
+
+        if cell.messageLbl.optimumSize.height > 55 {
+            cell.readMoreLbl.isHidden = false
+        }
+        else {
+            cell.readMoreLbl.isHidden = true
+        }
 
         if !model.userIconUrl.isEmpty {
             let url = NSURL(string:model.userIconUrl)! as URL
@@ -306,6 +323,19 @@ class ActivityFeedListViewController: UIViewController, UITableViewDataSource, U
         cell.bgView.layer.cornerRadius = 3.0
         cell.bgView.layer.borderColor = UIColor().HexToColor(hexString: "#D7D7D7", alpha: 1.0).cgColor
         cell.bgView.layer.borderWidth = 1.0
+
+//        //Check post text message length
+//        let textSize = CGSize(width: CGFloat(cell.textLbl.frame.size.width), height: CGFloat(MAXFLOAT))
+//        let rHeight: Int = lroundf(Float(cell.textLbl.sizeThatFits(textSize).height))
+//        let charSize: Int = lroundf(Float(cell.textLbl.font.pointSize))
+//        let lineCount = rHeight / charSize
+//       // print("No of lines: ",lineCount)
+//        if lineCount > 2 {
+//            cell.readMoreLbl.isHidden = false
+//        }
+//        else {
+//            cell.readMoreLbl.isHidden = true
+//        }
 
         if model.isImageDeleted {
             cell.postImageView.image = UIImage(named: "no_image")
@@ -344,7 +374,7 @@ class ActivityFeedListViewController: UIViewController, UITableViewDataSource, U
             self.navigationController?.pushViewController(viewController, animated: true)
         }
     }
-
+    
     // MARK: - UITableViewDelegate Methods
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
@@ -371,6 +401,23 @@ class ActivityFeedListViewController: UIViewController, UITableViewDataSource, U
         _ = self.feedsModelController.updateCommentIntoDB(at: activityIndex, count: count)
         self.tableviewObj.reloadRows(at: [IndexPath.init(row: activityIndex, section: 0)], with: .none)
         //tableviewObj.reloadData()
+    }
+
+
+    //MARK:- RTLabel Delegate Dismiss
+
+    func rtLabel(_ rtLabel: Any!, didSelectLinkWith url: URL!) {
+     //   print("did select url %@", url)
+        let svc = SFSafariViewController(url: url)
+        svc.delegate = self
+        self.present(svc, animated: true, completion: nil)
+    }
+
+    //MARK:- SafatriViewConroller Dismiss
+
+    func safariViewControllerDidFinish(_ controller: SFSafariViewController)
+    {
+        controller.dismiss(animated: true, completion: nil)
     }
 
     //MARK: - Button Action Methods
@@ -508,13 +555,14 @@ class ActivityCustomCell: UITableViewCell {
     @IBOutlet var postDateLbl:UILabel!
     @IBOutlet var userIconImage:UIImageView!
     @IBOutlet var bgView:UIView!
+    @IBOutlet var messageLbl:RTLabel!
 
-    @IBOutlet var textLbl:UILabel!
     @IBOutlet var likesLbl:UILabel!
     @IBOutlet var commentsLbl:UILabel!
     @IBOutlet var postImageView:UIImageView!
     @IBOutlet var likesButton:UIButton!
     @IBOutlet var commentButton:UIButton!
+    @IBOutlet var readMoreLbl:UILabel!
 
     
     @IBAction func likeButtonTapped(sender: AnyObject) {

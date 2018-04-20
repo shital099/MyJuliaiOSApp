@@ -282,7 +282,6 @@ static char UIScrollViewTwitterCover;
     //    CFRelease(inBitmapData);
     //
     //    CGImageRelease(imageRef);
-    NSLog(@"REturn image : %@",returnImage);
     return returnImage;
 }
 

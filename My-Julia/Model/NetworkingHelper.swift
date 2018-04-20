@@ -13,7 +13,7 @@ import UIKit
 //let BASE_URL = "http://srv01:2300/"
 
 //let BASE_URL = "http://srv01.gcotechcenter.local:1400/"  //SRV 1
-//let BASE_URL = "http://srv01.gcotechcenter.local:2400/"     //SRV 2
+let BASE_URL = "http://srv01.gcotechcenter.local:2400/"     //SRV 2
 //let BASE_URL = "http://roshan.gcotechcenter.local:800
 //let BASE_URL = "http://10.3.2.152:1110/"
 //let BASE_URL = "https://apps.gcotechcenter.com/"
@@ -24,7 +24,7 @@ import UIKit
 //let BASE_URL = "http://srv01.gcotechcenter.local:3400/"     //TEST Enviorment
 //let BASE_URL = "https://ems2-test.gcoeurope.com:3000/"     //TEST Enviorment
 
-let BASE_URL = "https://apps.gcoeurope.com/"      //LIVE Enviorment
+//let BASE_URL = "https://apps.gcoeurope.com/"      //LIVE Enviorment
 
 
 /***** API'S *******/

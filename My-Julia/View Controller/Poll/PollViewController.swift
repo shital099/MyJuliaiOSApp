@@ -365,7 +365,12 @@ class PollViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 cell.submitBtn.isEnabled = true
                 cell.submitBtn.alpha = 1.0
             }
-            
+
+            //Hide next button if array countain only one value
+            if questionIndex == pollarray.count {
+                cell.nextBtn.isHidden = true
+            }
+
             cell.nextAndBackButtonTapped = { [unowned self] (selectedCell,sender) -> Void in
                 self.changeProgressStatus(cell: selectedCell, sender: sender)
             }
@@ -456,7 +461,7 @@ class PollViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func changeProgressStatus(cell : SubmitCell, sender : AnyObject)  {
         
         //Back Question button clicked
-        if cell.backBtn == sender as! UIButton {
+        if cell.backBtn == sender as? UIButton {
             questionIndex -= 1
             cell.nextBtn.isHidden = false
 

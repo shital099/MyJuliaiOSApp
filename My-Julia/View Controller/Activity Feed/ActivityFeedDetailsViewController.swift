@@ -7,12 +7,16 @@
 //
 
 import UIKit
+import SafariServices
 
-class ActivityFeedDetailsViewController: UIViewController, UIScrollViewDelegate {
+class ActivityFeedDetailsViewController: UIViewController, RTLabelDelegate, SFSafariViewControllerDelegate, UITableViewDataSource, UITableViewDelegate {
 
     @IBOutlet weak var bgImageView: UIImageView!
     @IBOutlet weak var postImageView: UIImageView!
-    @IBOutlet weak var textLabel: UILabel!
+    @IBOutlet weak var tableViewObj: UITableView!
+
+
+    var cellHeight : CGFloat = 400
 
     var feedModel : ActivityFeedsModel!
     var lastScale : CGFloat = 0.0
@@ -28,21 +32,37 @@ class ActivityFeedDetailsViewController: UIViewController, UIScrollViewDelegate 
         
         //apply application theme on screen
         CommonModel.sharedInstance.applyThemeOnScreen(viewController: self, bgImage: bgImageView)
-        
-        self.textLabel.text = feedModel.messageText
-        
-        if !feedModel.isImageDeleted {
-            
-            if !feedModel.postImageUrl.isEmpty {
-                
-                let url = NSURL(string:feedModel.postImageUrl)! as URL
-                self.postImageView.sd_setImage(with: url, placeholderImage: nil)
-                self.createPanGestureRecognizer(targetView: postImageView)
-            }
-        }
-        else {
-            self.postImageView.isHidden = true
-        }
+
+        //Update dyanamic height of tableview cell
+//        tableViewObj.estimatedRowHeight = 1000
+//        tableViewObj.rowHeight = UITableViewAutomaticDimension
+
+        let textLabel = UILabel()
+        textLabel.frame = CGRect(x: 10, y: 10, width: self.view.frame.size.width, height: 21.0)
+        textLabel.text = self.feedModel.messageText
+        textLabel.numberOfLines = 0
+        textLabel.lineBreakMode = .byWordWrapping
+        textLabel.sizeToFit()
+
+        //Calculate height of text
+        cellHeight = cellHeight + textLabel.size.height
+
+//
+//        self.textLabel.height = self.textLabel.optimumSize.height
+//        self.textLabel.updateConstraintsIfNeeded()
+//
+//        if !feedModel.isImageDeleted {
+//
+//            if !feedModel.postImageUrl.isEmpty {
+//
+//                let url = NSURL(string:feedModel.postImageUrl)! as URL
+//                self.postImageView.sd_setImage(with: url, placeholderImage: nil)
+//                self.createPanGestureRecognizer(targetView: postImageView)
+//            }
+//        }
+//        else {
+//            self.postImageView.isHidden = true
+//        }
     }
 
     
@@ -118,7 +138,7 @@ class ActivityFeedDetailsViewController: UIViewController, UIScrollViewDelegate 
     @objc func leftSideMenuButtonPressed(sender: UIBarButtonItem) {
         let masterVC : UIViewController!
         if IS_IPHONE {
-            masterVC =  self.menuContainerViewController.leftMenuViewController as! MenuViewController!
+            masterVC =  self.menuContainerViewController.leftMenuViewController as! MenuViewController?
         }
         else {
             masterVC = self.splitViewController?.viewControllers.first
@@ -127,5 +147,59 @@ class ActivityFeedDetailsViewController: UIViewController, UIScrollViewDelegate 
         if ((masterVC as? MenuViewController) != nil) {
             (masterVC as! MenuViewController).toggleLeftSplitMenuController()
         }
+    }
+
+    //MARK:- RTLabel Delegate Dismiss
+
+    func rtLabel(_ rtLabel: Any!, didSelectLinkWith url: URL!) {
+       // print("did select url %@", url)
+        let svc = SFSafariViewController(url: url)
+        svc.delegate = self
+        self.present(svc, animated: true, completion: nil)
+    }
+
+    //MARK:- SafatriViewConroller Dismiss
+
+    func safariViewControllerDidFinish(_ controller: SFSafariViewController)
+    {
+        controller.dismiss(animated: true, completion: nil)
+    }
+
+
+    // MARK: - TableView DataSource Methods
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return cellHeight //UITableViewAutomaticDimension
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+
+        let cellId = "CellIdentifier"
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! ActivityCustomCell
+        cell.selectionStyle = UITableViewCellSelectionStyle.none
+        cell.backgroundColor = cell.contentView.backgroundColor
+
+        cell.messageLbl.text = feedModel.messageText
+        cell.messageLbl.delegate = self
+        cell.messageLbl.lineBreakMode = RTTextLineBreakModeWordWrapping
+        cell.messageLbl.sizeToFit()
+
+        if feedModel.isImageDeleted {
+            cell.postImageView.image = UIImage(named: "no_image")
+        }
+        else {
+            if !feedModel.postImageUrl.isEmpty {
+                //print("feed image url ",model.postImageUrl)
+                let url = NSURL(string: feedModel.postImageUrl)! as URL
+                cell.postImageView.sd_setImage(with: url, placeholderImage: nil)
+                cell.postImageView.contentMode = .scaleAspectFit
+            }
+        }
+
+        return cell
     }
 }

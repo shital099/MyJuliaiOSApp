@@ -11,12 +11,15 @@ import AssetsLibrary
 
 private let reuseIdentifier = "CellIndentifier"
 
-class GalleryViewController: TKExamplesExampleViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate {
+class GalleryViewController: TKExamplesExampleViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     var cellColor = true
     
     @IBOutlet weak var bgImageView: UIImageView!
     @IBOutlet weak var postGallery: UIBarButtonItem!
+    @IBOutlet weak var collectionView: UICollectionView!
+
     let picker = UIImagePickerController()
+    lazy var lazyImage:LazyImage = LazyImage()
 
     var isRefreshList : Bool = true
     var actionSheetContoller : UIAlertController!
@@ -46,7 +49,7 @@ class GalleryViewController: TKExamplesExampleViewController, UIImagePickerContr
 
         if listArray.count != 0 {
             self.dataSource.itemSource = listArray
-            self.showPhotosIntoListView()
+           // self.showPhotosIntoListView()
         }
     }
     
@@ -236,27 +239,37 @@ class GalleryViewController: TKExamplesExampleViewController, UIImagePickerContr
 
     func getGalleryInfoListData() {
         
-        //NetworkingHelper.getRequestFromUrl(name:PhotoGallery_List_url,  urlString: PhotoGallery_List_url.appendingFormat(EventData.sharedInstance.eventId), callback: { response in
+//        let urlStr = Get_AllModuleDetails_url.appendingFormat("Flag=%@",PhotoGallery_List_url)
+//        NetworkingHelper.getRequestFromUrl(name:PhotoGallery_List_url,  urlString: urlStr, callback: { response in
+//            if response is Array<Any> {
+//                //Fetch data from Sqlite database
+//                let arr = DBManager.sharedInstance.fetchGalleryDataFromDB() as! [PhotoGallery]
+//                if arr.count != self.listArray.count {
+//                    self.listArray = arr
+//                    // if self.listArray.count != 0 {
+//                   // DispatchQueue.main.async  {
+//                        self.dataSource.itemSource = self.listArray
+//                        self.showPhotosIntoListView()
+//                   // }
+//                }
+//            }
+//        }, errorBack: { error in
+//            NSLog("error : %@", error)
+//            if self.listArray.count != 0 {
+//                self.dataSource.itemSource = self.listArray
+//                self.showPhotosIntoListView()
+//            }
+//        })
+
         let urlStr = Get_AllModuleDetails_url.appendingFormat("Flag=%@",PhotoGallery_List_url)
         NetworkingHelper.getRequestFromUrl(name:PhotoGallery_List_url,  urlString: urlStr, callback: { response in
             if response is Array<Any> {
                 //Fetch data from Sqlite database
-                let arr = DBManager.sharedInstance.fetchGalleryDataFromDB() as! [PhotoGallery]
-                if arr.count != self.listArray.count {
-                    self.listArray = arr
-                    // if self.listArray.count != 0 {
-                   // DispatchQueue.main.async  {
-                        self.dataSource.itemSource = self.listArray
-                        self.showPhotosIntoListView()
-                   // }
-                }
+                self.listArray = DBManager.sharedInstance.fetchGalleryDataFromDB() as! [PhotoGallery]
+                self.collectionView.reloadData()
             }
         }, errorBack: { error in
             NSLog("error : %@", error)
-            if self.listArray.count != 0 {
-                self.dataSource.itemSource = self.listArray
-                self.showPhotosIntoListView()
-            }
         })
     }
     
@@ -387,13 +400,72 @@ class GalleryViewController: TKExamplesExampleViewController, UIImagePickerContr
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         dismiss(animated:true, completion: nil) //5
     }
+
+    // MARK: - UICollectionViewDataSource
+    //1
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        numberOfItemsInSection section: Int) -> Int {
+        return self.listArray.count
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+
+        if IS_IPAD {
+            return CGSize(width: 80 , height:80.0)
+        }
+        else {
+            return CGSize(width: 70.0 , height:70.0)
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GalleryCustomCell", for: indexPath) as! GalleryCustomCell
+
+        let model = self.listArray[indexPath.row]
+
+        cell.imageView.tag = indexPath.item
+
+//        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.imageTapped(tapGestureRecognizer:)))
+//        cell.imageView.isUserInteractionEnabled = true
+//        cell.imageView.addGestureRecognizer(tapGestureRecognizer)
+
+        if model.isImageDeleted == true {
+            cell.imageView.image = UIImage(named: "no_image")
+        }
+        else {
+            if !model.iconUrl.isEmpty {
+                cell.imageView.sd_setImage(with: NSURL(string:model.iconUrl) as URL?, placeholderImage: #imageLiteral(resourceName: "no_image"))
+                //cell.imageView.contentMode = .scaleAspectFit
+
+//               self.lazyImage.showWithSpinner(imageView:cell.imageView, url:model.iconUrl) {
+//                    (error:LazyImageError?) in
+//                    //Lazy loading complete. Do something..
+//                print("Image loaded....")
+//                }
+            }
+        }
+        return cell
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+
+        let nextViewController = storyboard?.instantiateViewController(withIdentifier: "GDetailViewController") as! GDetailViewController
+        nextViewController.imgIndex = indexPath.row
+        nextViewController.listArray = listArray
+        self.navigationController?.pushViewController(nextViewController, animated: true)
+    }
 }
 
 
-class GCustomCell:UICollectionViewCell {
+class GalleryCustomCell:UICollectionViewCell {
     
     @IBOutlet weak var backView: UIImageView!
-    @IBOutlet weak var imageTapped: UIImageView!
+    @IBOutlet weak var imageView: UIImageView!
 
     
 }

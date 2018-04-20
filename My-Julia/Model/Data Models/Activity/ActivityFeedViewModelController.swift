@@ -30,9 +30,9 @@ class ActivityFeedViewModelController: NSObject {
             let urlStr = Get_AllModuleDetails_url.appendingFormat("Flag=%@&PageNo=%d",ActivityFeed_List_url,self.pageNo)
             NetworkingHelper.getRequestFromUrl(name:ActivityFeed_List_url,  urlString:urlStr, callback: { response in
 
-                //Change notification count in side menu
-                let userDict:[String: Bool] = ["isClickOnNotification": false]
-                NotificationCenter.default.post(name: BroadcastNotification, object: "", userInfo: userDict)
+//                //Change notification count in side menu
+//                let userDict:[String: Bool] = ["isClickOnNotification": false]
+//                NotificationCenter.default.post(name: BroadcastNotification, object: "", userInfo: userDict)
 
                 // Remove first page load data
                 if self.pageNo == 0 {

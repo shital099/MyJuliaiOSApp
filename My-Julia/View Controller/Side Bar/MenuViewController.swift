@@ -124,7 +124,7 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
     // MARK: - Operation queue oberver
     func setMenuList()  {
         
-        DispatchQueue.main.async  {
+       // DispatchQueue.main.async  {
             //Change header color
             if IS_IPHONE {
                 var navController = UINavigationController()
@@ -169,6 +169,8 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
                 navController.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor:AppTheme.sharedInstance.headerTextColor, NSAttributedStringKey.font: font ]
 
+                //add this line because chat bottom bar hides when image added on navigation bar
+                UINavigationBar.appearance().isTranslucent = true
             }
             else {
                 //        //Apply navigation theme
@@ -230,7 +232,7 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
             self.menuArray = self.fetchModuleListFromDB()
 
             self.tableView.reloadData()
-        }
+       // }
 
     }
     
@@ -304,6 +306,10 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
                    self.chatCount = DBManager.sharedInstance.fetchChatUnreadListCount()
                     sideDrawerItem.dataCount = self.chatCount
                     isChatPresent = true
+                }
+                else if viewController is MapViewController {
+                    self.chatCount = DBManager.sharedInstance.fetchMapUnreadListCount()
+                    sideDrawerItem.dataCount = self.chatCount
                 }
                 else if viewController is NotificationViewController {
                     sideDrawerItem.dataCount = DBManager.sharedInstance.fetchUnreadNotificationsCount()
@@ -649,7 +655,7 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         viewController.title = item.moduleTitle
         //viewController.accessibilityValue = String(format:"%d",index)
-        //viewController.view.tag = index         //Store row index
+        viewController.view.tag = index         //Store row index
 
         if IS_IPHONE {
             self.menuContainerViewController.setMenuState(MFSideMenuStateClosed, completion: nil)
