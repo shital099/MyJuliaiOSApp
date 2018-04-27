@@ -34,12 +34,13 @@ class ActivityFeedDetailsViewController: UIViewController, RTLabelDelegate, SFSa
         CommonModel.sharedInstance.applyThemeOnScreen(viewController: self, bgImage: bgImageView)
 
         //Update dyanamic height of tableview cell
-//        tableViewObj.estimatedRowHeight = 1000
-//        tableViewObj.rowHeight = UITableViewAutomaticDimension
+        tableViewObj.estimatedRowHeight = 1200
+        tableViewObj.rowHeight = UITableViewAutomaticDimension
 
         let textLabel = UILabel()
         textLabel.frame = CGRect(x: 10, y: 10, width: self.view.frame.size.width, height: 21.0)
-        textLabel.text = self.feedModel.messageText
+        //textLabel.text = self.feedModel.messageText
+        textLabel.attributedText =  CommonModel.sharedInstance.stringFromHtml(string: self.feedModel.messageText)
         textLabel.numberOfLines = 0
         textLabel.lineBreakMode = .byWordWrapping
         textLabel.sizeToFit()
@@ -47,6 +48,7 @@ class ActivityFeedDetailsViewController: UIViewController, RTLabelDelegate, SFSa
         //Calculate height of text
         cellHeight = cellHeight + textLabel.size.height
 
+        print("Cell height : ",cellHeight)
 //
 //        self.textLabel.height = self.textLabel.optimumSize.height
 //        self.textLabel.updateConstraintsIfNeeded()
@@ -169,36 +171,56 @@ class ActivityFeedDetailsViewController: UIViewController, RTLabelDelegate, SFSa
     // MARK: - TableView DataSource Methods
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        if feedModel.postImageUrl.isEmpty {
+            return 1
+        }
+        else {
+            return 2
+        }
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return cellHeight //UITableViewAutomaticDimension
+        if indexPath.row == 0{
+            return UITableViewAutomaticDimension
+        }
+
+        else {
+            return 360
+        }
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-        let cellId = "CellIdentifier"
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! ActivityCustomCell
-        cell.selectionStyle = UITableViewCellSelectionStyle.none
-        cell.backgroundColor = cell.contentView.backgroundColor
+        var cell : ActivityCustomCell!
+        if indexPath.row == 0 {
+            cell = tableView.dequeueReusableCell(withIdentifier: "CellIdentifier", for: indexPath) as! ActivityCustomCell
 
-        cell.messageLbl.text = feedModel.messageText
-        cell.messageLbl.delegate = self
-        cell.messageLbl.lineBreakMode = RTTextLineBreakModeWordWrapping
-        cell.messageLbl.sizeToFit()
+            cell.messageLbl.text = feedModel.messageText
+            cell.messageLbl.delegate = self
+            cell.messageLbl.lineBreakMode = RTTextLineBreakModeWordWrapping
+            // cell.messageLbl.sizeToFit()
 
-        if feedModel.isImageDeleted {
-            cell.postImageView.image = UIImage(named: "no_image")
+            let string = feedModel.messageText.appending(String(format:"<style>body{font-family: '%@'; font-size:%fpx;}</style><br>",cell.messageLbl.font.fontName,cell.messageLbl.font.pointSize))
+            cell.descLbl.attributedText = CommonModel.sharedInstance.stringFromHtml(string: string)
         }
         else {
-            if !feedModel.postImageUrl.isEmpty {
-                //print("feed image url ",model.postImageUrl)
-                let url = NSURL(string: feedModel.postImageUrl)! as URL
-                cell.postImageView.sd_setImage(with: url, placeholderImage: nil)
-                cell.postImageView.contentMode = .scaleAspectFit
+            cell = tableView.dequeueReusableCell(withIdentifier: "ImageCellIdentifier", for: indexPath) as! ActivityCustomCell
+
+            if feedModel.isImageDeleted {
+                cell.postImageView.image = UIImage(named: "no_image")
+            }
+            else {
+                if !feedModel.postImageUrl.isEmpty {
+                    //print("feed image url ",model.postImageUrl)
+                    let url = NSURL(string: feedModel.postImageUrl)! as URL
+                    cell.postImageView.sd_setImage(with: url, placeholderImage: nil)
+                    cell.postImageView.contentMode = .scaleAspectFit
+                }
             }
         }
+
+        cell.selectionStyle = UITableViewCellSelectionStyle.none
+        cell.backgroundColor = cell.contentView.backgroundColor
 
         return cell
     }

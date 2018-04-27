@@ -112,7 +112,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let cryptoLib = CryptLib.sharedManager() as!  CryptLib
         cryptoLib.key = "23501748FEB710349F13763248DFC6C2"
         cryptoLib.iv = "abcdefghijklmnop"
-        
+
+      let input = "+dL9zvCUUH4lCBztagrlMg=="
+       let output = (CryptLib.sharedManager() as AnyObject).decryptCipherText(with: input)
+        print("Output : ",output)
+
         // iOS 10 support
         if #available(iOS 10, *) {
             UNUserNotificationCenter.current().requestAuthorization(options:[.badge, .alert, .sound]){ (granted, error) in }
@@ -207,12 +211,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         //Save notification dat into db and navigate to screen
         //self.receivedNotification(application: application, data: data as AnyObject)
+        print("Notification Received : ",data )
 
         if data is Dictionary<String, Any> {
             if (data["Chat"] != nil) {
                 let body = data["Chat"]
                 let alertBody = data["aps"] as? NSDictionary
-               // print("Chat notification : ",body )
+                print("Chat notification : ",body )
 
                 let chatM = DBManager.sharedInstance.convertToJsonData(text: body as! String) as? NSDictionary
 
@@ -270,10 +275,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             else {
                // print("Other notification : ",data)
 
+                if (data["Wifi"] != nil) {
+                    let alertBody = DBManager.sharedInstance.convertToJsonData(text: data["Wifi"] as! String) as! NSDictionary
+                    DBManager.sharedInstance.saveWifiDataIntoDB(response: alertBody)
+                }
+                else if (data["Activity Feeds"] != nil) {
+                    let alertBody = DBManager.sharedInstance.convertToJsonData(text: data["Activity Feeds"] as! String) as! NSDictionary
+                    DBManager.sharedInstance.saveActivityFeedDataIntoDB(response: alertBody)
+                }
+                else if (data["Map"] != nil) {
+                    let alertBody = DBManager.sharedInstance.convertToJsonData(text: data["Map"] as! String) as! NSDictionary
+                    DBManager.sharedInstance.saveMapDataIntoDB(response: alertBody)
+                }
+                else if (data["Documents"] != nil) {
+                    let alertBody = DBManager.sharedInstance.convertToJsonData(text: data["Documents"] as! String) as! NSDictionary
+                    DBManager.sharedInstance.saveDocumentsDataIntoDB(response: alertBody)
+                }
+
                 let moduleId = data["ModuleId"] as? String
                 if application.applicationState == UIApplicationState.active {
                     let alertBody = data["aps"] as? NSDictionary
                     self.showNotificationAlertMessage(title: APP_NAME, message:  alertBody!["alert"] as! String, application: application)
+
+                    let imageDataDict:[String: String] = ["moduleId": moduleId!]
+                    NotificationCenter.default.post(name: ShowNotificationCount, object: nil, userInfo: imageDataDict)
                 }
                 else {
                     let imageDataDict:[String: String] = ["moduleId": moduleId!]
@@ -281,7 +306,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
         }
-
     }
 
     func receivedNotification(application: UIApplication, data : AnyObject) {

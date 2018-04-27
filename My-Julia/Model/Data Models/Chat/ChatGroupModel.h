@@ -23,7 +23,7 @@
 @property (nonatomic) BOOL visibilitySetting;
 @property (nonatomic, strong) NSString *groupCreatedUserId;
 @property (nonatomic) BOOL listStatus;
-@property (nonatomic, strong) NSString *unreadCount;
+@property (nonatomic, assign) int unreadCount;
 
 @end
 

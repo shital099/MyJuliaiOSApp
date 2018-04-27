@@ -394,6 +394,7 @@ class CommonModel: NSObject {
     }
     
     public func imageFromUrl(urlString: String) {
+
         if let url = NSURL(string: urlString) {
             var request = URLRequest(url: url as URL)
             request.addValue("Basic ".appending(EventData.sharedInstance.auth_token), forHTTPHeaderField: "Authorization")

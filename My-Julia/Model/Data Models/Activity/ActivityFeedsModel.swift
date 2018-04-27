@@ -23,5 +23,6 @@ class ActivityFeedsModel: NSObject {
     
     var isUserLike : Bool = false
     var isImageDeleted : Bool = false
+    var isRead : Bool = false
 
 }

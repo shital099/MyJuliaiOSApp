@@ -440,6 +440,15 @@ class GalleryViewController: TKExamplesExampleViewController, UIImagePickerContr
         else {
             if !model.iconUrl.isEmpty {
                 cell.imageView.sd_setImage(with: NSURL(string:model.iconUrl) as URL?, placeholderImage: #imageLiteral(resourceName: "no_image"))
+//                cell.imageView.kf.setImage(with: NSURL(string:model.iconUrl) as URL?,
+//                                              placeholder: nil,
+//                                              options: [],
+//                                              progressBlock: { receivedSize, totalSize in
+//                                                print("\(indexPath.row + 1): \(receivedSize)/\(totalSize)")
+//                },
+//                                              completionHandler: { image, error, cacheType, imageURL in
+//                                                print("\(indexPath.row + 1): Finished")
+//                })
                 //cell.imageView.contentMode = .scaleAspectFit
 
 //               self.lazyImage.showWithSpinner(imageView:cell.imageView, url:model.iconUrl) {

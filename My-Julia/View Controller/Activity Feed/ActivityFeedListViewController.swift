@@ -556,6 +556,7 @@ class ActivityCustomCell: UITableViewCell {
     @IBOutlet var userIconImage:UIImageView!
     @IBOutlet var bgView:UIView!
     @IBOutlet var messageLbl:RTLabel!
+    @IBOutlet var descLbl:UILabel!
 
     @IBOutlet var likesLbl:UILabel!
     @IBOutlet var commentsLbl:UILabel!

@@ -40,11 +40,11 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
 
         if IS_IPHONE {
           //  drawer = (self.menuContainerViewController.leftMenuViewController as! MenuViewController).drawer
-            self.delegate =  self.menuContainerViewController.leftMenuViewController as! MenuViewController!
+            self.delegate =  self.menuContainerViewController.leftMenuViewController as! MenuViewController?
         }
         else {
            // drawer = ((self.splitViewController?.viewControllers[0] as? MenuViewController)?.drawer)!
-            self.delegate =  self.splitViewController?.viewControllers.first as! MenuViewController!
+            self.delegate =  self.splitViewController?.viewControllers.first as! MenuViewController?
         }
         
         //Fetch all module list from server

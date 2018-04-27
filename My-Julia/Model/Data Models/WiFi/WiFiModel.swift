@@ -16,4 +16,6 @@ class WiFiModel: NSObject {
     var password : String = ""
     var iconUrl : String = ""
     var note : String = ""
+    var isRead : Bool = false
+
 }

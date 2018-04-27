@@ -44,17 +44,12 @@ class AgendaDetailsViewController: UIViewController,UIImagePickerControllerDeleg
         //Fetch data from json
        // agendaModel.speakers = CommonModel.sharedInstance.parseSpeakerData() as! [PersonModel]
         
-        //Check reminder added or not
-        reminderStatus = DBManager.sharedInstance.isReminderAddedIntoDB(activityId: agendaModel.activityId)
-        
         //Register header cell
         tableviewObj.register(UINib(nibName: "CustomHeaderView", bundle: nil), forHeaderFooterViewReuseIdentifier: "HeaderCellId")
        
         //Set separator color according to background color
         CommonModel.sharedInstance.applyTableSeperatorColor(object: tableviewObj)
         
-        //Fetch agenda details
-        agendaModel = DBManager.sharedInstance.fetchActivityDetailsFromDB(activitySessionId: agendaModel.activitySessionId)
     }
 
     override func didReceiveMemoryWarning() {
@@ -63,6 +58,12 @@ class AgendaDetailsViewController: UIViewController,UIImagePickerControllerDeleg
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        //Check reminder added or not
+        reminderStatus = DBManager.sharedInstance.isReminderAddedIntoDB(activityId: agendaModel.activityId)
+
+        //Fetch agenda details
+        agendaModel = DBManager.sharedInstance.fetchActivityDetailsFromDB(activitySessionId: agendaModel.activitySessionId)
+
         if isRefresh == true {
             //Fetch agenda details
             agendaModel = DBManager.sharedInstance.fetchActivityDetailsFromDB(activitySessionId: agendaModel.activitySessionId)

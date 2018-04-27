@@ -17,7 +17,7 @@ class CustomHeaderView: UITableViewHeaderFooterView {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        // Initialization code        
     }
     
     func setGradientColor() {

@@ -10,12 +10,13 @@ import UIKit
 
 class DocumentModel: NSObject {
     
-    var docId : String!
-    var title : String!
-    var pdfUrlStr : String!
-    var isPDF : Bool!
-    var descStr : String!
-    var startDateStr : String!
-    var endDateStr : String!
+    var docId : String = ""
+    var title : String = ""
+    var pdfUrlStr : String = ""
+    var isPDF : Bool = false
+    var descStr : String = ""
+    var startDateStr : String = ""
+    var endDateStr : String = ""
+    var isRead : Bool = false
 
 }

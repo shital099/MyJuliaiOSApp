@@ -330,7 +330,7 @@ class QuestionsViewController: UIViewController, UITableViewDataSource, UITableV
     @objc func leftSideMenuButtonPressed(sender: UIBarButtonItem) {
         let masterVC : UIViewController!
         if IS_IPHONE {
-            masterVC =  self.menuContainerViewController.leftMenuViewController as! MenuViewController!
+            masterVC =  self.menuContainerViewController.leftMenuViewController as! MenuViewController?
         }
         else {
             masterVC = self.splitViewController?.viewControllers.first
@@ -343,6 +343,7 @@ class QuestionsViewController: UIViewController, UITableViewDataSource, UITableV
     
     // MARK: - Webservice Methods
     func fetchActivityQuestionList() {
+        
         let urlStr = GetQuestions_List_url.appendingFormat("%@",self.sessionModel.activityId)
         NetworkingHelper.getRequestFromUrl(name:GetQuestions_List_url,  urlString:urlStr, callback: { response in
 
@@ -358,7 +359,6 @@ class QuestionsViewController: UIViewController, UITableViewDataSource, UITableV
         let paramDict = ["ActivityId":self.sessionModel.activityId  ,"AttendeeId":AttendeeInfo.sharedInstance.attendeeId, "EventId":EventData.sharedInstance.eventId, "Session" : 0, "dtLastDate" : "", "Seconds": Question_History_Time] as [String : Any]
         
         NetworkingHelper.postData(urlString: Get_Latest_Questions_List_url, param:paramDict as AnyObject, withHeader: false, isAlertShow: false, controller:self, callback: { response in
-
             self.listArray = DBManager.sharedInstance.fetchSessionQuestionsListFromDB(sessionId: self.sessionModel.sessionId, activityId: self.sessionModel.activityId)
             self.totalCountLbl.text = String(format: "%d QUESTIONS", self.listArray.count)
             self.tableView.reloadData()

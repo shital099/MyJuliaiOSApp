@@ -67,13 +67,17 @@ class AgendaViewController: UIViewController, UITableViewDataSource, UITableView
         }
         
         tableviewObj.separatorColor = UIColor.red // AppTheme.sharedInstance.backgroundColor.darker(by:10)
-        
+
         self.fetchAgendaDataList()
 
+        print("view did load ",CommonModel.sharedInstance.getCurrentDateInMM())
     }
     
     override func viewDidAppear(_ animated: Bool) {
-      
+
+        print("view did appear ",CommonModel.sharedInstance.getCurrentDateInMM())
+
+       // self.collectionview.reloadData()
         
         if datesArray.count != 0 {
             
@@ -82,7 +86,7 @@ class AgendaViewController: UIViewController, UITableViewDataSource, UITableView
             let formatter = DateFormatter()
             formatter.dateFormat = "dd-MM-yyyy"
             let todaysDate = formatter.string(from: date)
-            if   self.datesArray.contains(todaysDate) {
+            if self.datesArray.contains(todaysDate) {
                 self.selectedDate = todaysDate
             }
             else {

@@ -41,6 +41,8 @@ class SessionListViewController: UIViewController, UITableViewDataSource, UITabl
         
         //Remove extra lines from tableview
         tableView.tableFooterView = UIView()
+        tableView.tableFooterView?.tintColor = .clear
+
         self.tableView.tintColor = AppTheme.sharedInstance.menuBackgroundColor.darker(by: 15)
         
     }
@@ -102,11 +104,12 @@ class SessionListViewController: UIViewController, UITableViewDataSource, UITabl
     
     // MARK: - Webservice Methods
     func fetchAllCompletedSessionList() {
-        
+
         let urlStr = Get_AllModuleDetails_url.appendingFormat("Flag=%@",GetQuestionActivities_url)
         NetworkingHelper.getRequestFromUrl(name:GetQuestionActivities_url,  urlString:urlStr, callback: { response in
             CommonModel.sharedInstance.dissmissActitvityIndicator()
-         //   print("Questions Activities:", response)
+
+            //   print("Questions Activities:", response)
             // Bounce back to the main thread to update the UI
             DispatchQueue.main.async {
                 //Fetch all completed activity from db
@@ -213,7 +216,7 @@ class SessionListViewController: UIViewController, UITableViewDataSource, UITabl
 
         let cell = tableView.dequeueReusableCell(withIdentifier: "CellIdentifier", for: indexPath) as! SessionCustomCell
         cell.bgImage?.layer.cornerRadius = 5.0 
-        //cell.backgroundColor = cell.contentView.backgroundColor;
+        cell.backgroundColor = cell.contentView.backgroundColor;
 
         let model : SessionsModel = ((self.dataList[sortedSections[indexPath.section]]) as! Array)[indexPath.row]
 

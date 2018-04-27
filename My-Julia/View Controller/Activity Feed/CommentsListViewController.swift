@@ -221,10 +221,7 @@ class CommentsListViewController: UIViewController, UITableViewDelegate, UITable
             //CommonModel.sharedInstance.dissmissActitvityIndicator()
             if response is NSDictionary {
                 if (response.value(forKey: "responseCode") != nil) {
-                    //  CommonModel.sharedInstance.showAlertWithStatus(message: Feedback_Sucess_Message, vc: self)
-//                    let responceDict = ["ActivityFeedId": self.feedModel.id,"comment":self.commentTextView.text,"AttendeeId":AttendeeInfo.sharedInstance.attendeeId, "Name":AttendeeInfo.sharedInstance.attendeeName, "iconurl":""] as [String : Any]
-//                    self.listArray.add(responceDict)
-                    
+
                     let model = FeedsCommentModel()
                     model.commentId = "" //(results?.string(forColumn: "ActivityFeedID"))!
                     model.messageText = self.commentTextView.text

@@ -17,6 +17,7 @@ import UserNotificationsUI //framework to customize the notification
 let BroadcastNotification = NSNotification.Name(rawValue: "BroadcastMessageNotificationReceived")
 let ChatNotification = NSNotification.Name(rawValue: "ChatMessageNotificationReceived")
 let OtherModuleNotification = NSNotification.Name(rawValue: "OtherNotificationReceived")
+let ShowNotificationCount = NSNotification.Name(rawValue: "WiFiNotificationReceived")
 
 class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, SideMenuControllerDelegate, TKAlertDelegate, UNUserNotificationCenterDelegate {
     
@@ -101,6 +102,9 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
         NotificationCenter.default.addObserver(self, selector:#selector(MenuViewController.changeSideMenuCountInSideMenu(notification:)), name:BroadcastNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(MenuViewController.changeSideMenuCountInSideMenu(notification:)), name:ChatNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(MenuViewController.openNotificationModuleScreenInSideMenu(notification:)), name:OtherModuleNotification, object: nil)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(MenuViewController.changeSideMenuUnreadMessageCount(notification:)), name:ShowNotificationCount, object: nil)
+
     }
 
     func toggleLeftSplitMenuController()  {
@@ -309,6 +313,18 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 }
                 else if viewController is MapViewController {
                     self.chatCount = DBManager.sharedInstance.fetchMapUnreadListCount()
+                    sideDrawerItem.dataCount = self.chatCount
+                }
+                else if viewController is DocumentsListViewController {
+                    self.chatCount = DBManager.sharedInstance.fetchUnreadDocumentCount()
+                    sideDrawerItem.dataCount = self.chatCount
+                }
+                else if viewController is WiFiViewController {
+                    self.chatCount = DBManager.sharedInstance.fetchUnreadWiFiCount()
+                    sideDrawerItem.dataCount = self.chatCount
+                }  
+                else if viewController is ActivityFeedListViewController {
+                    self.chatCount = DBManager.sharedInstance.fetchUnreadActivityFeedsCount()
                     sideDrawerItem.dataCount = self.chatCount
                 }
                 else if viewController is NotificationViewController {
@@ -655,7 +671,7 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         viewController.title = item.moduleTitle
         //viewController.accessibilityValue = String(format:"%d",index)
-        viewController.view.tag = index         //Store row index
+        //viewController.view.tag = index         //Store row index
 
         if IS_IPHONE {
             self.menuContainerViewController.setMenuState(MFSideMenuStateClosed, completion: nil)
@@ -776,6 +792,93 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
     }
 
+    @objc func changeSideMenuUnreadMessageCount(notification: NSNotification) {
+
+        let section = self.menuArray[1] as! TKSideDrawerSection
+        let array = section.items
+
+        let predicate:NSPredicate = NSPredicate(format: "moduleId CONTAINS[c] %@", notification.userInfo!["moduleId"] as! String)
+        let filteredArray = array?.filter { predicate.evaluate(with: $0) };
+
+        if filteredArray?.count != 0 {
+            let sideDrawerItem = filteredArray![0] as! SideDrawerMenu
+
+            print("Section  : ",array?.count ?? "")
+            let viewController = CommonModel.sharedInstance.fetchViewControllerObject(moduleId: notification.userInfo!["moduleId"] as! String)
+
+            //Check Agenda menu added or not
+            if viewController is ChatListViewController {
+                self.chatCount = DBManager.sharedInstance.fetchChatUnreadListCount()
+                sideDrawerItem.dataCount = self.chatCount
+                isChatPresent = true
+            }
+            else if viewController is MapViewController {
+                self.chatCount = DBManager.sharedInstance.fetchMapUnreadListCount()
+                sideDrawerItem.dataCount = self.chatCount
+            }
+            else if viewController is DocumentsListViewController {
+                self.chatCount = DBManager.sharedInstance.fetchUnreadDocumentCount()
+                sideDrawerItem.dataCount = self.chatCount
+            }
+            else if viewController is WiFiViewController {
+                self.chatCount = DBManager.sharedInstance.fetchUnreadWiFiCount()
+                sideDrawerItem.dataCount = self.chatCount
+            }
+            else if viewController is ActivityFeedListViewController {
+                self.chatCount = DBManager.sharedInstance.fetchUnreadActivityFeedsCount()
+                sideDrawerItem.dataCount = self.chatCount
+            }
+            else if viewController is NotificationViewController {
+                sideDrawerItem.dataCount = DBManager.sharedInstance.fetchUnreadNotificationsCount()
+            }
+
+            self.tableView.reloadData()
+        }
+
+
+//        //Fetch data from Sqlite database
+//        let listArray : [Modules] = DBManager.sharedInstance.fetchModulesDataFromDB() as! [Modules]
+//
+//        for data in listArray {
+//
+//            let sideDrawerItem: SideDrawerMenu = SideDrawerMenu().addItemWithTitle(titleStr: data.name)
+//            sideDrawerItem.dataCount = 0
+//
+//                //Check Agenda menu added or not
+//                let viewController = CommonModel.sharedInstance.fetchViewControllerObject(moduleId: sideDrawerItem.moduleId)
+//                if viewController is AgendaViewController {
+//                    isAgendaPresent = true
+//                }
+//                else if viewController is ChatListViewController {
+//                    self.chatCount = DBManager.sharedInstance.fetchChatUnreadListCount()
+//                    sideDrawerItem.dataCount = self.chatCount
+//                    isChatPresent = true
+//                }
+//                else if viewController is MapViewController {
+//                    self.chatCount = DBManager.sharedInstance.fetchMapUnreadListCount()
+//                    sideDrawerItem.dataCount = self.chatCount
+//                }
+//                else if viewController is DocumentsListViewController {
+//                    self.chatCount = DBManager.sharedInstance.fetchUnreadDocumentCount()
+//                    sideDrawerItem.dataCount = self.chatCount
+//                }
+//                else if viewController is WiFiViewController {
+//                    self.chatCount = DBManager.sharedInstance.fetchUnreadWiFiCount()
+//                    sideDrawerItem.dataCount = self.chatCount
+//                }
+//                else if viewController is ActivityFeedListViewController {
+//                    self.chatCount = DBManager.sharedInstance.fetchUnreadActivityFeedsCount()
+//                    sideDrawerItem.dataCount = self.chatCount
+//                }
+//                else if viewController is NotificationViewController {
+//                    sideDrawerItem.dataCount = DBManager.sharedInstance.fetchUnreadNotificationsCount()
+//                }
+//
+//                section2.addItem(sideDrawerItem)
+//        }
+
+    }
+
     @objc func openNotificationModuleScreenInSideMenu(notification: NSNotification) {
         let moduleOrder = DBManager.sharedInstance.fetchModuleOrderFromDB(moduleId: notification.userInfo!["moduleId"] as! String) as Int
 
@@ -833,7 +936,7 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
                     let timer = Timer.scheduledTimer(timeInterval: timeInSec, target: self, selector:  #selector(activityFinished(timer:)), userInfo: observerName, repeats: false)
                     timerObjectsArray.add(timer)
                     // Register to receive notification
-                    NotificationCenter.default.addObserver(self, selector: #selector(showPopup(notification:)), name:NSNotification.Name(rawValue: observerName!), object: nil)
+                    NotificationCenter.default.addObserver(self, selector: #selector(showPopup(notification:)), name:NSNotification.Name(rawValue: observerName), object: nil)
                 }
             }
         }
