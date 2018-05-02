@@ -1708,7 +1708,7 @@
                                 <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                             </imageView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="interactive" translatesAutoresizingMaskIntoConstraints="NO" id="Rxd-sx-9WJ">
-                                <rect key="frame" x="7" y="84" width="306" height="307"/>
+                                <rect key="frame" x="7" y="84" width="306" height="269"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" spellCheckingType="yes"/>
@@ -1720,7 +1720,7 @@
                             <constraint firstItem="VA9-TB-Wrx" firstAttribute="leading" secondItem="R6D-sC-ksF" secondAttribute="leading" id="7mj-hy-3Rv"/>
                             <constraint firstAttribute="trailing" secondItem="Rxd-sx-9WJ" secondAttribute="trailing" constant="7" id="IgP-wU-D0c"/>
                             <constraint firstItem="3Mr-Dp-FhH" firstAttribute="top" secondItem="VA9-TB-Wrx" secondAttribute="bottom" id="Oh5-YE-QZv"/>
-                            <constraint firstItem="3Mr-Dp-FhH" firstAttribute="top" secondItem="Rxd-sx-9WJ" secondAttribute="bottom" constant="177" id="P6J-KW-Hbq"/>
+                            <constraint firstItem="3Mr-Dp-FhH" firstAttribute="top" secondItem="Rxd-sx-9WJ" secondAttribute="bottom" constant="215" id="P6J-KW-Hbq"/>
                             <constraint firstItem="Rxd-sx-9WJ" firstAttribute="leading" secondItem="R6D-sC-ksF" secondAttribute="leading" constant="7" id="QDY-bj-S3t"/>
                             <constraint firstItem="VA9-TB-Wrx" firstAttribute="top" secondItem="aYQ-f6-NXg" secondAttribute="bottom" id="bUe-mh-9PI"/>
                             <constraint firstItem="Rxd-sx-9WJ" firstAttribute="top" secondItem="aYQ-f6-NXg" secondAttribute="bottom" constant="20" id="pP9-5h-LvD"/>
@@ -1869,7 +1869,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="52U-HW-SCS" customClass="RTLabel">
-                                                    <rect key="frame" x="15" y="11" width="290" height="32"/>
+                                                    <rect key="frame" x="15" y="11" width="290" height="35"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="32" id="kae-5e-xkL"/>
@@ -1887,7 +1887,7 @@
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
-                                                <constraint firstAttribute="bottom" secondItem="52U-HW-SCS" secondAttribute="bottom" constant="13" id="ShF-Gu-Rpy"/>
+                                                <constraint firstAttribute="bottom" secondItem="52U-HW-SCS" secondAttribute="bottom" constant="10" id="ShF-Gu-Rpy"/>
                                                 <constraint firstAttribute="trailing" secondItem="1Kp-A0-zCw" secondAttribute="trailing" constant="15" id="Xey-eG-NOw"/>
                                                 <constraint firstItem="52U-HW-SCS" firstAttribute="top" secondItem="mFs-b3-vsV" secondAttribute="top" constant="11" id="XrK-IB-TzA"/>
                                                 <constraint firstAttribute="bottom" secondItem="1Kp-A0-zCw" secondAttribute="bottom" constant="10" id="Y42-gj-0m4"/>
@@ -4778,11 +4778,23 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="65"/>
                                                     <color key="backgroundColor" white="0.8729998682226453" alpha="1" colorSpace="calibratedWhite"/>
                                                 </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="102" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yer-Hq-h1B">
+                                                    <rect key="frame" x="281" y="35" width="23" height="23"/>
+                                                    <color key="backgroundColor" red="0.010363193484498262" green="0.44862388959390853" blue="0.060106884892594768" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="23" id="ASJ-hr-YnR"/>
+                                                        <constraint firstAttribute="width" constant="23" id="DM8-16-3U2"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="10"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="lPH-DO-kCc" secondAttribute="trailing" constant="15" id="4qN-o6-nO7"/>
                                                 <constraint firstItem="SfP-yW-cqd" firstAttribute="leading" secondItem="zmc-QM-bkC" secondAttribute="leading" id="Fv6-jn-pcO"/>
+                                                <constraint firstAttribute="trailing" secondItem="Yer-Hq-h1B" secondAttribute="trailing" constant="16" id="GSq-t1-ZkD"/>
                                                 <constraint firstAttribute="bottom" secondItem="SfP-yW-cqd" secondAttribute="bottom" id="HQC-mJ-zP8"/>
                                                 <constraint firstItem="2LT-Sh-JUE" firstAttribute="top" secondItem="zmc-QM-bkC" secondAttribute="top" constant="8" id="O6J-PQ-CgA"/>
                                                 <constraint firstItem="tKk-a8-tZK" firstAttribute="leading" secondItem="zmc-QM-bkC" secondAttribute="leading" constant="59" id="O9N-9V-t1t"/>
@@ -4803,6 +4815,7 @@
                                                 <constraint firstItem="tKk-a8-tZK" firstAttribute="top" secondItem="zmc-QM-bkC" secondAttribute="top" constant="38" id="sVm-Yi-WId"/>
                                                 <constraint firstItem="pTR-42-CAu" firstAttribute="leading" secondItem="2LT-Sh-JUE" secondAttribute="trailing" constant="11" id="uOf-p7-bFy"/>
                                                 <constraint firstItem="MQJ-h9-N2w" firstAttribute="leading" secondItem="2LT-Sh-JUE" secondAttribute="trailing" constant="11" id="wGO-gx-Iyy"/>
+                                                <constraint firstAttribute="bottom" secondItem="Yer-Hq-h1B" secondAttribute="bottom" constant="6.5" id="x3P-tn-aiG"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -4815,6 +4828,7 @@
                                             <outlet property="selectionImgView" destination="SfP-yW-cqd" id="22T-yu-af9"/>
                                             <outlet property="statusImg" destination="lPH-DO-kCc" id="XpN-l5-dHd"/>
                                             <outlet property="timeLbl" destination="lBo-TV-PNW" id="Km8-10-34V"/>
+                                            <outlet property="unreadMsgCount" destination="Yer-Hq-h1B" id="fdC-Nv-JtT"/>
                                             <outlet property="userIconImg" destination="2LT-Sh-JUE" id="p5G-qU-LxA"/>
                                         </connections>
                                     </tableViewCell>

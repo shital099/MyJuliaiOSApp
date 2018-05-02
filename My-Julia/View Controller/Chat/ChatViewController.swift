@@ -350,7 +350,7 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
                 let paramDict = ["ToId":self.chatGroupModel.groupId] as [String : Any]
                 NetworkingHelper.postData(urlString:Chat_History, param:paramDict as AnyObject, withHeader: false, isAlertShow: false, controller:self, callback: { response in
 
-               // print("Chat history  : ",response)
+                print("Chat history  : ",response)
                 if response is Array<Any> {
                     self.parseChatHistoryData(response: response, isChatHistory:  true)
                 }

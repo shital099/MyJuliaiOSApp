@@ -185,7 +185,7 @@ class DBManager: NSObject {
                     let poll_speaker_act_sql = "CREATE TABLE IF NOT EXISTS PollSpeakerActivity (id INTEGER PRIMARY KEY AUTOINCREMENT, EventID text, ActivityId text unique, ActivityName text, ActivityStartDate text, ActivityEndDate text, SpeakerId text, UNIQUE (EventID, ActivityId, SpeakerId) ON CONFLICT REPLACE );"
 
                     //Poll Speaker Act questions
-                    let poll_act_question_sql = "CREATE TABLE IF NOT EXISTS SpeakerPollQuestions(id INTEGER PRIMARY KEY AUTOINCREMENT, EventID text, ActivityId text, Question text, QuestionId text, Option1 text, Option2 text, Option3 text, Option4 text, Op1Id text, Op2Id text, Op3Id text, Op4Id text, UNIQUE (EventID, ActivityId, QuestionId ) ON CONFLICT REPLACE );"
+                    let poll_act_question_sql = "CREATE TABLE IF NOT EXISTS SpeakerPollQuestions(id INTEGER PRIMARY KEY AUTOINCREMENT, EventID text, ActivityId text, CreatedDate text, Question text, QuestionId text, Option1 text, Option2 text, Option3 text, Option4 text, Op1Id text, Op2Id text, Op3Id text, Op4Id text, UNIQUE (EventID, ActivityId, QuestionId ) ON CONFLICT REPLACE );"
 
                     let sql_stmt = login_details_sql + event_sql_stmt + module_sql_stmt + attendee_sql + note_sql + reminder_sql + speaker_sql + map_sql + feedback_sql + sponsor_sql + event_details_sql + document_sql + emergency_sql + gallery_sql + website_sql + wifi_details_sql + email_details_sql + activity_details_sql + profile_sql + sessions_sql + sessions_que_sql + poll_activity_sql + poll_sessions_que_sql + myschedule_sql + agenda_sql + noti_sql + activityFeed_sql + activityFeedComments_sql + activityFeedLikes_sql + act_feedback_sql + chatlist_sql + chathistorySql + poll_speaker_act_sql + poll_act_question_sql
                     
@@ -1978,6 +1978,17 @@ class DBManager: NSObject {
             var isRead = 1
             var isGroupChat = 1
             // let unreadCount = 0
+            let iconImage = self.appendImagePath(path: dict.value(forKey: "ToIconUrl") as Any)
+            var lastMessage = ""
+            if (dict.value(forKey: "Message") as? NSNull) == nil {
+                lastMessage = dict.value(forKey: "Message") as! String
+            }
+            let msgImage = self.appendImagePath(path: dict.value(forKey: "ImageUrl") as Any)
+            var chatSqlQuery = ""
+            ///Save chat message in chat history table
+            let chatId = dict.value(forKey: "ChatId") as! String
+            let type = 0
+            let userIconImage = ""
 
             //Group chat list
             if self.isNullString(str: dict.value(forKey: "GroupChatId") as Any) != "" {
@@ -1990,6 +2001,8 @@ class DBManager: NSObject {
                 name = self.isNullString(str: dict.value(forKey: "ToName") as Any)
                 groupAdminId = dict.value(forKey: "CreatedBy") as! String
                 isRead = dict.value(forKey: "IsRead") as! Int
+
+                chatSqlQuery = "INSERT OR REPLACE INTO ChatHistory (EventID, AttendeeId, GroupId, FromId, ChatMessageId, CreatedBy, ToId , CreatedDate , ModifiedDate, UserIconUrl, UserName,  ToUserName, ToIconUrl , MessageIconUrl, Message, MessageType, MessageFromMe, isGroupChat, isDeleted ,  IsRead ) VALUES ('\(eventId)','\(attendeeId)','\(groupId)', '\(fromId)', '\(chatId)', '\(fromId)', '\(toId)','\(createdDateStr)', '\(modifiedDateStr)', \"\(userIconImage)\", \"\(name)\", \"\(toName)\", \"\(iconImage)\", \"\(msgImage)\", \"\(lastMessage)\", '\(type)', \(0), '\(isGroupChat)', \(isDeleted),\(isRead));"
             }
             else {
                 isGroupChat = 0
@@ -2005,22 +2018,17 @@ class DBManager: NSObject {
                 visibility = dict.value(forKey: "IsVisible") as! Int
                 isRead = dict.value(forKey: "IsRead") as! Int
                 isDeleted = dict.value(forKey: "ToDeleted") as! Int
+
+                chatSqlQuery = "INSERT OR REPLACE INTO ChatHistory (EventID, AttendeeId, GroupId, FromId, ChatMessageId, CreatedBy, ToId , CreatedDate , ModifiedDate, UserIconUrl, UserName,  ToUserName, ToIconUrl , MessageIconUrl, Message, MessageType, MessageFromMe, isGroupChat, isDeleted ,  IsRead ) VALUES ('\(eventId)','\(attendeeId)','\(fromId)', '\(groupId)', '\(chatId)', '\(toId)', '\(fromId)','\(createdDateStr)', '\(modifiedDateStr)', \"\(userIconImage)\", \"\(name)\", \"\(toName)\", \"\(iconImage)\", \"\(msgImage)\", \"\(lastMessage)\", '\(type)', \(0), '\(isGroupChat)', \(isDeleted),\(isRead));"
             }
 
-            let iconImage = self.appendImagePath(path: dict.value(forKey: "ToIconUrl") as Any)
-            var lastMessage = ""
-            if (dict.value(forKey: "Message") as? NSNull) == nil {
-                lastMessage = dict.value(forKey: "Message") as! String
-            }
 
             let sqlQuery = "INSERT OR REPLACE INTO ChatList (EventID, AttendeeId, GroupId, FromId , ToId , GroupIconUrl , LastMessage , CreatedDate , ModifiedDate , GroupCreatedBy, isGroupChat, Name, PrivacySetting, DNDSetting, IsReadList, IsDeleted) VALUES ('\(eventId)','\(attendeeId)', '\(groupId)', '\(fromId)', '\(toId)','\(iconImage)', \"\(lastMessage)\",'\(createdDateStr)', '\(modifiedDateStr)','\(groupAdminId)',\(isGroupChat),\"\(name)\",\(visibility),\(dndSetting),\(isRead),\(isDeleted));"
             database.executeUpdate(sqlQuery, withArgumentsIn:[])
 
-            ///Save chat message in chat history table
-            let chatId = dict.value(forKey: "ChatId") as! String
-            var type = 0
 
-            let chatSqlQuery = "INSERT OR REPLACE INTO ChatHistory (EventID, AttendeeId, GroupId, FromId, ChatMessageId, CreatedBy, ToId , CreatedDate , ModifiedDate, UserIconUrl, UserName,  ToUserName, ToIconUrl , MessageIconUrl, Message, MessageType, MessageFromMe, isGroupChat, isDeleted ,  IsRead ) VALUES ('\(eventId)','\(attendeeId)','\(groupId)', '\(fromId)', '\(chatId)', '\(fromId)', '\(toId)','\(createdDateStr)', '\(modifiedDateStr)', \"\(iconImage)\", \"\(name)\", \"\(toName)\", \"\(iconImage)\", \"\(iconImage)\", \"\(lastMessage)\", '\(type)', \(0), '\(isGroupChat)', \(isDeleted),\(isRead));"
+//            let chatSqlQuery = "INSERT OR REPLACE INTO ChatHistory (EventID, AttendeeId, GroupId, FromId, ChatMessageId, CreatedBy, ToId , CreatedDate , ModifiedDate, UserIconUrl, UserName,  ToUserName, ToIconUrl , MessageIconUrl, Message, MessageType, MessageFromMe, isGroupChat, isDeleted ,  IsRead ) VALUES ('\(eventId)','\(attendeeId)','\(fromId)', '\(groupId)', '\(chatId)', '\(toId)', '\(fromId)','\(createdDateStr)', '\(modifiedDateStr)', \"\(userIconImage)\", \"\(name)\", \"\(toName)\", \"\(iconImage)\", \"\(msgImage)\", \"\(lastMessage)\", '\(type)', \(0), '\(isGroupChat)', \(isDeleted),\(isRead));"
+            print("Notification Chat history : ",chatSqlQuery)
 
             if !database.executeStatements(chatSqlQuery) {
                 //Getting error in saving messages in chathistory table
@@ -2057,8 +2065,15 @@ class DBManager: NSObject {
                 //model.unreadCount = (results?.string(forColumn: "UnreadCount"))!
 
                 //Fetch unread messages count
-                let countQuery = "Select Count(IsRead) from ChatHistory Where IsRead = ? AND FromId = ? AND ToId = ? AND EventID = ?"
-                let results:FMResultSet = database.executeQuery(countQuery, withArgumentsIn: [0, model.fromId, model.groupId, EventData.sharedInstance.eventId])
+                let results:FMResultSet!
+                if model.isGroupChat == true {
+                   let countQuery = "Select Count(IsRead) from ChatHistory Where IsRead = ? AND GroupId = ? AND EventID = ?"
+                    results = database.executeQuery(countQuery, withArgumentsIn: [0, model.groupId, EventData.sharedInstance.eventId])
+                }
+                else {
+                   let countQuery = "Select Count(IsRead) from ChatHistory Where IsRead = ? AND FromId = ? AND ToId = ? AND EventID = ?"
+                    results = database.executeQuery(countQuery, withArgumentsIn: [0, model.fromId, model.groupId, EventData.sharedInstance.eventId])
+                }
                 while results.next() == true {
                     model.unreadCount = Int32(results.object(forColumnIndex: 0) as! Int)
                     print("Unread message count : ",model.unreadCount)
@@ -2136,8 +2151,11 @@ class DBManager: NSObject {
                // let isFromDeleted = dict.value(forKey: "FromDeleted") as! Int
               //  let isToDeleted = dict.value(forKey: "ToDeleted") as! Int
                 let isDeleted = 0 //dict.value(forKey: "FromDeleted") as! Int
-                let isRead = dict.value(forKey: "IsRead") as! Int
-                print("is Read : ",isRead)
+                var isRead = dict.value(forKey: "IsRead") as! Int
+                //update read message status
+                if createdBy == EventData.sharedInstance.attendeeId {
+                    isRead = 1
+                }
 
                 var type = 0
                 if (dict.value(forKey: "ImageUrl") as? NSNull) == nil {
@@ -2151,6 +2169,8 @@ class DBManager: NSObject {
                 }
                 
                 sqlQuery += "INSERT OR REPLACE INTO ChatHistory (EventID,AttendeeId, GroupId, FromId, ChatMessageId, CreatedBy, ToId , CreatedDate , ModifiedDate, UserIconUrl, UserName,  ToUserName, ToIconUrl , MessageIconUrl, Message, MessageType, MessageFromMe, isGroupChat, isDeleted ,  IsRead ) VALUES ('\(eventId)','\(attendeeId)','\(groupId)', '\(fromId)', '\(chatId)', '\(createdBy)', '\(toId)','\(createdDateStr)', '\(modifiedDateStr)', \"\(iconImage)\", \"\(name)\", \"\(toName)\", \"\(toIconUrl)\", \"\(pictureImage)\", \"\(message)\", '\(type)', \(fromMe), '\(isGroupChat)', \(isDeleted),\(isRead));"
+
+
             }
 
 //            //Update previous chat history data
@@ -2159,6 +2179,7 @@ class DBManager: NSObject {
 //            } catch {
 //                print("error = \(error)")
 //            }
+            print("Refresh Chat history : ",sqlQuery)
 
             if !database.executeStatements(sqlQuery) {
             }
@@ -2217,7 +2238,12 @@ class DBManager: NSObject {
                 let toName = self.isNullString(str: dict.value(forKey: "ToName") as Any)
                 let toIconUrl = self.appendImagePath(path: dict.value(forKey: "ToIconUrl") as Any)
                 let isDeleted = 0
-                let isRead = dict.value(forKey: "IsRead") as! Int
+                var isRead = dict.value(forKey: "IsRead") as! Int
+
+                //update read message status
+                if createdBy == EventData.sharedInstance.attendeeId {
+                    isRead = 1
+                }
 
                 var type = 0
                 if (dict.value(forKey: "ImageUrl") as? NSNull) == nil {
@@ -2368,6 +2394,10 @@ class DBManager: NSObject {
 
             if isGroupChat == false {
                 if lastFetchTime == "All" {
+
+                    //Update all message as read = 1
+                    self.updateChatUnreadMessageStatusIntoDB(groupId: groupId, isGroupChat: false)
+
                     let querySQL = "Select * from ChatHistory Where ((FromId = ? AND ToId = ?) OR (FromId = ? AND ToId = ?)) AND isGroupChat = ? AND isDeleted = ? AND EventID = ? AND AttendeeId = ? Order by CreatedDate ASC"
                     results = database.executeQuery(querySQL, withArgumentsIn: [fromId, groupId, groupId, fromId, isGroupChat, 0, EventData.sharedInstance.eventId,EventData.sharedInstance.attendeeId])
 
@@ -2385,6 +2415,9 @@ class DBManager: NSObject {
                 }
             }
             else {
+                //Update all message as read = 1
+                self.updateChatUnreadMessageStatusIntoDB(groupId: groupId, isGroupChat: true)
+
                 if previousTime == nil {
 
                     let querySQL = "Select * from ChatHistory Where GroupId = ? AND isDeleted = ? AND EventID = ? AND AttendeeId = ? Order by CreatedDate ASC"
@@ -2514,6 +2547,18 @@ class DBManager: NSObject {
         database.close()
     }
 
+    func updateChatUnreadMessageStatusIntoDB(groupId : String, isGroupChat : Bool) {
+        do {
+            if isGroupChat {
+                try database.executeUpdate("Update ChatHistory SET IsRead = ? Where GroupId = ? AND EventID = ?", values: [1, groupId, EventData.sharedInstance.eventId])
+            }
+            else {
+                try database.executeUpdate("Update ChatHistory SET IsRead = ? Where FromId = ? AND ToId = ? AND EventID = ?", values: [1, groupId, EventData.sharedInstance.attendeeId, EventData.sharedInstance.eventId])
+            }
+        }catch {
+            print("error = \(error)")
+        }
+    }
 
     func updateGroupNameIntoDB(groupName : String, groupIcon: String, groupId : String) {
         if openDatabase() {
@@ -2545,9 +2590,12 @@ class DBManager: NSObject {
         var count : Int = 0
         if openDatabase() {
            // let querySQL = "Select Count(IsReadList) from ChatList Where IsReadList = ? AND AttendeeId = ? AND EventID = ?"
-            let querySQL = "Select Count(IsRead) from ChatHistory Where IsRead = ? AND EventID = ?"
+//            let querySQL = "Select Count(IsRead) from ChatHistory Where IsRead = ? AND ToId = ? AND EventID = ?"
+//            let results:FMResultSet = database.executeQuery(querySQL, withArgumentsIn: [0,EventData.sharedInstance.attendeeId, EventData.sharedInstance.eventId])
 
+            let querySQL = "Select Count(IsRead) from ChatHistory Where IsRead = ? AND EventID = ?"
             let results:FMResultSet = database.executeQuery(querySQL, withArgumentsIn: [0, EventData.sharedInstance.eventId])
+
             while results.next() == true {
                 count = results.object(forColumnIndex: 0) as! Int
             }
@@ -2626,10 +2674,13 @@ class DBManager: NSObject {
                     if (dict.value(forKey: "UserLiked") as? NSNull) == nil {
                         self.saveActivityFeedLikesDataIntoDB(response: dict.value(forKey: "UserLiked") as AnyObject, activityFeedId: aId , createdDate:postDateStr )
                     }
-
-                    //  try database.executeUpdate("INSERT OR REPLACE INTO ActivityFeeds (EventID, ActivityFeedID, Message, LikeCount, CommentCount, CreatedDate, IsImageDeleted, PostImagePath, PostUserName, PostUserImage, PostUserId, IsRead) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", values: [eventId, aId ,message,likesCount, commentsCount, postDateStr, isDeleted, image, username, usericon, userId, isRead])
-
-                    sqlQuery += "INSERT OR REPLACE INTO ActivityFeeds (EventID, ActivityFeedID, Message, LikeCount, CommentCount, CreatedDate, IsImageDeleted, PostImagePath, PostUserName, PostUserImage, PostUserId, IsRead) VALUES ('\(eventId)', '\(aId)', '\(message)', '\(likesCount)', '\(commentsCount)','\(postDateStr)', \(isDeleted),'\(image)',\"\(username)\",'\(usericon)','\(userId)','\(isRead)');"
+                    
+  do {
+                      try database.executeUpdate("INSERT OR REPLACE INTO ActivityFeeds (EventID, ActivityFeedID, Message, LikeCount, CommentCount, CreatedDate, IsImageDeleted, PostImagePath, PostUserName, PostUserImage, PostUserId, IsRead) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", values: [eventId, aId ,message,likesCount, commentsCount, postDateStr, isDeleted, image, username, usericon, userId, isRead])
+  } catch {
+    print("error = \(error)")
+                    }
+                   // sqlQuery += "INSERT OR REPLACE INTO ActivityFeeds (EventID, ActivityFeedID, Message, LikeCount, CommentCount, CreatedDate, IsImageDeleted, PostImagePath, PostUserName, PostUserImage, PostUserId, IsRead) VALUES ('\(eventId)', '\(aId)', \"\(message)\", '\(likesCount)', '\(commentsCount)','\(postDateStr)', \(isDeleted),'\(image)',\"\(username)\",'\(usericon)','\(userId)','\(isRead)');"
 
                 }
 
@@ -3412,20 +3463,21 @@ class DBManager: NSObject {
                         let  dict = item as! NSDictionary
 
                         //                        let eventId = dict.value(forKey: "EventId") as! String!
-                        let activityId = dict.value(forKey: "ActivityId") as! String!
-                        let question = dict.value(forKey: "Questions") as! String!
-                        let questionsId = dict.value(forKey: "Id") as! String!
-                        let opt1 = dict.value(forKey: "Option1") as! String!
-                        let opt2 = dict.value(forKey: "Option2") as! String!
-                        let opt3 = dict.value(forKey: "Option3") as! String!
-                        let opt4 = dict.value(forKey: "Option4") as! String!
-                        let op1Id = dict.value(forKey: "Option1Id") as! String!
-                        let opt2Id = dict.value(forKey: "Option2Id") as! String!
-                        let opt3Id = dict.value(forKey: "Option3Id") as! String!
-                        let opt4Id = dict.value(forKey: "Option4Id") as! String!
+                        let activityId = dict.value(forKey: "ActivityId") as! String
+                        let createdDate = dict.value(forKey: "CreatedDate") as! String
+                        let question = dict.value(forKey: "Questions") as! String
+                        let questionsId = dict.value(forKey: "Id") as! String
+                        let opt1 = dict.value(forKey: "Option1") as! String
+                        let opt2 = dict.value(forKey: "Option2") as! String
+                        let opt3 = dict.value(forKey: "Option3") as! String
+                        let opt4 = dict.value(forKey: "Option4") as! String
+                        let op1Id = dict.value(forKey: "Option1Id") as! String
+                        let opt2Id = dict.value(forKey: "Option2Id") as! String
+                        let opt3Id = dict.value(forKey: "Option3Id") as! String
+                        let opt4Id = dict.value(forKey: "Option4Id") as! String
 
                         //Create  table
-                        try database.executeUpdate("INSERT OR REPLACE INTO SpeakerPollQuestions (EventID, ActivityId,  Question, QuestionId, Option1, Option2, Option3, Option4, Op1Id, Op2Id, Op3Id, Op4Id) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", values: [eventId, activityId, question, questionsId, opt1, opt2, opt3, opt4, op1Id, opt2Id, opt3Id, opt4Id])
+                        try database.executeUpdate("INSERT OR REPLACE INTO SpeakerPollQuestions (EventID, ActivityId, CreatedDate, Question, QuestionId, Option1, Option2, Option3, Option4, Op1Id, Op2Id, Op3Id, Op4Id) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", values: [eventId, activityId, createdDate, question, questionsId, opt1, opt2, opt3, opt4, op1Id, opt2Id, opt3Id, opt4Id])
 
                     }
 
@@ -3442,7 +3494,7 @@ class DBManager: NSObject {
 
         if openDatabase() {
 
-            let querySQL = "Select * from SpeakerPollQuestions where  EventID = ? AND ActivityId = ?"
+            let querySQL = "Select * from SpeakerPollQuestions where  EventID = ? AND ActivityId = ? Order by CreatedDate ASC"
             let results:FMResultSet? = database.executeQuery(querySQL, withArgumentsIn: [EventData.sharedInstance.eventId, activityId])
 
             while results?.next() == true {

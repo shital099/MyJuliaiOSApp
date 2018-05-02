@@ -391,7 +391,17 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
         cell.nameLabel?.text = model.name
         //Show last modified date of chat
         cell.timeLbl.text = model.dateStr == "" ? "" : CommonModel.sharedInstance.getChatListDate(dateStr: model.modifiedDateStr)
-        cell.statusImg.isHidden  = model.lastMessage == "" ? true : model.listStatus
+       // cell.statusImg.isHidden  = model.lastMessage == "" ? true : model.listStatus
+        cell.unreadMsgCount.layer.cornerRadius = cell.unreadMsgCount.frame.size.width / 2
+        cell.unreadMsgCount.clipsToBounds = true
+
+        if model.unreadCount == 0 {
+            cell.unreadMsgCount.isHidden = true
+        }
+        else {
+            cell.unreadMsgCount.isHidden = false
+            cell.unreadMsgCount.text = String(format: "%d",model.unreadCount)
+        }
 
         if model.lastMessage == "" {
             cell.cameraImg.isHidden = true
@@ -480,6 +490,7 @@ class ChatListCell: UITableViewCell {
     @IBOutlet var selectedIconImgview:UIImageView!
     @IBOutlet var selectionImgView:UIImageView!
     @IBOutlet var statusImg:UIImageView!
+    @IBOutlet var unreadMsgCount:UILabel!
 
 }
 

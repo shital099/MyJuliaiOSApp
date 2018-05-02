@@ -21,7 +21,8 @@ class AttendeeDetailsViewController: UIViewController, UITableViewDataSource, UI
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        self.title = "Details"
+
         //apply application theme on screen
         CommonModel.sharedInstance.applyThemeOnScreen(viewController: self, bgImage: bgImageView)
         
@@ -31,9 +32,9 @@ class AttendeeDetailsViewController: UIViewController, UITableViewDataSource, UI
         
         //Register header cell
         tableViewObj.register(UINib(nibName: "CustomHeaderView", bundle: nil), forHeaderFooterViewReuseIdentifier: "HeaderCellId")
-        
+
         if isSpeakerDetails {
-            self.title = "Speaker Details"
+           // self.title = "Speaker Details"
             //Fetch details from Sqlite database
             personModel = DBManager.sharedInstance.fetchSpeakersDetailsFromDB(speakerId: personModel.speakerId, attendeeId: self.personModel.personId)
             
@@ -41,7 +42,7 @@ class AttendeeDetailsViewController: UIViewController, UITableViewDataSource, UI
             self.getSpeakerDetailsData()
         }
         else {
-            self.title = "Attendee Details"
+           // self.title = "Attendee Details"
         }
     }
     

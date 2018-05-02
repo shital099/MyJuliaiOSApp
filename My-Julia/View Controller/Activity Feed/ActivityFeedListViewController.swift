@@ -408,9 +408,21 @@ class ActivityFeedListViewController: UIViewController, UITableViewDataSource, U
 
     func rtLabel(_ rtLabel: Any!, didSelectLinkWith url: URL!) {
      //   print("did select url %@", url)
-        let svc = SFSafariViewController(url: url)
-        svc.delegate = self
-        self.present(svc, animated: true, completion: nil)
+        let urlStr = url.absoluteString
+        var nUrl : URL = url
+        if urlStr.lowercased().hasPrefix("http://") || urlStr.lowercased().hasPrefix("https://") {
+        }
+        else {
+            if URL (string: String(format:"http://%@", urlStr)) != nil {
+                nUrl = URL (string: String(format:"http://%@", urlStr))!
+            }
+        }
+
+        if url != nil {
+            let svc = SFSafariViewController(url: nUrl)
+            svc.delegate = self
+            self.present(svc, animated: true, completion: nil)
+        }
     }
 
     //MARK:- SafatriViewConroller Dismiss

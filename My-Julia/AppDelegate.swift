@@ -113,9 +113,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         cryptoLib.key = "23501748FEB710349F13763248DFC6C2"
         cryptoLib.iv = "abcdefghijklmnop"
 
-      let input = "+dL9zvCUUH4lCBztagrlMg=="
-       let output = (CryptLib.sharedManager() as AnyObject).decryptCipherText(with: input)
-        print("Output : ",output)
 
         // iOS 10 support
         if #available(iOS 10, *) {
@@ -459,7 +456,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         if #available(iOS 10.0, *) {
             UNUserNotificationCenter.current().getDeliveredNotifications(completionHandler: {(notifications: [UNNotification]) in
-                //print("All received Notifications : ",notifications)
+                print("All received Notifications : ",notifications)
             })
         } else {
             // Fallback on earlier versions

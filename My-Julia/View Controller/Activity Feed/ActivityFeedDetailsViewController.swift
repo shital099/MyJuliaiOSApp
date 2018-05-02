@@ -200,7 +200,7 @@ class ActivityFeedDetailsViewController: UIViewController, RTLabelDelegate, SFSa
             cell.messageLbl.lineBreakMode = RTTextLineBreakModeWordWrapping
             // cell.messageLbl.sizeToFit()
 
-            let string = feedModel.messageText.appending(String(format:"<style>body{font-family: '%@'; font-size:%fpx;}</style><br>",cell.messageLbl.font.fontName,cell.messageLbl.font.pointSize))
+            let string = feedModel.messageText.appending(String(format:"<style>body{font-family: '%@'; font-size:%fpx;}</style><br></br>",cell.messageLbl.font.fontName,cell.messageLbl.font.pointSize))
             cell.descLbl.attributedText = CommonModel.sharedInstance.stringFromHtml(string: string)
         }
         else {
