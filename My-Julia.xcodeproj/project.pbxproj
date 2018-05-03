@@ -218,6 +218,7 @@
 		7E5F095520610173002687D0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7E5F088120610173002687D0 /* Main.storyboard */; };
 		7E63A2921F0B8E6600D87C65 /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E63A2911F0B8E6600D87C65 /* SpriteKit.framework */; };
 		7E70462F1ED6BB99006B30F7 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E70462E1ED6BB99006B30F7 /* libsqlite3.0.tbd */; };
+		7E767CA52099958C00F8BF28 /* My_JuliaTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E767CA42099958C00F8BF28 /* My_JuliaTests.m */; };
 		7E7DD514208482B0006F2109 /* LazyImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7DD513208482AF006F2109 /* LazyImage.swift */; };
 		7EB850472091AD85004948AB /* HTMLConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EB850452091AD85004948AB /* HTMLConverter.m */; };
 		7EB852E92091E64B004948AB /* ImageView+Kingfisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB852E82091E64B004948AB /* ImageView+Kingfisher.swift */; };
@@ -250,7 +251,18 @@
 		7EF9C1CE1F3DBD8200B3BB93 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EF9C1CD1F3DBD8200B3BB93 /* CoreGraphics.framework */; };
 		7EFD29751F1E1AFA004D5343 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EFD29741F1E1AFA004D5343 /* AssetsLibrary.framework */; };
 		7EFF6AFB2063B1F80094F1EF /* CustomUITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EFF6AFA2063B1F80094F1EF /* CustomUITextField.swift */; };
+		E7E325C4A2F819E80456F48B /* libPods-My-JuliaTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 95F6B8CF01CBB4CE715448DA /* libPods-My-JuliaTests.a */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		7E767CA72099958C00F8BF28 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7E41110A1EC97033009031B9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7E4111111EC97033009031B9;
+			remoteInfo = "My-Julia";
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		0635FA105906ABA80A04D868 /* Pods-EventApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EventApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-EventApp/Pods-EventApp.release.xcconfig"; sourceTree = "<group>"; };
@@ -271,8 +283,6 @@
 		7E41126B1EC97559009031B9 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		7E4112771EC9807F009031B9 /* AFNetworking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AFNetworking.framework; path = "../../../Library/Developer/Xcode/DerivedData/EventApp-bnzckdsfhlarzhgnbusyxnrrnuui/Build/Products/Debug-iphonesimulator/AFNetworking/AFNetworking.framework"; sourceTree = "<group>"; };
 		7E4112791EC984E5009031B9 /* libAFNetworking.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libAFNetworking.a; path = "../../../Library/Developer/Xcode/DerivedData/EventApp-bnzckdsfhlarzhgnbusyxnrrnuui/Build/Products/Debug-iphonesimulator/AFNetworking/libAFNetworking.a"; sourceTree = "<group>"; };
-		7E5835A6206B8E60001B94BC /* My_JuliaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = My_JuliaTests.swift; sourceTree = "<group>"; };
-		7E5835A8206B8E60001B94BC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7E5F072120610172002687D0 /* database.sqlite */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = database.sqlite; sourceTree = "<group>"; };
 		7E5F072220610172002687D0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7E5F072420610172002687D0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -539,6 +549,9 @@
 		7E5F088220610173002687D0 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7E63A2911F0B8E6600D87C65 /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
 		7E70462E1ED6BB99006B30F7 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
+		7E767CA22099958B00F8BF28 /* My-JuliaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "My-JuliaTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7E767CA42099958C00F8BF28 /* My_JuliaTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = My_JuliaTests.m; sourceTree = "<group>"; };
+		7E767CA62099958C00F8BF28 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7E7DD513208482AF006F2109 /* LazyImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LazyImage.swift; sourceTree = "<group>"; };
 		7EB850452091AD85004948AB /* HTMLConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTMLConverter.m; sourceTree = "<group>"; };
 		7EB850462091AD85004948AB /* HTMLConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTMLConverter.h; sourceTree = "<group>"; };
@@ -605,6 +618,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		7E767C9F2099958B00F8BF28 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E7E325C4A2F819E80456F48B /* libPods-My-JuliaTests.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -646,7 +667,7 @@
 			children = (
 				7E5F072020610172002687D0 /* My-Julia */,
 				7E23BB9D20610303003CCF5B /* My-Julia™Tests */,
-				7E5835A5206B8E60001B94BC /* My-JuliaTests */,
+				7E767CA32099958C00F8BF28 /* My-JuliaTests */,
 				7E4111131EC97033009031B9 /* Products */,
 				C3654A9F5FB51E6BFD9D7539 /* Frameworks */,
 				2B3FBB16B4CD51447524C03D /* Pods */,
@@ -657,17 +678,9 @@
 			isa = PBXGroup;
 			children = (
 				7E4111121EC97033009031B9 /* My-Julia.app */,
+				7E767CA22099958B00F8BF28 /* My-JuliaTests.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		7E5835A5206B8E60001B94BC /* My-JuliaTests */ = {
-			isa = PBXGroup;
-			children = (
-				7E5835A6206B8E60001B94BC /* My_JuliaTests.swift */,
-				7E5835A8206B8E60001B94BC /* Info.plist */,
-			);
-			path = "My-JuliaTests";
 			sourceTree = "<group>";
 		};
 		7E5F072020610172002687D0 /* My-Julia */ = {
@@ -1603,6 +1616,15 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		7E767CA32099958C00F8BF28 /* My-JuliaTests */ = {
+			isa = PBXGroup;
+			children = (
+				7E767CA42099958C00F8BF28 /* My_JuliaTests.m */,
+				7E767CA62099958C00F8BF28 /* Info.plist */,
+			);
+			path = "My-JuliaTests";
+			sourceTree = "<group>";
+		};
 		7E7DD512208482AF006F2109 /* LazyImageLibrary */ = {
 			isa = PBXGroup;
 			children = (
@@ -1689,6 +1711,7 @@
 				7E4111101EC97033009031B9 /* Resources */,
 				E6DE825E614DD0C10C8CFF08 /* [CP] Embed Pods Frameworks */,
 				D2664ECCEE10E2DCF2540C1F /* [CP] Copy Pods Resources */,
+				7E767CAC2099AEF100F8BF28 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1698,6 +1721,27 @@
 			productName = EventApp;
 			productReference = 7E4111121EC97033009031B9 /* My-Julia.app */;
 			productType = "com.apple.product-type.application";
+		};
+		7E767CA12099958B00F8BF28 /* My-JuliaTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7E767CA92099958C00F8BF28 /* Build configuration list for PBXNativeTarget "My-JuliaTests" */;
+			buildPhases = (
+				D45FF6D8A4C2714CB3258DB0 /* [CP] Check Pods Manifest.lock */,
+				7E767C9E2099958B00F8BF28 /* Sources */,
+				7E767C9F2099958B00F8BF28 /* Frameworks */,
+				7E767CA02099958B00F8BF28 /* Resources */,
+				0888BA512C7FCF14AB9BF5D7 /* [CP] Embed Pods Frameworks */,
+				2191B93768A0A61B5DB3C1C9 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7E767CA82099958C00F8BF28 /* PBXTargetDependency */,
+			);
+			name = "My-JuliaTests";
+			productName = "My-JuliaTests";
+			productReference = 7E767CA22099958B00F8BF28 /* My-JuliaTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -1723,6 +1767,12 @@
 							};
 						};
 					};
+					7E767CA12099958B00F8BF28 = {
+						CreatedOnToolsVersion = 9.3;
+						DevelopmentTeam = B9357KA83X;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 7E4111111EC97033009031B9;
+					};
 				};
 			};
 			buildConfigurationList = 7E41110D1EC97033009031B9 /* Build configuration list for PBXProject "My-Julia" */;
@@ -1739,6 +1789,7 @@
 			projectRoot = "";
 			targets = (
 				7E4111111EC97033009031B9 /* My-Julia */,
+				7E767CA12099958B00F8BF28 /* My-JuliaTests */,
 			);
 		};
 /* End PBXProject section */
@@ -1771,9 +1822,59 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		7E767CA02099958B00F8BF28 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		0888BA512C7FCF14AB9BF5D7 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-My-JuliaTests/Pods-My-JuliaTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		2191B93768A0A61B5DB3C1C9 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-My-JuliaTests/Pods-My-JuliaTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7E767CAC2099AEF100F8BF28 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Fabric/run\" eee8b5e686cf645f9f040ef1a0d564a721af0651 d30e8797da90cef9509607101b975b6986de1bc3f4fc4ec9c88a479bba76540c";
+		};
 		D2664ECCEE10E2DCF2540C1F /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1787,6 +1888,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-My-Julia/Pods-My-Julia-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D45FF6D8A4C2714CB3258DB0 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-My-JuliaTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		E6DE825E614DD0C10C8CFF08 /* [CP] Embed Pods Frameworks */ = {
@@ -2037,7 +2156,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		7E767C9E2099958B00F8BF28 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7E767CA52099958C00F8BF28 /* My_JuliaTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		7E767CA82099958C00F8BF28 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7E4111111EC97033009031B9 /* My-Julia */;
+			targetProxy = 7E767CA72099958C00F8BF28 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		7E5F072320610172002687D0 /* LaunchScreen.storyboard */ = {
@@ -2277,6 +2412,50 @@
 			};
 			name = Release;
 		};
+		7E767CAA2099958C00F8BF28 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1DA2CEAD307391FDD3016EDA /* Pods-My-JuliaTests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "My-JuliaTests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.gcotechcenter.gggg.My-JuliaTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/My-Julia.app/My-Julia";
+			};
+			name = Debug;
+		};
+		7E767CAB2099958C00F8BF28 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 903D597BFA9F490771E39A69 /* Pods-My-JuliaTests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "My-JuliaTests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.gcotechcenter.gggg.My-JuliaTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/My-Julia.app/My-Julia";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -2294,6 +2473,15 @@
 			buildConfigurations = (
 				7E4111301EC97033009031B9 /* Debug */,
 				7E4111311EC97033009031B9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		7E767CA92099958C00F8BF28 /* Build configuration list for PBXNativeTarget "My-JuliaTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7E767CAA2099958C00F8BF28 /* Debug */,
+				7E767CAB2099958C00F8BF28 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

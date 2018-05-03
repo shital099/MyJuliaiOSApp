@@ -33,6 +33,8 @@ class DocumentDetailsViewController: UIViewController, UIWebViewDelegate {
         var request = URLRequest(url: targetURL as URL)
         request.setValue("Basic ".appending(EventData.sharedInstance.auth_token), forHTTPHeaderField: "Authorization")
         webView.loadRequest(request)
+
+        self.updateReadStatus()
         
     }
 
@@ -51,5 +53,16 @@ class DocumentDetailsViewController: UIViewController, UIWebViewDelegate {
         // Pass the selected object to the new view controller.
     }
     */
+
+    // MARK: - Webservice Methods
+
+    func updateReadStatus()  {
+
+        let urlStr = UpdateReadStatus.appendingFormat("flag=%@&Id=%@",Update_Documents_List,self.model.docId)
+        NetworkingHelper.getRequestFromUrl(name:UpdateReadStatus,  urlString:urlStr, callback: { response in
+
+        }, errorBack: { error in
+        })
+    }
 
 }

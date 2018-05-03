@@ -464,15 +464,17 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
             DBManager.sharedInstance.updateChatListStatusIntoDB(groupId: vc.chatGroupModel.groupId)
 
             //Update side menu row
-            self.changeChatCount()
+           // self.changeChatCount()
 
+            vc.view.tag = self.view.tag
             self.navigationController?.pushViewController(vc, animated: true)
         }
     }
 
     func changeChatCount() {
-        let userDict:[String: Bool] = ["isClickOnNotification": false]
-        NotificationCenter.default.post(name: ChatNotification, object: "", userInfo: userDict)
+//        let userDict:[String: Bool] = ["isClickOnNotification": false]
+//        NotificationCenter.default.post(name: ChatNotification, object: "", userInfo: userDict)
+
     }
 
 }

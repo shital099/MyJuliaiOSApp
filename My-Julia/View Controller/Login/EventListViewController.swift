@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Crashlytics
 
 class EventListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource,TKAlertDelegate, UISearchBarDelegate, CustomAlertViewDelegate {
 
@@ -55,7 +56,19 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
             //Fetch login attendee details from database
             DBManager.sharedInstance.fetchLoginAttendeeDetailsFromDB(attendeeCode: (userCredential?.user)!)
         }
+
+//        let button = UIButton(type: .roundedRect)
+//        button.frame = CGRect(x: 20, y: 50, width: 100, height: 30)
+//        button.setTitle("Crash", for: [])
+//        button.addTarget(self, action: #selector(self.crashButtonTapped(_:)), for: .touchUpInside)
+//        view.addSubview(button)
+
     }
+
+//    @IBAction func crashButtonTapped(_ sender: AnyObject) {
+//        print("crash button press")
+//        Crashlytics.sharedInstance().crash()
+//    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

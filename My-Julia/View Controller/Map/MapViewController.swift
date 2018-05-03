@@ -13,9 +13,8 @@ class MapViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var bgImageView: UIImageView!
 
-    
-    var listArray:[Map] = []
-    
+    var listArray : NSMutableArray = []
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -40,7 +39,7 @@ class MapViewController: UIViewController, UITableViewDelegate, UITableViewDataS
         tableView.tableFooterView = UIView()
 
         //Fetch data from Sqlite database
-        listArray = DBManager.sharedInstance.fetchMapDataFromDB() as! [Map]
+        listArray = DBManager.sharedInstance.fetchMapDataFromDB().mutableCopy() as! NSMutableArray
 
     }
     
@@ -82,8 +81,12 @@ class MapViewController: UIViewController, UITableViewDelegate, UITableViewDataS
         let cell = tableView.dequeueReusableCell(withIdentifier: "CellIdentifier", for: indexPath) as! MapCustomCell
         cell.backgroundColor = cell.contentView.backgroundColor;
 
-        let model = self.listArray[indexPath.row]
+        let model = self.listArray[indexPath.row] as! Map
         cell.nameLabel?.text = model.name
+
+        cell.statusImageview.isHidden  = model.isRead
+        print("Map Status : ",model.isRead)
+
         return cell
     }
     
@@ -93,25 +96,23 @@ class MapViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     {
         tableView.deselectRow(at: indexPath as IndexPath, animated: true)
 
+        let model = self.listArray[indexPath.row] as! Map
+
         //Update map read status
-        DBManager.sharedInstance.updateMapNotificationStatus(mapId: self.listArray[indexPath.row].id)
+        DBManager.sharedInstance.updateMapNotificationStatus(mapId: model.id)
 
-        //Change notification count in side menu
-        let masterVC : UIViewController!
-        if IS_IPHONE {
-            masterVC =  self.menuContainerViewController.leftMenuViewController as! MenuViewController?
-        }
-        else {
-            masterVC = self.splitViewController?.viewControllers.first
-        }
+        //Update notification read/unread message count in side menu bar
+        let dataDict:[String: Any] = ["Order": self.view.tag, "Flag":Update_Map_List]
+        NotificationCenter.default.post(name: UpdateNotificationCount, object: nil, userInfo: dataDict)
 
-        if ((masterVC as? MenuViewController) != nil) {
-            (masterVC as! MenuViewController).tableView.reloadRows(at: [IndexPath(item: self.view.tag, section: 1)], with: .top)
-        }
+        model.isRead = !model.isRead
+        self.listArray.replaceObject(at: indexPath.row, with: model)
+        self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
 
         let nextViewController = storyboard?.instantiateViewController(withIdentifier: "MapDetailsViewController") as! MapDetailsViewController
-        nextViewController.nameStr = self.listArray[indexPath.row].name
-        nextViewController.imgStr = self.listArray[indexPath.row].iconUrl
+        nextViewController.nameStr = model.name
+        nextViewController.imgStr = model.iconUrl
+        nextViewController.mapId = model.id
         self.navigationController?.pushViewController(nextViewController, animated: true)
     }
     
@@ -127,5 +128,6 @@ class MapCustomCell: UITableViewCell {
     
     @IBOutlet var nameLabel:UILabel!
     @IBOutlet var imageview:UIImageView!
-    
+    @IBOutlet var statusImageview:UIImageView!
+
 }

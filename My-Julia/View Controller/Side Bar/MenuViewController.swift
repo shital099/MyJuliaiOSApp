@@ -16,8 +16,9 @@ import UserNotificationsUI //framework to customize the notification
 //}
 let BroadcastNotification = NSNotification.Name(rawValue: "BroadcastMessageNotificationReceived")
 let ChatNotification = NSNotification.Name(rawValue: "ChatMessageNotificationReceived")
-let OtherModuleNotification = NSNotification.Name(rawValue: "OtherNotificationReceived")
-let ShowNotificationCount = NSNotification.Name(rawValue: "WiFiNotificationReceived")
+let OtherModuleNotification = NSNotification.Name(rawValue: "OpenNotificationReceived")
+let ShowNotificationCount = NSNotification.Name(rawValue: "OtherNotificationReceived")
+let UpdateNotificationCount = NSNotification.Name(rawValue: "UpdateNotificationCountReceived")
 
 class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, SideMenuControllerDelegate, TKAlertDelegate, UNUserNotificationCenterDelegate {
     
@@ -104,6 +105,7 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
         NotificationCenter.default.addObserver(self, selector: #selector(MenuViewController.openNotificationModuleScreenInSideMenu(notification:)), name:OtherModuleNotification, object: nil)
 
         NotificationCenter.default.addObserver(self, selector: #selector(MenuViewController.changeSideMenuUnreadMessageCount(notification:)), name:ShowNotificationCount, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(MenuViewController.changeSideMenuNotificationCount(notification:)), name:UpdateNotificationCount, object: nil)
 
     }
 
@@ -307,25 +309,20 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
                     isAgendaPresent = true
                 }
                 else if viewController is ChatListViewController {
-                   self.chatCount = DBManager.sharedInstance.fetchChatUnreadListCount()
-                    sideDrawerItem.dataCount = self.chatCount
+                   sideDrawerItem.dataCount = DBManager.sharedInstance.fetchChatUnreadListCount()
                     isChatPresent = true
                 }
                 else if viewController is MapViewController {
-                    self.chatCount = DBManager.sharedInstance.fetchMapUnreadListCount()
-                    sideDrawerItem.dataCount = self.chatCount
+                   sideDrawerItem.dataCount = DBManager.sharedInstance.fetchMapUnreadListCount()
                 }
                 else if viewController is DocumentsListViewController {
-                    self.chatCount = DBManager.sharedInstance.fetchUnreadDocumentCount()
-                    sideDrawerItem.dataCount = self.chatCount
+                    sideDrawerItem.dataCount = DBManager.sharedInstance.fetchUnreadDocumentCount()
                 }
                 else if viewController is WiFiViewController {
-                    self.chatCount = DBManager.sharedInstance.fetchUnreadWiFiCount()
-                    sideDrawerItem.dataCount = self.chatCount
-                }  
+                    sideDrawerItem.dataCount = DBManager.sharedInstance.fetchUnreadWiFiCount()
+                }
                 else if viewController is ActivityFeedListViewController {
-                    self.chatCount = DBManager.sharedInstance.fetchUnreadActivityFeedsCount()
-                    sideDrawerItem.dataCount = self.chatCount
+                    sideDrawerItem.dataCount = DBManager.sharedInstance.fetchUnreadActivityFeedsCount()
                 }
                 else if viewController is NotificationViewController {
                     sideDrawerItem.dataCount = DBManager.sharedInstance.fetchUnreadNotificationsCount()
@@ -674,6 +671,8 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
         //viewController.view.tag = index         //Store row index
 
         if IS_IPHONE {
+            viewController.view.tag = index         //Store row index
+
             self.menuContainerViewController.setMenuState(MFSideMenuStateClosed, completion: nil)
             let navController = self.menuContainerViewController.centerViewController as? UINavigationController
             navController?.viewControllers = NSArray().adding(viewController) as! [UIViewController]
@@ -685,6 +684,7 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
             }
             else {
                 let navVC = UINavigationController.init(rootViewController: viewController)
+                viewController.view.tag = index         //Store row index
                 splitViewController?.showDetailViewController(navVC, sender: nil)
             }
         }
@@ -808,75 +808,57 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
             //Check Agenda menu added or not
             if viewController is ChatListViewController {
-                self.chatCount = DBManager.sharedInstance.fetchChatUnreadListCount()
-                sideDrawerItem.dataCount = self.chatCount
+                sideDrawerItem.dataCount = DBManager.sharedInstance.fetchChatUnreadListCount()
                 isChatPresent = true
             }
             else if viewController is MapViewController {
-                self.chatCount = DBManager.sharedInstance.fetchMapUnreadListCount()
-                sideDrawerItem.dataCount = self.chatCount
+                sideDrawerItem.dataCount = DBManager.sharedInstance.fetchMapUnreadListCount()
             }
             else if viewController is DocumentsListViewController {
-                self.chatCount = DBManager.sharedInstance.fetchUnreadDocumentCount()
-                sideDrawerItem.dataCount = self.chatCount
+                sideDrawerItem.dataCount = DBManager.sharedInstance.fetchUnreadDocumentCount()
             }
             else if viewController is WiFiViewController {
-                self.chatCount = DBManager.sharedInstance.fetchUnreadWiFiCount()
-                sideDrawerItem.dataCount = self.chatCount
+                sideDrawerItem.dataCount = DBManager.sharedInstance.fetchUnreadWiFiCount()
             }
             else if viewController is ActivityFeedListViewController {
-                self.chatCount = DBManager.sharedInstance.fetchUnreadActivityFeedsCount()
-                sideDrawerItem.dataCount = self.chatCount
+               sideDrawerItem.dataCount = DBManager.sharedInstance.fetchUnreadActivityFeedsCount()
             }
             else if viewController is NotificationViewController {
                 sideDrawerItem.dataCount = DBManager.sharedInstance.fetchUnreadNotificationsCount()
             }
-
             self.tableView.reloadData()
         }
+    }
 
+    @objc func changeSideMenuNotificationCount(notification: NSNotification) {
 
-//        //Fetch data from Sqlite database
-//        let listArray : [Modules] = DBManager.sharedInstance.fetchModulesDataFromDB() as! [Modules]
-//
-//        for data in listArray {
-//
-//            let sideDrawerItem: SideDrawerMenu = SideDrawerMenu().addItemWithTitle(titleStr: data.name)
-//            sideDrawerItem.dataCount = 0
-//
-//                //Check Agenda menu added or not
-//                let viewController = CommonModel.sharedInstance.fetchViewControllerObject(moduleId: sideDrawerItem.moduleId)
-//                if viewController is AgendaViewController {
-//                    isAgendaPresent = true
-//                }
-//                else if viewController is ChatListViewController {
-//                    self.chatCount = DBManager.sharedInstance.fetchChatUnreadListCount()
-//                    sideDrawerItem.dataCount = self.chatCount
-//                    isChatPresent = true
-//                }
-//                else if viewController is MapViewController {
-//                    self.chatCount = DBManager.sharedInstance.fetchMapUnreadListCount()
-//                    sideDrawerItem.dataCount = self.chatCount
-//                }
-//                else if viewController is DocumentsListViewController {
-//                    self.chatCount = DBManager.sharedInstance.fetchUnreadDocumentCount()
-//                    sideDrawerItem.dataCount = self.chatCount
-//                }
-//                else if viewController is WiFiViewController {
-//                    self.chatCount = DBManager.sharedInstance.fetchUnreadWiFiCount()
-//                    sideDrawerItem.dataCount = self.chatCount
-//                }
-//                else if viewController is ActivityFeedListViewController {
-//                    self.chatCount = DBManager.sharedInstance.fetchUnreadActivityFeedsCount()
-//                    sideDrawerItem.dataCount = self.chatCount
-//                }
-//                else if viewController is NotificationViewController {
-//                    sideDrawerItem.dataCount = DBManager.sharedInstance.fetchUnreadNotificationsCount()
-//                }
-//
-//                section2.addItem(sideDrawerItem)
-//        }
+        let flag = notification.userInfo!["Flag"] as! String
+        let moduleOrder = notification.userInfo!["Order"] as! Int
 
+        let section = self.menuArray[1] as! TKSideDrawerSection
+        let sideDrawerItem = section.items![moduleOrder] as! SideDrawerMenu
+
+        //Check Agenda menu added or not
+        if flag == Update_Chat_List {
+            sideDrawerItem.dataCount = DBManager.sharedInstance.fetchChatUnreadListCount()
+        }
+        else if flag == Update_Map_List {
+            sideDrawerItem.dataCount = DBManager.sharedInstance.fetchMapUnreadListCount()
+        }
+        else if flag == Update_Documents_List {
+            sideDrawerItem.dataCount = DBManager.sharedInstance.fetchUnreadDocumentCount()
+        }
+        else if flag == Update_WiFi_List {
+            sideDrawerItem.dataCount = DBManager.sharedInstance.fetchUnreadWiFiCount()
+        }
+        else if flag == Update_Activity_Feeds_List {
+            sideDrawerItem.dataCount = DBManager.sharedInstance.fetchUnreadActivityFeedsCount()
+        }
+        else if flag == Update_Broadcast_List {
+            sideDrawerItem.dataCount = DBManager.sharedInstance.fetchUnreadNotificationsCount()
+        }
+
+        self.tableView.reloadData()
     }
 
     @objc func openNotificationModuleScreenInSideMenu(notification: NSNotification) {

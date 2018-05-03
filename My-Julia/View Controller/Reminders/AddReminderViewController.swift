@@ -81,8 +81,8 @@ class AddReminderViewController: UIViewController , TKAlertDelegate {
             // << alert-animation-swift
             
             // >> alert-tint-dim-swift
-            alert.style.backgroundDimAlpha = 0.0;
-            alert.style.backgroundTintColor = UIColor.white
+            alert.style.backgroundDimAlpha = 0.3;
+            alert.style.backgroundTintColor = UIColor.gray
             // << alert-tint-dim-swift
             
             // >> alert-anim-duration-swift
@@ -143,7 +143,7 @@ class AddReminderViewController: UIViewController , TKAlertDelegate {
         if sender.tag == 100 {
             let outputFormatter : DateFormatter = DateFormatter();
             outputFormatter.dateFormat = "dd-MM-YYYY hh:mm aa"
-            self.dateTextField.text = outputFormatter.string(from: timePicker.date)
+            self.dateTextField.text = outputFormatter.string(from: timeDatePicker.date)
         }
 
         dateTextField.resignFirstResponder()

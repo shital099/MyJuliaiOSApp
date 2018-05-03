@@ -28,14 +28,27 @@ class WiFiDetailsViewController: UIViewController, UITableViewDataSource, UITabl
         //Update dyanamic height of tableview cell
         tableViewObj.estimatedRowHeight = 500
         tableViewObj.rowHeight = UITableViewAutomaticDimension
-        
+
+        //Update wifi read status into db and server
+        self.updateReadStatus()
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
+
+    func updateReadStatus()  {
+
+
+        let urlStr = UpdateReadStatus.appendingFormat("flag=%@&Id=%@",Update_WiFi_List,self.wifiModel.id)
+        NetworkingHelper.getRequestFromUrl(name:UpdateReadStatus,  urlString:urlStr, callback: { response in
+
+        }, errorBack: { error in
+        })
+    }
+
+
     // MARK: - UITableView Delegate Methods
     
     func numberOfSections(in tableView: UITableView) -> Int {

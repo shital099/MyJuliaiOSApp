@@ -13,7 +13,7 @@ class DocumentsListViewController: UIViewController, UITableViewDelegate, UITabl
     @IBOutlet weak var bgImageView: UIImageView!
     @IBOutlet weak var tableView: UITableView!
 
-    var listArray : NSArray = [] // = [DocumentModel]()
+    var listArray : NSMutableArray = [] // = [DocumentModel]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,7 +36,7 @@ class DocumentsListViewController: UIViewController, UITableViewDelegate, UITabl
         tableView.rowHeight = UITableViewAutomaticDimension
 
          //Fetch data from Sqlite database
-        self.listArray = DBManager.sharedInstance.fetchDocumentsListFromDB()
+        self.listArray = DBManager.sharedInstance.fetchDocumentsListFromDB().mutableCopy() as! NSMutableArray
         
         //Set separator color according to background color
         CommonModel.sharedInstance.applyTableSeperatorColor(object: tableView)
@@ -67,7 +67,7 @@ class DocumentsListViewController: UIViewController, UITableViewDelegate, UITabl
     @objc func leftSideMenuButtonPressed(sender: UIBarButtonItem) {
         let masterVC : UIViewController!
         if IS_IPHONE {
-            masterVC =  self.menuContainerViewController.leftMenuViewController as! MenuViewController!
+            masterVC =  self.menuContainerViewController.leftMenuViewController as! MenuViewController?
         }
         else {
             masterVC = self.splitViewController?.viewControllers.first
@@ -86,7 +86,7 @@ class DocumentsListViewController: UIViewController, UITableViewDelegate, UITabl
         NetworkingHelper.getRequestFromUrl(name:Documents_List_url,  urlString:urlStr, callback: { response in
            // print("Documents data : ",response)
             //Fetch data from Sqlite database
-            self.listArray = DBManager.sharedInstance.fetchDocumentsListFromDB()
+            self.listArray = DBManager.sharedInstance.fetchDocumentsListFromDB().mutableCopy() as! NSMutableArray
             self.tableView.reloadData()
         }, errorBack: { error in
         })
@@ -114,6 +114,8 @@ class DocumentsListViewController: UIViewController, UITableViewDelegate, UITabl
         cell.titleLbl.text = model.title
         cell.timeLbl.text = String(format:"Valid from : %@ - %@",CommonModel.sharedInstance.getDateAndTime(dateStr: model.startDateStr),  CommonModel.sharedInstance.getDateAndTime(dateStr: model.endDateStr))
 
+        cell.statusImageview.isHidden  = model.isRead
+
         if let htmlData = model.descStr.data(using: String.Encoding.unicode) {
             do {
                 let attributedText = try NSAttributedString(data: htmlData, options: [NSAttributedString.DocumentReadingOptionKey.documentType: NSAttributedString.DocumentType.html], documentAttributes: nil)
@@ -129,8 +131,21 @@ class DocumentsListViewController: UIViewController, UITableViewDelegate, UITabl
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
+        let model = self.listArray[indexPath.row] as! DocumentModel
+
+        //Update map read status
+        DBManager.sharedInstance.updateDocumentStatus(documentId: model.docId)
+
+        //Update notification read/unread message count in side menu bar
+        let dataDict:[String: Any] = ["Order": self.view.tag, "Flag":Update_Documents_List]
+        NotificationCenter.default.post(name: UpdateNotificationCount, object: nil, userInfo: dataDict)
+
+        model.isRead = !model.isRead
+        self.listArray.replaceObject(at: indexPath.row, with: model)
+        self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+
         let viewController = storyboard?.instantiateViewController(withIdentifier: "DocumentDetailsViewController") as! DocumentDetailsViewController
-        viewController.model = listArray[indexPath.row] as! DocumentModel
+        viewController.model = model
         self.navigationController?.pushViewController(viewController, animated: true)
     }
 
@@ -144,5 +159,6 @@ class DocumentCustomCell: UITableViewCell {
     @IBOutlet var imageview:UIImageView!
     @IBOutlet var descLbl:UILabel!
     @IBOutlet var timeLbl:UILabel!
+    @IBOutlet var statusImageview:UIImageView!
 }
 

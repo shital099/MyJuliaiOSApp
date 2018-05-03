@@ -31,11 +31,7 @@ class NotificationViewController: UIViewController, UITableViewDelegate, UITable
         
         //Show menu icon in ipad and iphone
         self.setupMenuBarButtonItems()
-        
-        //        if IS_IPHONE {
-        //            self.setupMenuBarButtonItems()
-        //        }
-        
+
         //apply application theme on screen
         CommonModel.sharedInstance.applyThemeOnScreen(viewController: self, bgImage: bgImageView)
         
@@ -62,6 +58,7 @@ class NotificationViewController: UIViewController, UITableViewDelegate, UITable
         //Fetch data from server
         self.getNotificationData()
 
+        self.changeNotificationCount()
     }
     
     // MARK: - Navigation UIBarButtonItems
@@ -114,10 +111,9 @@ class NotificationViewController: UIViewController, UITableViewDelegate, UITable
             guard let strongSelf = self else { return }
             if !success {
                 DispatchQueue.main.async {
-                    //Change notification count in side menu
-                    let userDict:[String: Bool] = ["isClickOnNotification": false]
-                    NotificationCenter.default.post(name: BroadcastNotification, object: "", userInfo: userDict)
 
+//                    let userDict:[String: Bool] = ["isClickOnNotification": false]
+//                    NotificationCenter.default.post(name: BroadcastNotification, object: "", userInfo: userDict)
                 }
             } else {
                 DispatchQueue.main.async {
@@ -127,60 +123,13 @@ class NotificationViewController: UIViewController, UITableViewDelegate, UITable
                 }
             }
         }
-
-        /*let urlStr = Get_AllModuleDetails_url.appendingFormat("EventId=%@&AttendeeId=%@&Flag=%@&PageNo=%d",EventData.sharedInstance.eventId,EventData.sharedInstance.attendeeId,Notification_List_url,self.pageNo)
-        NetworkingHelper.getRequestFromUrl(name:Notification_List_url,  urlString:urlStr, callback: { response in
-
-            //Change notification count in side menu
-            NotificationCenter.default.post(name: BroadcastNotification, object: nil)
-
-            //Remove first page load data
-            if self.pageNo == 0 {
-                self.pageNo = 0
-                self.isLastPage = false
-
-                if self.dataArray.count != 0 {
-                    self.dataArray.removeAllObjects()
-                }
-            }
-            //Load data from db
-            self.loadItem()
-            DispatchQueue.main.async {
-              //  self.sortData()
-            }
-        }, errorBack: { error in
-            NSLog("error : %@", error)
-        })*/
     }
     
-  /*  func sortData() {
-        if sortedSections.count != 0 {
-            sortedSections.removeAll()
-        }
-        if dataList.count != 0 {
-            dataList.removeAllObjects()
-        }
-
-        //Sort data according to date
-        for item in dataArray  {
-
-            let obj = item as! NotificationsModel
-            let dateStr = CommonModel.sharedInstance.getNotificationDate(dateStr: obj.cretedDate)
-            if (dataList.value(forKey: dateStr) != nil) {
-                let array = dataList.value(forKey: dateStr) as! NSMutableArray
-                array.add(item)
-                dataList.setValue(array, forKey: dateStr)
-            }
-            else {
-                let array = NSMutableArray()
-                array.add(item)
-                dataList.setValue(array, forKey: dateStr)
-                sortedSections.append(dateStr)
-                
-            }
-        }
-        tableView.reloadData()
-    }*/
+    func changeNotificationCount() {
+        //Change notification count in side menu
+        let dataDict:[String: Any] = ["Order": self.view.tag, "Flag":Update_Chat_List]
+        NotificationCenter.default.post(name: UpdateNotificationCount, object: nil, userInfo: dataDict)
+    }
 
 
     // MARK: - UITableView Delegate Methods

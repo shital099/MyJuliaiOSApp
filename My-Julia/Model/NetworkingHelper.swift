@@ -144,6 +144,14 @@ let Chat_Get_Group_Members = "api/chat/GetGroupMembers/"
 let Chat_Delete_Conversession = "api/Chat/DeleteConversation"
 let Chat_Delete_Messages = "api/Chat/DeleteMessages"
 
+//Update read WiFi, Document, Activity Feed and Map module status
+let UpdateReadStatus = "api/Notifications/UpdateReadFlag?"
+let Update_WiFi_List = "Wifi"
+let Update_Map_List = "Map"
+let Update_Documents_List = "Documents"
+let Update_Activity_Feeds_List = "Activity Feeds"
+let Update_Chat_List = "Chat"
+let Update_Broadcast_List = "Activity Feeds"
 
 /***** END *******/
 

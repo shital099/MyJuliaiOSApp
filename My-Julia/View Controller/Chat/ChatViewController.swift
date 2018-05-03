@@ -107,16 +107,7 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
         
         // self.IFView.textViewInput.becomeFirstResponder()
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        
-        
-        //  if timer != nil {
-        //      timer.invalidate()
-        // }
-        
-    }
-    
+
     override func viewWillDisappear(_ animated : Bool) {
         super.viewWillDisappear(animated)
         isPausedTimer = true
@@ -131,6 +122,11 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
     }
 
     override func viewDidAppear(_ animated: Bool) {
+
+        //Update notification read/unread message count in side menu bar
+        let dataDict:[String: Any] = ["Order": self.view.tag, "Flag":Update_Chat_List]
+        NotificationCenter.default.post(name: UpdateNotificationCount, object: nil, userInfo: dataDict)
+
         isPausedTimer = false
 
         if self.chatGroupModel.isGroupChat == true {

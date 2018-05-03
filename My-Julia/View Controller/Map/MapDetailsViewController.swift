@@ -12,6 +12,7 @@ class MapDetailsViewController: UIViewController, UIScrollViewDelegate {
     
     var nameStr: String?
     var imgStr: String?
+    var mapId: String?
     var lastScale : CGFloat = 0.0
     let kMaxScale : CGFloat = 2.0
     let kMinScale : CGFloat = 0.7
@@ -34,8 +35,21 @@ class MapDetailsViewController: UIViewController, UIScrollViewDelegate {
         
         //apply application theme on screen
         CommonModel.sharedInstance.applyThemeOnScreen(viewController: self, bgImage: bgImageView)
+
+        self.updateReadStatus()
     }
-    
+
+    // MARK: - Webservice Methods
+
+    func updateReadStatus()  {
+
+        let urlStr = UpdateReadStatus.appendingFormat("flag=%@&Id=%@",Update_Map_List,self.mapId!)
+        NetworkingHelper.getRequestFromUrl(name:UpdateReadStatus,  urlString:urlStr, callback: { response in
+
+        }, errorBack: { error in
+        })
+    }
+
     // MARK: - Gesture Methods
     
     // The Pan Gesture

@@ -35,7 +35,7 @@ class AgendaDetailsViewController: UIViewController,UIImagePickerControllerDeleg
         // Do any additional setup after loading the view.
         
         //Update dyanamic height of tableview cell
-        tableviewObj.estimatedRowHeight = 500
+        tableviewObj.estimatedRowHeight = 1000
         tableviewObj.rowHeight = UITableViewAutomaticDimension
         
         //Remove extra lines from tableview

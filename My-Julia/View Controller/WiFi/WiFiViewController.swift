@@ -10,9 +10,8 @@ import UIKit
 
 class WiFiViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    var wifiArray = [WiFiModel]()
-    
-    
+    var wifiArray : NSMutableArray = []
+
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var bgImageView: UIImageView!
     
@@ -41,9 +40,9 @@ class WiFiViewController: UIViewController, UITableViewDelegate, UITableViewData
         CommonModel.sharedInstance.applyTableSeperatorColor(object: tableView)
 
         //Fetch data from Sqlite database
-        wifiArray = DBManager.sharedInstance.fetchWifiDataFromDB() as! [WiFiModel]
+        self.wifiArray = DBManager.sharedInstance.fetchWifiDataFromDB().mutableCopy() as! NSMutableArray
     }
-    
+
     // MARK: - Navigation UIBarButtonItems
     
     func setupMenuBarButtonItems() {
@@ -57,7 +56,7 @@ class WiFiViewController: UIViewController, UITableViewDelegate, UITableViewData
     @objc func leftSideMenuButtonPressed(sender: UIBarButtonItem) {
         let masterVC : UIViewController!
         if IS_IPHONE {
-            masterVC =  self.menuContainerViewController.leftMenuViewController as! MenuViewController!
+            masterVC =  self.menuContainerViewController.leftMenuViewController as! MenuViewController?
         }
         else {
             masterVC = self.splitViewController?.viewControllers.first
@@ -82,10 +81,9 @@ class WiFiViewController: UIViewController, UITableViewDelegate, UITableViewData
         let cell = tableView.dequeueReusableCell(withIdentifier: "CellIdentifier", for: indexPath) as! WiFiCustomCell
         cell.backgroundColor = cell.contentView.backgroundColor;
 
-        let wifi: WiFiModel
-        wifi = wifiArray[indexPath.row]
-        
+        let wifi = wifiArray[indexPath.row] as! WiFiModel
         cell.nameLabel!.text = wifi.name
+        cell.statusImageview.isHidden  = wifi.isRead
         return cell
     }
     
@@ -93,12 +91,19 @@ class WiFiViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
-        tableView.deselectRow(at: indexPath as IndexPath, animated: true)
-        
+        let model = self.wifiArray[indexPath.row] as! WiFiModel
+        //Update notification read/unread message count in side menu bar
+        let dataDict:[String: Any] = ["Order": self.view.tag, "Flag":Update_WiFi_List]
+        DBManager.sharedInstance.updateWiFiDataStatus(wifiId: model.id)
+        NotificationCenter.default.post(name: UpdateNotificationCount, object: nil, userInfo: dataDict)
+
+        model.isRead = !model.isRead
+        self.wifiArray.replaceObject(at: indexPath.row, with: model)
+        self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
+
         let viewController = storyboard?.instantiateViewController(withIdentifier: "WiFiDetailsViewController") as! WiFiDetailsViewController
-        viewController.wifiModel = self.wifiArray[indexPath.row]
+        viewController.wifiModel = model
         self.navigationController?.pushViewController(viewController, animated: true)
-        
     }
     
     override func didReceiveMemoryWarning() {
@@ -111,6 +116,6 @@ class WiFiViewController: UIViewController, UITableViewDelegate, UITableViewData
 class WiFiCustomCell: UITableViewCell {
     
     @IBOutlet var nameLabel:UILabel!
-    @IBOutlet var imageview:UIImageView!
+    @IBOutlet var statusImageview:UIImageView!
     
 }

@@ -48,6 +48,16 @@
                ReferencedContainer = "container:My-Julia.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7E767C932099956600F8BF28"
+               BuildableName = "My-JuliaUITests.xctest"
+               BlueprintName = "My-JuliaUITests"
+               ReferencedContainer = "container:My-Julia.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference

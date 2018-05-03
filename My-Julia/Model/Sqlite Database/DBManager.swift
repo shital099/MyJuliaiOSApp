@@ -1087,12 +1087,12 @@ class DBManager: NSObject {
             if response is Dictionary<String, Any> {
                 do {
                     let  dict = response as! NSDictionary
-                    let id = self.isNullString(str: dict.value(forKey: "ID") as Any)
+                    let id = self.isNullString(str: dict.value(forKey: "Id") as Any)
                     let name = self.isNullString(str: dict.value(forKey: "Location") as Any)
                     let image = self.appendImagePath(path: dict.value(forKey: "ImagePath") as Any)
-                    let isRead = 0
+                    let isRead = dict.value(forKey: "IsRead")
 
-                    try database.executeUpdate("INSERT OR REPLACE INTO Map (EventID, AttendeeId, Id, Name, FloorPlanImage, IsRead) VALUES (?, ?, ?, ?, ?, ?)", values: [eventId,EventData.sharedInstance.attendeeId, id, name, image, isRead])
+                    try database.executeUpdate("INSERT OR REPLACE INTO Map (EventID, AttendeeId, Id, Name, FloorPlanImage, IsRead) VALUES (?, ?, ?, ?, ?, ?)", values: [eventId,EventData.sharedInstance.attendeeId, id, name, image, isRead ?? 0])
 
                 } catch {
                     print("error = \(error)")
@@ -1106,9 +1106,9 @@ class DBManager: NSObject {
                         let id = self.isNullString(str: dict.value(forKey: "ID") as Any)
                         let name = self.isNullString(str: dict.value(forKey: "Location") as Any)
                         let image = self.appendImagePath(path: dict.value(forKey: "ImagePath") as Any)
-                        let isRead = 1
+                        let isRead = dict.value(forKey: "IsRead")
 
-                        try database.executeUpdate("INSERT OR REPLACE INTO Map (EventID, AttendeeId, Id, Name, FloorPlanImage, IsRead) VALUES (?, ?, ?, ?, ?, ?)", values: [eventId,EventData.sharedInstance.attendeeId, id, name, image, isRead])
+                        try database.executeUpdate("INSERT OR REPLACE INTO Map (EventID, AttendeeId, Id, Name, FloorPlanImage, IsRead) VALUES (?, ?, ?, ?, ?, ?)", values: [eventId,EventData.sharedInstance.attendeeId, id, name, image, isRead ?? 0])
 
                     } catch {
                         print("error = \(error)")
@@ -1402,13 +1402,6 @@ class DBManager: NSObject {
         if openDatabase() {
             let eventId = EventData.sharedInstance.eventId
 
-            //Delete local data which is deleted from admin
-//            do {
-//                try database.executeUpdate("DELETE FROM Documents WHERE EventID = ?", values: [eventId])
-//
-//            } catch {
-//                print("error = \(error)")
-//            }
             //Notification data save into DB
             if response is Dictionary<String, Any> {
                 do {
@@ -1419,15 +1412,23 @@ class DBManager: NSObject {
                     let sDate = self.isNullString(str: dict.value(forKey: "FromDateTime") as Any)
                     let eDate = self.isNullString(str: dict.value(forKey: "ExpiryDatetime") as Any)
                     let url = self.appendImagePath(path: dict.value(forKey: "UrlPath") as Any)
-                    let isRead = 0
+                    let isRead = dict.value(forKey: "IsRead")
 
-                    try database.executeUpdate("INSERT OR REPLACE INTO Documents (EventID, DocId, Title, UrlPath, Description,StartDate, EndDate, IsRead ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", values: [eventId, docId ,title , url, desc, sDate, eDate, isRead])
+                    try database.executeUpdate("INSERT OR REPLACE INTO Documents (EventID, DocId, Title, UrlPath, Description,StartDate, EndDate, IsRead ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", values: [eventId, docId ,title , url, desc, sDate, eDate, isRead ?? 0])
 
                 } catch {
                     print("error = \(error)")
                 }
             }
             else {
+                //Delete local data which is deleted from admin
+                do {
+                    try database.executeUpdate("DELETE FROM Documents WHERE EventID = ?", values: [eventId])
+
+                } catch {
+                    print("error = \(error)")
+                }
+
                 for item in response as! NSArray {
                     do {
                         let  dict = item as! NSDictionary
@@ -1437,9 +1438,9 @@ class DBManager: NSObject {
                         let sDate = self.isNullString(str: dict.value(forKey: "FromDateTime") as Any)
                         let eDate = self.isNullString(str: dict.value(forKey: "ExpiryDatetime") as Any)
                         let url = self.appendImagePath(path: dict.value(forKey: "UrlPath") as Any)
-                        let isRead = 1
+                        let isRead = dict.value(forKey: "IsRead")
 
-                        try database.executeUpdate("INSERT OR REPLACE INTO Documents (EventID, DocId, Title, UrlPath, Description,StartDate, EndDate, IsRead ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", values: [eventId, docId ,title , url, desc, sDate, eDate, isRead])
+                        try database.executeUpdate("INSERT OR REPLACE INTO Documents (EventID, DocId, Title, UrlPath, Description,StartDate, EndDate, IsRead ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", values: [eventId, docId ,title , url, desc, sDate, eDate, isRead ?? 0])
 
                     } catch {
                         print("error = \(error)")
@@ -1492,11 +1493,11 @@ class DBManager: NSObject {
         return count
     }
 
-    func updateDocumentStatus() {
+    func updateDocumentStatus(documentId: String) {
         if openDatabase() {
 
             do {
-                try database.executeUpdate("Update Documents SET IsRead = ? Where EventID = ?", values: [1, EventData.sharedInstance.eventId])
+                try database.executeUpdate("Update Documents SET IsRead = ? Where DocId = ? AND EventID = ?", values: [1, documentId, EventData.sharedInstance.eventId])
             } catch {
                 print("error = \(error)")
             }
@@ -1695,14 +1696,6 @@ class DBManager: NSObject {
         if openDatabase() {
             let eventId = EventData.sharedInstance.eventId
 
-            //            //Delete local data which is deleted from admin
-//            do {
-//                try database.executeUpdate("DELETE FROM WiFi WHERE EventID = ?", values: [eventId])
-//
-//            } catch {
-//                print("error = \(error)")
-//            }
-
             //Notification data save into DB
             if response is Dictionary<String, Any> {
                 do {
@@ -1713,7 +1706,7 @@ class DBManager: NSObject {
                     let password = self.isNullString(str: dict.value(forKey: "Password") as Any)
                     let note = self.isNullString(str: dict.value(forKey: "Note") as Any)
                     let date = self.isNullString(str: dict.value(forKey: "CreatedDate") as Any)
-                    let isRead = 0
+                    let isRead = dict.value(forKey: "IsRead")
 
                     try database.executeUpdate("INSERT OR REPLACE INTO Wifi (EventID, Id, Name, Network, Password, Note, CreatedDate, IsRead) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", values: [eventId, id ,name , network , password , note, date, isRead])
                 } catch {
@@ -1721,8 +1714,16 @@ class DBManager: NSObject {
                 }
             }
             else {
-                for item in response as! NSArray {
 
+                //Delete local data which is deleted from admin
+                do {
+                    try database.executeUpdate("DELETE FROM WiFi WHERE EventID = ?", values: [eventId])
+
+                } catch {
+                    print("error = \(error)")
+                }
+
+                for item in response as! NSArray {
                     do {
                         let  dict = item as! NSDictionary
                         let id = self.isNullString(str: dict.value(forKey: "Id") as Any)
@@ -1731,10 +1732,9 @@ class DBManager: NSObject {
                         let password = self.isNullString(str: dict.value(forKey: "Password") as Any)
                         let note = self.isNullString(str: dict.value(forKey: "Note") as Any)
                         let date = self.isNullString(str: dict.value(forKey: "CreatedDate") as Any)
-                        let isRead = 1
+                        let isRead = dict.value(forKey: "IsRead")
 
-                        try database.executeUpdate("INSERT OR REPLACE INTO Wifi (EventID, Id, Name, Network, Password, Note, CreatedDate, IsRead) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", values: [eventId, id ,name , network , password , note, date, isRead])
-
+                        try database.executeUpdate("INSERT OR REPLACE INTO Wifi (EventID, Id, Name, Network, Password, Note, CreatedDate, IsRead) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", values: [eventId, id ,name , network , password , note, date, isRead ?? 0])
                     } catch {
                         print("error = \(error)")
                     }
@@ -1786,12 +1786,12 @@ class DBManager: NSObject {
         return count
     }
 
-    func updateWiFiDataStatus() {
+    func updateWiFiDataStatus(wifiId : String) {
         if openDatabase() {
 
             //Delete local data which is deleted from admin
             do {
-                try database.executeUpdate("Update WiFi SET IsRead = ? Where EventID = ?", values: [1, EventData.sharedInstance.eventId])
+                try database.executeUpdate("Update WiFi SET IsRead = ? Where Id = ? AND EventID = ?", values: [1,wifiId, EventData.sharedInstance.eventId])
             } catch {
                 print("error = \(error)")
             }
@@ -2072,7 +2072,7 @@ class DBManager: NSObject {
                 }
                 else {
                    let countQuery = "Select Count(IsRead) from ChatHistory Where IsRead = ? AND FromId = ? AND ToId = ? AND EventID = ?"
-                    results = database.executeQuery(countQuery, withArgumentsIn: [0, model.fromId, model.groupId, EventData.sharedInstance.eventId])
+                    results = database.executeQuery(countQuery, withArgumentsIn: [0, model.groupId, model.fromId, EventData.sharedInstance.eventId])
                 }
                 while results.next() == true {
                     model.unreadCount = Int32(results.object(forColumnIndex: 0) as! Int)
@@ -2179,8 +2179,6 @@ class DBManager: NSObject {
 //            } catch {
 //                print("error = \(error)")
 //            }
-            print("Refresh Chat history : ",sqlQuery)
-
             if !database.executeStatements(sqlQuery) {
             }
         }

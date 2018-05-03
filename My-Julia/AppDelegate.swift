@@ -8,6 +8,8 @@
 
 import UIKit
 import UserNotifications
+import Fabric
+import Crashlytics
 
 let IS_IPHONE = (UI_USER_INTERFACE_IDIOM()==UIUserInterfaceIdiom.phone);
 let IS_IPAD = (UI_USER_INTERFACE_IDIOM()==UIUserInterfaceIdiom.pad);
@@ -63,6 +65,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //            //Save notification data into db and navigate to screen
 //            //self.receivedNotification(application: application, data: launchOptions?[UIApplicationLaunchOptionsKey.remoteNotification] as AnyObject)
 //        }
+
+        //Get crash reports
+        Fabric.with([Crashlytics.self])
 
         //Get application name and version
         let name: AnyObject? = Bundle.main.infoDictionary!["CFBundleDisplayName"] as AnyObject
