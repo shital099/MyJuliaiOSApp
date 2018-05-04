@@ -253,7 +253,6 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
             else {
             }
             CommonModel.sharedInstance.dissmissActitvityIndicator()
-
         }, errorBack: { error in
             NSLog("error in Auth token: %@", error)
             CommonModel.sharedInstance.dissmissActitvityIndicator()
@@ -261,7 +260,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     func parseEventListData(response: AnyObject) {
-        for item in response as! NSArray {
+        for item in response as! NSArray {4
 
             let  dict = item as! NSDictionary
             let model = EventModel()

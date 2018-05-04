@@ -38,22 +38,27 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         //Show menu icon in ipad and iphone
         self.setupMenuBarButtonItems()
 
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
         if IS_IPHONE {
-          //  drawer = (self.menuContainerViewController.leftMenuViewController as! MenuViewController).drawer
+            //  drawer = (self.menuContainerViewController.leftMenuViewController as! MenuViewController).drawer
             self.delegate =  self.menuContainerViewController.leftMenuViewController as! MenuViewController?
         }
         else {
-           // drawer = ((self.splitViewController?.viewControllers[0] as? MenuViewController)?.drawer)!
-            self.delegate =  self.splitViewController?.viewControllers.first as! MenuViewController?
+            // drawer = ((self.splitViewController?.viewControllers[0] as? MenuViewController)?.drawer)!
+            self.delegate = self.splitViewController?.viewControllers.first as! MenuViewController?
         }
-        
+
         //Fetch all module list from server
         modulesArray = self.delegate.fetchModuleListFromDB().mutableCopy() as! NSMutableArray
-        
+
         //Remove home menu from section
         self.removeHomeModuleFromList()
+
+        self.collectionView.reloadData()
     }
-    
+
     func fetchModuleListFromDB() -> NSArray {
         
         //Add First section - User related module data
@@ -161,7 +166,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     @objc func leftSideMenuButtonPressed(sender: UIBarButtonItem) {
         let masterVC : UIViewController!
         if IS_IPHONE {
-            masterVC =  self.menuContainerViewController.leftMenuViewController as! MenuViewController!
+            masterVC =  self.menuContainerViewController.leftMenuViewController as! MenuViewController?
         }
         else {
             masterVC = self.splitViewController?.viewControllers.first

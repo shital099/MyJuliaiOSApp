@@ -14,8 +14,8 @@ import UserNotificationsUI //framework to customize the notification
 //    func sideMenuControllerDidHide(_ sideMenuController: SideMenuController)
 //    func sideMenuControllerDidReveal(_ sideMenuController: SideMenuController)
 //}
-let BroadcastNotification = NSNotification.Name(rawValue: "BroadcastMessageNotificationReceived")
-let ChatNotification = NSNotification.Name(rawValue: "ChatMessageNotificationReceived")
+//let BroadcastNotification = NSNotification.Name(rawValue: "BroadcastMessageNotificationReceived")
+//let ChatNotification = NSNotification.Name(rawValue: "ChatMessageNotificationReceived")
 let OtherModuleNotification = NSNotification.Name(rawValue: "OpenNotificationReceived")
 let ShowNotificationCount = NSNotification.Name(rawValue: "OtherNotificationReceived")
 let UpdateNotificationCount = NSNotification.Name(rawValue: "UpdateNotificationCountReceived")
@@ -100,8 +100,8 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
     func addNotificationObserver()  {
         //Change notification and chat message read/unread count
-        NotificationCenter.default.addObserver(self, selector:#selector(MenuViewController.changeSideMenuCountInSideMenu(notification:)), name:BroadcastNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(MenuViewController.changeSideMenuCountInSideMenu(notification:)), name:ChatNotification, object: nil)
+//        NotificationCenter.default.addObserver(self, selector:#selector(MenuViewController.changeSideMenuCountInSideMenu(notification:)), name:BroadcastNotification, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(MenuViewController.changeSideMenuCountInSideMenu(notification:)), name:ChatNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(MenuViewController.openNotificationModuleScreenInSideMenu(notification:)), name:OtherModuleNotification, object: nil)
 
         NotificationCenter.default.addObserver(self, selector: #selector(MenuViewController.changeSideMenuUnreadMessageCount(notification:)), name:ShowNotificationCount, object: nil)
@@ -445,7 +445,8 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
     @IBAction func onClickOfRefreshBtn(_ sender: Any) {
         //Show Indicator
         CommonModel.sharedInstance.showActitvityIndicator()
-        
+        print("Click on refresh button : ",CommonModel.sharedInstance.getCurrentDateInMM())
+
         self.getEventModuleData()
     }
     
@@ -648,6 +649,7 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
             if viewController is HomeViewController {
                 let vc = viewController as! HomeViewController
                 vc.homeIndex = index
+                vc.delegate = self
             }
             
             //Check Note,
@@ -695,7 +697,8 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
         NetworkingHelper.getRequestFromUrl(name:Get_AllModuleDetails_url, urlString: Get_AllModuleDetails_url.appendingFormat("Flag=%@",Get_AllDetails_url), callback: { response in
           //  print("All Module data : ",response)
             self.triggerPopAfterActivityFinish()
-            
+
+            print("After getting event modules data : ",CommonModel.sharedInstance.getCurrentDateInMM())
             //Fetch other details
             self.getEventDetailsData()
             
@@ -710,7 +713,8 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
         NetworkingHelper.getRequestFromUrl(name:Get_Login_Details_Url, urlString: Get_Login_Details_Url, callback: { response in
             
            // print("App theme data : ",response)
-            
+            print("After getting event details : ",CommonModel.sharedInstance.getCurrentDateInMM())
+
             //Fetch profile data
             _ = DBManager.sharedInstance.fetchProfileDataFromDB()
             
@@ -734,6 +738,9 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 else {
                     self.onClickOfEventDetails(self.eventButton)
                 }
+
+            print("After load event details on screen: ",CommonModel.sharedInstance.getCurrentDateInMM())
+
           //  }
         }, errorBack: { error in
             CommonModel.sharedInstance.dissmissActitvityIndicator()
@@ -743,7 +750,7 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
     // MARK: - Notification observer Methods
 
-    @objc func changeSideMenuCountInSideMenu(notification: NSNotification) {
+   /* @objc func changeSideMenuCountInSideMenu(notification: NSNotification) {
 
         let moduleName = notification.name == BroadcastNotification ? "NotificationViewController" : "ChatListViewController"
         let moduleId = CommonModel.sharedInstance.fetchModuleIdOfModuleName(moduleName:moduleName)
@@ -790,7 +797,7 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 }
             }
         }
-    }
+    }*/
 
     @objc func changeSideMenuUnreadMessageCount(notification: NSNotification) {
 

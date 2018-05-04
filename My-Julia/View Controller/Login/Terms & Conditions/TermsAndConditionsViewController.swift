@@ -67,7 +67,7 @@ class TermsAndConditionsViewController: UIViewController {
 
     func fetchContentFromServer() {
 
-        NetworkingHelper.getRequestFromUrl(name:Get_TermsAndCondition_Url, urlString: Get_TermsAndCondition_Url.appendingFormat("%@",EventData.sharedInstance.eventId), callback: { response in
+        NetworkingHelper.getRequestFromUrl(name:Get_TermsAndCondition_Url, urlString: Get_TermsAndCondition_Url, callback: { response in
             print("\n Terms and conditions Details : ",response)
 
             if response is NSArray {

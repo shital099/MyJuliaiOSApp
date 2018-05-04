@@ -106,7 +106,7 @@ class DBManager: NSObject {
                     let speaker_sql = "CREATE TABLE IF NOT EXISTS Speaker ( EventID text, SpeakerId text, AttendeeID text, Name text, Description text, Designation text, Iconurl text, ContactNo text, Email text, Address text, activityIds text, ActivityId text, UNIQUE (EventID, SpeakerId, AttendeeID) ON CONFLICT REPLACE);"
 
                     //Create Agenda table
-                    let agenda_sql = "CREATE TABLE IF NOT EXISTS Agenda (id INTEGER PRIMARY KEY AUTOINCREMENT, SessionID text, ActivitySessionId text, EventID text, ActivityID text, ActivityName text, AgendaId text, AgendaName text, ActivityStartDate text, ActivityEndDate text, SortStartDate text, SortEndDate text, SortActivityDate text, Location text, StartTime text, EndTime text, StartDate text, EndDate text, Day text, Description text,  SpeakerId text , UNIQUE (ActivitySessionId, EventID) ON CONFLICT REPLACE );"
+                    let agenda_sql = "CREATE TABLE IF NOT EXISTS Agenda (id INTEGER PRIMARY KEY AUTOINCREMENT, SessionID text, ActivitySessionId text, EventID text, ActivityID text, ActivityName text, AgendaId text, AgendaName text, ActivityStartDate text, ActivityEndDate text, SortStartDate text, SortEndDate text, SortActivityDate text, Location text, StartTime text, EndTime text, StartDate text, EndDate text, Day text, Description text,  SpeakerId text ,isAgendaActivity bool default true, UNIQUE (ActivitySessionId, EventID) ON CONFLICT REPLACE );"
                     
                     let myschedule_sql = "CREATE TABLE IF NOT EXISTS MySchedule (id INTEGER PRIMARY KEY AUTOINCREMENT,EventID text, AttendeeId text, ActivitySessionId text, SessionID text, ActivityID text, isUserSchedule boolean default false, UNIQUE (EventID, AttendeeId, ActivitySessionId) ON CONFLICT REPLACE);"
 
@@ -149,6 +149,8 @@ class DBManager: NSObject {
                     //Create Agenda and Speaker Relational table
                     let activity_details_sql = "CREATE TABLE IF NOT EXISTS AgendaSpeakerRelation (id INTEGER PRIMARY KEY AUTOINCREMENT, EventID text, ActivityId text, SpeakerId text, AttendeeId text, UNIQUE (EventID, ActivityId, SpeakerId) ON CONFLICT REPLACE);"
 
+                    let speaker_activities_sql = "CREATE TABLE IF NOT EXISTS SpeakerActivities (id INTEGER PRIMARY KEY AUTOINCREMENT, EventID text, ActivityId text, SpeakerId text, SessionId text, ActivitySessionId text, ActivityName text, ActivityStartDate text, ActivityEndDate text, Description text, UNIQUE (EventID, ActivityId, SpeakerId) ON CONFLICT REPLACE);"
+
                     //Create All completed session table
                     /*REmove session id logic
                     let sessions_sql = "CREATE TABLE IF NOT EXISTS QuestionActivities (id INTEGER PRIMARY KEY AUTOINCREMENT, EventID text, ActivitySessionId text unique, SessionId text, ActivityId text, SpeakerId text, ActivityName text, ActivityStartDate text, ActivityEndDate text, StartTime text, EndTime text, SortActivityDate text, ActivityDay text, isActive bool, AgendaId text, AgendaName text, Location text, QuesCount text);"*/
@@ -187,7 +189,7 @@ class DBManager: NSObject {
                     //Poll Speaker Act questions
                     let poll_act_question_sql = "CREATE TABLE IF NOT EXISTS SpeakerPollQuestions(id INTEGER PRIMARY KEY AUTOINCREMENT, EventID text, ActivityId text, CreatedDate text, Question text, QuestionId text, Option1 text, Option2 text, Option3 text, Option4 text, Op1Id text, Op2Id text, Op3Id text, Op4Id text, UNIQUE (EventID, ActivityId, QuestionId ) ON CONFLICT REPLACE );"
 
-                    let sql_stmt = login_details_sql + event_sql_stmt + module_sql_stmt + attendee_sql + note_sql + reminder_sql + speaker_sql + map_sql + feedback_sql + sponsor_sql + event_details_sql + document_sql + emergency_sql + gallery_sql + website_sql + wifi_details_sql + email_details_sql + activity_details_sql + profile_sql + sessions_sql + sessions_que_sql + poll_activity_sql + poll_sessions_que_sql + myschedule_sql + agenda_sql + noti_sql + activityFeed_sql + activityFeedComments_sql + activityFeedLikes_sql + act_feedback_sql + chatlist_sql + chathistorySql + poll_speaker_act_sql + poll_act_question_sql
+                    let sql_stmt = login_details_sql + event_sql_stmt + module_sql_stmt + attendee_sql + note_sql + reminder_sql + speaker_sql + map_sql + feedback_sql + sponsor_sql + event_details_sql + document_sql + emergency_sql + gallery_sql + website_sql + wifi_details_sql + email_details_sql + activity_details_sql + profile_sql + sessions_sql + sessions_que_sql + poll_activity_sql + poll_sessions_que_sql + myschedule_sql + agenda_sql + noti_sql + activityFeed_sql + activityFeedComments_sql + activityFeedLikes_sql + act_feedback_sql + chatlist_sql + chathistorySql + poll_speaker_act_sql + poll_act_question_sql + speaker_activities_sql
                     
                    // do {
                         success = database.executeStatements(sql_stmt)
@@ -1076,13 +1078,6 @@ class DBManager: NSObject {
         if openDatabase() {
             let eventId = EventData.sharedInstance.eventId
             
-            //Delete local data which is deleted from admin
-//            do {
-//                try database.executeUpdate("DELETE FROM Map WHERE EventID = ?", values: [eventId])
-//
-//            } catch {
-//                print("error = \(error)")
-//            }
             //Notification data save into DB
             if response is Dictionary<String, Any> {
                 do {
@@ -1099,8 +1094,14 @@ class DBManager: NSObject {
                 }
             }
             else {
-                for item in response as! NSArray {
+                //Delete local data which is deleted from admin
+                do {
+                    try database.executeUpdate("DELETE FROM Map WHERE EventID = ?", values: [eventId])
+                } catch {
+                    print("error = \(error)")
+                }
 
+                for item in response as! NSArray {
                     do {
                         let  dict = item as! NSDictionary
                         let id = self.isNullString(str: dict.value(forKey: "ID") as Any)
@@ -2028,7 +2029,7 @@ class DBManager: NSObject {
 
 
 //            let chatSqlQuery = "INSERT OR REPLACE INTO ChatHistory (EventID, AttendeeId, GroupId, FromId, ChatMessageId, CreatedBy, ToId , CreatedDate , ModifiedDate, UserIconUrl, UserName,  ToUserName, ToIconUrl , MessageIconUrl, Message, MessageType, MessageFromMe, isGroupChat, isDeleted ,  IsRead ) VALUES ('\(eventId)','\(attendeeId)','\(fromId)', '\(groupId)', '\(chatId)', '\(toId)', '\(fromId)','\(createdDateStr)', '\(modifiedDateStr)', \"\(userIconImage)\", \"\(name)\", \"\(toName)\", \"\(iconImage)\", \"\(msgImage)\", \"\(lastMessage)\", '\(type)', \(0), '\(isGroupChat)', \(isDeleted),\(isRead));"
-            print("Notification Chat history : ",chatSqlQuery)
+          //  print("Notification Chat history : ",chatSqlQuery)
 
             if !database.executeStatements(chatSqlQuery) {
                 //Getting error in saving messages in chathistory table
@@ -2628,15 +2629,15 @@ class DBManager: NSObject {
                     let message = self.isNullString(str: dict.value(forKey: "Comment") as Any)
                     let likesCount = 0
                     let commentsCount = 0
-                    let postDateStr = dict.value(forKey: "CreatedDate") as! String
+                    let postDateStr = self.isNullString(str: dict.value(forKey: "CreatedDate") as Any)
                     let isDeleted = dict.value(forKey: "isDeleted") as! Int
                     let image = self.appendImagePath(path: dict.value(forKey: "ImgPath") as Any)
-                    let username = self.isNullString(str: dict.value(forKey: "name") as Any)
+                    let username = self.isNullString(str: dict.value(forKey: "Name") as Any)
                     let usericon = "" //self.isNullString(str: dict.value(forKey: "Name") as Any)
-                    let userId = self.isNullString(str: dict.value(forKey: "CreatedBy") as Any)
-                    let isRead = 1
+                    let userId = self.isNullString(str: dict.value(forKey: "AttendeeId") as Any)
+                    let isRead = dict.value(forKey: "IsRead")
 
-                    try database.executeUpdate("INSERT OR REPLACE INTO ActivityFeeds (EventID, ActivityFeedID, Message, LikeCount, CommentCount, CreatedDate, IsImageDeleted, PostImagePath, PostUserName, PostUserImage, PostUserId, IsRead) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", values: [eventId, aId ,message,likesCount, commentsCount, postDateStr, isDeleted, image, username, usericon, userId, isRead])
+                    try database.executeUpdate("INSERT OR REPLACE INTO ActivityFeeds (EventID, ActivityFeedID, Message, LikeCount, CommentCount, CreatedDate, IsImageDeleted, PostImagePath, PostUserName, PostUserImage, PostUserId, IsRead) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", values: [eventId, aId ,message,likesCount, commentsCount, postDateStr, isDeleted, image, username, usericon, userId, isRead ?? 0])
 
                 } catch {
                     print("error = \(error)")
@@ -2644,7 +2645,7 @@ class DBManager: NSObject {
             }
             else {
 
-                var sqlQuery = ""
+                let sqlQuery = ""
 
                 for item in response as! NSArray {
                     let  dict = item as! NSDictionary
@@ -2659,7 +2660,7 @@ class DBManager: NSObject {
                     var username = ""
                     var usericon = ""
                     var userId = ""
-                    var isRead = 1
+                    let isRead = dict.value(forKey: "IsRead")
 
                     if (dict.value(forKey: "FeedUser") as? NSNull) == nil {
                         let user = dict.value(forKey: "FeedUser") as! NSDictionary
@@ -4044,10 +4045,14 @@ class DBManager: NSObject {
     }
     
     func saveSpeakersActivityDataIntoDB(responce: AnyObject) {
-        
+
+        print("Speaker details : ",responce)
+
         if openDatabase() {
+            database.beginTransaction()
+
+            var sqlQuery = ""
             if responce is NSDictionary {
-                
                 do {
                     let  dict = responce as! NSDictionary
                     let id = dict.value(forKey: "SpeakerID") as! String
@@ -4060,11 +4065,25 @@ class DBManager: NSObject {
                                 let  dict = item as! NSDictionary
                                 
                                 //let sessionId = dict.value(forKey: "Id")
-                                let activityId = dict.value(forKey: "ActivityId") as! String
-                                
+                                let activityId = self.isNullString(str: dict.value(forKey: "ActivityId") as Any)
+                                let sessionId = dict.value(forKey: "Id") as! Int
+                                let activitySessionId = String(format: "%@-%d", activityId, sessionId)
+
+                                let desc = self.isNullString(str: dict.value(forKey: "Description") as Any)
+                                let endDate = self.isNullString(str: dict.value(forKey: "EndDate") as Any)
+                                let startDate = self.isNullString(str: dict.value(forKey: "StartDate") as Any)
+                                let name = self.isNullString(str: dict.value(forKey: "Name") as Any)
+
+                                sqlQuery += "INSERT OR REPLACE INTO SpeakerActivities (EventID, SessionId, ActivitySessionId, ActivityId, SpeakerId, ActivityName, ActivityStartDate, ActivityEndDate, Description ) VALUES ('\(EventData.sharedInstance.eventId)', '\(sessionId)', '\(activitySessionId)', '\(activityId)', '\(id)', \"\(name)\", '\(startDate)','\(endDate)', \"\(desc)\");"
+
                                 //Save speaker id and activity id together in AgendaSpeakerRelation Table
                                 try database.executeUpdate("insert or replace into AgendaSpeakerRelation (EventID, ActivityId, SpeakerId) VALUES (?, ?, ?)", values: [EventData.sharedInstance.eventId, activityId, id ])
                             }
+                        }
+
+                        //Add speaker activities in table
+                        if !database.executeStatements(sqlQuery) {
+                            // print(database.lastError(), database.lastErrorMessage())
                         }
                     }
                 } catch {
@@ -4073,6 +4092,7 @@ class DBManager: NSObject {
             }
         }
         
+        database.commit()
         database.close()
     }
 
@@ -4260,30 +4280,42 @@ class DBManager: NSObject {
         
         if openDatabase() {
 
-            let sqlQuery = "Select * from Agenda where ActivityID in (Select ActivityId from AgendaSpeakerRelation where SpeakerId = \'\(speakerId)' AND EventID = \'\(EventData.sharedInstance.eventId)') AND EventID = \'\(EventData.sharedInstance.eventId)' GROUP BY ActivityID ORDER BY ActivityStartDate DESC"
-            
+            //let sqlQuery = "Select * from Agenda where ActivityID in (Select ActivityId from AgendaSpeakerRelation where SpeakerId = \'\(speakerId)' AND EventID = \'\(EventData.sharedInstance.eventId)') AND EventID = \'\(EventData.sharedInstance.eventId)' GROUP BY ActivityID ORDER BY ActivityStartDate DESC"
+
+            //let querySQL = "Select ActivityFeeds.*, ActivityFeedsLikes.IsUserLike from ActivityFeeds LEFT JOIN ActivityFeedsLikes ON ActivityFeeds.ActivityFeedID = ActivityFeedsLikes.ActivityFeedID AND ActivityFeedsLikes.AttendeeId = \'\(EventData.sharedInstance.attendeeId)' where ActivityFeeds.EventID = \'\(EventData.sharedInstance.eventId)' Order by CreatedDate DESC limit \(offset),\(limit)"
+
+            let sqlQuery = "Select SpeakerActivities.*, Agenda.isAgendaActivity from SpeakerActivities LEFT JOIN Agenda ON SpeakerActivities.activityId == agenda.activityID where SpeakerActivities.ActivityID in (Select ActivityId from AgendaSpeakerRelation where SpeakerId = \'\(speakerId)' AND EventID = \'\(EventData.sharedInstance.eventId)') AND SpeakerActivities.EventID = \'\(EventData.sharedInstance.eventId)' GROUP BY SpeakerActivities.ActivityID ORDER BY SpeakerActivities.ActivityStartDate DESC"
+
             let results:FMResultSet? = database.executeQuery(sqlQuery, withArgumentsIn: nil)
             
             while results?.next() == true {
                 
                 let model = AgendaModel()
-                model.sessionId = results?.string(forColumn: "SessionID")
+//                model.sessionId = results?.string(forColumn: "SessionID")
+//                model.activitySessionId = results?.string(forColumn: "ActivitySessionId")
+//                model.activityId = results?.string(forColumn: "ActivityID")
+//                model.activityName = results?.string(forColumn: "ActivityName")
+//                model.agendaId = results?.string(forColumn: "AgendaId")
+//                model.agendaName = results?.string(forColumn: "AgendaName")
+//                model.startActivityDate = results?.string(forColumn: "ActivityStartDate")
+//                model.endActivityDate = results?.string(forColumn: "ActivityEndDate")
+//                model.sortStartDate = results?.string(forColumn: "SortStartDate")
+//                model.sortEndDate = results?.string(forColumn: "SortEndDate")
+//                model.sortDate = results?.string(forColumn: "SortActivityDate")
+//                model.location = results?.string(forColumn: "Location")
+//                model.startTime = results?.string(forColumn: "StartTime")
+//                model.endTime = results?.string(forColumn: "EndTime")
+//                model.day = results?.string(forColumn: "Day")
+//                model.isAddedToSchedule = (results?.bool(forColumn: "isUserSchedule"))!
+
+                model.sessionId = results?.string(forColumn: "SessionId")
                 model.activitySessionId = results?.string(forColumn: "ActivitySessionId")
-                model.activityId = results?.string(forColumn: "ActivityID")
+                model.activityId = results?.string(forColumn: "ActivityId")
                 model.activityName = results?.string(forColumn: "ActivityName")
-                model.agendaId = results?.string(forColumn: "AgendaId")
-                model.agendaName = results?.string(forColumn: "AgendaName")
                 model.startActivityDate = results?.string(forColumn: "ActivityStartDate")
                 model.endActivityDate = results?.string(forColumn: "ActivityEndDate")
-                model.sortStartDate = results?.string(forColumn: "SortStartDate")
-                model.sortEndDate = results?.string(forColumn: "SortEndDate")
-                model.sortDate = results?.string(forColumn: "SortActivityDate")
-                model.location = results?.string(forColumn: "Location")
-                model.startTime = results?.string(forColumn: "StartTime")
-                model.endTime = results?.string(forColumn: "EndTime")
-                model.day = results?.string(forColumn: "Day")
-                model.isAddedToSchedule = (results?.bool(forColumn: "isUserSchedule"))!
-                
+                model.isAgendaActivity = (results?.bool(forColumn: "isAgendaActivity"))!
+                print("is Agenda activity : ",model.isAgendaActivity)
                 array.add(model)
             }
         }
@@ -4314,17 +4346,6 @@ class DBManager: NSObject {
                 let activitySessionId = String(format: "%@-%d", activityId, sessionId)
                 
                 let activityName = self.isNullString(str: dict.value(forKey: "ActivityName") as Any)
-                //Remove UTC - Change Shital on 15 Dec
-//                let startTime = CommonModel.sharedInstance.UTCToLocalDate(date: dict.value(forKey: "StartTime") as! String)
-//                let endTime = CommonModel.sharedInstance.UTCToLocalDate(date: dict.value(forKey: "EndTime") as! String)
-//                let endActivityDate = CommonModel.sharedInstance.UTCToLocalDate(date: dict.value(forKey: "EndDate") as! String)
-//                let startDate =  CommonModel.sharedInstance.UTCToLocalDate(date:dict.value(forKey: "StartDate") as! String)
-//                let endDate = CommonModel.sharedInstance.UTCToLocalDate(date: dict.value(forKey: "EndDate") as! String)
-//                let sDate = String(format:"%@T%@",self.isNullString(str: dict.value(forKey: "ActivityStartDate") as Any),dict.value(forKey: "StartTime") as! CVarArg)
-//                let sortStartDate = CommonModel.sharedInstance.UTCToLocalDate(date: sDate)
-//                let eDate = String(format:"%@T%@",self.isNullString(str: dict.value(forKey: "ActivityStartDate") as Any),dict.value(forKey: "EndTime") as! CVarArg)
-//                let sortEndDate = CommonModel.sharedInstance.UTCToLocalDate(date: eDate)
-                
                 let startTime = self.isNullString(str:dict.value(forKey: "StartTime") as Any)
                 let endTime = self.isNullString(str:dict.value(forKey: "EndTime") as Any)
                 let startActivityDate =  self.isNullString(str:dict.value(forKey: "StartDate") as Any)

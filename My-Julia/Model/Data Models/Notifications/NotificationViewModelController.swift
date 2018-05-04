@@ -28,10 +28,6 @@ class NotificationViewModelController: NSObject {
             let urlStr = Get_AllModuleDetails_url.appendingFormat("Flag=%@&PageNo=%d",Notification_List_url,self.pageNo)
             NetworkingHelper.getRequestFromUrl(name:Notification_List_url,  urlString:urlStr, callback: { response in
 
-                //Change notification count in side menu
-                let userDict:[String: Bool] = ["isClickOnNotification": false]
-                NotificationCenter.default.post(name: BroadcastNotification, object: "", userInfo: userDict)
-
                 // Remove first page load data
                 if self.pageNo == 0 {
                     self.isLastPage = false

@@ -203,10 +203,12 @@ class AttendeesViewController: UIViewController, UITableViewDelegate, UITableVie
         }
         
         cell.nameLabel?.text = model.name
+        print("Attendee name : ",model.name)
+        print("icon url : ",model.iconUrl)
 
         //cell.designationLabel.text = model.designation
         if model.privacySetting == true && !model.iconUrl.isEmpty {
-            
+
             cell.imageview.sd_setImage(with: URL(string:model.iconUrl), placeholderImage: #imageLiteral(resourceName: "user"))
             cell.imageview?.layer.cornerRadius = cell.imageview.frame.size.height/2
             cell.imageview.clipsToBounds = true

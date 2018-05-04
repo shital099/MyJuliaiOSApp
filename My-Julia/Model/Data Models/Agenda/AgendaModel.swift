@@ -32,5 +32,8 @@ class AgendaModel: NSObject {
     var activityStatus : Bool = false
     var isFutureActivity : Bool = false
 
+    //Use for speaker details
+    var isAgendaActivity : Bool = true
+
     var speakers : [PersonModel] = []  //Show speaker of agenda
 }

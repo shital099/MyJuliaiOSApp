@@ -288,6 +288,14 @@ class AttendeeDetailsViewController: UIViewController, UITableViewDataSource, UI
 
                 cell.timeLbl.text = CommonModel.sharedInstance.getAgendaDate(dateStr: model.startActivityDate).appendingFormat(" - %@", CommonModel.sharedInstance.getAgendaDate(dateStr: model.endActivityDate))
 
+                //Hide details screen if activity is not associated to logged in user
+                if model.isAgendaActivity == false {
+                    cell.accessoryType = UITableViewCellAccessoryType.none
+                }
+                else {
+                    cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
+                }
+
                // cell.timeLbl.text =  CommonModel.sharedInstance.getAgendaDate(dateStr: model.sortDate).appendingFormat(", \(CommonModel.sharedInstance.getTimeInDisplayFormat(dateStr: model.startTime)) - \(CommonModel.sharedInstance.getTimeInDisplayFormat(dateStr: model.endTime)) - ")
 
 //                let dateStr = CommonModel.sharedInstance.getAgendaDate(dateStr: model.sortDate).appendingFormat(", \(CommonModel.sharedInstance.getTimeInDisplayFormat(dateStr: model.startTime)) - \(CommonModel.sharedInstance.getTimeInDisplayFormat(dateStr: model.endTime)) - ")
@@ -366,9 +374,14 @@ class AttendeeDetailsViewController: UIViewController, UITableViewDataSource, UI
         
         //Show session details
         if indexPath.section == 3 && self.isSpeakerDetails == true && personModel.activities.count >= 1 {
-            let viewController = self.storyboard?.instantiateViewController(withIdentifier: "AgendaDetailsViewController") as! AgendaDetailsViewController
-            viewController.agendaModel = self.personModel.activities[indexPath.row] as AgendaModel
-            self.navigationController?.pushViewController(viewController, animated: true)
+            let model = self.personModel.activities[indexPath.row] as AgendaModel
+
+            //Hide details screen if activity is not associated to logged in user
+            if model.isAgendaActivity == true {
+                let viewController = self.storyboard?.instantiateViewController(withIdentifier: "AgendaDetailsViewController") as! AgendaDetailsViewController
+                viewController.agendaModel = self.personModel.activities[indexPath.row] as AgendaModel
+                self.navigationController?.pushViewController(viewController, animated: true)
+            }
         }
     }    
 }

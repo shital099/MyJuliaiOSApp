@@ -216,68 +216,102 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         print("Notification Received : ",data )
 
         if data is Dictionary<String, Any> {
-            if (data["Chat"] != nil) {
-                let body = data["Chat"]
-                let alertBody = data["aps"] as? NSDictionary
-                print("Chat notification : ",body )
+//            if (data["Chat"] != nil) {
+//                let body = data["Chat"]
+//                let alertBody = data["aps"] as? NSDictionary
+//                print("Chat notification : ",body )
+//
+//                let chatM = DBManager.sharedInstance.convertToJsonData(text: body as! String) as? NSDictionary
+//
+//                let message = DBManager.sharedInstance.isNullString(str: chatM?["Message"] as Any)
+//                var decryptedMsg = (CryptLib.sharedManager() as AnyObject).decryptCipherText(with: message)
+//
+//                //Chat Image notification
+//                if alertBody!["alert"] as! String == "Photo" || decryptedMsg == ""{
+//                    decryptedMsg = "Photo"
+//                }
+//
+//                //Skip notification bar while receiving message from same chat with attendee
+//                if currentChatAttendeeId != "" {
+//
+//                    if  ((chatM?["GroupChatId"] as? NSNull) == nil) {
+//                        if currentChatAttendeeId == chatM?.value(forKey: "GroupChatId") as! String {
+//                            // NotificationCenter.default.post(name: Notification.Name("ChatMessageNotificationId"), object: body)
+//                            return
+//                        }
+//                    }
+//                    else if currentChatAttendeeId == chatM?.value(forKey: "FromId") as! String  {
+//                        //  NotificationCenter.default.post(name: Notification.Name("ChatMessageNotificationId"), object: body)
+//                        return
+//                    }
+//                }
+//
+//                //Save chat details into db
+//                DBManager.sharedInstance.saveChatNotificationMessageIntoDB(response: chatM!)
+//                if application.applicationState == UIApplicationState.active {
+//                    let userDict:[String: Bool] = ["isClickOnNotification": false]
+//                    NotificationCenter.default.post(name: ChatNotification, object: "", userInfo: userDict)
+//                }
+//                else {
+//                    let userDict:[String: Bool] = ["isClickOnNotification": true]
+//                    NotificationCenter.default.post(name: ChatNotification, object: "", userInfo: userDict)
+//                }
+//                self.showNotificationAlertMessage(title: APP_NAME, message: decryptedMsg!, application: application)
+//            }
+//            else if (data["Notification"] != nil)
+//            {
+//                let alertBody = DBManager.sharedInstance.convertToJsonData(text: data["Notification"] as! String) as! NSDictionary
+//                //print("Notification body : ",alertBody )
+//                DBManager.sharedInstance.saveBroadCastNotification(data : alertBody)
+//
+//                if application.applicationState == UIApplicationState.active {
+//                    let userDict:[String: Bool] = ["isClickOnNotification": false]
+//                    NotificationCenter.default.post(name: BroadcastNotification, object: "", userInfo: userDict)
+//                }
+//                else {
+//                    let userDict:[String: Bool] = ["isClickOnNotification": true]
+//                    NotificationCenter.default.post(name: BroadcastNotification, object: "", userInfo: userDict)
+//                }
+//                self.showNotificationAlertMessage(title: APP_NAME, message:  alertBody["Message"] as! String, application: application)
+//            }
+//            else {
+               // print("Other notification : ",data)
 
-                let chatM = DBManager.sharedInstance.convertToJsonData(text: body as! String) as? NSDictionary
+                if (data["Chat"] != nil) {
+                    let body = data["Chat"]
+                    let alertBody = data["aps"] as? NSDictionary
 
-                let message = DBManager.sharedInstance.isNullString(str: chatM?["Message"] as Any)
-                var decryptedMsg = (CryptLib.sharedManager() as AnyObject).decryptCipherText(with: message)
+                    let chatM = DBManager.sharedInstance.convertToJsonData(text: body as! String) as? NSDictionary
+                    let message = DBManager.sharedInstance.isNullString(str: chatM?["Message"] as Any)
+                    var decryptedMsg = (CryptLib.sharedManager() as AnyObject).decryptCipherText(with: message)
 
-                //Chat Image notification
-                if alertBody!["alert"] as! String == "Photo" || decryptedMsg == ""{
-                    decryptedMsg = "Photo"
-                }
+                    //Chat Image notification
+                    if alertBody!["alert"] as! String == "Photo" || decryptedMsg == ""{
+                        decryptedMsg = "Photo"
+                    }
 
-                //Skip notification bar while receiving message from same chat with attendee
-                if currentChatAttendeeId != "" {
-
-                    if  ((chatM?["GroupChatId"] as? NSNull) == nil) {
-                        if currentChatAttendeeId == chatM?.value(forKey: "GroupChatId") as! String {
-                            // NotificationCenter.default.post(name: Notification.Name("ChatMessageNotificationId"), object: body)
+                    //Skip notification bar while receiving message from same chat with attendee
+                    if currentChatAttendeeId != "" {
+                        if  ((chatM?["GroupChatId"] as? NSNull) == nil) {
+                            if currentChatAttendeeId == chatM?.value(forKey: "GroupChatId") as! String {
+                                // NotificationCenter.default.post(name: Notification.Name("ChatMessageNotificationId"), object: body)
+                                return
+                            }
+                        }
+                        else if currentChatAttendeeId == chatM?.value(forKey: "FromId") as! String  {
+                            //  NotificationCenter.default.post(name: Notification.Name("ChatMessageNotificationId"), object: body)
                             return
                         }
                     }
-                    else if currentChatAttendeeId == chatM?.value(forKey: "FromId") as! String  {
-                        //  NotificationCenter.default.post(name: Notification.Name("ChatMessageNotificationId"), object: body)
-                        return
-                    }
-                }
 
-                //Save chat details into db
-                DBManager.sharedInstance.saveChatNotificationMessageIntoDB(response: chatM!)
-                if application.applicationState == UIApplicationState.active {
-                    let userDict:[String: Bool] = ["isClickOnNotification": false]
-                    NotificationCenter.default.post(name: ChatNotification, object: "", userInfo: userDict)
+                    //Save chat details into db
+                    DBManager.sharedInstance.saveChatNotificationMessageIntoDB(response: chatM!)
                 }
-                else {
-                    let userDict:[String: Bool] = ["isClickOnNotification": true]
-                    NotificationCenter.default.post(name: ChatNotification, object: "", userInfo: userDict)
+                else if (data["Notification"] != nil) {
+                    let alertBody = DBManager.sharedInstance.convertToJsonData(text: data["Notification"] as! String) as! NSDictionary
+                    DBManager.sharedInstance.saveBroadCastNotification(data: alertBody)
                 }
-                self.showNotificationAlertMessage(title: APP_NAME, message: decryptedMsg!, application: application)
-            }
-            else if (data["Notification"] != nil)
-            {
-                let alertBody = DBManager.sharedInstance.convertToJsonData(text: data["Notification"] as! String) as! NSDictionary
-                //print("Notification body : ",alertBody )
-                DBManager.sharedInstance.saveBroadCastNotification(data : alertBody)
-
-                if application.applicationState == UIApplicationState.active {
-                    let userDict:[String: Bool] = ["isClickOnNotification": false]
-                    NotificationCenter.default.post(name: BroadcastNotification, object: "", userInfo: userDict)
-                }
-                else {
-                    let userDict:[String: Bool] = ["isClickOnNotification": true]
-                    NotificationCenter.default.post(name: BroadcastNotification, object: "", userInfo: userDict)
-                }
-                self.showNotificationAlertMessage(title: APP_NAME, message:  alertBody["Message"] as! String, application: application)
-            }
-            else {
-               // print("Other notification : ",data)
-
-                if (data["Wifi"] != nil) {
+                else if (data["Wifi"] != nil) {
                     let alertBody = DBManager.sharedInstance.convertToJsonData(text: data["Wifi"] as! String) as! NSDictionary
                     DBManager.sharedInstance.saveWifiDataIntoDB(response: alertBody)
                 }
@@ -306,7 +340,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     let imageDataDict:[String: String] = ["moduleId": moduleId!]
                     NotificationCenter.default.post(name: OtherModuleNotification, object: nil, userInfo: imageDataDict)
                 }
-            }
+           // }
         }
     }
 
@@ -315,10 +349,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if (data["Chat"] != nil) {
                 let body = data["Chat"]
                 let alertBody = data["aps"] as? NSDictionary
-              //  print("Chat notification : ",body )
 
                 let chatM = DBManager.sharedInstance.convertToJsonData(text: body as! String) as? NSDictionary
-
                 let message = DBManager.sharedInstance.isNullString(str: chatM?["Message"] as Any)
                 var decryptedMsg = (CryptLib.sharedManager() as AnyObject).decryptCipherText(with: message)
 
@@ -329,7 +361,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
                 //Skip notification bar while receiving message from same chat with attendee
                 if currentChatAttendeeId != "" {
-
                     if  ((chatM?["GroupChatId"] as? NSNull) == nil) {
                         if currentChatAttendeeId == chatM?.value(forKey: "GroupChatId") as! String {
                             // NotificationCenter.default.post(name: Notification.Name("ChatMessageNotificationId"), object: body)
@@ -344,47 +375,41 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
                 //Save chat details into db
                 DBManager.sharedInstance.saveChatNotificationMessageIntoDB(response: chatM!)
-                if application.applicationState == UIApplicationState.active {
-                    let userDict:[String: Bool] = ["isClickOnNotification": false]
-                    NotificationCenter.default.post(name: ChatNotification, object: "", userInfo: userDict)
-                }
-                else {
-                    let userDict:[String: Bool] = ["isClickOnNotification": true]
-                    NotificationCenter.default.post(name: ChatNotification, object: "", userInfo: userDict)
-                }
-                self.showNotificationAlertMessage(title: APP_NAME, message: decryptedMsg!, application: application)
             }
-            else if (data["Notification"] != nil)
-            {
+            else if (data["Notification"] != nil) {
                 let alertBody = DBManager.sharedInstance.convertToJsonData(text: data["Notification"] as! String) as! NSDictionary
-               // print("Notification body : ",alertBody )
-                DBManager.sharedInstance.saveBroadCastNotification(data : alertBody)
+                DBManager.sharedInstance.saveBroadCastNotification(data: alertBody)
+            }
+            else if (data["Wifi"] != nil) {
+                let alertBody = DBManager.sharedInstance.convertToJsonData(text: data["Wifi"] as! String) as! NSDictionary
+                DBManager.sharedInstance.saveWifiDataIntoDB(response: alertBody)
+            }
+            else if (data["Activity Feeds"] != nil) {
+                let alertBody = DBManager.sharedInstance.convertToJsonData(text: data["Activity Feeds"] as! String) as! NSDictionary
+                DBManager.sharedInstance.saveActivityFeedDataIntoDB(response: alertBody)
+            }
+            else if (data["Map"] != nil) {
+                let alertBody = DBManager.sharedInstance.convertToJsonData(text: data["Map"] as! String) as! NSDictionary
+                DBManager.sharedInstance.saveMapDataIntoDB(response: alertBody)
+            }
+            else if (data["Documents"] != nil) {
+                let alertBody = DBManager.sharedInstance.convertToJsonData(text: data["Documents"] as! String) as! NSDictionary
+                DBManager.sharedInstance.saveDocumentsDataIntoDB(response: alertBody)
+            }
 
-                if application.applicationState == UIApplicationState.active {
-                    let userDict:[String: Bool] = ["isClickOnNotification": false]
-                    NotificationCenter.default.post(name: BroadcastNotification, object: "", userInfo: userDict)
-                }
-                else {
-                    let userDict:[String: Bool] = ["isClickOnNotification": true]
-                    NotificationCenter.default.post(name: BroadcastNotification, object: "", userInfo: userDict)
-                }
-                self.showNotificationAlertMessage(title: APP_NAME, message:  alertBody["Message"] as! String, application: application)
+            let moduleId = data["ModuleId"] as? String
+            if application.applicationState == UIApplicationState.active {
+                let alertBody = data["aps"] as? NSDictionary
+                self.showNotificationAlertMessage(title: APP_NAME, message:  alertBody!["alert"] as! String, application: application)
+
+                let imageDataDict:[String: String] = ["moduleId": moduleId!]
+                NotificationCenter.default.post(name: ShowNotificationCount, object: nil, userInfo: imageDataDict)
             }
             else {
-               // print("Other notification : ",data)
-
-                let moduleId = data["ModuleId"] as? String
-                if application.applicationState == UIApplicationState.active {
-                    let alertBody = data["aps"] as? NSDictionary
-                    self.showNotificationAlertMessage(title: APP_NAME, message:  alertBody!["alert"] as! String, application: application)
-                }
-                else {
-                    let imageDataDict:[String: String] = ["moduleId": moduleId!]
-                    NotificationCenter.default.post(name: OtherModuleNotification, object: nil, userInfo: imageDataDict)
-                }
+                let imageDataDict:[String: String] = ["moduleId": moduleId!]
+                NotificationCenter.default.post(name: OtherModuleNotification, object: nil, userInfo: imageDataDict)
             }
         }
-
     }
 
     func showNotificationAlertMessage(title : String, message : String, application: UIApplication)  {

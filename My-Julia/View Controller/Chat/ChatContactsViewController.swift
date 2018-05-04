@@ -103,6 +103,7 @@ class ChatContactsViewController: UIViewController, headerDelegate, UISearchBarD
 //            else {
                 vc.chatGroupModel = model as! ChatGroupModel
 //            }
+            vc.isFromContactList = true
             self.navigationController?.pushViewController(vc, animated: true)
         }
 

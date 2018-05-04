@@ -70,17 +70,8 @@ class AgendaViewController: UIViewController, UITableViewDataSource, UITableView
 
         self.fetchAgendaDataList()
 
-        print("view did load ",CommonModel.sharedInstance.getCurrentDateInMM())
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-
-        print("view did appear ",CommonModel.sharedInstance.getCurrentDateInMM())
-
-       // self.collectionview.reloadData()
-        
         if datesArray.count != 0 {
-            
+
             //Show today's date activities
             let date = Date()
             let formatter = DateFormatter()
@@ -92,10 +83,13 @@ class AgendaViewController: UIViewController, UITableViewDataSource, UITableView
             else {
                 self.selectedDate = self.datesArray.lastObject as! String
             }
-            
+
             self.collectionView(self.collectionview, didSelectItemAt: NSIndexPath(item: self.datesArray.index(of: self.selectedDate), section: 0) as IndexPath)
             self.onChangeOnBottomTab(segmentControl)
         }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
     }
 
     func fetchAgendaDataList()  {

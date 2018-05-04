@@ -66,15 +66,18 @@ class AgendaDetailsViewController: UIViewController,UIImagePickerControllerDeleg
 
         if isRefresh == true {
             //Fetch agenda details
-            agendaModel = DBManager.sharedInstance.fetchActivityDetailsFromDB(activitySessionId: agendaModel.activitySessionId)
-            self.tableviewObj.reloadData()
+           // agendaModel = DBManager.sharedInstance.fetchActivityDetailsFromDB(activitySessionId: agendaModel.activitySessionId)
+           // self.tableviewObj.reloadData()
             isRefresh = false
         }
         else {
             //Fetch note data
             note = DBManager.sharedInstance.fetchNotesFromDB(activityId: agendaModel.activityId)
-            self.refreshTableStatus()
+           // self.refreshTableStatus()
         }
+
+        self.tableviewObj.reloadData()
+
     }
     
     

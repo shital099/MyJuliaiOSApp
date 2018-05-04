@@ -27,7 +27,8 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
     var timer: Timer!
     var isPausedTimer : Bool = false
     var deleteMsgArray : NSMutableArray = []
-    
+    var isFromContactList : Bool = false
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -115,9 +116,13 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
         //Remove notification observer
         NotificationCenter.default.removeObserver(self, name: Notification.Name("ChatMessageNotificationId"), object: nil)
 
-        if (self.isMovingFromParentViewController){
-            // Your code...
-            self.navigationController?.popToRootViewController(animated: false)
+//        if (self.isMovingFromParentViewController){
+//            // Your code...
+//            self.navigationController?.popToRootViewController(animated: false)
+//        }
+
+        if isFromContactList == true {
+          self.navigationController?.popToRootViewController(animated: false)
         }
     }
 
@@ -346,7 +351,7 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
                 let paramDict = ["ToId":self.chatGroupModel.groupId] as [String : Any]
                 NetworkingHelper.postData(urlString:Chat_History, param:paramDict as AnyObject, withHeader: false, isAlertShow: false, controller:self, callback: { response in
 
-                print("Chat history  : ",response)
+//                print("Chat history  : ",response)
                 if response is Array<Any> {
                     self.parseChatHistoryData(response: response, isChatHistory:  true)
                 }

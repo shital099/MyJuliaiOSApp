@@ -44,7 +44,10 @@ class MapDetailsViewController: UIViewController, UIScrollViewDelegate {
     func updateReadStatus()  {
 
         let urlStr = UpdateReadStatus.appendingFormat("flag=%@&Id=%@",Update_Map_List,self.mapId!)
+        print("map update url : ",urlStr)
+
         NetworkingHelper.getRequestFromUrl(name:UpdateReadStatus,  urlString:urlStr, callback: { response in
+            print("map update responce : ",response)
 
         }, errorBack: { error in
         })
