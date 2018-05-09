@@ -125,7 +125,8 @@ class SpeakersListViewController: UIViewController, UISearchBarDelegate, UISearc
         cell.statusImg.isHighlighted = speaker.isActiveSpeaker
     
         cell.statusImg.isHighlighted = speaker.isActiveSpeaker == true ? true : false
-        if !speaker.iconUrl.isEmpty {
+        if speaker.privacySetting == true && !speaker.iconUrl.isEmpty {
+//        if !speaker.iconUrl.isEmpty {
             cell.imageview.sd_setImage(with: URL(string:speaker.iconUrl), placeholderImage: #imageLiteral(resourceName: "user"))
             cell.imageview?.layer.cornerRadius = cell.imageview.frame.size.height/2
             cell.imageview.contentMode = UIViewContentMode.scaleAspectFill

@@ -1,4 +1,4 @@
-//  AppDelegate.swift
+  //  AppDelegate.swift
 //  My-Julia
 //
 //  Created by GCO on 5/15/17.
@@ -118,6 +118,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         cryptoLib.key = "23501748FEB710349F13763248DFC6C2"
         cryptoLib.iv = "abcdefghijklmnop"
 
+
+        let decryptedMsg = (CryptLib.sharedManager() as AnyObject).decryptCipherText(with: "OjB+xwiaB8Nhgo6COStxyQ==")
+        print("Message : ",decryptedMsg ?? "")
 
         // iOS 10 support
         if #available(iOS 10, *) {

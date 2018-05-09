@@ -243,6 +243,12 @@ class FeedbackViewController: UIViewController, UITableViewDataSource, UITableVi
         
         let result = (textView.text as NSString?)?.replacingCharacters(in: range, with: text)
         ansDict.setValue(result, forKey: textView.accessibilityIdentifier!)
+
+        //Retrict feedback text length
+        if(textView.text.count > 500 && range.length == 0) {
+            return false
+        }
+
         return true
     }
     
@@ -1011,7 +1017,7 @@ class FeedbackViewController: UIViewController, UITableViewDataSource, UITableVi
 class Feedback2CustomCell: UITableViewCell
 {
     @IBOutlet var questionLabel:UILabel!
-    @IBOutlet var answerText:UITextView!
+    @IBOutlet var answerText:CustomUITextView!
 }
 
 class FeedbackMultipleCell: UITableViewCell {

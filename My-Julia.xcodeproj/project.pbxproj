@@ -11,6 +11,8 @@
 		7E0F59D31ED459F100C89D40 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E0F59D21ED459F100C89D40 /* AVFoundation.framework */; };
 		7E1C5D5E2085F80000E32201 /* RTLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E1C5D5D2085F80000E32201 /* RTLabel.m */; };
 		7E23BBA7206118C8003CCF5B /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E23BBA6206118C8003CCF5B /* MobileCoreServices.framework */; };
+		7E2E3F1020A2E12F00967213 /* UITextField_CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E2E3F0F20A2E12E00967213 /* UITextField_CustomTextField.swift */; };
+		7E2E3F1220A2E15400967213 /* CustomUITextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E2E3F1120A2E15400967213 /* CustomUITextView.swift */; };
 		7E41126C1EC97559009031B9 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E41126B1EC97559009031B9 /* libsqlite3.tbd */; };
 		7E41127A1EC984E5009031B9 /* libAFNetworking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E4112791EC984E5009031B9 /* libAFNetworking.a */; };
 		7E5F088620610173002687D0 /* database.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 7E5F072120610172002687D0 /* database.sqlite */; };
@@ -107,7 +109,6 @@
 		7E5F08E120610173002687D0 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5F07DD20610173002687D0 /* Date.swift */; };
 		7E5F08E220610173002687D0 /* UIButton+Border.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5F07DE20610173002687D0 /* UIButton+Border.swift */; };
 		7E5F08E420610173002687D0 /* UIColor+CustomColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5F07E020610173002687D0 /* UIColor+CustomColor.swift */; };
-		7E5F08E520610173002687D0 /* UITextField_CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5F07E120610173002687D0 /* UITextField_CustomTextField.swift */; };
 		7E5F08E620610173002687D0 /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5F07E220610173002687D0 /* Fonts.swift */; };
 		7E5F08E720610173002687D0 /* FMResultSet+ResultSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5F07E320610173002687D0 /* FMResultSet+ResultSet.swift */; };
 		7E5F08E820610173002687D0 /* UIColor+AttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5F07E420610173002687D0 /* UIColor+AttributedString.swift */; };
@@ -279,6 +280,8 @@
 		7E23BB9E20610303003CCF5B /* My_Julia_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = My_Julia_Tests.swift; sourceTree = "<group>"; };
 		7E23BBA020610303003CCF5B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7E23BBA6206118C8003CCF5B /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		7E2E3F0F20A2E12E00967213 /* UITextField_CustomTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITextField_CustomTextField.swift; sourceTree = "<group>"; };
+		7E2E3F1120A2E15400967213 /* CustomUITextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomUITextView.swift; sourceTree = "<group>"; };
 		7E4111121EC97033009031B9 /* My-Julia.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "My-Julia.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E41126B1EC97559009031B9 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		7E4112771EC9807F009031B9 /* AFNetworking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AFNetworking.framework; path = "../../../Library/Developer/Xcode/DerivedData/EventApp-bnzckdsfhlarzhgnbusyxnrrnuui/Build/Products/Debug-iphonesimulator/AFNetworking/AFNetworking.framework"; sourceTree = "<group>"; };
@@ -433,7 +436,6 @@
 		7E5F07DD20610173002687D0 /* Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		7E5F07DE20610173002687D0 /* UIButton+Border.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIButton+Border.swift"; sourceTree = "<group>"; };
 		7E5F07E020610173002687D0 /* UIColor+CustomColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+CustomColor.swift"; sourceTree = "<group>"; };
-		7E5F07E120610173002687D0 /* UITextField_CustomTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITextField_CustomTextField.swift; sourceTree = "<group>"; };
 		7E5F07E220610173002687D0 /* Fonts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		7E5F07E320610173002687D0 /* FMResultSet+ResultSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FMResultSet+ResultSet.swift"; sourceTree = "<group>"; };
 		7E5F07E420610173002687D0 /* UIColor+AttributedString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+AttributedString.swift"; sourceTree = "<group>"; };
@@ -1170,15 +1172,16 @@
 		7E5F07DC20610173002687D0 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
+				7E2E3F0F20A2E12E00967213 /* UITextField_CustomTextField.swift */,
 				7EB852E82091E64B004948AB /* ImageView+Kingfisher.swift */,
 				7E5F07DD20610173002687D0 /* Date.swift */,
 				7E5F07DE20610173002687D0 /* UIButton+Border.swift */,
 				7E5F07E020610173002687D0 /* UIColor+CustomColor.swift */,
-				7E5F07E120610173002687D0 /* UITextField_CustomTextField.swift */,
 				7E5F07E220610173002687D0 /* Fonts.swift */,
 				7E5F07E320610173002687D0 /* FMResultSet+ResultSet.swift */,
 				7E5F07E420610173002687D0 /* UIColor+AttributedString.swift */,
 				7EFF6AFA2063B1F80094F1EF /* CustomUITextField.swift */,
+				7E2E3F1120A2E15400967213 /* CustomUITextView.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -1960,6 +1963,7 @@
 				7E5F08D020610173002687D0 /* DocumentModel.swift in Sources */,
 				7E5F090B20610173002687D0 /* CommentsListViewController.swift in Sources */,
 				7E5F093B20610173002687D0 /* PostTextViewController.swift in Sources */,
+				7E2E3F1220A2E15400967213 /* CustomUITextView.swift in Sources */,
 				7E5F08E220610173002687D0 /* UIButton+Border.swift in Sources */,
 				7E5F08C020610173002687D0 /* UIView+WebCache.m in Sources */,
 				7E5F091C20610173002687D0 /* EmerViewController.swift in Sources */,
@@ -2048,7 +2052,6 @@
 				7E5F08DD20610173002687D0 /* SessionsModel.swift in Sources */,
 				7EB853022091E6C3004948AB /* RequestModifier.swift in Sources */,
 				7E5F08E020610173002687D0 /* EventData.swift in Sources */,
-				7E5F08E520610173002687D0 /* UITextField_CustomTextField.swift in Sources */,
 				7E5F08D320610173002687D0 /* Sponsors.swift in Sources */,
 				7E5F08F420610173002687D0 /* WiFiViewController.swift in Sources */,
 				7E5F094520610173002687D0 /* CustomAlertViewDelegate.swift in Sources */,
@@ -2110,6 +2113,7 @@
 				7E5F08E620610173002687D0 /* Fonts.swift in Sources */,
 				7E5F08A720610173002687D0 /* FMDatabaseVariadic.swift in Sources */,
 				7E5F08A320610173002687D0 /* CustomButtonOrView.swift in Sources */,
+				7E2E3F1020A2E12F00967213 /* UITextField_CustomTextField.swift in Sources */,
 				7E5F091D20610173002687D0 /* EmergencyViewController.swift in Sources */,
 				7EB850472091AD85004948AB /* HTMLConverter.m in Sources */,
 				7E5F093720610173002687D0 /* CustomPageRenderer.swift in Sources */,

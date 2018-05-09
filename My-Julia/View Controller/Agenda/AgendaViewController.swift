@@ -70,23 +70,6 @@ class AgendaViewController: UIViewController, UITableViewDataSource, UITableView
 
         self.fetchAgendaDataList()
 
-        if datesArray.count != 0 {
-
-            //Show today's date activities
-            let date = Date()
-            let formatter = DateFormatter()
-            formatter.dateFormat = "dd-MM-yyyy"
-            let todaysDate = formatter.string(from: date)
-            if self.datesArray.contains(todaysDate) {
-                self.selectedDate = todaysDate
-            }
-            else {
-                self.selectedDate = self.datesArray.lastObject as! String
-            }
-
-            self.collectionView(self.collectionview, didSelectItemAt: NSIndexPath(item: self.datesArray.index(of: self.selectedDate), section: 0) as IndexPath)
-            self.onChangeOnBottomTab(segmentControl)
-        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -129,6 +112,26 @@ class AgendaViewController: UIViewController, UITableViewDataSource, UITableView
             self.headerBgView.isHidden = false
             self.fetchActivitiesListAndSort()
         }
+
+        if datesArray.count != 0 {
+
+            //Show today's date activities
+            let date = Date()
+            let formatter = DateFormatter()
+            formatter.dateFormat = "dd-MM-yyyy"
+            let todaysDate = formatter.string(from: date)
+            if self.datesArray.contains(todaysDate) {
+                self.selectedDate = todaysDate
+            }
+            else {
+                self.selectedDate = self.datesArray.lastObject as! String
+            }
+
+            self.collectionView(self.collectionview, didSelectItemAt: NSIndexPath(item: self.datesArray.index(of: self.selectedDate), section: 0) as IndexPath)
+            self.collectionview.scrollToItem(at: IndexPath(item: self.datesArray.index(of: self.selectedDate), section: 0) as IndexPath, at: .right, animated: true)
+            self.onChangeOnBottomTab(segmentControl)
+        }
+
     }
  
     override func didReceiveMemoryWarning() {

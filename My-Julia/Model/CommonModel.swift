@@ -99,6 +99,9 @@ let Activity_Page_Limit = 15            //Set default limit 20 in server and app
 //Feedback
 let Event_Feedback_submitted = "You have already submitted the feedback"
 
+//Speaker Details
+let Speaker_Session_Error = "You haven't associated this activity."
+
 enum TKAlertType : NSInteger {
     case TKAlertTypeSucess = 0
     case TKAlertTypeError

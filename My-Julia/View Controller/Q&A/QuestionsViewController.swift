@@ -478,6 +478,9 @@ class QuestionsViewController: UIViewController, UITableViewDataSource, UITableV
         for index in 0 ... listArray.count {
             if index < listArray.count {
                 let model = self.listArray[index] as! Questions
+
+                model.queStr = model.queStr.replacingOccurrences(of: "\n", with: "<br>")
+
                 html = html.appendingFormat("<div style='text-align:justify; font-size:14px;font-family:HelveticaNeue;color:#362932;'><b> %@.</b> %@ <br></br> %@ <b> - %@</b></p><br>",String(format:"%d",index+1),model.userNameStr, model.queStr,String(format:"%d",model.queCount))
             }
         }

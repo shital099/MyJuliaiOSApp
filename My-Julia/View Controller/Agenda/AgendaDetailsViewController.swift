@@ -49,7 +49,10 @@ class AgendaDetailsViewController: UIViewController,UIImagePickerControllerDeleg
        
         //Set separator color according to background color
         CommonModel.sharedInstance.applyTableSeperatorColor(object: tableviewObj)
-        
+
+        //Fetch agenda details
+        agendaModel = DBManager.sharedInstance.fetchActivityDetailsFromDB(activityId: agendaModel.activityId)
+
     }
 
     override func didReceiveMemoryWarning() {
@@ -61,23 +64,19 @@ class AgendaDetailsViewController: UIViewController,UIImagePickerControllerDeleg
         //Check reminder added or not
         reminderStatus = DBManager.sharedInstance.isReminderAddedIntoDB(activityId: agendaModel.activityId)
 
-        //Fetch agenda details
-        agendaModel = DBManager.sharedInstance.fetchActivityDetailsFromDB(activitySessionId: agendaModel.activitySessionId)
-
         if isRefresh == true {
             //Fetch agenda details
-           // agendaModel = DBManager.sharedInstance.fetchActivityDetailsFromDB(activitySessionId: agendaModel.activitySessionId)
+            agendaModel = DBManager.sharedInstance.fetchActivityDetailsFromDB(activityId: agendaModel.activityId)
            // self.tableviewObj.reloadData()
             isRefresh = false
         }
         else {
             //Fetch note data
+            print("activity id : ",agendaModel.activityId)
             note = DBManager.sharedInstance.fetchNotesFromDB(activityId: agendaModel.activityId)
            // self.refreshTableStatus()
         }
-
         self.tableviewObj.reloadData()
-
     }
     
     
@@ -114,8 +113,7 @@ class AgendaDetailsViewController: UIViewController,UIImagePickerControllerDeleg
             if response is NSDictionary {
                 let dict = response as! NSDictionary
                 if (dict.value(forKey:"speaker") as? NSNull) == nil {
-                    
-                    self.agendaModel = DBManager.sharedInstance.fetchActivityDetailsFromDB(activitySessionId:self.agendaModel.activitySessionId)
+                    self.agendaModel = DBManager.sharedInstance.fetchActivityDetailsFromDB(activityId:self.agendaModel.activityId)
                 }
             }
             self.tableviewObj.reloadData()
@@ -274,8 +272,8 @@ class AgendaDetailsViewController: UIViewController,UIImagePickerControllerDeleg
                 return
             }
             let event = EKEvent(eventStore: store)
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+//            let dateFormatter = DateFormatter()
+//            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
 //            event.startDate = dateFormatter.date(from: self.agendaModel.startActivityDate)!
 //            event.endDate = dateFormatter.date(from: self.agendaModel.endActivityDate)!
             event.title = self.agendaModel.activityName
@@ -287,7 +285,10 @@ class AgendaDetailsViewController: UIViewController,UIImagePickerControllerDeleg
             let interval = TimeInterval(-(60 * time));
             let alarm = EKAlarm(relativeOffset:interval)
             event.alarms = [alarm]
-            
+
+            print("event start", event.startDate )
+            print("event end", event.endDate  )
+
             //Add reminder into calender
             do {
                 let predicate = store.predicateForEvents(withStart: event.startDate, end: event.endDate, calendars: nil)

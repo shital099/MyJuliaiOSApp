@@ -377,7 +377,10 @@ class AttendeeDetailsViewController: UIViewController, UITableViewDataSource, UI
             let model = self.personModel.activities[indexPath.row] as AgendaModel
 
             //Hide details screen if activity is not associated to logged in user
-            if model.isAgendaActivity == true {
+            if model.isAgendaActivity == false {
+                CommonModel.sharedInstance.showAlertWithStatus(title: Alert_Warning, message: Speaker_Session_Error, vc: self)
+            }
+            else {
                 let viewController = self.storyboard?.instantiateViewController(withIdentifier: "AgendaDetailsViewController") as! AgendaDetailsViewController
                 viewController.agendaModel = self.personModel.activities[indexPath.row] as AgendaModel
                 self.navigationController?.pushViewController(viewController, animated: true)

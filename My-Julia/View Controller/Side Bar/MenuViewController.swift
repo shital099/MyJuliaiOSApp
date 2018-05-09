@@ -810,7 +810,6 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
         if filteredArray?.count != 0 {
             let sideDrawerItem = filteredArray![0] as! SideDrawerMenu
 
-            print("Section  : ",array?.count ?? "")
             let viewController = CommonModel.sharedInstance.fetchViewControllerObject(moduleId: notification.userInfo!["moduleId"] as! String)
 
             //Check Agenda menu added or not

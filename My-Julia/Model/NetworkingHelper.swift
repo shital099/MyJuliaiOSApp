@@ -151,7 +151,7 @@ let Update_Map_List = "Map"
 let Update_Documents_List = "Documents"
 let Update_Activity_Feeds_List = "Activity Feeds"
 let Update_Chat_List = "Chat"
-let Update_Broadcast_List = "Activity Feeds"
+let Update_Broadcast_List = "Broadcast"
 
 /***** END *******/
 

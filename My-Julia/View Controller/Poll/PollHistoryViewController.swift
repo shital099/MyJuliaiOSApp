@@ -155,7 +155,6 @@ class ChartBarCell: UITableViewCell {
         chart.addSeries(series)
         
         /** Add extra bar **/
-        
         //Add one last column bar with clear color for keeping constant y axis value
         var items1 = [TKChartDataPoint]() //last hidden colum bar
         items1.append(TKChartDataPoint(x:" ", y:20))

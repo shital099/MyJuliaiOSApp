@@ -111,9 +111,6 @@ class NotificationViewController: UIViewController, UITableViewDelegate, UITable
             guard let strongSelf = self else { return }
             if !success {
                 DispatchQueue.main.async {
-
-//                    let userDict:[String: Bool] = ["isClickOnNotification": false]
-//                    NotificationCenter.default.post(name: BroadcastNotification, object: "", userInfo: userDict)
                 }
             } else {
                 DispatchQueue.main.async {
@@ -127,7 +124,7 @@ class NotificationViewController: UIViewController, UITableViewDelegate, UITable
     
     func changeNotificationCount() {
         //Change notification count in side menu
-        let dataDict:[String: Any] = ["Order": self.view.tag, "Flag":Update_Chat_List]
+        let dataDict:[String: Any] = ["Order": self.view.tag, "Flag":Update_Broadcast_List]
         NotificationCenter.default.post(name: UpdateNotificationCount, object: nil, userInfo: dataDict)
     }
 

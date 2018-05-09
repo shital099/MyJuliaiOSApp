@@ -21,6 +21,7 @@ class ActivityFeedbackViewController: UIViewController, UITableViewDataSource, U
     @IBOutlet weak var submittedMessageLbl: UILabel!
 
     var ansDict = NSMutableDictionary()
+
     var listArray:[FeedbackModel] = []
     var editingIndexPath : NSIndexPath! = nil
     var activityId : String = ""
@@ -207,7 +208,9 @@ class ActivityFeedbackViewController: UIViewController, UITableViewDataSource, U
         let keys = self.ansDict.allKeys
         
         for index in 0 ... keys.count - 1 {
-            let paramDict = ["QuestionId": keys[index] ,"Answer":self.ansDict.value(forKey: keys[index] as! String) ?? "", "QuestionType" : "","ActivityId":self.activityId, "AttendeeId":AttendeeInfo.sharedInstance.attendeeId, "EventId":event.eventId]
+
+            let answer = self.ansDict.value(forKey: keys[index] as! String) ?? ""
+            let paramDict = ["QuestionId": keys[index] ,"Answer":answer, "QuestionType" : "","ActivityId":self.activityId, "AttendeeId":AttendeeInfo.sharedInstance.attendeeId, "EventId":event.eventId]
             paramArr.append(paramDict)
         }
         print("Post Activity Feedbck :",paramArr)
@@ -261,6 +264,12 @@ class ActivityFeedbackViewController: UIViewController, UITableViewDataSource, U
         
         let result = (textView.text as NSString?)?.replacingCharacters(in: range, with: text)
         ansDict.setValue(result, forKey: textView.accessibilityIdentifier!)
+
+        //Retrict feedback text length
+        if(textView.text.count > 500 && range.length == 0) {
+            return false
+        }
+
         return true
     }
     

@@ -10,15 +10,15 @@ import UIKit
 
 class PersonModel: NSObject {
     
-    @objc var name : String!
-    var designation : String!
-    var personId : String!
-    var speakerId : String!
-    var bioInfo : String!
-    var iconUrl : String!
-    var email : String!
-    var contactNo : String!
-    var address : String!
+    @objc var name : String = ""
+    var designation : String = ""
+    var personId : String = ""
+    var speakerId : String = ""
+    var bioInfo : String = ""
+    var iconUrl : String = ""
+    var email : String = ""
+    var contactNo : String = ""
+    var address : String = ""
     var isSpeaker : Bool = false
     var activities : [AgendaModel] = []  //Show agenda's of speaker
     var isActiveSpeaker : Bool = false

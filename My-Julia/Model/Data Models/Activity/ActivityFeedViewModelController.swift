@@ -13,6 +13,8 @@ class ActivityFeedViewModelController: NSObject {
     fileprivate var pageNo = 0
     fileprivate var isLastPage = false
     fileprivate var viewModels:NSMutableArray = []
+     var moduleIndex = 0
+
 
     func retrieveFirstPage()  {
         // Remove first page load data
@@ -20,6 +22,10 @@ class ActivityFeedViewModelController: NSObject {
         self.isLastPage = false
     }
 
+    func initializeModuleIndex(index : Int)  {
+        // Remove first page load data
+        self.moduleIndex = index
+    }
 
     // MARK: - Webservice Methods
 
@@ -103,9 +109,14 @@ class ActivityFeedViewModelController: NSObject {
         if array.count < Activity_Page_Limit {
             self.isLastPage = true
         }
-
         self.viewModels.addObjects(from: array as! [ActivityFeedsModel])
 
+//        //Update activity feed read status
+//         DBManager.sharedInstance.updateActivityFeedNotificationStatus()
+
+        //Update actiivty read/unread data count in side menu bar
+        let dataDict:[String: Any] = ["Order": moduleIndex, "Flag":Update_Activity_Feeds_List]
+        NotificationCenter.default.post(name: UpdateNotificationCount, object: nil, userInfo: dataDict)
         // print("After load Data array count : ", self.dataArray.count)
     }
 

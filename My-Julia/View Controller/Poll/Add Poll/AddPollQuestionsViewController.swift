@@ -108,14 +108,24 @@ class AddPollQuestionsViewController: UIViewController, UITableViewDataSource, U
                                   callback: { response in
                                     //dissmiss Indicator
                                     CommonModel.sharedInstance.dissmissActitvityIndicator()
+                                    let responseCode = Int(response.value(forKey: "responseCode") as! String)
+                                    print("Add poll responce", response)
 
-                                    DispatchQueue.main.async {
-                                        self.navigationController?.popViewController(animated: true)
-                                        //Show status alert
-                                        self.delegate.updateQuestionDelegateCall(isAddPoll: self.isAddPoll)
+                                    if responseCode == 0 {
+                                        DispatchQueue.main.async {
+                                            self.navigationController?.popViewController(animated: true)
+                                            //Show status alert
+                                            self.delegate.updateQuestionDelegateCall(isAddPoll: self.isAddPoll)
+                                        }
+                                    }
+                                    else {
+                                        CommonModel.sharedInstance.dissmissActitvityIndicator()
+                                        CommonModel.sharedInstance.showAlertWithStatus(title: "", message:response.value(forKey: "responseMsg") as! String, vc: self)
                                     }
 
+
         }, errorBack: { error in
+            print("Add poll error : ",error.description)
         })
     }
 
@@ -146,12 +156,21 @@ class AddPollQuestionsViewController: UIViewController, UITableViewDataSource, U
         CommonModel.sharedInstance.dissmissActitvityIndicator()
          DBManager.sharedInstance.updateSpeakerPollQuestionsDataIntoDB(question: self.questionModel.questionText, opt1: self.questionModel.opt1, opt2: self.questionModel.opt2, opt3: self.questionModel.opt3, opt4: self.questionModel.opt4, questionsId: self.questionModel.questionsId)
 
-                                    // CommonModel.sharedInstance.showAlertWithStatus(title: Alert_Sucess, message: Update_Poll_success, vc: self)
-                                    DispatchQueue.main.async {
-                                        self.navigationController?.popViewController(animated: true)
-                                        //Show status alert
-                                        self.delegate.updateQuestionDelegateCall(isAddPoll: self.isAddPoll)
-                                   }
+                                    print("Update Poll responce : ",response)
+                                    let responseCode = Int(response.value(forKey: "responseCode") as! String)
+
+                                    if responseCode == 0 {
+                                        DispatchQueue.main.async {
+                                            self.navigationController?.popViewController(animated: true)
+                                            //Show status alert
+                                            self.delegate.updateQuestionDelegateCall(isAddPoll: self.isAddPoll)
+                                        }
+                                    }
+                                    else {
+                                        CommonModel.sharedInstance.dissmissActitvityIndicator()
+                                        CommonModel.sharedInstance.showAlertWithStatus(title: "", message:response.value(forKey: "responseMsg") as! String, vc: self)
+                                    }
+
 
         }, errorBack: { error in
         })
@@ -267,10 +286,10 @@ class AddPollQuestionsViewController: UIViewController, UITableViewDataSource, U
     @IBAction func onClickOfsendBtnBtn(sender: AnyObject) {
         //imp dont delete ( post binding)
         questionModel.questionText = tablecell.questInputView.text
-        questionModel.opt1 = tablecell.opt1txt.text
-        questionModel.opt2 = tablecell.opt2txt.text
-        questionModel.opt3 = tablecell.opt3txt.text
-        questionModel.opt4 = tablecell.opt4txt.text
+        questionModel.opt1 = tablecell.opt1txt.text!
+        questionModel.opt2 = tablecell.opt2txt.text!
+        questionModel.opt3 = tablecell.opt3txt.text!
+        questionModel.opt4 = tablecell.opt4txt.text!
         //        else
         //        {
         //        tablecell.questInputView.text = ""
@@ -333,10 +352,10 @@ class AddPollQuestionsViewController: UIViewController, UITableViewDataSource, U
         tablecell.sendBtn.isHidden = true
         tablecell.updateBtn.isHidden = false
         questionModel.questionText = tablecell.questInputView.text
-        questionModel.opt1 = tablecell.opt1txt.text
-        questionModel.opt2 = tablecell.opt2txt.text
-        questionModel.opt3 = tablecell.opt3txt.text
-        questionModel.opt4 = tablecell.opt4txt.text
+        questionModel.opt1 = tablecell.opt1txt.text!
+        questionModel.opt2 = tablecell.opt2txt.text!
+        questionModel.opt3 = tablecell.opt3txt.text!
+        questionModel.opt4 = tablecell.opt4txt.text!
 
         if (tablecell.questInputView.text?.trimmingCharacters(in: .whitespaces).isEmpty)! {
             CommonModel.sharedInstance.showAlertWithStatus(title: "", message: No_Question_Message, vc: self)

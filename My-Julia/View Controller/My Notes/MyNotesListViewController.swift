@@ -109,7 +109,11 @@ class MyNotesListViewController: UIViewController, MyNoteDelegate, UITableViewDa
         for index in 0 ... listArray.count {
             if index < listArray.count {
                 let model = listArray[index] as Notes
-                
+
+                print("model.titleStr : ",model.titleStr)
+                model.titleStr = model.titleStr.replacingOccurrences(of: "\n", with: "<br>")
+                model.messageStr = model.messageStr.replacingOccurrences(of: "\n", with: "<br>")
+
                 // If title and message is equal then remove dublication
                 if model.titleStr == model.messageStr {
                     html = html.appendingFormat("<div style='text-align:justify; font-size:17px;font-family:HelveticaNeue;color:#362932;'><b> %@. %@</b><p></p><br>",String(format:"%d",index+1),model.titleStr)
@@ -119,8 +123,8 @@ class MyNotesListViewController: UIViewController, MyNoteDelegate, UITableViewDa
                 }
             }
         }
+
         CommonModel.sharedInstance.createPDF(content: html, pdfName: "MyNotes")
-        
         
         //Share PDF File
         let filename = String(format: "MyNotes_%@_%@", EventData.sharedInstance.eventId,AttendeeInfo.sharedInstance.attendeeId)

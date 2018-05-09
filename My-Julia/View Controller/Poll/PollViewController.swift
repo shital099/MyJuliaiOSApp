@@ -41,10 +41,7 @@ class PollViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         //Remove extra lines from tableview
         tableView.tableFooterView = UIView()
-        
-        //Fetch data from json
-        self.getPollListData()
-        
+
         progressView = DDProgressView()
         if IS_IPAD {
             //Remove spit view width(250) from view
@@ -65,7 +62,12 @@ class PollViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         //Sucess view
         UIColor().setIconColorImageToButton(button: self.tickImgBtn, image:"poll-completed-fill")
-        
+
+        self.pollarray = DBManager.sharedInstance.fetchPollActivityQuestionsListFromDB(sessionId: self.sessionModel.sessionId, activityId: self.sessionModel.activityId) as! [PollModel]
+        self.fetchUserAnswerData()
+
+        //Fetch data from json
+        self.getPollListData()
     }
     
     override func didReceiveMemoryWarning() {
@@ -86,8 +88,10 @@ class PollViewController: UIViewController, UITableViewDataSource, UITableViewDe
             CommonModel.sharedInstance.dissmissActitvityIndicator()
 
             if response is Array<Any> {
-                self.parsePollData(response: response)
-                
+              //  self.parsePollData(response: response)
+                self.pollarray = DBManager.sharedInstance.fetchPollActivityQuestionsListFromDB(sessionId: self.sessionModel.sessionId, activityId: self.sessionModel.activityId) as! [PollModel]
+                self.fetchUserAnswerData()
+
                 if self.pollarray.count == 0 {
                     self.topView.isHidden = true
                 }
@@ -116,8 +120,20 @@ class PollViewController: UIViewController, UITableViewDataSource, UITableViewDe
             CommonModel.sharedInstance.dissmissActitvityIndicator()
         })
     }
-    
-    func parsePollData(response: AnyObject) {
+
+    func fetchUserAnswerData()  {
+        for model in pollarray {
+            //Store in answer dictionary
+            if model.userAnswerId != "" {
+                self.answerDict.setValue(model.userAnswerId, forKey:model.id)
+            }
+            else {
+            }
+        }
+        self.tableView.reloadData()
+    }
+
+    /*func parsePollData(response: AnyObject) {
         
         //let  arr = response as! NSDictionary
        // var isQuestionRemaining : Bool = false
@@ -126,10 +142,10 @@ class PollViewController: UIViewController, UITableViewDataSource, UITableViewDe
             let dict = item as! NSDictionary
             
             let model = PollModel()
-            model.questionText = dict.value(forKey: "Questions") as! String!
+            model.questionText = dict.value(forKey: "Questions") as! String
             model.id = dict.value(forKey: "Id") as! String
             model.optionsArr = dict.value(forKey: "Options") as! Array<Any>
-            let qType = dict.value(forKey: "QuestionType") as! String!
+            let qType = dict.value(forKey: "QuestionType") as! String
             model.isUserAnswered = dict.value(forKey: "IsUserAnswered") as! Bool
             model.userAnswerId = DBManager.sharedInstance.isNullString(str: dict.value(forKey: "UserAnswerId") as Any)
 
@@ -150,7 +166,8 @@ class PollViewController: UIViewController, UITableViewDataSource, UITableViewDe
             
             pollarray.append(model)
         }
-        
+        print("Server Poll array count : ",self.pollarray.count)
+
         tableView.reloadData()
         
 //        //Hide is questions answered by user
@@ -161,7 +178,7 @@ class PollViewController: UIViewController, UITableViewDataSource, UITableViewDe
 //            tableView.reloadData()
 //        }
     }
-
+*/
     
     func postPollForm(selectedCell: SubmitCell) {
         
@@ -482,8 +499,7 @@ class PollViewController: UIViewController, UITableViewDataSource, UITableViewDe
         /*Show Progress */
         self.noOfQuestionsLbl.text = "Question \(questionIndex) of \(pollarray.count)"
         self.progressView.progress = self.progressCount * Float(questionIndex)
-        print("Progress ",self.progressView.progress)
-        
+
         if questionIndex == pollarray.count + 1 {
            sucessView.isHidden = false
         }
@@ -523,10 +539,10 @@ class PollViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let model = self.pollarray[self.questionIndex - 1] as PollModel
         let optionDict = model.optionsArr[indexPath.row] as! NSDictionary
 
-        model.answerText = optionDict["OptionValue"] as? String
+        model.answerText = (optionDict["OptionValue"] as? String)!
         let selectedItem = optionDict["Id"] as? String
         let identifier = model.id
-        self.answerDict.setValue(selectedItem, forKey:identifier!)
+        self.answerDict.setValue(selectedItem, forKey:identifier)
         
         tableView.reloadData()
     }

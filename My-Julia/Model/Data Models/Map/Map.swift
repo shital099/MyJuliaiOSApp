@@ -10,8 +10,8 @@ import UIKit
 
 class Map: NSObject {
     
-    var name : String!
-    var id : String!
-    var iconUrl : String!
-    var isRead : Bool!
+    var name : String = ""
+    var id : String = ""
+    var iconUrl : String = ""
+    var isRead : Bool = false
 }

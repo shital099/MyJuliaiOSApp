@@ -102,33 +102,33 @@ class AddReminderViewController: UIViewController , TKAlertDelegate {
         
         let outputFormatter : DateFormatter = DateFormatter();
         outputFormatter.dateFormat = "HH"
-        let hours = Int(outputFormatter.string(from: timeDatePicker.date))
+        let hours = Int(outputFormatter.string(from: timePicker.date))
         outputFormatter.dateFormat = "mm"
-        let mins = hours!*60 + Int(outputFormatter.string(from: timeDatePicker.date))!
+        self.time = hours!*60 + Int(outputFormatter.string(from: timePicker.date))!
 
-        self.timeTextField.setTitle(String(format:" %d min",mins), for: .normal)
+        self.timeTextField.setTitle(String(format:" %d min",self.time), for: .normal)
 
         alert.dismiss(true)
     }
     
     @IBAction func chooseReminderTimeAction(sender: AnyObject) {
         
-        self.timeDatePicker.isEnabled = false
+        self.timePicker.isEnabled = false
 
         //Add before time of reminder
         switch (sender as AnyObject).tag {
         case 100:
-            time = 5
+            self.time = 5
             break
         case 200:
-            time = 15
+            self.time = 15
             break
         case 300:
-            self.timeDatePicker.isEnabled = true
+            self.timePicker.isEnabled = true
             self.customTimeDoneBtn.isEnabled = true
             break
         default:
-            time = 0
+            self.time = 0
             break
         }
         
@@ -176,10 +176,10 @@ class AddReminderViewController: UIViewController , TKAlertDelegate {
 
         let outputFormatter : DateFormatter = DateFormatter();
         outputFormatter.dateFormat = "dd-MM-YYYY"
-        reminder.sortDate = outputFormatter.string(from: timePicker.date)
+        reminder.sortDate = outputFormatter.string(from: timeDatePicker.date)
         outputFormatter.dateFormat = "HH:mm:ss"
-        reminder.activityStartTime = outputFormatter.string(from: timePicker.date)
-        reminder.activityEndTime = outputFormatter.string(from: timePicker.date)
+        reminder.activityStartTime = outputFormatter.string(from: timeDatePicker.date)
+        reminder.activityEndTime = outputFormatter.string(from: timeDatePicker.date)
 
         DBManager.sharedInstance.saveNewReminderDataIntoDB(reminder: reminder)
         
@@ -193,30 +193,14 @@ class AddReminderViewController: UIViewController , TKAlertDelegate {
                 return
             }
             let event = EKEvent(eventStore: store)
-            
-            event.title = self.titleTextField.text!
-
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss" //Your date format
-             dateFormatter.timeZone = TimeZone(abbreviation: "GMT+0:00") //Current time zone
-//            let startdate = dateFormatter.date(from: self.agendaModel.startDate)
-//            let endDate = dateFormatter.date(from: self.agendaModel.endDate)
-            
-//            event.startDate = startdate!
-//            event.endDate = endDate!
-//
-//            print("event start", event.startDate )
-//            print("event end", event.endDate )
-//            
-//            event.startDate = CommonModel.sharedInstance.getStringIntoDate(dateStr: self.agendaModel.startDate) as Date
-//            event.endDate = CommonModel.sharedInstance.getStringIntoDate(dateStr: self.agendaModel.endDate) as Date
-            // event.startDate.dateByAddingTimeInterval(60*60) //1 hour long meeting
+            event.title = reminder.title
+            event.startDate = self.timeDatePicker.date
+            event.endDate = self.timeDatePicker.date
             event.calendar = store.defaultCalendarForNewEvents
-            
             let interval = TimeInterval(-(60 * time));
             let alarm = EKAlarm(relativeOffset:interval)
             event.alarms = [alarm]
-            
+
             //Add reminder into calender
             do {
                 try store.save(event, span: .thisEvent, commit: true)

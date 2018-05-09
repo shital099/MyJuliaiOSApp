@@ -524,6 +524,8 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
         let paramDict = ["FromId":AttendeeInfo.sharedInstance.attendeeId  ,"ToId":self.chatGroupModel.groupId, "EventId":EventData.sharedInstance.eventId, "HistoryDate" : "", "Seconds": Chat_History_Time] as [String : Any]
         NetworkingHelper.postData(urlString: Chat_Refresh_Chat_history, param:paramDict as AnyObject, withHeader: false, isAlertShow: false, controller:self, callback: { response in
 
+            print("Refresh Chat list responce : ",response)
+            
             //            let listArray:[UUMessageFrame] = DBManager.sharedInstance.fetchChatHistoryMessages(groupId: self.chatGroupModel.groupId, fromId: self.chatGroupModel.fromId, isGroupChat: self.chatGroupModel.isGroupChat) as! [UUMessageFrame]
             //            self.chatModel.dataSource = NSMutableArray(array: listArray)
             //            self.chatTableView?.reloadData()
@@ -537,8 +539,6 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
             }
         }, errorBack: { error in
         })
-
-
     }
 
     // MARK: - Timer Method
