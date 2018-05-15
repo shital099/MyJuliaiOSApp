@@ -54,8 +54,12 @@ class ReminderTableViewController: UIViewController , UITableViewDelegate , UITa
 
     override func viewDidAppear(_ animated: Bool) {
 
+        //Clear previous data
         if dataList.count != 0 {
             dataList.removeAllObjects()
+        }
+        if sortedSections.count != 0 {
+            sortedSections.removeAll()
         }
 
         //Fetch data from Sqlite database
@@ -71,6 +75,8 @@ class ReminderTableViewController: UIViewController , UITableViewDelegate , UITa
         for item in reminderarray  {
 
             let dateStr = CommonModel.sharedInstance.getListHeaderDate(dateStr: item.sortDate)
+            print("Date Str : ",dateStr)
+            
             if (dataList.value(forKey: dateStr) != nil) {
                 let array = dataList.value(forKey: dateStr) as! NSMutableArray
                 array.add(item)
@@ -80,10 +86,11 @@ class ReminderTableViewController: UIViewController , UITableViewDelegate , UITa
                 let array = NSMutableArray()
                 array.add(item)
                 dataList.setValue(array, forKey: dateStr)
+                sortedSections.append(dateStr)
             }
         }
 
-        sortedSections = dataList.allKeys
+        //sortedSections = dataList.allKeys
         self.tableviewObj.reloadData()
     }
 
@@ -183,13 +190,13 @@ class ReminderTableViewController: UIViewController , UITableViewDelegate , UITa
         let mins = Int( model.reminderTime)! % 60
 
         if hours != 0 && mins == 0{
-            cell.dateLabel.text = String(format:"%@ - before %d hours",CommonModel.sharedInstance.getTimeInDisplayFormat(dateStr: model.activityStartTime),hours )
+            cell.dateLabel.text = String(format:"%@ - before %d hours",CommonModel.sharedInstance.getReminderTimeDisplayFormat(dateStr: model.activityStartTime),hours )
         }
         else if hours == 0 && mins != 0 {
-            cell.dateLabel.text = String(format:"%@ - before %d mins",CommonModel.sharedInstance.getTimeInDisplayFormat(dateStr: model.activityStartTime), mins )
+            cell.dateLabel.text = String(format:"%@ - before %d mins",CommonModel.sharedInstance.getReminderTimeDisplayFormat(dateStr: model.activityStartTime), mins )
         }
         else {
-            cell.dateLabel.text = String(format:"%@ - before %d hour %d mins",CommonModel.sharedInstance.getTimeInDisplayFormat(dateStr: model.activityStartTime), hours, mins)
+            cell.dateLabel.text = String(format:"%@ - before %d hour %d mins",CommonModel.sharedInstance.getReminderTimeDisplayFormat(dateStr: model.activityStartTime), hours, mins)
         }
         
         cell.titleLabel.text = model.title

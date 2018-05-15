@@ -41,6 +41,7 @@ extension UIApplication {
     }
 }
 
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -56,12 +57,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //            // Do what you want to happen when a remote notification is tapped.
 //            print("Notification in App launch : ", launchOptions?[UIApplicationLaunchOptionsKey.remoteNotification] ?? "")
 //                // Fallback on earlier versions
-//                let alert = UIAlertView()
-//                alert.title = "Notification"
-//            alert.message = launchOptions?[UIApplicationLaunchOptionsKey.remoteNotification] as? String
-//                alert.addButton(withTitle: "OK")
-//                alert.delegate = self
-//                alert.show()
 //            //Save notification data into db and navigate to screen
 //            //self.receivedNotification(application: application, data: launchOptions?[UIApplicationLaunchOptionsKey.remoteNotification] as AnyObject)
 //        }
@@ -119,8 +114,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         cryptoLib.iv = "abcdefghijklmnop"
 
 
-        let decryptedMsg = (CryptLib.sharedManager() as AnyObject).decryptCipherText(with: "OjB+xwiaB8Nhgo6COStxyQ==")
-        print("Message : ",decryptedMsg ?? "")
+//        let encryptedString = (CryptLib.sharedManager() as AnyObject).encryptPlainText(with: "mmm")
+//        print("encryptedString : ",encryptedString ?? "")
+//
+//        let decryptedMsg = (CryptLib.sharedManager() as AnyObject).decryptCipherText(with: "WIC9w2qonPp0WgPIl0WVPA==\n")
+//        print("decryptedMsg : ",decryptedMsg ?? "")
 
         // iOS 10 support
         if #available(iOS 10, *) {
@@ -191,13 +189,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Print the error to console (you should alert the user that registration failed)
     }
 
-    //MARK: - Prepare to Receive Notifications
-    @available(iOS 10.0, *)
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void)
-    {
-        completionHandler(.alert)
-    }
-    
     // Push notification received
     func application(_ application: UIApplication, didReceiveRemoteNotification data: [AnyHashable : Any]) {
         //Remove all badges number
@@ -471,7 +462,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
     }
-    
+
     //MARK: - UIApplication Methods
 
     func applicationWillResignActive(_ application: UIApplication) {

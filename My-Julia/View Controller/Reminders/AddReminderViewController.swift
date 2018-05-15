@@ -175,9 +175,9 @@ class AddReminderViewController: UIViewController , TKAlertDelegate {
         reminder.reminderTime = String(time)
 
         let outputFormatter : DateFormatter = DateFormatter();
-        outputFormatter.dateFormat = "dd-MM-YYYY"
+        outputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
         reminder.sortDate = outputFormatter.string(from: timeDatePicker.date)
-        outputFormatter.dateFormat = "HH:mm:ss"
+       // outputFormatter.dateFormat = "HH:mm:ss"
         reminder.activityStartTime = outputFormatter.string(from: timeDatePicker.date)
         reminder.activityEndTime = outputFormatter.string(from: timeDatePicker.date)
 

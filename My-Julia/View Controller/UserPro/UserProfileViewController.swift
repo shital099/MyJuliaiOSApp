@@ -175,7 +175,9 @@ class UserProfileViewController: UIViewController, UINavigationControllerDelegat
                     fileName = fileName.components(separatedBy: ".").first!
                 }
                 
-            }, failureBlock: nil)
+            }, failureBlock: {_ in
+                print("Failed access")
+            })
         }
         else {
             let imageNo = Int(arc4random_uniform(1000) + 1)

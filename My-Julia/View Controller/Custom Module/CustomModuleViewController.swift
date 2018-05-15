@@ -27,22 +27,26 @@ class CustomModuleViewController: UIViewController {
         //        if IS_IPHONE {
         //            self.setupMenuBarButtonItems()
         //        }
-        
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
         if contentStr != nil {
             let result = self.verifyUrl(urlString: contentStr)
-            
+
             if result {
                 let url = NSURL (string: contentStr)
                 let requestObj = URLRequest(url: url! as URL)
                 webview.loadRequest(requestObj)
             }
             else {
+              //  contentStr = contentStr.appending(String(format:"<style>body{font-family: 'Helvetica'; font-size:12px;}</style>"))
+                contentStr = String(format:"<font face='Helvetica' size='6'>%@",contentStr)
+                print("Content Str : ",contentStr)
                 webview.loadHTMLString(contentStr, baseURL: nil)
             }
         }
-
     }
-    
+
     func verifyUrl (urlString: String?) -> Bool {
         //Check for nil
         if let urlString = urlString {

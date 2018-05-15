@@ -349,20 +349,12 @@ class AttendeeDetailsViewController: UIViewController, UITableViewDataSource, UI
                 cell.callBtn.isEnabled = false
                 cell.messageBtn.isEnabled = false
             }
-        }
 
-        // Hide chat button if chat module is associated  in this event by admin
-        if isChatPresent == false {
-            //            cell.messageBtn.isHidden = true
-            //            cell.messageBtn.size.width = 0
-            //            cell.messageBtn.updateConstraintsIfNeeded()
-            //            var frame = cell.messageBtn.frame
-            //            frame.origin.x = (cell.frame.size.width - frame.size.width ) / 2
-            //            cell.callBtn.frame = frame
-            //            cell.callBtn.updateConstraintsIfNeeded()
-
-            cell.messageBtn.isEnabled = false
-            cell.messageBtn.alpha = 0.5
+            // Hide chat button if chat module is associated  in this event by admin
+            if isChatPresent == false {
+                cell.messageBtn.isEnabled = false
+                cell.messageBtn.alpha = 0.5
+            }
         }
 
         return cell

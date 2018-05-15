@@ -81,8 +81,6 @@ class ActivityFeedListViewController: UIViewController, UITableViewDataSource, U
 //        //Fetch data from Sqlite database
 //        self.dataArray = DBManager.sharedInstance.fetchActivityFeedsDataFromDB(limit: Activity_Page_Limit, offset: pageNo).mutableCopy() as! NSMutableArray
 
-        //load data from db
-        self.feedsModelController.loadItem()
 
         //Fetch data from server
         //self.getActivityFeedInfoListData()
@@ -100,15 +98,17 @@ class ActivityFeedListViewController: UIViewController, UITableViewDataSource, U
         self.feedsModelController.initializeModuleIndex(index : self.view.tag)
 
         if self.isRefreshList == true {
+            //load data from db
+            self.feedsModelController.loadItem()
+            self.tableviewObj.reloadData()
+
             let queue = OperationQueue()
-            
             queue.addOperation { () -> Void in
 
                 self.feedsModelController.retrieveFirstPage()
 
                 //Fetch data from server
                 self.getActivityFeedInfoListData()
-
             }
             
             self.isRefreshList = false

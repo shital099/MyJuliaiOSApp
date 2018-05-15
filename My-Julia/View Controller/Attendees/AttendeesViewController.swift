@@ -210,9 +210,6 @@ class AttendeesViewController: UIViewController, UITableViewDelegate, UITableVie
         }
         
         cell.nameLabel?.text = model.name
-        print("Attendee name : ",model.name)
-        print("icon url : ",model.iconUrl)
-        print("privacySetting : ", model.privacySetting )
       //  cell.imageview.image = nil
 
         //cell.designationLabel.text = model.designation

@@ -1426,8 +1426,8 @@
 		7E5F083E20610173002687D0 /* Sponsors */ = {
 			isa = PBXGroup;
 			children = (
-				7E5F083F20610173002687D0 /* SponsorDetailsViewController.swift */,
 				7E5F084020610173002687D0 /* SponsorsListViewController.swift */,
+				7E5F083F20610173002687D0 /* SponsorDetailsViewController.swift */,
 			);
 			path = Sponsors;
 			sourceTree = "<group>";

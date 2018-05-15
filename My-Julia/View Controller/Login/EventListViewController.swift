@@ -118,7 +118,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
 
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return YES if you want the specified item to be editable.
-        if self.isSearching == true && self.searchListArray.count == 0 {
+        if self.isSearching == true {
             return false
         }
         else {
@@ -463,6 +463,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
             self.searchListArray.removeAll()
         }
 
+        self.searchBar.text = ""
         self.tableView.reloadData()
         searchBar.resignFirstResponder()
     }

@@ -98,13 +98,11 @@ class AddPollQuestionsViewController: UIViewController, UITableViewDataSource, U
             [ "Id" : activityId,  "OptionValue" : questionModel.opt1, "OptionOrder" : "1", "EventId" : EventData.sharedInstance.eventId],
             [ "Id" : activityId,  "OptionValue" : questionModel.opt2, "OptionOrder" : "2", "EventId" : EventData.sharedInstance.eventId],
             [ "Id" : activityId,  "OptionValue" : questionModel.opt3, "OptionOrder" : "3", "EventId" : EventData.sharedInstance.eventId],
-            [ "Id" : activityId,  "OptionValue" : questionModel.opt4, "OptionOrder" : "4", "EventId" : EventData.sharedInstance.eventId]
-            
-            ]
+            [ "Id" : activityId,  "OptionValue" : questionModel.opt4, "OptionOrder" : "4", "EventId" : EventData.sharedInstance.eventId]]
             ] as [String : Any]
         
         print("post poll parameter", parameter)
-        NetworkingHelper.postData(urlString: Add_Poll_Speaker_Question, param:parameter as AnyObject, withHeader: false, isAlertShow: true, controller:self,
+        NetworkingHelper.postData(urlString: Add_Poll_Speaker_Question, param:parameter as AnyObject, withHeader: true, isAlertShow: true, controller:self,
                                   callback: { response in
                                     //dissmiss Indicator
                                     CommonModel.sharedInstance.dissmissActitvityIndicator()
@@ -148,7 +146,7 @@ class AddPollQuestionsViewController: UIViewController, UITableViewDataSource, U
             ] as [String : Any]
             
         
-//        print(" updateparameter", parameter)
+        print(" update parameter", parameter)
         NetworkingHelper.postData(urlString: Post_Update_Poll_Question, param:parameter as AnyObject, withHeader: false, isAlertShow: true, controller:self,
                                   callback: { response in
 //                                    print("update list", response)

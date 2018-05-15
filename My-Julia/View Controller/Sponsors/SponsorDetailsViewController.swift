@@ -126,7 +126,7 @@ class SponsorDetailsViewController: UIViewController, UITableViewDataSource, UIT
         if indexPath.section == 0
         {
             cell.nameLabel?.text = sponsorModel.name
-            cell.imageview.sd_setImage(with: NSURL(string:sponsorModel.iconUrl) as URL?, placeholderImage: nil)
+            cell.imageview.sd_setImage(with: NSURL(string:sponsorModel.iconUrl) as URL?, placeholderImage: #imageLiteral(resourceName: "empty_sponsors"))
             cell.selectionStyle = UITableViewCellSelectionStyle.none
 
             

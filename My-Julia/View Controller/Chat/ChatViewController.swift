@@ -736,7 +736,6 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
             break
         }
 
-
         //  self.chatTableView?.reloadData()
         //self.tableViewScrollToBottom()
     }

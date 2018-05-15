@@ -92,7 +92,7 @@ class SponsorsListViewController: UIViewController, UITableViewDelegate, UITable
 
         cell.nameLabel!.text = sponsor.name
         SDImageCache.shared().removeImage(forKey: sponsor.iconUrl, withCompletion: nil)
-        cell.imageview.sd_setImage(with: NSURL(string:sponsor.iconUrl) as URL?, placeholderImage: nil)
+        cell.imageview.sd_setImage(with: NSURL(string:sponsor.iconUrl) as URL?, placeholderImage: #imageLiteral(resourceName: "empty_sponsors"))
 
         return cell
     }

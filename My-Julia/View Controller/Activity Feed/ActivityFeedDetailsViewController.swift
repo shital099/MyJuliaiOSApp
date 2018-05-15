@@ -16,15 +16,12 @@ class ActivityFeedDetailsViewController: UIViewController, RTLabelDelegate, SFSa
     @IBOutlet weak var tableViewObj: UITableView!
 
 
-    var cellHeight : CGFloat = 400
-
     var feedModel : ActivityFeedsModel!
     var lastScale : CGFloat = 0.0
     let kMaxScale : CGFloat = 2.0
     let kMinScale : CGFloat = 0.7
     var currentScale : CGFloat = 1.0
-    
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -36,43 +33,12 @@ class ActivityFeedDetailsViewController: UIViewController, RTLabelDelegate, SFSa
         //Update dyanamic height of tableview cell
         tableViewObj.estimatedRowHeight = 1200
         tableViewObj.rowHeight = UITableViewAutomaticDimension
-
-        let textLabel = UILabel()
-        textLabel.frame = CGRect(x: 10, y: 10, width: self.view.frame.size.width, height: 21.0)
-        //textLabel.text = self.feedModel.messageText
-        textLabel.attributedText =  CommonModel.sharedInstance.stringFromHtml(string: self.feedModel.messageText)
-        textLabel.numberOfLines = 0
-        textLabel.lineBreakMode = .byWordWrapping
-        textLabel.sizeToFit()
-
-        //Calculate height of text
-        cellHeight = cellHeight + textLabel.size.height
-
-        print("Cell height : ",cellHeight)
-//
-//        self.textLabel.height = self.textLabel.optimumSize.height
-//        self.textLabel.updateConstraintsIfNeeded()
-//
-//        if !feedModel.isImageDeleted {
-//
-//            if !feedModel.postImageUrl.isEmpty {
-//
-//                let url = NSURL(string:feedModel.postImageUrl)! as URL
-//                self.postImageView.sd_setImage(with: url, placeholderImage: nil)
-//                self.createPanGestureRecognizer(targetView: postImageView)
-//            }
-//        }
-//        else {
-//            self.postImageView.isHidden = true
-//        }
     }
 
-    
     // MARK: - Gesture Methods
 
     // The Pan Gesture
     func createPanGestureRecognizer(targetView: UIImageView) {
-        
         targetView.addGestureRecognizer(UIPanGestureRecognizer(target: self, action:#selector(self.handlePanGesture(panGesture:))))
     }
     

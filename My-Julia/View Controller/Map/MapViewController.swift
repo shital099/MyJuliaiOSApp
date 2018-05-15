@@ -85,7 +85,6 @@ class MapViewController: UIViewController, UITableViewDelegate, UITableViewDataS
         cell.nameLabel?.text = model.name
 
         cell.statusImageview.isHidden  = model.isRead
-        print("Map Status : ",model.isRead)
 
         return cell
     }
@@ -105,7 +104,7 @@ class MapViewController: UIViewController, UITableViewDelegate, UITableViewDataS
         let dataDict:[String: Any] = ["Order": self.view.tag, "Flag":Update_Map_List]
         NotificationCenter.default.post(name: UpdateNotificationCount, object: nil, userInfo: dataDict)
 
-        model.isRead = !model.isRead
+        model.isRead = true
         self.listArray.replaceObject(at: indexPath.row, with: model)
         self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
 

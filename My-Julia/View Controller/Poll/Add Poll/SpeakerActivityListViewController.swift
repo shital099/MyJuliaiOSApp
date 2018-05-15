@@ -15,7 +15,7 @@ class SpeakerActivityListViewController: UIViewController, UITableViewDataSource
     var statusAlert : UIAlertController!
     var placeholderLabel : UILabel!
     var alert : TKAlert!
-    var listArray : [AgendaModel] = []
+    //var listArray : [AgendaModel] = []
 
 //    var listArray:NSMutableArray = []
     var array : NSMutableArray = []
@@ -47,20 +47,20 @@ class SpeakerActivityListViewController: UIViewController, UITableViewDataSource
         
         //Set separator color according to background color
         CommonModel.sharedInstance.applyTableSeperatorColor(object: tableView)
-        
+        //Register header cell
+        tableView.register(UINib(nibName: "CustomHeaderView", bundle: nil), forHeaderFooterViewReuseIdentifier: "HeaderCellId")
+
         //Fetch data from Sqlite database
 //        listArray = DBManager.sharedInstance.saveSpeakerActivitiesIntoDB(response: AnyObject as AnyObject).
         //now
 //        listArray = DBManager.sharedInstance.fetchSpeakerPollActListFromDB() as! [AgendaModel]
+//
+
+        let listArray = DBManager.sharedInstance.fetchSpeakerPollActListFromDB() as! [AgendaModel]
+        self.sortData(dataArray: listArray as NSArray)
 
         self.fetchSpeakerActData()
         
-//        let listArray = DBManager.sharedInstance.fetchSpeakerPollActListFromDB() as! [AgendaModel]
-//        self.sortData(dataArray: listArray as NSArray)
-
-        
-        //Register header cell
-        tableView.register(UINib(nibName: "CustomHeaderView", bundle: nil), forHeaderFooterViewReuseIdentifier: "HeaderCellId")
     }
     
     func sortData(dataArray : NSArray)  {
@@ -92,6 +92,7 @@ class SpeakerActivityListViewController: UIViewController, UITableViewDataSource
         
         tableView.reloadData()
     }
+
     func getSectionHeaderDate(dateStr: String) -> String
     {
         let dateFormatter = DateFormatter()
@@ -170,7 +171,6 @@ class SpeakerActivityListViewController: UIViewController, UITableViewDataSource
             print("Activity list :", response)
             if response is Array<Any> {
                 self.sortData(dataArray: DBManager.sharedInstance.fetchSpeakerPollActListFromDB() as! [AgendaModel] as NSArray)
-                self.tableView.reloadData()
 //                self.parseSpeakerData(response: response)
             }
         }, errorBack: { error in

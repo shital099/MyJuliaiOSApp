@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import SafariServices
 
-class CommentsListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate {
+class CommentsListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, RTLabelDelegate, SFSafariViewControllerDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var bgImageView: UIImageView!
@@ -36,21 +37,18 @@ class CommentsListViewController: UIViewController, UITableViewDelegate, UITable
         tableView.tableFooterView = UIView()
         
         //Update dyanamic height of tableview cell
-        tableView?.estimatedRowHeight = 500
+        tableView?.estimatedRowHeight = 700
         tableView?.rowHeight = UITableViewAutomaticDimension
         
         sendButton.layer.cornerRadius = 5.0
         commentTextView.layer.cornerRadius = 5.0
-        //commentTextView.layer.borderColor = UIColor.lightGray.cgColor
         commentTextView.layer.borderColor = UIColor().HexToColor(hexString: "#DDDDDD", alpha: 1.0).cgColor
         commentTextView.layer.borderWidth = 1.0
         commentTextView.backgroundColor = .clear
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardChange), name: .UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardChange), name: .UIKeyboardWillHide, object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: .UIKeyboardWillShow, object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: .UIKeyboardWillHide, object: nil)
-        
+
         //Add Placeholder in textview
         commentTextView.delegate = self
         placeholderLabel = UILabel()
@@ -209,11 +207,17 @@ class CommentsListViewController: UIViewController, UITableViewDelegate, UITable
         }
 
         commentTextView.resignFirstResponder()
-                
-        //Show Indicator
-        //CommonModel.sharedInstance.showActitvityIndicator()
-        
-        let paramDict = ["ActivityFeedId": feedModel.id,"comment":self.commentTextView.text,"AttendeeId":AttendeeInfo.sharedInstance.attendeeId] as [String : Any]
+
+        // Create an instance of HTMLConverter.
+        let converter : HTMLConverter = HTMLConverter()
+
+        // Prepare an input text.
+        let input : String = self.commentTextView.text
+
+        // Convert the plain text into an HTML text using the converter.
+        let output : String = converter.toHTML(input)
+
+        let paramDict = ["ActivityFeedId": feedModel.id,"comment":output,"AttendeeId":AttendeeInfo.sharedInstance.attendeeId] as [String : Any]
 
         NetworkingHelper.postData(urlString:Post_Activity_Comment_url, param:paramDict as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { response in
             
@@ -224,7 +228,7 @@ class CommentsListViewController: UIViewController, UITableViewDelegate, UITable
 
                     let model = FeedsCommentModel()
                     model.commentId = "" //(results?.string(forColumn: "ActivityFeedID"))!
-                    model.messageText = self.commentTextView.text
+                    model.messageText = output
                     model.name = AttendeeInfo.sharedInstance.attendeeName
                     model.createdDate = "" //(results?.string(forColumn: "CreatedDate"))!
                     model.userIconUrl = AttendeeInfo.sharedInstance.iconUrl
@@ -263,11 +267,20 @@ class CommentsListViewController: UIViewController, UITableViewDelegate, UITable
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CellIdentifier", for: indexPath) as! CommentsCustomCell
         cell.backgroundColor = cell.contentView.backgroundColor;
+        cell.selectionStyle = UITableViewCellSelectionStyle.none
 
         let model = self.listArray[indexPath.row] as! FeedsCommentModel
         cell.nameLabel.text = model.name
-        cell.descLabel.text = model.messageText
-        
+      //  cell.descLabel.text = model.messageText
+
+        cell.messageLbl.text = model.messageText
+        cell.messageLbl.delegate = self
+        cell.messageLbl.lineBreakMode = RTTextLineBreakModeWordWrapping
+        // cell.messageLbl.sizeToFit()
+
+        let string = model.messageText.appending(String(format:"<style>body{font-family: '%@'; font-size:%fpx;}</style>",cell.messageLbl.font.fontName,cell.messageLbl.font.pointSize))
+         cell.descLabel.attributedText = CommonModel.sharedInstance.stringFromHtml(string: string)
+
         if !model.userIconUrl.isEmpty {
             let url = NSURL(string:model.userIconUrl)! as URL
             cell.userImageView.sd_setImage(with: url, placeholderImage: #imageLiteral(resourceName: "user"))
@@ -285,6 +298,34 @@ class CommentsListViewController: UIViewController, UITableViewDelegate, UITable
 
         return cell
     }
+
+    //MARK:- RTLabel Delegate Dismiss
+
+    func rtLabel(_ rtLabel: Any!, didSelectLinkWith url: URL!) {
+        //   print("did select url %@", url)
+        let urlStr = url.absoluteString
+        var nUrl : URL = url
+        if urlStr.lowercased().hasPrefix("http://") || urlStr.lowercased().hasPrefix("https://") {
+        }
+        else {
+            if URL (string: String(format:"http://%@", urlStr)) != nil {
+                nUrl = URL (string: String(format:"http://%@", urlStr))!
+            }
+        }
+
+        if url != nil {
+            let svc = SFSafariViewController(url: nUrl)
+            svc.delegate = self
+            self.present(svc, animated: true, completion: nil)
+        }
+    }
+
+    //MARK:- SafatriViewConroller Dismiss
+
+    func safariViewControllerDidFinish(_ controller: SFSafariViewController)
+    {
+        controller.dismiss(animated: true, completion: nil)
+    }
 }
 
 // MARK: - Custom Cell Classes
@@ -294,6 +335,7 @@ class CommentsCustomCell: UITableViewCell {
     @IBOutlet var nameLabel:UILabel!
     @IBOutlet var userImageView:UIImageView!
     @IBOutlet var descLabel:UILabel!
-    
+    @IBOutlet var messageLbl:RTLabel!
+
 }
 

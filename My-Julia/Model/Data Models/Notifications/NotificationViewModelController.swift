@@ -14,7 +14,13 @@ class NotificationViewModelController: NSObject {
     fileprivate var pageNo = 0
     fileprivate var isLastPage = false
     fileprivate var viewModels:NSMutableArray = []
+    var moduleIndex = 0
 
+    func initializeModuleIndex(index : Int)  {
+        // Remove first page load data
+        self.moduleIndex = index
+    }
+    
     func retrieveFirstPage()  {
         // Remove first page load data
         self.pageNo = 0
@@ -66,6 +72,12 @@ class NotificationViewModelController: NSObject {
        self.viewModels.addObjects(from: array as! [NotificationsModel])
 
         // print("After load Data array count : ", self.dataArray.count)
+
+        print("Module index : ",self.moduleIndex)
+
+        //Update actiivty read/unread data count in side menu bar
+        let dataDict:[String: Any] = ["Order": moduleIndex, "Flag":Update_Broadcast_List]
+        NotificationCenter.default.post(name: UpdateNotificationCount, object: nil, userInfo: dataDict)
     }
 
   //  task.resume()

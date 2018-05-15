@@ -97,7 +97,7 @@ class WiFiViewController: UIViewController, UITableViewDelegate, UITableViewData
         DBManager.sharedInstance.updateWiFiDataStatus(wifiId: model.id)
         NotificationCenter.default.post(name: UpdateNotificationCount, object: nil, userInfo: dataDict)
 
-        model.isRead = !model.isRead
+        model.isRead = true
         self.wifiArray.replaceObject(at: indexPath.row, with: model)
         self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
 

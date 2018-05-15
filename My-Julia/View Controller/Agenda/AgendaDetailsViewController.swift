@@ -247,13 +247,17 @@ class AgendaDetailsViewController: UIViewController,UIImagePickerControllerDeleg
     func saveReminderIntoDB(time : Int) {
 
         self.customTimeDoneBtn.isEnabled = false
-
         let reminder = ReminderModel()
         reminder.title = agendaModel.activityName
         reminder.message = agendaModel.location
-        reminder.sortDate = agendaModel.sortDate
-        reminder.activityStartTime = agendaModel.startTime
-        reminder.activityEndTime = agendaModel.endTime
+        reminder.sortDate = agendaModel.startActivityDate
+//        let dateFormatter = DateFormatter()
+//        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+//        let date = dateFormatter.date(from: agendaModel.startActivityDate)
+//        dateFormatter.dateFormat = "dd-MM-yyyy"
+//        reminder.sortDate = dateFormatter.string(from: date!)
+        reminder.activityStartTime = agendaModel.startActivityDate
+        reminder.activityEndTime = agendaModel.endActivityDate
         reminder.sessionId = agendaModel.sessionId
         reminder.activityId = agendaModel.activityId
         reminder.reminderTime = String(time)

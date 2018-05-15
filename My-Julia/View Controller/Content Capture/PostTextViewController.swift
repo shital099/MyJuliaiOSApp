@@ -13,17 +13,13 @@ class PostTextViewController: UIViewController, UITextViewDelegate {
     @IBOutlet weak var bgImageView: UIImageView!
     @IBOutlet weak var postBtn: UIBarButtonItem!
     @IBOutlet weak var textField: UITextView!
+    @IBOutlet weak var viewBottomContraint: NSLayoutConstraint!
     var placeholderLabel : UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.title = "New Feed"
-        
-//        textField.layer.borderColor = UIColor.darkGray.cgColor
-//        textField.layer.borderWidth = 0.5
-//        textField.layer.cornerRadius = 5
-        
         textField.delegate = self
         
         //Add Placeholder in textview
@@ -44,6 +40,9 @@ class PostTextViewController: UIViewController, UITextViewDelegate {
         
         self.postBtn.tintColor = AppTheme.sharedInstance.headerTextColor
 
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: .UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: .UIKeyboardWillHide, object: nil)
+
        // postBtn.showButtonTheme()
     }
     
@@ -51,7 +50,23 @@ class PostTextViewController: UIViewController, UITextViewDelegate {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
+
+    // MARK: - Keyboard Methods
+
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            self.viewBottomContraint.constant = keyboardSize.size.height + 10
+            self.textField.updateConstraintsIfNeeded()
+        }
+    }
+
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            self.viewBottomContraint.constant = 0
+            self.textField.updateConstraintsIfNeeded()
+        }
+    }
+
     // MARK: - Textview Delegate methods
     
     func textViewDidChange(_ textView: UITextView) {
@@ -72,32 +87,10 @@ class PostTextViewController: UIViewController, UITextViewDelegate {
         }
         self.postNewFeed()
     }
-    
-//    func convertHtml(str : String) -> NSAttributedString{
-//
-//        let attrStr = NSAttributedString(string: str)
-//       // let documentAttributes = [NSAttributedString.DocumentAttributeKey:NSAttributedString.DocumentType.html]
-//
-//        let documentAttributes = [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType]
-//
-//        do {
-//            let htmlData = try attrStr.dataFromRange(NSMakeRange(0, attrStr.length), documentAttributes:documentAttributes)
-//            if let htmlString = String(data:htmlData, encoding:NSUTF8StringEncoding) {
-//                print("htmlString : ",htmlString)
-//            }
-//        }
-//        catch {
-//            print("error creating HTML from Attributed String")
-//        }
-//
-//    }
 
     // MARK: - Webservice Methods
     
     func postNewFeed() {
-
-        //let str = self.convertHtml(str: textField.text )
-       // print("String : ",str)
 
         //Show Indicator
         CommonModel.sharedInstance.showActitvityIndicator()
@@ -112,37 +105,14 @@ class PostTextViewController: UIViewController, UITextViewDelegate {
 
         // Convert the plain text into an HTML text using the converter.
         let output : String = converter.toHTML(input)
-        print("html Output : ",output)
-
+        print("Output : ",output)
+        
         let paramDict : NSMutableDictionary? = ["Comment":output ,"AttendeeId":AttendeeInfo.sharedInstance.attendeeId, "EventId":event.eventId]
-        print("Post Data : ",paramDict ?? "")
-
-//        var testString =  String(format: "<h> %@ </h>",textField.text )
-//
-//        print("Post text : ",testString )
-//        do {
-//            let detector = try NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
-//            let range = NSRange(location: 0, length: (testString.count))
-//            let block = { (result: NSTextCheckingResult?, flags: NSRegularExpression.MatchingFlags, stop: UnsafeMutablePointer<ObjCBool>) -> Void in
-//                if let newResult = result, newResult.resultType == NSTextCheckingResult.CheckingType.link {
-//                    print("Found link: ",(newResult.url?.isFileURL)! ? newResult.url?.path : newResult.url?.absoluteString ?? "")
-//                    let htmlLessString: String = detector.stringByReplacingMatches(in: testString, options: NSRegularExpression.MatchingOptions(), range:range, withTemplate: String(format: "<a href='%@'>%@</a>",newResult.url! as CVarArg,newResult.url! as CVarArg ))
-//                    print("htmlLessString  : ",htmlLessString)
-//                 // testString = testString.replacingOccurrences(of: String(format: "%@",result! ), with: String(format: "<a href='%@'>%@</a>",newResult.url! as CVarArg,newResult.url! as CVarArg ), options: NSString.CompareOptions.literal, range: nil)
-//                }
-//            }
-//            detector.enumerateMatches(in: testString, options: [], range: range, using: block)
-//        } catch {
-//            print(error)
-//        }
-//
-//        print("After editing text : ",testString )
 
         NetworkingHelper.postData(urlString:Post_Activity_Feed_url, param:paramDict as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { response in
             //dissmiss Indicator
             CommonModel.sharedInstance.dissmissActitvityIndicator()
-            
-            print("Post Content Details response : ", response)
+
             if response is NSDictionary {
                 if (response.value(forKey: "responseCode") != nil) {
                     // CommonModel.sharedInstance.showAlertWithStatus(message: Feedback_Sucess_Message, vc: self)

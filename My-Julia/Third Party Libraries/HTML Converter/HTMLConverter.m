@@ -203,7 +203,7 @@ static NSArray *_entityReferences;
             link = [[NSMutableString alloc] initWithString:@"http://"];
             i += 7;
         }
-        else if ([self string:text from:i hasPrefix:@"Https://"])
+        else if ([self string:text from:i hasPrefix:@"Http://"])
         {
             link = [[NSMutableString alloc] initWithString:@"Http://"];
             i += 7;

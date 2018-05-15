@@ -13,7 +13,7 @@ class ActivityFeedViewModelController: NSObject {
     fileprivate var pageNo = 0
     fileprivate var isLastPage = false
     fileprivate var viewModels:NSMutableArray = []
-     var moduleIndex = 0
+    var moduleIndex = 0
 
 
     func retrieveFirstPage()  {
@@ -113,6 +113,8 @@ class ActivityFeedViewModelController: NSObject {
 
 //        //Update activity feed read status
 //         DBManager.sharedInstance.updateActivityFeedNotificationStatus()
+
+        print("Activity feed Module index : ",self.moduleIndex)
 
         //Update actiivty read/unread data count in side menu bar
         let dataDict:[String: Any] = ["Order": moduleIndex, "Flag":Update_Activity_Feeds_List]

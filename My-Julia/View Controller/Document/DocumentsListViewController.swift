@@ -115,6 +115,7 @@ class DocumentsListViewController: UIViewController, UITableViewDelegate, UITabl
         cell.timeLbl.text = String(format:"Valid from : %@ - %@",CommonModel.sharedInstance.getDateAndTime(dateStr: model.startDateStr),  CommonModel.sharedInstance.getDateAndTime(dateStr: model.endDateStr))
 
         cell.statusImageview.isHidden  = model.isRead
+        print("model isread : ",model.isRead)
 
         if let htmlData = model.descStr.data(using: String.Encoding.unicode) {
             do {
@@ -140,7 +141,7 @@ class DocumentsListViewController: UIViewController, UITableViewDelegate, UITabl
         let dataDict:[String: Any] = ["Order": self.view.tag, "Flag":Update_Documents_List]
         NotificationCenter.default.post(name: UpdateNotificationCount, object: nil, userInfo: dataDict)
 
-        model.isRead = !model.isRead
+        model.isRead = true
         self.listArray.replaceObject(at: indexPath.row, with: model)
         self.tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.none)
 

@@ -639,13 +639,15 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
         //If Custom Module added
         if item.isCustomMenu {
             viewController = self.storyboard?.instantiateViewController(withIdentifier: "CustomModuleViewController") as! CustomModuleViewController
+            viewController.view.tag = index
             let vc = viewController as! CustomModuleViewController
             vc.contentStr = item.customModuleContent
         }
         else {
             
             viewController = CommonModel.sharedInstance.fetchViewControllerObject(moduleId: item.moduleId)
-            
+            viewController.view.tag = index
+
             if viewController is HomeViewController {
                 let vc = viewController as! HomeViewController
                 vc.homeIndex = index
@@ -666,6 +668,11 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
                     vc.isMySchedules = true
                 }
             }
+                //Check if myschedule selected
+//            else if viewController is NotificationViewController {
+//                    let vc = viewController as! NotificationViewController
+//                    vc.changeNotificationCount()
+//            }
         }
         
         viewController.title = item.moduleTitle
@@ -673,7 +680,7 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
         //viewController.view.tag = index         //Store row index
 
         if IS_IPHONE {
-            viewController.view.tag = index         //Store row index
+           // viewController.view.tag = index         //Store row index
 
             self.menuContainerViewController.setMenuState(MFSideMenuStateClosed, completion: nil)
             let navController = self.menuContainerViewController.centerViewController as? UINavigationController
@@ -686,7 +693,7 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
             }
             else {
                 let navVC = UINavigationController.init(rootViewController: viewController)
-                viewController.view.tag = index         //Store row index
+              //  viewController.view.tag = index         //Store row index
                 splitViewController?.showDetailViewController(navVC, sender: nil)
             }
         }

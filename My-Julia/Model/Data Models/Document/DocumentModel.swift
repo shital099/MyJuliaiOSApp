@@ -17,6 +17,7 @@ class DocumentModel: NSObject {
     var descStr : String = ""
     var startDateStr : String = ""
     var endDateStr : String = ""
+    var createdDate : String = ""
     var isRead : Bool = false
 
 }

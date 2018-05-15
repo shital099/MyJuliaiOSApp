@@ -119,7 +119,7 @@ class CommonModel: NSObject {
     
     static let RowHighlightColour = AppTheme.sharedInstance.backgroundColor.darker(by:20)
 
-    //MARK: Local Variable
+    //MARK: Local Variablegoo
     
     var emptyStringArray : [String] = []
     
@@ -569,10 +569,19 @@ class CommonModel: NSObject {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd-MM-yyyy"
         dateFormatter.locale = Locale.init(identifier: "en_GB")
-        let date = dateFormatter.date(from: dateStr)
+        var date = dateFormatter.date(from: dateStr)
 
         if date == nil {
-            return ""
+            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+            date = dateFormatter.date(from: dateStr)
+            if date == nil {
+                return ""
+            }
+            else {
+                dateFormatter.dateFormat = "EEEE, MMM dd, yyyy"
+                let result:String = dateFormatter.string(from: date!)
+                return result
+            }
         }
         else {
             dateFormatter.dateFormat = "EEEE, MMM dd, yyyy"
@@ -673,7 +682,23 @@ class CommonModel: NSObject {
             return result
         }
     }
-    
+
+    func getReminderTimeDisplayFormat(dateStr: String) -> String
+    {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        dateFormatter.locale = Locale.init(identifier: "en_GB")
+        let date = dateFormatter.date(from: dateStr)
+        if date == nil {
+            return "00:00 am"
+        }
+        else {
+            dateFormatter.dateFormat = "hh:mm aa"
+            let result:String = dateFormatter.string(from: date!)
+            return result
+        }
+    }
+
     func getAgendaDayOnly(dateStr: String) -> String
     {
         let dateFormatter = DateFormatter()
