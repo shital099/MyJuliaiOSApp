@@ -64,6 +64,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //Get crash reports
         Fabric.with([Crashlytics.self])
 
+        // TODO: Move this to where you establish a user session
+        self.logUser()
+
         //Get application name and version
         let name: AnyObject? = Bundle.main.infoDictionary!["CFBundleDisplayName"] as AnyObject
         if (name as? NSNull) == nil {
@@ -143,7 +146,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true;
     }
 
-
+    func logUser() {
+        // TODO: Use the current user's information
+        // You can call any combination of these three methods
+        Crashlytics.sharedInstance().setUserEmail("shital@gcotechcenter.com")
+        Crashlytics.sharedInstance().setUserIdentifier("12345")
+        Crashlytics.sharedInstance().setUserName("Shital")
+    }
 
 
     func setStatusBarBackgroundColor(color: UIColor) {
@@ -193,12 +202,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didReceiveRemoteNotification data: [AnyHashable : Any]) {
         //Remove all badges number
         UIApplication.shared.applicationIconBadgeNumber = 0
-
-        // If you are receiving a notification message while your app is in the background,
-        // this callback will not be fired till the user taps on the notification launching the application.
-        // TODO: Handle data of notification
-        // With swizzling disabled you must let Messaging know about the message, for Analytics
-        // Messaging.messaging().appDidReceiveMessage(userInfo)
 
         //If application not login in, don't show alert message
         if isAppLogin == false {
@@ -332,6 +335,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
                 else {
                     let imageDataDict:[String: String] = ["moduleId": moduleId!]
+                    NotificationCenter.default.post(name: ShowNotificationCount, object: nil, userInfo: imageDataDict)
                     NotificationCenter.default.post(name: OtherModuleNotification, object: nil, userInfo: imageDataDict)
                 }
            // }
@@ -473,19 +477,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+
     }
     
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
 
-        if #available(iOS 10.0, *) {
-            UNUserNotificationCenter.current().getDeliveredNotifications(completionHandler: {(notifications: [UNNotification]) in
-                print("All received Notifications : ",notifications)
-            })
-        } else {
-            // Fallback on earlier versions
-        }
+//        if #available(iOS 10.0, *) {
+//            UNUserNotificationCenter.current().getDeliveredNotifications(completionHandler: {(notifications: [UNNotification]) in
+//                print("All received Notifications : ",notifications)
+//            })
+//        } else {
+//            // Fallback on earlier versions
+//        }
 
+        //Refresh side menu count when application enter foreground
+        if isAppLogin == true {
+            let dataDict:[String: Any] = ["Order": 0, "Flag":Update_SideMenu_List]
+            NotificationCenter.default.post(name: UpdateNotificationCount, object: nil, userInfo: dataDict)
+        }
     }
     
     func applicationDidBecomeActive(_ application: UIApplication) {

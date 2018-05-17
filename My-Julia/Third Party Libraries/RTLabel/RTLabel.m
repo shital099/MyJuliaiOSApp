@@ -390,8 +390,9 @@
 	CFRelease(path);
 	CFRelease(styleDict1);
 	CFRelease(styleDict);
-	CFRelease(framesetter);
-	CTFrameDraw(frame, context);
+    CFRelease(framesetter);
+    if (context != NULL)
+        CTFrameDraw(frame, context);
     CFRelease(frame);
 }
 

@@ -65,14 +65,9 @@ class AgendaViewController: UIViewController, UITableViewDataSource, UITableView
             self.title = "Agenda"
             segmentControl.selectedSegmentIndex = 0
         }
-        
+
         tableviewObj.separatorColor = UIColor.red // AppTheme.sharedInstance.backgroundColor.darker(by:10)
-
-        print("Before fetching data : ",CommonModel.sharedInstance.getCurrentDateInMM())
-
         self.fetchAgendaDataList()
-        print("After fetching data : ",CommonModel.sharedInstance.getCurrentDateInMM())
-
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -109,8 +104,6 @@ class AgendaViewController: UIViewController, UITableViewDataSource, UITableView
             startDate = Calendar.current.date(byAdding: .day, value: 1, to: startDate!)!
         }
 
-        print("after sorting dates array : ",CommonModel.sharedInstance.getCurrentDateInMM())
-
         if daysArray.count != 0 {
             self.messageLbl.isHidden = true
             self.headerBgView.isHidden = false
@@ -131,12 +124,14 @@ class AgendaViewController: UIViewController, UITableViewDataSource, UITableView
                 self.selectedDate = self.datesArray.lastObject as! String
             }
 
-            self.collectionView(self.collectionview, didSelectItemAt: NSIndexPath(item: self.datesArray.index(of: self.selectedDate), section: 0) as IndexPath)
-            self.collectionview.scrollToItem(at: IndexPath(item: self.datesArray.index(of: self.selectedDate), section: 0) as IndexPath, at: .right, animated: true)
+            let indexPath = NSIndexPath(item: self.datesArray.index(of: self.selectedDate), section: 0) as IndexPath
+            self.collectionView(self.collectionview, didSelectItemAt: indexPath)
+            DispatchQueue.main.async {
+                self.collectionview.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+            }
+
             self.onChangeOnBottomTab(segmentControl)
         }
-        print("after sorting : ",CommonModel.sharedInstance.getCurrentDateInMM())
-
     }
  
     override func didReceiveMemoryWarning() {
@@ -176,7 +171,7 @@ class AgendaViewController: UIViewController, UITableViewDataSource, UITableView
     @objc func leftSideMenuButtonPressed(sender: UIBarButtonItem) {
         let masterVC : UIViewController!
         if IS_IPHONE {
-            masterVC =  self.menuContainerViewController.leftMenuViewController as! MenuViewController!
+            masterVC =  self.menuContainerViewController.leftMenuViewController as! MenuViewController?
         }
         else {
             masterVC = self.splitViewController?.viewControllers.first
@@ -214,7 +209,7 @@ class AgendaViewController: UIViewController, UITableViewDataSource, UITableView
 //        else {
 //            self.dataDict = DBManager.sharedInstance.fetchAllAgendaListFromDB(isAddedMySchedule: isMySchedules, datesArray: self.datesArray) as! [String : Array<AgendaModel>]
 //        }
-        print("after sorting by 2 method : ",CommonModel.sharedInstance.getCurrentDateInMM())
+    //    print("after sorting by 2 method : ",CommonModel.sharedInstance.getCurrentDateInMM())
        // print("nDataDict : ", nDataDict)
     }
     

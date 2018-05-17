@@ -8,6 +8,8 @@
 
 import UIKit
 import AssetsLibrary
+import Fabric
+import Crashlytics
 
 private let reuseIdentifier = "CellIndentifier"
 
@@ -35,7 +37,7 @@ class GalleryViewController: TKExamplesExampleViewController, UIImagePickerContr
         //Show menu icon in ipad and iphone
         self.setupMenuBarButtonItems()
          self.addOption("Scale in", action: scaleInSelected)
-        
+
 //        if IS_IPHONE {
 //            self.setupMenuBarButtonItems()
 //
@@ -262,11 +264,11 @@ class GalleryViewController: TKExamplesExampleViewController, UIImagePickerContr
 //        })
 
         let urlStr = Get_AllModuleDetails_url.appendingFormat("Flag=%@",PhotoGallery_List_url)
-        NetworkingHelper.getRequestFromUrl(name:PhotoGallery_List_url,  urlString: urlStr, callback: { response in
+        NetworkingHelper.getRequestFromUrl(name:PhotoGallery_List_url,  urlString: urlStr, callback: { [weak self] response in
             if response is Array<Any> {
                 //Fetch data from Sqlite database
-                self.listArray = DBManager.sharedInstance.fetchGalleryDataFromDB() as! [PhotoGallery]
-                self.collectionView.reloadData()
+                self?.listArray = DBManager.sharedInstance.fetchGalleryDataFromDB() as! [PhotoGallery]
+                self?.collectionView.reloadData()
             }
         }, errorBack: { error in
             NSLog("error : %@", error)

@@ -152,6 +152,7 @@ let Update_Documents_List = "Documents"
 let Update_Activity_Feeds_List = "Activity Feeds"
 let Update_Chat_List = "Chat"
 let Update_Broadcast_List = "Broadcast"
+let Update_SideMenu_List = "All Module"
 
 /***** END *******/
 
@@ -303,6 +304,8 @@ class NetworkingHelper: NSObject {
             }
             else  if name == Get_AllModuleDetails_url {
               //  DispatchQueue.global(qos: .background).async {
+                print("Get Event Module data : ",CommonModel.sharedInstance.getCurrentDateInMM())
+
                     DBManager.sharedInstance.saveAllEventDataIntoDB(response: responseObject as AnyObject, apiNname: name)
                // }
                 callback(responseObject as AnyObject)

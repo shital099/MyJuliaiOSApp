@@ -224,8 +224,6 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
         let urlStr = Get_AllModuleDetails_url.appendingFormat("Flag=%@",Chat_Contact_List)
         NetworkingHelper.getRequestFromUrl(name:Chat_Contact_List,  urlString:urlStr, callback: { response in
             if response is Array<Any> {
-                //Update side menu row
-                self.changeChatCount()
 
                 //Fetch data from Sqlite database
                 self.dataDict["Contacts"] = DBManager.sharedInstance.fetchChatListDataFromDB(isGroupList: false) as? [ChatGroupModel]
@@ -463,20 +461,10 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
             //Update database status for chat hostory read
             DBManager.sharedInstance.updateChatListStatusIntoDB(groupId: vc.chatGroupModel.groupId)
 
-            //Update side menu row
-           // self.changeChatCount()
-
             vc.view.tag = self.view.tag
             self.navigationController?.pushViewController(vc, animated: true)
         }
     }
-
-    func changeChatCount() {
-//        let userDict:[String: Bool] = ["isClickOnNotification": false]
-//        NotificationCenter.default.post(name: ChatNotification, object: "", userInfo: userDict)
-
-    }
-
 }
 
 // MARK: - Custom Cell Classes

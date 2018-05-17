@@ -166,7 +166,7 @@ class CustomAlertView: UIViewController, UITextFieldDelegate {
 
         let parameters : NSDictionary = [ "AttendeeCode": self.attendeeCodeTextField.text!, "EventId" : self.eventId, "DeviceToken":AppDelegate.getAppDelegateInstance().deviceToken]
 
-        NetworkingHelper.postData(urlString:Get_AuthToken_Url, param:parameters, withHeader: false, isAlertShow: true, controller:self, callback: { response in
+        NetworkingHelper.postData(urlString:Get_AuthToken_Url, param:parameters, withHeader: false, isAlertShow: true, controller:self, callback: {[weak self] response in
 
             //   print("\nAuth token response - ",CommonModel.sharedInstance.getCurrentDateInMM())
 
@@ -182,9 +182,9 @@ class CustomAlertView: UIViewController, UITextFieldDelegate {
                 event.auth_token = dict.value(forKey: "token") as! String
                 event.attendeeId = dict.value(forKey: "AttendeeId") as! String
                 event.attendeeStatus = dict.value(forKey: "IsAccept") as! Bool
-                event.attendeeCode = self.attendeeCodeTextField.text!
+                event.attendeeCode = (self?.attendeeCodeTextField.text!)!
 
-                self.attendeeCodeTextField.resignFirstResponder()
+                self?.attendeeCodeTextField.resignFirstResponder()
                 self.loginView.isHidden = true
                 self.otpView.isHidden = false
                 self.resendOTPButton.isEnabled = false
@@ -216,7 +216,7 @@ class CustomAlertView: UIViewController, UITextFieldDelegate {
 
         let parameters : NSDictionary = [ "EventId": EventData.sharedInstance.eventId, "OTPCode":self.otpTextField.text!, "AttendeeId": EventData.sharedInstance.attendeeId,]
 
-        NetworkingHelper.postData(urlString:Get_ValidateOTP_Url, param:parameters, withHeader: false, isAlertShow: true, controller:self, callback: { response in
+        NetworkingHelper.postData(urlString:Get_ValidateOTP_Url, param:parameters, withHeader: false, isAlertShow: true, controller:self, callback: { [weak self] response in
 
             print("Validate OTP response : ", response)
             let responseCode = Int(response.value(forKey: "responseCode") as! String)

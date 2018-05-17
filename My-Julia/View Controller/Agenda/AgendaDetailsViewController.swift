@@ -49,10 +49,6 @@ class AgendaDetailsViewController: UIViewController,UIImagePickerControllerDeleg
        
         //Set separator color according to background color
         CommonModel.sharedInstance.applyTableSeperatorColor(object: tableviewObj)
-
-        //Fetch agenda details
-        agendaModel = DBManager.sharedInstance.fetchActivityDetailsFromDB(activityId: agendaModel.activityId)
-
     }
 
     override func didReceiveMemoryWarning() {
@@ -61,6 +57,10 @@ class AgendaDetailsViewController: UIViewController,UIImagePickerControllerDeleg
     }
     
     override func viewDidAppear(_ animated: Bool) {
+
+        //Fetch agenda details
+        agendaModel = DBManager.sharedInstance.fetchActivityDetailsFromDB(activityId: agendaModel.activityId)
+
         //Check reminder added or not
         reminderStatus = DBManager.sharedInstance.isReminderAddedIntoDB(activityId: agendaModel.activityId)
 

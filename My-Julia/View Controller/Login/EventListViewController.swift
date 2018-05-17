@@ -79,7 +79,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         //Check logged in user details found or not in db
         if EventData.sharedInstance.eventId != "" {
             //Check last login attendee status and open event
-            CommonModel.sharedInstance.showActitvityIndicator()
+           // CommonModel.sharedInstance.showActitvityIndicator()
             self.checkLoginAttendeeStatus()
         }
     }
@@ -260,7 +260,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     func parseEventListData(response: AnyObject) {
-        for item in response as! NSArray {4
+        for item in response as! NSArray {
 
             let  dict = item as! NSDictionary
             let model = EventModel()
@@ -281,11 +281,13 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     func getEventDetailsData() {
+        CommonModel.sharedInstance.showActitvityIndicator()
 
-        NetworkingHelper.getRequestFromUrl(name:Get_Login_Details_Url, urlString: Get_Login_Details_Url, callback: { response in
+        NetworkingHelper.getRequestFromUrl(name:Get_Login_Details_Url, urlString: Get_Login_Details_Url, callback: {[weak self] response in
              //print("\nEvent Theme Details : ",response)
+            print("Event login details : ",CommonModel.sharedInstance.getCurrentDateInMM())
 
-            self.getEventModuleData()
+            self?.getEventModuleData()
 
         }, errorBack: { error in
             CommonModel.sharedInstance.dissmissActitvityIndicator()
@@ -294,12 +296,15 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     func getEventModuleData() {
+        CommonModel.sharedInstance.showActitvityIndicator()
         let urlStr = Get_AllModuleDetails_url.appendingFormat("Flag=%@",Get_AllDetails_url)
 
-        NetworkingHelper.getRequestFromUrl(name:Get_AllModuleDetails_url, urlString: urlStr, callback: { response in
+        NetworkingHelper.getRequestFromUrl(name:Get_AllModuleDetails_url, urlString: urlStr, callback: {[weak self] response in
             // print("\n All Data response Data - ",response)
             //Check login user status accepted terms and conditions
-            self.checkLoginAttendeeStatus()
+            print("Event module details : ",CommonModel.sharedInstance.getCurrentDateInMM())
+
+            self?.checkLoginAttendeeStatus()
         }, errorBack: { error in
             CommonModel.sharedInstance.dissmissActitvityIndicator()
             CommonModel.sharedInstance.showAlertWithStatus(title: "Error", message: Internet_Error_Message, vc: self)
@@ -312,7 +317,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
 
         let parameters : NSMutableDictionary? = [ "AttendeeId": EventData.sharedInstance.attendeeId, "EventId":EventData.sharedInstance.eventId, "IsAccept" : true]
 
-        NetworkingHelper.postData(urlString:Post_TermsAndCondition_Url, param:parameters!, withHeader: false, isAlertShow: true, controller:self, callback: { response in
+        NetworkingHelper.postData(urlString:Post_TermsAndCondition_Url, param:parameters!, withHeader: false, isAlertShow: true, controller:self, callback: {[weak self] response in
             //dismiss Indicator
             CommonModel.sharedInstance.dissmissActitvityIndicator()
 
@@ -325,7 +330,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
                 //Update terms and condiiton status in database
                 DBManager.sharedInstance.updateTermsAndCoditionsAttendeeStatusIntoDB()
 
-                self.navigateToNextScreen()
+                self?.navigateToNextScreen()
             }
         }, errorBack: { error in
             //dismiss Indicator
@@ -361,7 +366,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     func navigateToNextScreen() {
-        CommonModel.sharedInstance.dissmissActitvityIndicator()
+        print("navigateToNextScreen method : ",CommonModel.sharedInstance.getCurrentDateInMM())
 
         //App login
         isAppLogin = true
@@ -379,6 +384,8 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         //Apply navigation theme
         CommonModel.sharedInstance.applyNavigationTheme()
 
+        CommonModel.sharedInstance.dissmissActitvityIndicator()
+        print("After dismiss indicator : ",CommonModel.sharedInstance.getCurrentDateInMM())
 
         let appDelegate = AppDelegate.getAppDelegateInstance();
         if IS_IPHONE {
@@ -472,7 +479,6 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
 
     func loginButtonTapped(selectedOption: String, textFieldValue: String) {
         //Download event details
-        CommonModel.sharedInstance.showActitvityIndicator()
 
         //Save Login credintial in database
         DBManager.sharedInstance.saveLoginAttendeeDataIntoDB()

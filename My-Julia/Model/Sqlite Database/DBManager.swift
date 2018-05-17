@@ -407,10 +407,13 @@ class DBManager: NSObject {
                         }
 
                         //Save Chat Attendee List
-                        if (dict.value(forKey:"attChatList") as? NSNull) == nil {                            
+                        if (dict.value(forKey:"attChatList") as? NSNull) == nil {
+                            print("Start Chat : ",CommonModel.sharedInstance.getCurrentDateInMM())
+
                             //Delete chat list
                             self.updateChatListDataFromDB()
                              self.saveChatListIntoDB(response: dict.value(forKey:"attChatList") as AnyObject, isGroupChat: 0)
+                            print("Start chat : ",CommonModel.sharedInstance.getCurrentDateInMM())
                         }
                         //Save Chat Group List
                         if (dict.value(forKey:"attGroupChatList") as? NSNull) == nil {
@@ -1086,7 +1089,7 @@ class DBManager: NSObject {
                     let name = self.isNullString(str: dict.value(forKey: "Location") as Any)
                     let image = self.appendImagePath(path: dict.value(forKey: "ImagePath") as Any)
                     let date = self.isNullString(str: dict.value(forKey: "CreatedDate") as Any)
-                    let isRead = dict.value(forKey: "IsRead")
+                    let isRead = 0 //dict.value(forKey: "IsRead")
 
                     try database.executeUpdate("INSERT OR REPLACE INTO Map (EventID, AttendeeId, Id, Name, FloorPlanImage, CreatedDate, IsRead) VALUES (?, ?, ?, ?, ?, ?, ?)", values: [eventId,EventData.sharedInstance.attendeeId, id, name, image, date, isRead ?? 0])
 
@@ -1586,6 +1589,8 @@ class DBManager: NSObject {
     func saveNotificationDataIntoDB(response: AnyObject) {
         
         if openDatabase() {
+            database.beginTransaction()
+            var sqlQuery = ""
             let eventId = EventData.sharedInstance.eventId
             
 //            //Delete local data which is deleted from admin
@@ -1598,24 +1603,29 @@ class DBManager: NSObject {
 
             for item in response as! NSArray {
                 
-                do {
+              //  do {
                     let  dict = item as! NSDictionary
                     let id = dict.value(forKey: "Id") as! String
                     let title = self.isNullString(str: dict.value(forKey: "Title") as Any)
                     let desc = self.isNullString(str: dict.value(forKey: "Message") as Any)
                     let date = self.isNullString(str: dict.value(forKey: "CreatedDate") as Any)
-                    let status = dict.value(forKey: "IsRead")
+                    let status = dict.value(forKey: "IsRead") as! Int
                    // print("Name : ",desc)
                    // print("Status : ",status)
-                    try database.executeUpdate("INSERT OR REPLACE INTO Notifications (EventID, notiId,AttendeeId, Title, Description, CreatedDate, IsRead) VALUES (?, ?, ?, ?, ?, ?, ?)", values: [eventId, id, EventData.sharedInstance.attendeeId, title , desc , date , status ?? 0])
-                    
-                } catch {
-                    print("error = \(error)")
-                }
+                  //  try database.executeUpdate("INSERT OR REPLACE INTO Notifications (EventID, notiId,AttendeeId, Title, Description, CreatedDate, IsRead) VALUES (?, ?, ?, ?, ?, ?, ?)", values: [eventId, id, EventData.sharedInstance.attendeeId, title , desc , date , status ?? 0])
+                sqlQuery += "INSERT OR REPLACE INTO Notifications (EventID, notiId,AttendeeId, Title, Description, CreatedDate, IsRead) VALUES ('\(eventId)', '\(id)','\(EventData.sharedInstance.attendeeId)', \"\(title)\",\"\(desc)\",'\(date)',\(status));"
+
+//                } catch {
+//                    print("error = \(error)")
+//                }
             }
+            if !database.executeStatements(sqlQuery) {
+                print("Failed to insert notification ",database.lastError(), database.lastErrorMessage())
+            }
+
+            database.commit()
+            database.close()
         }
-        
-        database.close()
     }
 
     func saveBroadCastNotification(data: NSDictionary) {
@@ -1702,8 +1712,10 @@ class DBManager: NSObject {
     func saveWifiDataIntoDB(response: AnyObject) {
         
         if openDatabase() {
-            let eventId = EventData.sharedInstance.eventId
+            database.beginTransaction()
 
+            let eventId = EventData.sharedInstance.eventId
+          //  var sqlQuery = ""
             //Notification data save into DB
             if response is Dictionary<String, Any> {
                 do {
@@ -1714,9 +1726,11 @@ class DBManager: NSObject {
                     let password = self.isNullString(str: dict.value(forKey: "Password") as Any)
                     let note = self.isNullString(str: dict.value(forKey: "Note") as Any)
                     let date = self.isNullString(str: dict.value(forKey: "CreatedDate") as Any)
-                    let isRead = dict.value(forKey: "IsRead")
+                    let isRead = dict.value(forKey: "IsRead") as! Int
 
-                    try database.executeUpdate("INSERT OR REPLACE INTO Wifi (EventID, Id, Name, Network, Password, Note, CreatedDate, IsRead) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", values: [eventId, id ,name , network , password , note, date, isRead])
+                     try database.executeUpdate("INSERT OR REPLACE INTO Wifi (EventID, Id, Name, Network, Password, Note, CreatedDate, IsRead) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", values: [eventId, id ,name , network , password , note, date, isRead])
+                  //  sqlQuery += "INSERT OR REPLACE INTO Wifi (EventID, Id, Name, Network, Password, Note, CreatedDate, IsRead) VALUES ('\(eventId)', '\(id)',\"\(name)\",\"\(network)\",'\(password)','\(password)','\(date)',\(isRead));"
+
                 } catch {
                     print("error = \(error)")
                 }
@@ -1740,17 +1754,24 @@ class DBManager: NSObject {
                         let password = self.isNullString(str: dict.value(forKey: "Password") as Any)
                         let note = self.isNullString(str: dict.value(forKey: "Note") as Any)
                         let date = self.isNullString(str: dict.value(forKey: "CreatedDate") as Any)
-                        let isRead = dict.value(forKey: "IsRead")
+                        let isRead = dict.value(forKey: "IsRead") as! Int
 
                         try database.executeUpdate("INSERT OR REPLACE INTO Wifi (EventID, Id, Name, Network, Password, Note, CreatedDate, IsRead) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", values: [eventId, id ,name , network , password , note, date, isRead ?? 0])
+                       // sqlQuery += "INSERT OR REPLACE INTO Wifi (EventID, Id, Name, Network, Password, Note, CreatedDate, IsRead) VALUES ('\(eventId)', '\(id)',\"\(name)\",\"\(network)\",'\(password)',\"\(note)\",'\(date)',\(isRead));"
                     } catch {
                         print("error = \(error)")
                     }
                 }
             }
+
+//            if !database.executeStatements(sqlQuery) {
+//                print("Failed to insert Wifi ",database.lastError(), database.lastErrorMessage())
+//            }
+
+            database.commit()
+            database.close()
         }
-        
-        database.close()
+
     }
 
     func fetchWifiDataFromDB() -> NSArray {
@@ -2963,7 +2984,7 @@ class DBManager: NSObject {
                 
                 while results?.next() == true {
                     
-                    let model = PhotoGallery()
+                   let model = PhotoGallery()
                     model.id = results?.string(forColumn: "Id")
                     model.iconUrl = results?.string(forColumn: "Images")
                     model.isImageDeleted = (results?.bool(forColumn: "isDeleted"))!
@@ -4351,6 +4372,7 @@ class DBManager: NSObject {
     // MARK: - Agenda/MySchedule methods
     
     func saveAgendaDataIntoDB(responce: AnyObject) {
+        print("Start saving agenda: ",CommonModel.sharedInstance.getCurrentDateInMM())
 
         if openDatabase() {
             
@@ -4363,7 +4385,11 @@ class DBManager: NSObject {
             } catch {
                 print("error = \(error)")
             }
-            
+
+            var agendaQuery = ""
+            var deleteAgendaSpeakerQuery = ""
+            var saveAgendaSpeakerQuery = ""
+
             for item in responce as! NSArray {
                 let  dict = item as! NSDictionary
                 
@@ -4388,41 +4414,62 @@ class DBManager: NSObject {
                 let sortDate = self.isNullString(str: dict.value(forKey: "SortActivityDate") as Any)
                 let isAgenda = 1
 
-                    if !self.database.executeUpdate("INSERT OR REPLACE INTO Agenda (EventID, SessionID, ActivitySessionId, ActivityID, ActivityName, AgendaId, AgendaName, Location, Day, Description, ActivityStartDate, ActivityEndDate, SortActivityDate, StartTime, EndTime, SortStartDate, SortEndDate, IsAgendaActivity) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", withArgumentsIn: [eventId, sessionId, activitySessionId, activityId, activityName, agendaId, (agendaName), location, day, description, startActivityDate, endActivityDate, sortDate, startTime, endTime, sortStartDate, sortEndDate,isAgenda]) {
-                    print("Failed to insert initial data into the database.")
-                    print(self.database.lastError(), self.database.lastErrorMessage())
-                }
-                
+                agendaQuery +=  "INSERT OR REPLACE INTO Agenda (EventID, SessionID, ActivitySessionId, ActivityID, ActivityName, AgendaId, AgendaName, Location, Day, Description, ActivityStartDate, ActivityEndDate, SortActivityDate, StartTime, EndTime, SortStartDate, SortEndDate, IsAgendaActivity) VALUES ('\(eventId)', '\(sessionId)','\(activitySessionId)','\(activityId)',\"\(activityName)\",'\(agendaId)',\"\(agendaName)\",\"\(location)\",'\(day)',\"\(description)\",'\(startActivityDate)','\(endActivityDate)','\(sortDate)','\(startTime)','\(endTime)','\(sortStartDate)','\(sortEndDate)','\(isAgenda)');"
+
+//                if !self.database.executeUpdate("INSERT OR REPLACE INTO Agenda (EventID, SessionID, ActivitySessionId, ActivityID, ActivityName, AgendaId, AgendaName, Location, Day, Description, ActivityStartDate, ActivityEndDate, SortActivityDate, StartTime, EndTime, SortStartDate, SortEndDate, IsAgendaActivity) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", withArgumentsIn: [eventId, sessionId, activitySessionId, activityId, activityName, agendaId, (agendaName), location, day, description, startActivityDate, endActivityDate, sortDate, startTime, endTime, sortStartDate, sortEndDate,isAgenda]) {
+//                    print("Failed to insert initial data into the database.")
+//                    print(self.database.lastError(), self.database.lastErrorMessage())
+//                }
+
                 //Save Speaker of the session into db
                 let speakersList = dict.value(forKey: "Speakers")
                 if (speakersList as? NSNull) == nil {
                     
                     //Remove exiting speakers of this activity then add new speaker list
-                    do {
-                        try database.executeUpdate("DELETE FROM AgendaSpeakerRelation WHERE EventID = ? AND ActivityId = ?", values: [eventId, activityId])
-                        
-                    } catch {
-                        print("error = \(error)")
-                    }
-                    
+                    deleteAgendaSpeakerQuery +=  "DELETE FROM AgendaSpeakerRelation WHERE EventID = '\(eventId)' AND ActivityId = '\(activityId)';"
+
+//                    do {
+//                        try database.executeUpdate("DELETE FROM AgendaSpeakerRelation WHERE EventID = ? AND ActivityId = ?", values: [eventId, activityId])
+//
+//                    } catch {
+//                        print("error = \(error)")
+//                    }
+
                     if speakersList is Array<Any> {
                         for item in speakersList as! NSArray {
-                            do {
+                       // do {
                                 if item is NSDictionary {
                                     let  dict = item as! NSDictionary
                                     let speakerId = self.isNullString(str: dict.value(forKey: "SpeakerID") as Any)
-                                    try database.executeUpdate("insert or replace into AgendaSpeakerRelation (EventID, ActivityId, SpeakerId) VALUES (?, ?, ?)", values: [eventId, activityId, speakerId ])
+                                   // try database.executeUpdate("insert or replace into AgendaSpeakerRelation (EventID, ActivityId, SpeakerId) VALUES (?, ?, ?)", values: [eventId, activityId, speakerId ])
+                                    saveAgendaSpeakerQuery +=  "INSERT OR REPLACE INTO AgendaSpeakerRelation (EventID, ActivityId, SpeakerId) VALUES ('\(eventId)','\(activityId)','\(speakerId)');"
+
                                 }
-                            } catch {
-                                print("error = \(error)")
-                            }
+//                            } catch {
+//                                print("error = \(error)")
+//                            }
                         }
                     }
                 }
             }
+
+            if !database.executeStatements(agendaQuery) {
+                print("Failed to insert Agenda data into the database.")
+                print(self.database.lastError(), self.database.lastErrorMessage())
+            }
+            if !database.executeStatements(deleteAgendaSpeakerQuery) {
+                print("Failed to delete speker Agenda data into the database.")
+                print(self.database.lastError(), self.database.lastErrorMessage())
+            }
+            if !database.executeStatements(saveAgendaSpeakerQuery) {
+                print("Failed to save insert speaker Agenda data into the database.")
+                print(self.database.lastError(), self.database.lastErrorMessage())
+            }
+
+            database.commit()
+            database.close()
         }
-        database.commit()
-        database.close()
+        print("Finish saving agenda: ",CommonModel.sharedInstance.getCurrentDateInMM())
     }
 
     func fetchAllScheduleListFromDB(isAddedMySchedule: Bool) -> NSArray {
@@ -4848,12 +4895,19 @@ class DBManager: NSObject {
 //    }
     
     func isNullString(str : Any) -> String {
-        
+        var finalStr = ""
+
         if (str as? NSNull) == nil {
-            return (str as? String)!
+
+            //do {
+                finalStr = str as! String
+//            }
+//            catch {
+//                print("The string is null")
+//            }
         }
         
-        return ""
+        return finalStr
     }
 
 }

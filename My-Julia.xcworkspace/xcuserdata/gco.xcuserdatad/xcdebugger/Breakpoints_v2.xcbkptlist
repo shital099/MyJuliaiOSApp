@@ -84,7 +84,7 @@
                   moduleName = "My-Julia"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/gco/Shital%20Jadhav/JuliaApp_8Dec/MyJuliaiOSApp/My-Julia/View%20Controller/Speakers/SpeakerDetailsViewController.swift"
-                  timestampString = "548082197.847295"
+                  timestampString = "548233801.638472"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "68"
@@ -99,7 +99,7 @@
                   moduleName = "My-Julia"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/gco/Shital%20Jadhav/JuliaApp_8Dec/MyJuliaiOSApp/My-Julia/View%20Controller/Speakers/SpeakerDetailsViewController.swift"
-                  timestampString = "548082197.849246"
+                  timestampString = "548233801.641589"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "70"
@@ -116,60 +116,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "My-Julia/View Controller/Agenda/AgendaViewController.swift"
-            timestampString = "548053760.645936"
+            timestampString = "548240502.919832"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "274"
-            endingLineNumber = "274"
+            startingLineNumber = "269"
+            endingLineNumber = "269"
             landmarkName = "onClickOfAddToScheduleBtn(sender:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "My-Julia/AppDelegate.swift"
-            timestampString = "548082197.20172"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "310"
-            endingLineNumber = "310"
-            landmarkName = "application(_:didReceiveRemoteNotification:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "My-Julia/Model/Sqlite Database/DBManager.swift"
-            timestampString = "548082197.201793"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1721"
-            endingLineNumber = "1721"
-            landmarkName = "saveWifiDataIntoDB(response:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "My-Julia/Model/Sqlite Database/DBManager.swift"
-            timestampString = "548082197.2018501"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1709"
-            endingLineNumber = "1709"
-            landmarkName = "saveWifiDataIntoDB(response:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -212,7 +164,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "My-Julia/View Controller/UserPro/UserProfileViewController.swift"
-            timestampString = "548082197.2019989"
+            timestampString = "548140425.271511"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "205"

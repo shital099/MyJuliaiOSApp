@@ -14,8 +14,7 @@ import UserNotificationsUI //framework to customize the notification
 //    func sideMenuControllerDidHide(_ sideMenuController: SideMenuController)
 //    func sideMenuControllerDidReveal(_ sideMenuController: SideMenuController)
 //}
-//let BroadcastNotification = NSNotification.Name(rawValue: "BroadcastMessageNotificationReceived")
-//let ChatNotification = NSNotification.Name(rawValue: "ChatMessageNotificationReceived")
+
 let OtherModuleNotification = NSNotification.Name(rawValue: "OpenNotificationReceived")
 let ShowNotificationCount = NSNotification.Name(rawValue: "OtherNotificationReceived")
 let UpdateNotificationCount = NSNotification.Name(rawValue: "UpdateNotificationCountReceived")
@@ -249,11 +248,7 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
         //Add First section - User related module data
         let section1:TKSideDrawerSection = drawer.addSection(withTitle: "MY ITEMS")
         let section2:TKSideDrawerSection = drawer.addSection(withTitle: "EVENT GUIDE")
-        //        var section1:TKSideDrawerSection!
-        //        var section2:TKSideDrawerSection!
-        //        var isSection1Add = false
-        //        var isSection2Add = false
-        
+
         //Fetch data from Sqlite database
         let listArray : [Modules] = DBManager.sharedInstance.fetchModulesDataFromDB() as! [Modules]
         
@@ -275,15 +270,8 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
             //remove icon cache images
             SDImageCache.shared().removeImage(forKey: sideDrawerItem.smallIconImage, withCompletion: nil)
 
-
             if data.isUserRelated == true {
-                
-                //                if isSection1Add == false {
-                //                     isSection1Add = true
-                //                    section1 = drawer.addSection(withTitle: "MY ITEMS")
-                //                }
                 section1.addItem(sideDrawerItem)
-                
                 //Check My schedule, reminder and my notes menu added or not
                 let viewController = CommonModel.sharedInstance.fetchViewControllerObject(moduleId: sideDrawerItem.moduleId)
                 if viewController is AgendaViewController {
@@ -297,12 +285,6 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 }
             }
             else {
-                
-                //                if isSection2Add == false {
-                //                    isSection2Add = true
-                //                    section2 = drawer.addSection(withTitle: "EVENT GUIDE")
-                //                }
-
                 //Check Agenda menu added or not
                 let viewController = CommonModel.sharedInstance.fetchViewControllerObject(moduleId: sideDrawerItem.moduleId)
                 if viewController is AgendaViewController {
@@ -480,9 +462,9 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
                             CredentialHelper.shared.removeAllCredentials()
 
                             //Remove notification observer
-//                            NotificationCenter.default.removeObserver(self, name: BroadcastNotification, object: nil)
-//                            NotificationCenter.default.removeObserver(self, name: ChatNotification, object: nil)
-//                            NotificationCenter.default.removeObserver(self, name: OtherModuleNotification, object: nil)
+                            NotificationCenter.default.removeObserver(self, name: ShowNotificationCount, object: nil)
+                            NotificationCenter.default.removeObserver(self, name: UpdateNotificationCount, object: nil)
+                            NotificationCenter.default.removeObserver(self, name: OtherModuleNotification, object: nil)
 
                             //Default navigation bar color
                             CommonModel.sharedInstance.applyDefaultNavigationTheme()
@@ -839,6 +821,10 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
             else if viewController is NotificationViewController {
                 sideDrawerItem.dataCount = DBManager.sharedInstance.fetchUnreadNotificationsCount()
             }
+
+//            let indexPath = IndexPath.init(row: sideDrawerItem.moduleIndex, section: 1)
+//            self.tableView.reloadRows(at: [indexPath as IndexPath], with: UITableViewRowAnimation.automatic)
+
             self.tableView.reloadData()
         }
     }
@@ -870,6 +856,42 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
         else if flag == Update_Broadcast_List {
             sideDrawerItem.dataCount = DBManager.sharedInstance.fetchUnreadNotificationsCount()
         }
+        else {
+
+            //Fetch all module data and update side menu list when app open in foreground
+            for item in section.items {
+                let sideDrawerItem = item as! SideDrawerMenu
+                print("Before update Side menu count : ",sideDrawerItem.dataCount)
+
+                let viewController = CommonModel.sharedInstance.fetchViewControllerObject(moduleId: sideDrawerItem.moduleId)
+
+                if viewController is ChatListViewController {
+                    sideDrawerItem.dataCount = DBManager.sharedInstance.fetchChatUnreadListCount()
+                    isChatPresent = true
+                }
+                else if viewController is MapViewController {
+                    sideDrawerItem.dataCount = DBManager.sharedInstance.fetchMapUnreadListCount()
+                }
+                else if viewController is DocumentsListViewController {
+                    sideDrawerItem.dataCount = DBManager.sharedInstance.fetchUnreadDocumentCount()
+                }
+                else if viewController is WiFiViewController {
+                    sideDrawerItem.dataCount = DBManager.sharedInstance.fetchUnreadWiFiCount()
+                }
+                else if viewController is ActivityFeedListViewController {
+                    sideDrawerItem.dataCount = DBManager.sharedInstance.fetchUnreadActivityFeedsCount()
+                }
+                else if viewController is NotificationViewController {
+                    sideDrawerItem.dataCount = DBManager.sharedInstance.fetchUnreadNotificationsCount()
+                }
+
+                print("After update Side menu count : ",sideDrawerItem.dataCount)
+                print("module name : ",viewController.title)
+
+//                let indexPath = IndexPath.init(row: sideDrawerItem.moduleIndex, section: 1)
+//                self.tableView.reloadRows(at: [indexPath as IndexPath], with: UITableViewRowAnimation.automatic)
+            }
+        }
 
         self.tableView.reloadData()
     }
@@ -886,7 +908,7 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
             //create new selected row
             selectedIndexPath = IndexPath.init(row: moduleOrder - 1, section: 1)
-            self.tableView.reloadRows(at: [selectedIndexPath as IndexPath], with: UITableViewRowAnimation.automatic)
+//            self.tableView.reloadRows(at: [selectedIndexPath as IndexPath], with: UITableViewRowAnimation.automatic)
 
             //Call delegate method when menu item selected
             self.menuItemSelected(index: selectedIndexPath.row, section: selectedIndexPath.section)
