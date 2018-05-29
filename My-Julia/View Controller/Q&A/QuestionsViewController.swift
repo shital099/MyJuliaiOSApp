@@ -345,10 +345,10 @@ class QuestionsViewController: UIViewController, UITableViewDataSource, UITableV
     func fetchActivityQuestionList() {
         
         let urlStr = GetQuestions_List_url.appendingFormat("%@",self.sessionModel.activityId)
-        NetworkingHelper.getRequestFromUrl(name:GetQuestions_List_url,  urlString:urlStr, callback: { response in
+        NetworkingHelper.getRequestFromUrl(name:GetQuestions_List_url,  urlString:urlStr, callback: { [weak self] response in
 
-            self.listArray = DBManager.sharedInstance.fetchSessionQuestionsListFromDB(sessionId: self.sessionModel.sessionId, activityId: self.sessionModel.activityId)
-            self.tableView.reloadData()
+            self?.listArray = DBManager.sharedInstance.fetchSessionQuestionsListFromDB(sessionId: (self?.sessionModel.sessionId)!, activityId: (self?.sessionModel.activityId)!)
+            self?.tableView.reloadData()
             
         }, errorBack: { error in
             NSLog("error : %@", error)
@@ -358,10 +358,10 @@ class QuestionsViewController: UIViewController, UITableViewDataSource, UITableV
     func fetchLatestActivityQuestionList() {
         let paramDict = ["ActivityId":self.sessionModel.activityId  ,"AttendeeId":AttendeeInfo.sharedInstance.attendeeId, "EventId":EventData.sharedInstance.eventId, "Session" : 0, "dtLastDate" : "", "Seconds": Question_History_Time] as [String : Any]
         
-        NetworkingHelper.postData(urlString: Get_Latest_Questions_List_url, param:paramDict as AnyObject, withHeader: false, isAlertShow: false, controller:self, callback: { response in
-            self.listArray = DBManager.sharedInstance.fetchSessionQuestionsListFromDB(sessionId: self.sessionModel.sessionId, activityId: self.sessionModel.activityId)
-            self.totalCountLbl.text = String(format: "%d QUESTIONS", self.listArray.count)
-            self.tableView.reloadData()
+        NetworkingHelper.postData(urlString: Get_Latest_Questions_List_url, param:paramDict as AnyObject, withHeader: false, isAlertShow: false, controller:self, callback: { [weak self] response in
+            self?.listArray = DBManager.sharedInstance.fetchSessionQuestionsListFromDB(sessionId: (self?.sessionModel.sessionId)!, activityId: (self?.sessionModel.activityId)!)
+            self?.totalCountLbl.text = String(format: "%d QUESTIONS", (self?.listArray.count)!)
+            self?.tableView.reloadData()
         }, errorBack: { error in
         })
     }
@@ -419,15 +419,15 @@ class QuestionsViewController: UIViewController, UITableViewDataSource, UITableV
         let paramDict = ["Question": queTextView.text ,"ActivityId":self.sessionModel.activityId, "CreatedBy": AttendeeInfo.sharedInstance.attendeeId, "EventId":EventData.sharedInstance.eventId, "Session":0] as [String : Any]
         print("Post Question : ",paramDict)
 
-        NetworkingHelper.postData(urlString:PostQuestion_List_url, param:paramDict as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { response in
+        NetworkingHelper.postData(urlString:PostQuestion_List_url, param:paramDict as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { [weak self] response in
             //dissmiss Indicator
             CommonModel.sharedInstance.dissmissActitvityIndicator()
 
             let responseCode = Int(response.value(forKey: "responseCode") as! String)
             if responseCode == 0 {
                 //Show message posted alert message
-                self.showStatus(message: Question_Sent_Message, timeout: 1.0)
-                self.fetchLatestActivityQuestionList()
+                self?.showStatus(message: Question_Sent_Message, timeout: 1.0)
+                self?.fetchLatestActivityQuestionList()
             }
         }, errorBack: { error in
         })
@@ -440,20 +440,20 @@ class QuestionsViewController: UIViewController, UITableViewDataSource, UITableV
         
         let paramDict = ["QuestionId": questionId ,"ActivityId":self.sessionModel.activityId, "CreatedBy": AttendeeInfo.sharedInstance.attendeeId, "EventId":EventData.sharedInstance.eventId] as [String : Any]
 
-        NetworkingHelper.postData(urlString:LikeQuestion_List_url, param:paramDict as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { response in
+        NetworkingHelper.postData(urlString:LikeQuestion_List_url, param:paramDict as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { [weak self] response in
             //dissmiss Indicator
             CommonModel.sharedInstance.dissmissActitvityIndicator()
 
             let responseCode = Int(response.value(forKey: "responseCode") as! String)
             if responseCode == 0 {
-                let model = self.listArray[index] as! Questions
+                let model = self?.listArray[index] as! Questions
                 model.isUserLike = !model.isUserLike
                 model.queCount = model.isUserLike == false ? model.queCount-1 : model.queCount + 1
-                self.listArray.replaceObject(at: index, with: model)
+                self?.listArray.replaceObject(at: index, with: model)
 
                 DBManager.sharedInstance.updateActivityQuestionsDataIntoDB(isLikes: model.isUserLike, questionCount : String(model.queCount), quesId: model.queId, activityId: model.activityId)
 
-                self.tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: UITableViewRowAnimation.none)
+                self?.tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: UITableViewRowAnimation.none)
             }
         }, errorBack: { error in
         })

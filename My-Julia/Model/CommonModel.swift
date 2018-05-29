@@ -263,8 +263,8 @@ class CommonModel: NSObject {
         alert.dismissMode = TKAlertDismissMode.tap
         // << alert-dismiss-swift
         
-        alert.title = title
-        alert.message = message
+        alert.title = title as NSString
+        alert.message = message as NSString
         //alert.contentView.fill = TKSolidFill(color: colors[alertType])
         //alert.headerView.fill = TKSolidFill(color: colors[alertType])
         alert.contentView.fill = TKSolidFill(color: AppTheme.sharedInstance.menuBackgroundColor)

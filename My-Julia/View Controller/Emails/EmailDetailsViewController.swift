@@ -40,7 +40,7 @@ class EmailDetailsViewController: UIViewController, UITableViewDataSource, UITab
     
     //    func getEmailAttachment() {
     //
-    //        NetworkingHelper.getRequestFromUrl(name:Email_List_url, urlString: Email_List_url.appendingFormat(EventData.sharedInstance.attendeeId), callback: { response in
+    //        NetworkingHelper.getRequestFromUrl(name:Email_List_url, urlString: Email_List_url.appendingFormat(EventData.sharedInstance.attendeeId), callback: { [weak self] response in
     //
     //    if response is NSDictionary {
     //    if (response.value(forKey: "Path") != nil) {

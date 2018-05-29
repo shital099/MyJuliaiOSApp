@@ -106,14 +106,14 @@ class SessionListViewController: UIViewController, UITableViewDataSource, UITabl
     func fetchAllCompletedSessionList() {
 
         let urlStr = Get_AllModuleDetails_url.appendingFormat("Flag=%@",GetQuestionActivities_url)
-        NetworkingHelper.getRequestFromUrl(name:GetQuestionActivities_url,  urlString:urlStr, callback: { response in
+        NetworkingHelper.getRequestFromUrl(name:GetQuestionActivities_url,  urlString:urlStr, callback: { [weak self] response in
             CommonModel.sharedInstance.dissmissActitvityIndicator()
 
             //   print("Questions Activities:", response)
             // Bounce back to the main thread to update the UI
             DispatchQueue.main.async {
                 //Fetch all completed activity from db
-                self.sortData(dataArray: DBManager.sharedInstance.fetchAllPastActivitiesDataFromDB())
+                self?.sortData(dataArray: DBManager.sharedInstance.fetchAllPastActivitiesDataFromDB())
             }
         }, errorBack: { error in
             NSLog("error : %@", error)

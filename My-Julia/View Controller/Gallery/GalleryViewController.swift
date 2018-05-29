@@ -13,7 +13,7 @@ import Crashlytics
 
 private let reuseIdentifier = "CellIndentifier"
 
-class GalleryViewController: TKExamplesExampleViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+class GalleryViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     var cellColor = true
     
     @IBOutlet weak var bgImageView: UIImageView!
@@ -21,38 +21,36 @@ class GalleryViewController: TKExamplesExampleViewController, UIImagePickerContr
     @IBOutlet weak var collectionView: UICollectionView!
 
     let picker = UIImagePickerController()
-    lazy var lazyImage:LazyImage = LazyImage()
+   // lazy var lazyImage:LazyImage = LazyImage()
 
     var isRefreshList : Bool = true
     var actionSheetContoller : UIAlertController!
-    var listView = TKListView()
-    var dataSource = TKDataSource()
-    var layout = TKListViewGridLayout()
+//    var listView = TKListView()
+//    var dataSource = TKDataSource()
+//    var layout = TKListViewGridLayout()
 
-    var listArray:[PhotoGallery] = []
-    
+    private var listArray:[PhotoGallery]!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
         //Show menu icon in ipad and iphone
         self.setupMenuBarButtonItems()
-         self.addOption("Scale in", action: scaleInSelected)
+      //   self.addOption("Scale in", action: scaleInSelected)
 
-//        if IS_IPHONE {
-//            self.setupMenuBarButtonItems()
-//
-//            self.addOption("Scale in", action: scaleInSelected)
-//        }
-        
         CommonModel.sharedInstance.applyThemeOnScreen(viewController: self, bgImage: bgImageView)
         
         //Fetch data from Sqlite database
-        listArray = DBManager.sharedInstance.fetchGalleryDataFromDB() as! [PhotoGallery]
+         DBManager.sharedInstance.fetchGalleryDataFromDB(callback: { [weak self] array in
+            self?.listArray = array as! [PhotoGallery]
+            })
 
-        if listArray.count != 0 {
-            self.dataSource.itemSource = listArray
-           // self.showPhotosIntoListView()
-        }
+        print("Data Count : ",listArray.count)
+
+//        if listArray.count != 0 {
+//            self.dataSource.itemSource = listArray
+//           // self.showPhotosIntoListView()
+//        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -78,6 +76,8 @@ class GalleryViewController: TKExamplesExampleViewController, UIImagePickerContr
 
     override func viewDidDisappear(_ animated: Bool) {
        // self.listView = nil
+      //  self.listArray.removeAll()
+       // self.listArray = nil
     }
 
     func setupMenuBarButtonItems() {
@@ -105,11 +105,12 @@ class GalleryViewController: TKExamplesExampleViewController, UIImagePickerContr
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+        SDImageCache.shared().clearMemory()
     }
     
     override func didRotate(from fromInterfaceOrientation: UIInterfaceOrientation) {
         
-        self.setListViewItemSize()
+       // self.setListViewItemSize()
     }
 
     // MARK: - Navigation
@@ -125,149 +126,137 @@ class GalleryViewController: TKExamplesExampleViewController, UIImagePickerContr
     
     // MARK: - ListView animation Methods
     
-    func showPhotosIntoListView() {
-        
-        // Do any additional setup after loading the view.
-        // self.dataSource.loadData(fromJSONResource: "ListViewSampleData", ofType: "json", rootItemKeyPath: "photos")
-        
-        self.dataSource.settings.listView.createCell { (listView: TKListView, indexPath: IndexPath, item: Any) -> TKListViewCell? in
-            return listView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! TKListViewCell?
-        }
-        
-        self.dataSource.settings.listView.initCell { (listView: TKListView, indexPath: IndexPath, cell: TKListViewCell, item: Any) -> Void in
-            
-            listView.backgroundColor = UIColor.clear
-            cell.backgroundColor = UIColor.clear
-            let model = self.listArray[indexPath.row]
-            
-            cell.imageView.tag = indexPath.item
-            
-            let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.imageTapped(tapGestureRecognizer:)))
-            cell.imageView.isUserInteractionEnabled = true
-            cell.imageView.addGestureRecognizer(tapGestureRecognizer)
-            
-            if model.isImageDeleted == true {
-                cell.imageView.image = UIImage(named: "no_image")
-            }
-            else {
-                if !model.iconUrl.isEmpty {
-                    cell.imageView.sd_setImage(with: NSURL(string:model.iconUrl) as URL?, placeholderImage: #imageLiteral(resourceName: "no_image"))
-                    //cell.imageView.contentMode = .scaleAspectFit
-                }
-            }
-        }
+//    func showPhotosIntoListView() {
+//
+//        // Do any additional setup after loading the view.
+//        // self.dataSource.loadData(fromJSONResource: "ListViewSampleData", ofType: "json", rootItemKeyPath: "photos")
+//
+//        self.dataSource.settings.listView.createCell { (listView: TKListView, indexPath: IndexPath, item: Any) -> TKListViewCell? in
+//            return listView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! TKListViewCell?
+//        }
+//
+//        self.dataSource.settings.listView.initCell { (listView: TKListView, indexPath: IndexPath, cell: TKListViewCell, item: Any) -> Void in
+//
+//            listView.backgroundColor = UIColor.clear
+//            cell.backgroundColor = UIColor.clear
+//            let model = self.listArray[indexPath.row]
+//
+//            cell.imageView.tag = indexPath.item
+//
+//            let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.imageTapped(tapGestureRecognizer:)))
+//            cell.imageView.isUserInteractionEnabled = true
+//            cell.imageView.addGestureRecognizer(tapGestureRecognizer)
+//
+//            if model.isImageDeleted == true {
+//                cell.imageView.image = UIImage(named: "no_image")
+//            }
+//            else {
+//                if !model.iconUrl.isEmpty {
+//                    cell.imageView.sd_setImage(with: NSURL(string:model.iconUrl) as URL?, placeholderImage: #imageLiteral(resourceName: "no_image"))
+//                    //cell.imageView.contentMode = .scaleAspectFit
+//                }
+//            }
+//        }
+//
+//            self.listView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height: self.view.bounds.size.height)
+//            self.listView.backgroundColor = UIColor.clear
+//            self.listView.autoresizingMask = UIViewAutoresizing(rawValue: UIViewAutoresizing.flexibleWidth.rawValue | UIViewAutoresizing.flexibleHeight.rawValue)
+//            self.listView.dataSource = self.dataSource
+//            self.listView.register(AnimationListCell.self, forCellWithReuseIdentifier: "cell")
+//            self.view.addSubview(self.listView)
+//
+//      //  if listArray.count != 0 {
+//            self.setListViewItemSize()
+//      //  }
+//    }
+//
+//    func setListViewItemSize() {
+//
+//        var noOfGrid = 5
+//        if IS_IPAD {
+//            noOfGrid = Int((AppDelegate.getAppDelegateInstance().window?.frame.width)! / 120)
+//            if noOfGrid <= 4 {
+//                noOfGrid = 6
+//            }
+//            layout.itemSize.height = 80
+//        }
+//        else {
+//            noOfGrid = Int(self.view.frame.size.width/80)
+//            layout.itemSize.height = 80
+//        }
+//
+//        //layout.spanCount = Int(self.listView.frame.size.width / layout.itemSize.width)
+//        layout.spanCount = Int(noOfGrid)
+//        layout.itemSpacing = 7
+//        layout.lineSpacing = 7
+//        layout.headerReferenceSize = CGSize(width: 10, height:10)
+//        //layout.dynamicItemSize = true
+//
+//        // layout.itemSize = CGSize(width: 80, height:80)
+//
+//        // >> listview-alignment-swift
+//        layout.itemAlignment = TKListViewItemAlignment.center
+//        // << listview-alignment-swift
+//
+//        layout.itemAppearAnimation = TKListViewItemAnimation.scale
+//
+//        // >> listview-animation-duration-swift
+//        layout.animationDuration = 0.4
+//        // << listview-animation-duration-swift
+//
+//        self.listView.layout = layout
+//        self.listView.reloadData()
+//    }
+//
+//    func fadeInSelected() {
+//        let layout = listView.layout as! TKListViewLinearLayout
+//        layout.itemAppearAnimation = TKListViewItemAnimation.fade
+//        layout.itemInsertAnimation = TKListViewItemAnimation.fade
+//        layout.itemDeleteAnimation = TKListViewItemAnimation.fade
+//    }
+//
+//    func slideInSelected() {
+//        let layout = listView.layout as! TKListViewLinearLayout
+//        layout.itemAppearAnimation = TKListViewItemAnimation.slide
+//        layout.itemInsertAnimation = TKListViewItemAnimation.slide
+//        layout.itemInsertAnimation = TKListViewItemAnimation.slide
+//    }
+//
+//    func scaleInSelected() {
+//        let layout = listView.layout as! TKListViewLinearLayout
+//        // >> listview-appear-swift
+//        layout.itemAppearAnimation = TKListViewItemAnimation.scale
+//        // << listview-appear-swift
+//
+//        // >> listview-insert-swift
+//        layout.itemInsertAnimation = TKListViewItemAnimation.scale
+//        // << listview-insert-swift
+//
+//        // >> listview-delete-swift
+//        layout.itemInsertAnimation = TKListViewItemAnimation.scale
+//        // << listview-delete-swift
+//
+//    }
 
-            self.listView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height: self.view.bounds.size.height)
-            self.listView.backgroundColor = UIColor.clear
-            self.listView.autoresizingMask = UIViewAutoresizing(rawValue: UIViewAutoresizing.flexibleWidth.rawValue | UIViewAutoresizing.flexibleHeight.rawValue)
-            self.listView.dataSource = self.dataSource
-            self.listView.register(AnimationListCell.self, forCellWithReuseIdentifier: "cell")
-            self.view.addSubview(self.listView)
-
-      //  if listArray.count != 0 {
-            self.setListViewItemSize()
-      //  }
-    }
-    
-    func setListViewItemSize() {
-
-        var noOfGrid = 5
-        if IS_IPAD {
-            noOfGrid = Int((AppDelegate.getAppDelegateInstance().window?.frame.width)! / 120)
-            if noOfGrid <= 4 {
-                noOfGrid = 6
-            }
-            layout.itemSize.height = 80
-        }
-        else {
-            noOfGrid = Int(self.view.frame.size.width/80)
-            layout.itemSize.height = 80
-        }
-        
-        //layout.spanCount = Int(self.listView.frame.size.width / layout.itemSize.width)
-        layout.spanCount = Int(noOfGrid)
-        layout.itemSpacing = 7
-        layout.lineSpacing = 7
-        layout.headerReferenceSize = CGSize(width: 10, height:10)
-        //layout.dynamicItemSize = true
-        
-        // layout.itemSize = CGSize(width: 80, height:80)
-        
-        // >> listview-alignment-swift
-        layout.itemAlignment = TKListViewItemAlignment.center
-        // << listview-alignment-swift
-        
-        layout.itemAppearAnimation = TKListViewItemAnimation.scale
-        
-        // >> listview-animation-duration-swift
-        layout.animationDuration = 0.4
-        // << listview-animation-duration-swift
-
-        self.listView.layout = layout
-        self.listView.reloadData()
-    }
-    
-    func fadeInSelected() {
-        let layout = listView.layout as! TKListViewLinearLayout
-        layout.itemAppearAnimation = TKListViewItemAnimation.fade
-        layout.itemInsertAnimation = TKListViewItemAnimation.fade
-        layout.itemDeleteAnimation = TKListViewItemAnimation.fade
-    }
-    
-    func slideInSelected() {
-        let layout = listView.layout as! TKListViewLinearLayout
-        layout.itemAppearAnimation = TKListViewItemAnimation.slide
-        layout.itemInsertAnimation = TKListViewItemAnimation.slide
-        layout.itemInsertAnimation = TKListViewItemAnimation.slide
-    }
-    
-    func scaleInSelected() {
-        let layout = listView.layout as! TKListViewLinearLayout
-        // >> listview-appear-swift
-        layout.itemAppearAnimation = TKListViewItemAnimation.scale
-        // << listview-appear-swift
-        
-        // >> listview-insert-swift
-        layout.itemInsertAnimation = TKListViewItemAnimation.scale
-        // << listview-insert-swift
-        
-        // >> listview-delete-swift
-        layout.itemInsertAnimation = TKListViewItemAnimation.scale
-        // << listview-delete-swift
-        
-    }
-    
     // MARK: - Web service Methods
 
     func getGalleryInfoListData() {
         
-//        let urlStr = Get_AllModuleDetails_url.appendingFormat("Flag=%@",PhotoGallery_List_url)
-//        NetworkingHelper.getRequestFromUrl(name:PhotoGallery_List_url,  urlString: urlStr, callback: { response in
-//            if response is Array<Any> {
-//                //Fetch data from Sqlite database
-//                let arr = DBManager.sharedInstance.fetchGalleryDataFromDB() as! [PhotoGallery]
-//                if arr.count != self.listArray.count {
-//                    self.listArray = arr
-//                    // if self.listArray.count != 0 {
-//                   // DispatchQueue.main.async  {
-//                        self.dataSource.itemSource = self.listArray
-//                        self.showPhotosIntoListView()
-//                   // }
-//                }
-//            }
-//        }, errorBack: { error in
-//            NSLog("error : %@", error)
-//            if self.listArray.count != 0 {
-//                self.dataSource.itemSource = self.listArray
-//                self.showPhotosIntoListView()
-//            }
-//        })
-
         let urlStr = Get_AllModuleDetails_url.appendingFormat("Flag=%@",PhotoGallery_List_url)
         NetworkingHelper.getRequestFromUrl(name:PhotoGallery_List_url,  urlString: urlStr, callback: { [weak self] response in
             if response is Array<Any> {
                 //Fetch data from Sqlite database
-                self?.listArray = DBManager.sharedInstance.fetchGalleryDataFromDB() as! [PhotoGallery]
+                //self?.listArray = DBManager.sharedInstance.fetchGalleryDataFromDB() as! [PhotoGallery]
+                //Fetch data from Sqlite database
+                DBManager.sharedInstance.fetchGalleryDataFromDB(callback: { [weak self] array in
+                    self?.listArray = array as! [PhotoGallery]
+
+//                    if (array as NSArray).count != 0 {
+//                        self?.listArray.removeAll()
+//                        self?.listArray = array as! [PhotoGallery]
+//                    }
+                })
+
                 self?.collectionView.reloadData()
             }
         }, errorBack: { error in

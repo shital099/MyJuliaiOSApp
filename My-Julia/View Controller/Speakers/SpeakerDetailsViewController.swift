@@ -65,11 +65,11 @@ class SpeakerDetailsViewController: UIViewController, UITableViewDataSource, UIT
     
     func getSpeakerDetailsData() {
         
-        NetworkingHelper.getRequestFromUrl(name:Speakers_Details_url,  urlString: Speakers_Details_url.appendingFormat(self.personModel.speakerId), callback: { response in
+        NetworkingHelper.getRequestFromUrl(name:Speakers_Details_url,  urlString: Speakers_Details_url.appendingFormat(self.personModel.speakerId), callback: { [weak self] response in
 
-            self.personModel = DBManager.sharedInstance.fetchSpeakersDetailsFromDB(speakerId: self.personModel.speakerId, attendeeId: self.personModel.personId)
+            self?.personModel = DBManager.sharedInstance.fetchSpeakersDetailsFromDB(speakerId: (self?.personModel.speakerId)!, attendeeId: (self?.personModel.personId)!)
 
-            self.tableViewObj.reloadData()
+            self?.tableViewObj.reloadData()
         }, errorBack: { error in
         })
     }

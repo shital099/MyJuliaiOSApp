@@ -302,20 +302,20 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
         }
         print("Delete parameter : ",paramArray)
 
-        NetworkingHelper.postData(urlString:Chat_Delete_Messages, param:paramArray as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { response in
+        NetworkingHelper.postData(urlString:Chat_Delete_Messages, param:paramArray as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { [weak self] response in
             print("Delete Chat message response : ", response)
 
             let responseCode = Int(response.value(forKey: "responseCode") as! String)
             if responseCode == 0 {
                 DBManager.sharedInstance.deleteChatMessageDataFromDB(chatId: paramArray as NSArray)
-                self.deleteMsgArray.removeAllObjects()
+                self?.deleteMsgArray.removeAllObjects()
 
                 //Fetch all chat history from database
-                self.chatModel.dataSource = NSMutableArray(array: DBManager.sharedInstance.fetchChatHistoryMessages(groupId: self.chatGroupModel.groupId, fromId: self.chatGroupModel.fromId, isGroupChat: self.chatGroupModel.isGroupChat, lastFetchTime: "All") as! [UUMessageFrame])
-                self.chatTableView?.reloadData()
-                self.tableViewScrollToBottom()
+                self?.chatModel.dataSource = NSMutableArray(array: DBManager.sharedInstance.fetchChatHistoryMessages(groupId: (self?.chatGroupModel.groupId)!, fromId: (self?.chatGroupModel.fromId)!, isGroupChat: (self?.chatGroupModel.isGroupChat)!, lastFetchTime: "All") as! [UUMessageFrame])
+                self?.chatTableView?.reloadData()
+                self?.tableViewScrollToBottom()
 
-                self.navigationItem.rightBarButtonItem = nil
+                self?.navigationItem.rightBarButtonItem = nil
             }
         },
                                   errorBack: { error in
@@ -330,15 +330,15 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
         if self.chatGroupModel.isGroupChat {
 //            let urlStr = Chat_Group_History.appendingFormat("FromId=%@&ToId=%@&EventId=%@", self.chatGroupModel.fromId,self.chatGroupModel.groupId,EventData.sharedInstance.eventId)
 //
-//            NetworkingHelper.getRequestFromUrl(name:Chat_Group_History,  urlString:urlStr, callback: { response in
+//            NetworkingHelper.getRequestFromUrl(name:Chat_Group_History,  urlString:urlStr, callback: { [weak self] response in
 
                 let paramDict = ["ToId":self.chatGroupModel.groupId] as [String : Any]
 
-                NetworkingHelper.postData(urlString:Chat_Group_History, param:paramDict as AnyObject, withHeader: false, isAlertShow: false, controller:self, callback: { response in
+                NetworkingHelper.postData(urlString:Chat_Group_History, param:paramDict as AnyObject, withHeader: false, isAlertShow: false, controller:self, callback: { [weak self] response in
 
                   //  print("Group Chat history  : ",response)
                 if response is Array<Any> {
-                    self.parseChatHistoryData(response: response, isChatHistory:  true)
+                    self?.parseChatHistoryData(response: response, isChatHistory:  true)
                 }
             }, errorBack: { error in
                 NSLog("error : %@", error)
@@ -347,13 +347,13 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
         else {
 //            let urlStr = Chat_History.appendingFormat("FromId=%@&ToId=%@&EventId=%@", self.chatGroupModel.fromId,self.chatGroupModel.groupId,EventData.sharedInstance.eventId)
 //
-//            NetworkingHelper.getRequestFromUrl(name:Chat_History,  urlString:urlStr, callback: { response in
+//            NetworkingHelper.getRequestFromUrl(name:Chat_History,  urlString:urlStr, callback: { [weak self] response in
                 let paramDict = ["ToId":self.chatGroupModel.groupId] as [String : Any]
-                NetworkingHelper.postData(urlString:Chat_History, param:paramDict as AnyObject, withHeader: false, isAlertShow: false, controller:self, callback: { response in
+                NetworkingHelper.postData(urlString:Chat_History, param:paramDict as AnyObject, withHeader: false, isAlertShow: false, controller:self, callback: { [weak self] response in
 
 //                print("Chat history  : ",response)
                 if response is Array<Any> {
-                    self.parseChatHistoryData(response: response, isChatHistory:  true)
+                    self?.parseChatHistoryData(response: response, isChatHistory:  true)
                 }
             }, errorBack: { error in
                 NSLog("error : %@", error)
@@ -463,14 +463,14 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
         let paramDict = ["FromId":AttendeeInfo.sharedInstance.attendeeId  ,"ToId":self.chatGroupModel.groupId, paramKey: message , "IsGroupChat" : self.chatGroupModel.isGroupChat, "EventId":EventData.sharedInstance.eventId] as [String : Any]
         print("Post respoonce : ",paramDict)
         
-        NetworkingHelper.postData(urlString:Chat_Post_Message, param:paramDict as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { response in
+        NetworkingHelper.postData(urlString:Chat_Post_Message, param:paramDict as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { [weak self] response in
             print("Post Chat message response : ", response)
             
             let responseCode = Int(response.value(forKey: "responseCode") as! String)
             if responseCode == 0 {
                 
                 if response.value(forKey: "responseMsg") is NSDictionary {
-                    let listArray = self.chatModel.dataSource as NSMutableArray
+                    let listArray = self?.chatModel.dataSource as! NSMutableArray
 
                     //Check if message already exit in list
                     let  dict = response.value(forKey: "responseMsg") as! NSDictionary
@@ -492,15 +492,15 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
                     let filteredArray = listArray.filter { predicate.evaluate(with: $0) };
                     
                     if filteredArray.count == 0 {
-                        let messageF = self.setMessageFrame(dict: dict)
-                        self.chatModel.dataSource.add(messageF)
+                        let messageF = self?.setMessageFrame(dict: dict)
+                        self?.chatModel.dataSource.add(messageF)
                         
-                        self.chatTableView?.beginUpdates()
-                        self.chatTableView?.insertRows(at: [IndexPath(row: self.chatModel.dataSource.count-1, section: 0)], with: .automatic)
-                        self.chatTableView?.endUpdates()
+                        self?.chatTableView?.beginUpdates()
+                        self?.chatTableView?.insertRows(at: [IndexPath(row: (self?.chatModel.dataSource.count)!-1, section: 0)], with: .automatic)
+                        self?.chatTableView?.endUpdates()
 
                         // self.chatTableView?.reloadData()
-                        self.tableViewScrollToBottom()
+                        self?.tableViewScrollToBottom()
                     }
 
                 }
@@ -522,7 +522,7 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
     func refreshChatHistoryList() {
         
         let paramDict = ["FromId":AttendeeInfo.sharedInstance.attendeeId  ,"ToId":self.chatGroupModel.groupId, "EventId":EventData.sharedInstance.eventId, "HistoryDate" : "", "Seconds": Chat_History_Time] as [String : Any]
-        NetworkingHelper.postData(urlString: Chat_Refresh_Chat_history, param:paramDict as AnyObject, withHeader: false, isAlertShow: false, controller:self, callback: { response in
+        NetworkingHelper.postData(urlString: Chat_Refresh_Chat_history, param:paramDict as AnyObject, withHeader: false, isAlertShow: false, controller:self, callback: { [weak self] response in
 
             print("Refresh Chat list responce : ",response)
             
@@ -534,7 +534,7 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
             if response is Array<Any> {
                 let array = response as! NSArray
                 if array.count != 0 {
-                    self.parseChatHistoryData(response: response, isChatHistory:  false)
+                    self?.parseChatHistoryData(response: response, isChatHistory:  false)
                 }
             }
         }, errorBack: { error in

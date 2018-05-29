@@ -12,7 +12,7 @@ let OTP_session_Time = 60
 
 class CustomAlertView: UIViewController, UITextFieldDelegate {
     
-    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var titleLbl: UILabel!
    // @IBOutlet weak var messageLabel: UILabel!
     @IBOutlet weak var attendeeCodeTextField: UITextField!
     @IBOutlet weak var otpTextField: CustomUITextField!
@@ -39,7 +39,7 @@ class CustomAlertView: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         attendeeCodeTextField.becomeFirstResponder()
-        self.titleLabel.text = Confirm_Attendee_code
+        self.titleLbl.text = Confirm_Attendee_code
         self.otpMessageLbl.text = String(format:"If you still do not receive your OTP after %d seconds, please try again later.",OTP_session_Time)
 
         self.codeCheckbox.layer.borderWidth = 1.0
@@ -185,15 +185,15 @@ class CustomAlertView: UIViewController, UITextFieldDelegate {
                 event.attendeeCode = (self?.attendeeCodeTextField.text!)!
 
                 self?.attendeeCodeTextField.resignFirstResponder()
-                self.loginView.isHidden = true
-                self.otpView.isHidden = false
-                self.resendOTPButton.isEnabled = false
-                self.downloadButton.isEnabled = false
-                self.otpTextField.becomeFirstResponder()
+                self?.loginView.isHidden = true
+                self?.otpView.isHidden = false
+                self?.resendOTPButton.isEnabled = false
+                self?.downloadButton.isEnabled = false
+                self?.otpTextField.becomeFirstResponder()
 
-                self.isValidateOTP = true
-                self.noOfOtpAttempt += 1
-                Timer.scheduledTimer(timeInterval: TimeInterval(OTP_session_Time), target: self, selector:  #selector(self.otpSessionExpired(timer:)), userInfo: nil, repeats: false)
+                self?.isValidateOTP = true
+                self?.noOfOtpAttempt += 1
+                Timer.scheduledTimer(timeInterval: TimeInterval(OTP_session_Time), target: self, selector:  #selector(self?.otpSessionExpired(timer:)), userInfo: nil, repeats: false)
                 // CommonModel.sharedInstance.showAlertWithStatus(title: "", message:Confirm_Attendee_code, vc: self)
 
                 //self.getEventDetailsData()
@@ -205,7 +205,7 @@ class CustomAlertView: UIViewController, UITextFieldDelegate {
 
             }
             else {
-                CommonModel.sharedInstance.showAlertWithStatus(title: "", message:response.value(forKey: "responseMsg") as! String, vc: self)
+                CommonModel.sharedInstance.showAlertWithStatus(title: "", message:response.value(forKey: "responseMsg") as! String, vc: self!)
             }
         }, errorBack: { error in
             NSLog("error in Auth token: %@", error)
@@ -221,18 +221,18 @@ class CustomAlertView: UIViewController, UITextFieldDelegate {
             print("Validate OTP response : ", response)
             let responseCode = Int(response.value(forKey: "responseCode") as! String)
 
-//            self.attendeeCodeTextField.resignFirstResponder()
-//            self.delegate?.loginButtonTapped(selectedOption: "", textFieldValue: self.attendeeCodeTextField.text!)
-//            self.dismiss(animated: true, completion: nil)
+//            self?.attendeeCodeTextField.resignFirstResponder()
+//            self?.delegate?.loginButtonTapped(selectedOption: "", textFieldValue: (self?.attendeeCodeTextField.text!)
+//            self?.dismiss(animated: true, completion: nil)
 
             if responseCode == 0 {
-                self.attendeeCodeTextField.resignFirstResponder()
-                self.delegate?.loginButtonTapped(selectedOption: "", textFieldValue: self.attendeeCodeTextField.text!)
-                self.dismiss(animated: true, completion: nil)
+                self?.attendeeCodeTextField.resignFirstResponder()
+                self?.delegate?.loginButtonTapped(selectedOption: "", textFieldValue: (self?.attendeeCodeTextField.text)!)
+                self?.dismiss(animated: true, completion: nil)
             }
             else {
                 CommonModel.sharedInstance.dissmissActitvityIndicator()
-                CommonModel.sharedInstance.showAlertWithStatus(title: "", message:response.value(forKey: "responseMsg") as! String, vc: self)
+                CommonModel.sharedInstance.showAlertWithStatus(title: "", message:response.value(forKey: "responseMsg") as! String, vc: self!)
             }
         }, errorBack: { error in
             NSLog("error in Validate OTP : %@ ≤", error)
@@ -241,14 +241,14 @@ class CustomAlertView: UIViewController, UITextFieldDelegate {
 
     func resendOTP() {
 
-        NetworkingHelper.getRequestFromUrl(name:Post_ResendOTP_Url, urlString: Post_ResendOTP_Url, callback: { response in
+        NetworkingHelper.getRequestFromUrl(name:Post_ResendOTP_Url, urlString: Post_ResendOTP_Url, callback: { [weak self] response in
 
             print("\n Resend OTP response : ", response)
             let responseCode = Int(response.value(forKey: "responseCode") as! String)
 
             if responseCode == 0 {
-                self.noOfOtpAttempt += 1
-                Timer.scheduledTimer(timeInterval: TimeInterval(OTP_session_Time), target: self, selector:  #selector(self.otpSessionExpired(timer:)), userInfo: nil, repeats: false)
+                self?.noOfOtpAttempt += 1
+                Timer.scheduledTimer(timeInterval: TimeInterval(OTP_session_Time), target: self, selector:  #selector(self?.otpSessionExpired(timer:)), userInfo: nil, repeats: false)
             }
         }, errorBack: { error in
             NSLog("error in resend OTP : %@", error)

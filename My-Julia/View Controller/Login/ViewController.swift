@@ -152,7 +152,7 @@ class ViewController: UIViewController, UITextFieldDelegate, TKAlertDelegate {
     
     func getEventDetailsData() {
         
-        NetworkingHelper.getRequestFromUrl(name:Get_Login_Details_Url, urlString: Get_Login_Details_Url, callback: {[weak self] response in
+        NetworkingHelper.getRequestFromUrl(name:Get_Login_Details_Url, urlString: Get_Login_Details_Url, callback: { [weak self] response in
            // print("\nEvent Theme Details : ",response)
 
             self?.getEventModuleData()
@@ -166,7 +166,7 @@ class ViewController: UIViewController, UITextFieldDelegate, TKAlertDelegate {
     func getEventModuleData() {
         let urlStr = Get_AllModuleDetails_url.appendingFormat("Flag=%@",Get_AllDetails_url)
 
-        NetworkingHelper.getRequestFromUrl(name:Get_AllModuleDetails_url, urlString: urlStr, callback: {[weak self] response in
+        NetworkingHelper.getRequestFromUrl(name:Get_AllModuleDetails_url, urlString: urlStr, callback: { [weak self] response in
            // print("\n All Data response Data - ",response)
             //Check login user status accepted terms and conditions
             self?.checkLoginAttendeeStatus()
@@ -183,7 +183,7 @@ class ViewController: UIViewController, UITextFieldDelegate, TKAlertDelegate {
 
         let parameters : NSMutableDictionary? = [ "AttendeeId": EventData.sharedInstance.attendeeId, "EventId":EventData.sharedInstance.eventId, "IsAccept" : true]
 
-        NetworkingHelper.postData(urlString:Post_TermsAndCondition_Url, param:parameters!, withHeader: false, isAlertShow: true, controller:self, callback: {[weak self] response in
+        NetworkingHelper.postData(urlString:Post_TermsAndCondition_Url, param:parameters!, withHeader: false, isAlertShow: true, controller:self, callback: { [weak self] response in
             //dismiss Indicator
             CommonModel.sharedInstance.dissmissActitvityIndicator()
             let responseCode = Int(response.value(forKey: "responseCode") as! String)

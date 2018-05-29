@@ -83,11 +83,11 @@ class DocumentsListViewController: UIViewController, UITableViewDelegate, UITabl
     func getDocumentsListData() {
 
         let urlStr = Get_AllModuleDetails_url.appendingFormat("Flag=%@",Documents_List_url)
-        NetworkingHelper.getRequestFromUrl(name:Documents_List_url,  urlString:urlStr, callback: { response in
+        NetworkingHelper.getRequestFromUrl(name:Documents_List_url,  urlString:urlStr, callback: { [weak self] response in
            // print("Documents data : ",response)
             //Fetch data from Sqlite database
-            self.listArray = DBManager.sharedInstance.fetchDocumentsListFromDB().mutableCopy() as! NSMutableArray
-            self.tableView.reloadData()
+            self?.listArray = DBManager.sharedInstance.fetchDocumentsListFromDB().mutableCopy() as! NSMutableArray
+            self?.tableView.reloadData()
         }, errorBack: { error in
         })
     }

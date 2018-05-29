@@ -286,13 +286,13 @@ class ChatContactsViewController: UIViewController, headerDelegate, UISearchBarD
         
         let paramDict = ["GroupChatId":self.groupId ?? "", "AttendeeId":paramArr] as [String : Any]
         
-        NetworkingHelper.postData(urlString:Chat_Add_Group_Members, param:paramDict as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { response in
+        NetworkingHelper.postData(urlString:Chat_Add_Group_Members, param:paramDict as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { [weak self] response in
             //dissmiss Indicator
             CommonModel.sharedInstance.dissmissActitvityIndicator()
             
             let responseCode = Int(response.value(forKey: "responseCode") as! String)
             if responseCode == 0 {
-                self.navigationController?.popToRootViewController(animated: true)
+                self?.navigationController?.popToRootViewController(animated: true)
             }
         }, errorBack: { error in
         })

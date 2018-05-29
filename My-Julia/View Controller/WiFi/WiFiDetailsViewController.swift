@@ -42,7 +42,7 @@ class WiFiDetailsViewController: UIViewController, UITableViewDataSource, UITabl
 
 
         let urlStr = UpdateReadStatus.appendingFormat("flag=%@&Id=%@",Update_WiFi_List,self.wifiModel.id)
-        NetworkingHelper.getRequestFromUrl(name:UpdateReadStatus,  urlString:urlStr, callback: { response in
+        NetworkingHelper.getRequestFromUrl(name:UpdateReadStatus,  urlString:urlStr, callback: { [weak self] response in
 
         }, errorBack: { error in
         })

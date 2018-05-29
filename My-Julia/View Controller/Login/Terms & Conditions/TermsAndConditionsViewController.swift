@@ -67,7 +67,7 @@ class TermsAndConditionsViewController: UIViewController {
 
     func fetchContentFromServer() {
 
-        NetworkingHelper.getRequestFromUrl(name:Get_TermsAndCondition_Url, urlString: Get_TermsAndCondition_Url, callback: { response in
+        NetworkingHelper.getRequestFromUrl(name:Get_TermsAndCondition_Url, urlString: Get_TermsAndCondition_Url, callback: { [weak self] response in
             print("\n Terms and conditions Details : ",response)
 
             if response is NSArray {
@@ -75,11 +75,11 @@ class TermsAndConditionsViewController: UIViewController {
                 if array.count != 0 {
                     let dict = array[0] as! NSDictionary
                     let content = DBManager.sharedInstance.isNullString(str: dict.value(forKey:"TermsCondition") as Any)
-                    self.contentLabel.attributedText =  CommonModel.sharedInstance.stringFromHtml(string: content)
+                    self?.contentLabel.attributedText =  CommonModel.sharedInstance.stringFromHtml(string: content)
                    // self.contentText.attributedText = CommonModel.sharedInstance.stringFromHtml(string: content)
 
-                    self.scrollView.bounces = false
-                    self.scrollView.contentSize = CGSize(width: self.scrollView.frame.size.width, height: self.contentLabel.frame.size.height + 100)
+                    self?.scrollView.bounces = false
+                    self?.scrollView.contentSize = CGSize(width: (self?.scrollView.frame.size.width)!, height: (self?.contentLabel.frame.size.height)! + 100)
 
                 }
             }

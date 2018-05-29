@@ -128,22 +128,22 @@ Returns the UIButton object for the specified TKAlertAction.
 /**
  The title used by the header view.
  */
-@property (nonatomic, strong, nullable) NSString *title;
+@property (nonatomic, weak, nullable) NSString *title;
 
 /**
  The attributed title used by the header view.
  */
-@property (nonatomic, strong, nullable) NSAttributedString * attributedTitle;
+@property (nonatomic, weak, nullable) NSAttributedString * attributedTitle;
 
 /**
  The message used by the custom view.
  */
-@property (nonatomic, strong, nullable) NSString *message;
+@property (nonatomic, weak, nullable) NSString *message;
 
 /**
  The attributed message used by the custom view.
  */
-@property (nonatomic, strong, nullable) NSAttributedString * attributedMessage;
+@property (nonatomic, weak, nullable) NSAttributedString * attributedMessage;
 
 /**
  Determines if TKAlert's view is displayed on screen.

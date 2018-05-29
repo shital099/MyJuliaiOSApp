@@ -89,7 +89,7 @@ class PostPhotoViewController: UIViewController, UITextViewDelegate {
                                                 "EventId":EventData.sharedInstance.eventId]
        // print("paramDict",              paramDict )
 
-        NetworkingHelper.postData(urlString:Post_Activity_Feed_url, param:paramDict as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { response in
+        NetworkingHelper.postData(urlString:Post_Activity_Feed_url, param:paramDict as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { [weak self] response in
             //dissmiss Indicator
             CommonModel.sharedInstance.dissmissActitvityIndicator()
             
@@ -97,7 +97,7 @@ class PostPhotoViewController: UIViewController, UITextViewDelegate {
             if response is NSDictionary {
                 if (response.value(forKey: "responseCode") != nil) {
                     // CommonModel.sharedInstance.showAlertWithStatus(message: Feedback_Sucess_Message, vc: self)
-                    self.navigationController?.popViewController(animated: true)
+                    self?.navigationController?.popViewController(animated: true)
                 }
                 else {
                     // CommonModel.sharedInstance.showAlertWithStatus(message: Feedback_Error_Message, vc: self)

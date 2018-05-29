@@ -56,7 +56,7 @@ class ActivityPostLikesViewController: UIViewController, UITableViewDelegate, UI
 
  /*   func getComments() {
 
-        NetworkingHelper.getRequestFromUrl(name:Get_PostLikes_url,  urlString: Get_PostLikes_url.appendingFormat(activityPostId), callback: { response in
+        NetworkingHelper.getRequestFromUrl(name:Get_PostLikes_url,  urlString: Get_PostLikes_url.appendingFormat(activityPostId), callback: { [weak self] response in
 
             //Parse likes data
             for item in response as! NSArray{

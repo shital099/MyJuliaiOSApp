@@ -50,25 +50,13 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
 
         //Open last open event automatically if attendee credential is stored
         let userCredential = CredentialHelper.shared.defaultCredential
-        // print("Default credential : ",userCredential?.user ?? "")
+        print("Default credential : ",userCredential?.user ?? "")
 
         if userCredential?.user != nil {
             //Fetch login attendee details from database
             DBManager.sharedInstance.fetchLoginAttendeeDetailsFromDB(attendeeCode: (userCredential?.user)!)
         }
-
-//        let button = UIButton(type: .roundedRect)
-//        button.frame = CGRect(x: 20, y: 50, width: 100, height: 30)
-//        button.setTitle("Crash", for: [])
-//        button.addTarget(self, action: #selector(self.crashButtonTapped(_:)), for: .touchUpInside)
-//        view.addSubview(button)
-
     }
-
-//    @IBAction func crashButtonTapped(_ sender: AnyObject) {
-//        print("crash button press")
-//        Crashlytics.sharedInstance().crash()
-//    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -240,15 +228,15 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         CommonModel.sharedInstance.showActitvityIndicator()
 
         let parameters : NSDictionary? = [ "SearchText": self.searchBar.text!]
-        NetworkingHelper.postData(urlString:Search_Event_Url, param:parameters!, withHeader: false, isAlertShow: true, controller:self, callback: { response in
+        NetworkingHelper.postData(urlString:Search_Event_Url, param:parameters!, withHeader: false, isAlertShow: true, controller:self, callback: { [weak self] response in
 
             //Remove all objects
-            if self.searchListArray.count != 0 {
-                self.searchListArray.removeAll()
+            if self?.searchListArray.count != 0 {
+                self?.searchListArray.removeAll()
             }
 
             if response is NSArray {
-                self.parseEventListData(response: response)
+                self?.parseEventListData(response: response)
             }
             else {
             }
@@ -283,7 +271,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     func getEventDetailsData() {
         CommonModel.sharedInstance.showActitvityIndicator()
 
-        NetworkingHelper.getRequestFromUrl(name:Get_Login_Details_Url, urlString: Get_Login_Details_Url, callback: {[weak self] response in
+        NetworkingHelper.getRequestFromUrl(name:Get_Login_Details_Url, urlString: Get_Login_Details_Url, callback: { [weak self] response in
              //print("\nEvent Theme Details : ",response)
             print("Event login details : ",CommonModel.sharedInstance.getCurrentDateInMM())
 
@@ -299,7 +287,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         CommonModel.sharedInstance.showActitvityIndicator()
         let urlStr = Get_AllModuleDetails_url.appendingFormat("Flag=%@",Get_AllDetails_url)
 
-        NetworkingHelper.getRequestFromUrl(name:Get_AllModuleDetails_url, urlString: urlStr, callback: {[weak self] response in
+        NetworkingHelper.getRequestFromUrl(name:Get_AllModuleDetails_url, urlString: urlStr, callback: { [weak self] response in
             // print("\n All Data response Data - ",response)
             //Check login user status accepted terms and conditions
             print("Event module details : ",CommonModel.sharedInstance.getCurrentDateInMM())
@@ -317,7 +305,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
 
         let parameters : NSMutableDictionary? = [ "AttendeeId": EventData.sharedInstance.attendeeId, "EventId":EventData.sharedInstance.eventId, "IsAccept" : true]
 
-        NetworkingHelper.postData(urlString:Post_TermsAndCondition_Url, param:parameters!, withHeader: false, isAlertShow: true, controller:self, callback: {[weak self] response in
+        NetworkingHelper.postData(urlString:Post_TermsAndCondition_Url, param:parameters!, withHeader: false, isAlertShow: true, controller:self, callback: { [weak self] response in
             //dismiss Indicator
             CommonModel.sharedInstance.dissmissActitvityIndicator()
 
@@ -405,7 +393,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
 
     func initialiseTermsAndConditionAlert() -> TKAlert {
         // >> alert-custom-content-swift
-        let alert = TKAlert()
+        var alert = TKAlert()
         alert.title = "Terms and Conditions"
         alert.style.headerHeight = 40
 
@@ -501,14 +489,14 @@ class EventsCustomCell: UITableViewCell {
 
     var downloadBtnTapped: ((EventsCustomCell) -> Void)?
 
-    @IBOutlet var nameLabel : UILabel!
-    @IBOutlet var addressLbl : UILabel!
-    @IBOutlet var datesLbl : UILabel!
-    @IBOutlet var imageview : UIImageView!
+    @IBOutlet weak var nameLabel : UILabel!
+    @IBOutlet weak var addressLbl : UILabel!
+    @IBOutlet weak var datesLbl : UILabel!
+    @IBOutlet weak var imageview : UIImageView!
     @IBOutlet var downloadBtn : UIButton!
 
-    @IBOutlet var currentEventview : UIView!
-    @IBOutlet var pastEventview : UIView!
+    @IBOutlet weak var currentEventview : UIView!
+    @IBOutlet weak var pastEventview : UIView!
 
     @IBAction func downloadBtnTapped(sender: AnyObject) {
         downloadBtnTapped?(self)

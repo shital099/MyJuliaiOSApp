@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		07D817AAED4061267CBDFD87 /* libPods-My-JuliaTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 95F6B8CF01CBB4CE715448DA /* libPods-My-JuliaTests.a */; };
 		72CC910A4259C3894FAD2048 /* libPods-My-Julia.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B36B23041A0246C60FF9C820 /* libPods-My-Julia.a */; };
 		7E04514D20AC430400DFB2A5 /* My_JuliaTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E04514C20AC430400DFB2A5 /* My_JuliaTests.m */; };
 		7E0F59D31ED459F100C89D40 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E0F59D21ED459F100C89D40 /* AVFoundation.framework */; };
@@ -601,6 +602,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				07D817AAED4061267CBDFD87 /* libPods-My-JuliaTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1217,6 +1219,7 @@
 			children = (
 				7E5F086220610173002687D0 /* Login */,
 				7E5F084B20610173002687D0 /* Side Bar */,
+				7E5F084620610173002687D0 /* Event Details */,
 				7E5F07F020610173002687D0 /* App Notification */,
 				7E5F07F320610173002687D0 /* WiFi */,
 				7E5F07F620610173002687D0 /* Attendees */,
@@ -1238,7 +1241,6 @@
 				7E5F083E20610173002687D0 /* Sponsors */,
 				7E5F084120610173002687D0 /* Map */,
 				7E5F084420610173002687D0 /* Custom Module */,
-				7E5F084620610173002687D0 /* Event Details */,
 				7E5F084920610173002687D0 /* SpotME */,
 				7E5F085120610173002687D0 /* My Notes */,
 				7E5F085A20610173002687D0 /* Agenda */,
@@ -1718,9 +1720,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7E04515120AC430500DFB2A5 /* Build configuration list for PBXNativeTarget "My-JuliaTests" */;
 			buildPhases = (
+				9212CF421818477487F44BC4 /* [CP] Check Pods Manifest.lock */,
 				7E04514620AC430400DFB2A5 /* Sources */,
 				7E04514720AC430400DFB2A5 /* Frameworks */,
 				7E04514820AC430400DFB2A5 /* Resources */,
+				8428E433BC577DBE0F62F38C /* [CP] Embed Pods Frameworks */,
+				CC3A934D080480FDED46266B /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1854,6 +1859,54 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Fabric/run\" eee8b5e686cf645f9f040ef1a0d564a721af0651 d30e8797da90cef9509607101b975b6986de1bc3f4fc4ec9c88a479bba76540c";
+		};
+		8428E433BC577DBE0F62F38C /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-My-JuliaTests/Pods-My-JuliaTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9212CF421818477487F44BC4 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-My-JuliaTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CC3A934D080480FDED46266B /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-My-JuliaTests/Pods-My-JuliaTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 		D2664ECCEE10E2DCF2540C1F /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2151,6 +2204,7 @@
 /* Begin XCBuildConfiguration section */
 		7E04515220AC430500DFB2A5 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1DA2CEAD307391FDD3016EDA /* Pods-My-JuliaTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -2176,6 +2230,7 @@
 		};
 		7E04515320AC430500DFB2A5 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 903D597BFA9F490771E39A69 /* Pods-My-JuliaTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";

@@ -33,7 +33,7 @@ var isAgendaPresent : Bool = false
 var profileSettingVisible : Bool = true
 var isLiveQuestionScreenOpen : Bool = false
 var isChatPresent : Bool = false
-;
+
 extension UIApplication {
     
     var statusBarView: UIView? {
@@ -47,7 +47,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var deviceToken : String = ""
     var window: UIWindow?
-     
+    var appIsStarting : Bool = false
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
 
@@ -198,215 +199,115 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Print the error to console (you should alert the user that registration failed)
     }
 
-    // Push notification received
-    func application(_ application: UIApplication, didReceiveRemoteNotification data: [AnyHashable : Any]) {
-        //Remove all badges number
-        UIApplication.shared.applicationIconBadgeNumber = 0
+    func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
+        print("Received memory warning.......")
 
+        print("Before clear memory : ",SDImageCache.shared().getDiskCount())
+
+        SDImageCache.shared().clearDisk(onCompletion: {})
+
+        print("After clear memory : ",SDImageCache.shared().getDiskCount())
+
+    }
+
+    // Push notification received
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         //If application not login in, don't show alert message
         if isAppLogin == false {
             return
         }
 
-        //Save notification dat into db and navigate to screen
-        //self.receivedNotification(application: application, data: data as AnyObject)
-        print("Notification Received : ",data )
+        //Remove all badges number
+        UIApplication.shared.applicationIconBadgeNumber = 0
 
-        if data is Dictionary<String, Any> {
-//            if (data["Chat"] != nil) {
-//                let body = data["Chat"]
-//                let alertBody = data["aps"] as? NSDictionary
-//                print("Chat notification : ",body )
-//
-//                let chatM = DBManager.sharedInstance.convertToJsonData(text: body as! String) as? NSDictionary
-//
-//                let message = DBManager.sharedInstance.isNullString(str: chatM?["Message"] as Any)
-//                var decryptedMsg = (CryptLib.sharedManager() as AnyObject).decryptCipherText(with: message)
-//
-//                //Chat Image notification
-//                if alertBody!["alert"] as! String == "Photo" || decryptedMsg == ""{
-//                    decryptedMsg = "Photo"
-//                }
-//
-//                //Skip notification bar while receiving message from same chat with attendee
-//                if currentChatAttendeeId != "" {
-//
-//                    if  ((chatM?["GroupChatId"] as? NSNull) == nil) {
-//                        if currentChatAttendeeId == chatM?.value(forKey: "GroupChatId") as! String {
-//                            // NotificationCenter.default.post(name: Notification.Name("ChatMessageNotificationId"), object: body)
-//                            return
-//                        }
-//                    }
-//                    else if currentChatAttendeeId == chatM?.value(forKey: "FromId") as! String  {
-//                        //  NotificationCenter.default.post(name: Notification.Name("ChatMessageNotificationId"), object: body)
-//                        return
-//                    }
-//                }
-//
-//                //Save chat details into db
-//                DBManager.sharedInstance.saveChatNotificationMessageIntoDB(response: chatM!)
-//                if application.applicationState == UIApplicationState.active {
-//                    let userDict:[String: Bool] = ["isClickOnNotification": false]
-//                    NotificationCenter.default.post(name: ChatNotification, object: "", userInfo: userDict)
-//                }
-//                else {
-//                    let userDict:[String: Bool] = ["isClickOnNotification": true]
-//                    NotificationCenter.default.post(name: ChatNotification, object: "", userInfo: userDict)
-//                }
-//                self.showNotificationAlertMessage(title: APP_NAME, message: decryptedMsg!, application: application)
-//            }
-//            else if (data["Notification"] != nil)
-//            {
-//                let alertBody = DBManager.sharedInstance.convertToJsonData(text: data["Notification"] as! String) as! NSDictionary
-//                //print("Notification body : ",alertBody )
-//                DBManager.sharedInstance.saveBroadCastNotification(data : alertBody)
-//
-//                if application.applicationState == UIApplicationState.active {
-//                    let userDict:[String: Bool] = ["isClickOnNotification": false]
-//                    NotificationCenter.default.post(name: BroadcastNotification, object: "", userInfo: userDict)
-//                }
-//                else {
-//                    let userDict:[String: Bool] = ["isClickOnNotification": true]
-//                    NotificationCenter.default.post(name: BroadcastNotification, object: "", userInfo: userDict)
-//                }
-//                self.showNotificationAlertMessage(title: APP_NAME, message:  alertBody["Message"] as! String, application: application)
-//            }
-//            else {
-               // print("Other notification : ",data)
+        print("App State : ",self.appIsStarting)
+        print("Notification Received : ",userInfo )
 
-                if (data["Chat"] != nil) {
-                    let body = data["Chat"]
-                    let alertBody = data["aps"] as? NSDictionary
+        let state : UIApplicationState = application.applicationState
 
-                    let chatM = DBManager.sharedInstance.convertToJsonData(text: body as! String) as? NSDictionary
-                    let message = DBManager.sharedInstance.isNullString(str: chatM?["Message"] as Any)
-                    var decryptedMsg = (CryptLib.sharedManager() as AnyObject).decryptCipherText(with: message)
-
-                    //Chat Image notification
-                    if alertBody!["alert"] as! String == "Photo" || decryptedMsg == ""{
-                        decryptedMsg = "Photo"
-                    }
-
-                    //Skip notification bar while receiving message from same chat with attendee
-                    if currentChatAttendeeId != "" {
-                        if  ((chatM?["GroupChatId"] as? NSNull) == nil) {
-                            if currentChatAttendeeId == chatM?.value(forKey: "GroupChatId") as! String {
-                                // NotificationCenter.default.post(name: Notification.Name("ChatMessageNotificationId"), object: body)
-                                return
-                            }
-                        }
-                        else if currentChatAttendeeId == chatM?.value(forKey: "FromId") as! String  {
-                            //  NotificationCenter.default.post(name: Notification.Name("ChatMessageNotificationId"), object: body)
-                            return
-                        }
-                    }
-
-                    //Save chat details into db
-                    DBManager.sharedInstance.saveChatNotificationMessageIntoDB(response: chatM!)
-                }
-                else if (data["Notification"] != nil) {
-                    let alertBody = DBManager.sharedInstance.convertToJsonData(text: data["Notification"] as! String) as! NSDictionary
-                    DBManager.sharedInstance.saveBroadCastNotification(data: alertBody)
-                }
-                else if (data["Wifi"] != nil) {
-                    let alertBody = DBManager.sharedInstance.convertToJsonData(text: data["Wifi"] as! String) as! NSDictionary
-                    DBManager.sharedInstance.saveWifiDataIntoDB(response: alertBody)
-                }
-                else if (data["Activity Feeds"] != nil) {
-                    let alertBody = DBManager.sharedInstance.convertToJsonData(text: data["Activity Feeds"] as! String) as! NSDictionary
-                    DBManager.sharedInstance.saveActivityFeedDataIntoDB(response: alertBody)
-                }
-                else if (data["Map"] != nil) {
-                    let alertBody = DBManager.sharedInstance.convertToJsonData(text: data["Map"] as! String) as! NSDictionary
-                    DBManager.sharedInstance.saveMapDataIntoDB(response: alertBody)
-                }
-                else if (data["Documents"] != nil) {
-                    let alertBody = DBManager.sharedInstance.convertToJsonData(text: data["Documents"] as! String) as! NSDictionary
-                    DBManager.sharedInstance.saveDocumentsDataIntoDB(response: alertBody)
-                }
-
-                let moduleId = data["ModuleId"] as? String
-                if application.applicationState == UIApplicationState.active {
-                    let alertBody = data["aps"] as? NSDictionary
-                    self.showNotificationAlertMessage(title: APP_NAME, message:  alertBody!["alert"] as! String, application: application)
-
-                    let imageDataDict:[String: String] = ["moduleId": moduleId!]
-                    NotificationCenter.default.post(name: ShowNotificationCount, object: nil, userInfo: imageDataDict)
-                }
-                else {
-                    let imageDataDict:[String: String] = ["moduleId": moduleId!]
-                    NotificationCenter.default.post(name: ShowNotificationCount, object: nil, userInfo: imageDataDict)
-                    NotificationCenter.default.post(name: OtherModuleNotification, object: nil, userInfo: imageDataDict)
-                }
-           // }
+        if (state == UIApplicationState.background ) {
+            // app is inactive
+            self.receivedNotification(application: application, userInfo: userInfo)
+            completionHandler(UIBackgroundFetchResult.noData);
+        }
+        else if (state == UIApplicationState.inactive &&
+            self.appIsStarting) {
+            // user tapped notification
+            self.receivedNotification(application: application, userInfo: userInfo)
+            completionHandler(UIBackgroundFetchResult.newData);
+        } else {
+            // app is active
+            self.receivedNotification(application: application, userInfo: userInfo)
+            completionHandler(UIBackgroundFetchResult.noData);
         }
     }
 
-    func receivedNotification(application: UIApplication, data : AnyObject) {
-        if data is Dictionary<String, Any> {
-            if (data["Chat"] != nil) {
-                let body = data["Chat"]
-                let alertBody = data["aps"] as? NSDictionary
+    func receivedNotification(application: UIApplication, userInfo : [AnyHashable : Any]) {
+        //Save notification dat into db and navigate to screen
 
-                let chatM = DBManager.sharedInstance.convertToJsonData(text: body as! String) as? NSDictionary
-                let message = DBManager.sharedInstance.isNullString(str: chatM?["Message"] as Any)
-                var decryptedMsg = (CryptLib.sharedManager() as AnyObject).decryptCipherText(with: message)
+        if (userInfo["Chat"] != nil) {
+            let body = userInfo["Chat"]
+            let alertBody = userInfo["aps"] as? NSDictionary
 
-                //Chat Image notification
-                if alertBody!["alert"] as! String == "Photo" || decryptedMsg == ""{
-                    decryptedMsg = "Photo"
-                }
+            let chatM = DBManager.sharedInstance.convertToJsonData(text: body as! String) as? NSDictionary
+            let message = DBManager.sharedInstance.isNullString(str: chatM?["Message"] as Any)
+            var decryptedMsg = (CryptLib.sharedManager() as AnyObject).decryptCipherText(with: message)
 
-                //Skip notification bar while receiving message from same chat with attendee
-                if currentChatAttendeeId != "" {
-                    if  ((chatM?["GroupChatId"] as? NSNull) == nil) {
-                        if currentChatAttendeeId == chatM?.value(forKey: "GroupChatId") as! String {
-                            // NotificationCenter.default.post(name: Notification.Name("ChatMessageNotificationId"), object: body)
-                            return
-                        }
-                    }
-                    else if currentChatAttendeeId == chatM?.value(forKey: "FromId") as! String  {
-                        //  NotificationCenter.default.post(name: Notification.Name("ChatMessageNotificationId"), object: body)
+            //Chat Image notification
+            if alertBody!["alert"] as! String == "Photo" || decryptedMsg == ""{
+                decryptedMsg = "Photo"
+            }
+
+            //Skip notification bar while receiving message from same chat with attendee
+            if currentChatAttendeeId != "" {
+                if  ((chatM?["GroupChatId"] as? NSNull) == nil) {
+                    if currentChatAttendeeId == chatM?.value(forKey: "GroupChatId") as! String {
+                        // NotificationCenter.default.post(name: Notification.Name("ChatMessageNotificationId"), object: body)
                         return
                     }
                 }
-
-                //Save chat details into db
-                DBManager.sharedInstance.saveChatNotificationMessageIntoDB(response: chatM!)
-            }
-            else if (data["Notification"] != nil) {
-                let alertBody = DBManager.sharedInstance.convertToJsonData(text: data["Notification"] as! String) as! NSDictionary
-                DBManager.sharedInstance.saveBroadCastNotification(data: alertBody)
-            }
-            else if (data["Wifi"] != nil) {
-                let alertBody = DBManager.sharedInstance.convertToJsonData(text: data["Wifi"] as! String) as! NSDictionary
-                DBManager.sharedInstance.saveWifiDataIntoDB(response: alertBody)
-            }
-            else if (data["Activity Feeds"] != nil) {
-                let alertBody = DBManager.sharedInstance.convertToJsonData(text: data["Activity Feeds"] as! String) as! NSDictionary
-                DBManager.sharedInstance.saveActivityFeedDataIntoDB(response: alertBody)
-            }
-            else if (data["Map"] != nil) {
-                let alertBody = DBManager.sharedInstance.convertToJsonData(text: data["Map"] as! String) as! NSDictionary
-                DBManager.sharedInstance.saveMapDataIntoDB(response: alertBody)
-            }
-            else if (data["Documents"] != nil) {
-                let alertBody = DBManager.sharedInstance.convertToJsonData(text: data["Documents"] as! String) as! NSDictionary
-                DBManager.sharedInstance.saveDocumentsDataIntoDB(response: alertBody)
+                else if currentChatAttendeeId == chatM?.value(forKey: "FromId") as! String  {
+                    //  NotificationCenter.default.post(name: Notification.Name("ChatMessageNotificationId"), object: body)
+                    return
+                }
             }
 
-            let moduleId = data["ModuleId"] as? String
-            if application.applicationState == UIApplicationState.active {
-                let alertBody = data["aps"] as? NSDictionary
-                self.showNotificationAlertMessage(title: APP_NAME, message:  alertBody!["alert"] as! String, application: application)
+            //Save chat details into db
+            DBManager.sharedInstance.saveChatNotificationMessageIntoDB(response: chatM!)
+        }
+        else if (userInfo["Notification"] != nil) {
+            let alertBody = DBManager.sharedInstance.convertToJsonData(text: userInfo["Notification"] as! String) as! NSDictionary
+            DBManager.sharedInstance.saveBroadCastNotification(data: alertBody)
+        }
+        else if (userInfo["Wifi"] != nil) {
+            let alertBody = DBManager.sharedInstance.convertToJsonData(text: userInfo["Wifi"] as! String) as! NSDictionary
+            DBManager.sharedInstance.saveWifiDataIntoDB(response: alertBody)
+        }
+        else if (userInfo["Activity Feeds"] != nil) {
+            let alertBody = DBManager.sharedInstance.convertToJsonData(text: userInfo["Activity Feeds"] as! String) as! NSDictionary
+            DBManager.sharedInstance.saveActivityFeedDataIntoDB(response: alertBody)
+        }
+        else if (userInfo["Map"] != nil) {
+            let alertBody = DBManager.sharedInstance.convertToJsonData(text: userInfo["Map"] as! String) as! NSDictionary
+            DBManager.sharedInstance.saveMapDataIntoDB(response: alertBody)
+        }
+        else if (userInfo["Documents"] != nil) {
+            let alertBody = DBManager.sharedInstance.convertToJsonData(text: userInfo["Documents"] as! String) as! NSDictionary
+            DBManager.sharedInstance.saveDocumentsDataIntoDB(response: alertBody)
+        }
 
-                let imageDataDict:[String: String] = ["moduleId": moduleId!]
-                NotificationCenter.default.post(name: ShowNotificationCount, object: nil, userInfo: imageDataDict)
-            }
-            else {
-                let imageDataDict:[String: String] = ["moduleId": moduleId!]
-                NotificationCenter.default.post(name: OtherModuleNotification, object: nil, userInfo: imageDataDict)
-            }
+        let moduleId = userInfo["ModuleId"] as? String
+        if self.appIsStarting == false {
+            let alertBody = userInfo["aps"] as? NSDictionary
+            self.showNotificationAlertMessage(title: APP_NAME, message:  alertBody!["alert"] as! String, application: application)
+
+            let imageDataDict:[String: String] = ["moduleId": moduleId!]
+            NotificationCenter.default.post(name: ShowNotificationCount, object: nil, userInfo: imageDataDict)
+        }
+        else {
+            let imageDataDict:[String: String] = ["moduleId": moduleId!]
+            NotificationCenter.default.post(name: ShowNotificationCount, object: nil, userInfo: imageDataDict)
+            NotificationCenter.default.post(name: OtherModuleNotification, object: nil, userInfo: imageDataDict)
         }
     }
 
@@ -446,8 +347,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             alert.dismissMode = TKAlertDismissMode.tap
             // << alert-dismiss-swift
 
-            alert.title = title
-            alert.message = message
+            alert.title = title as NSString
+            alert.message = message as NSString
             //        alert.headerView.textLabel.textColor = AppTheme.sharedInstance.menuTextColor
             //        alert.contentView.fill = TKSolidFill(color: AppTheme.sharedInstance.menuBackgroundColor)
             //        alert.headerView.fill = TKSolidFill(color: AppTheme.sharedInstance.menuBackgroundColor)
@@ -472,16 +373,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
+
+         self.appIsStarting = false
     }
     
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+        self.appIsStarting = false
 
     }
     
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
+        self.appIsStarting = true
 
 //        if #available(iOS 10.0, *) {
 //            UNUserNotificationCenter.current().getDeliveredNotifications(completionHandler: {(notifications: [UNNotification]) in
@@ -500,7 +405,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-        
+        self.appIsStarting = false
+
         //Remove all badges number
         UIApplication.shared.applicationIconBadgeNumber = 0
 

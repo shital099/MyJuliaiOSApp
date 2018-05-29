@@ -447,7 +447,7 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
             let paramDict = ["AttendeeId": EventData.sharedInstance.attendeeId ,"DeviceToken":AppDelegate.getAppDelegateInstance().deviceToken] as [String : Any]
             print("Log out parameter : ",paramDict)
 
-                NetworkingHelper.postData(urlString:Logout_Url, param:paramDict as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { response in
+                NetworkingHelper.postData(urlString:Logout_Url, param:paramDict as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { [weak self] response in
                     //dissmiss Indicator
                     CommonModel.sharedInstance.dissmissActitvityIndicator()
                     print("Log out responce : ",response)
@@ -456,15 +456,10 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
                         if responseCode == 0 {
                             isAppLogin = false
                             //Remove notification observer
-                            self.clearAllObserver()
+                            self?.clearAllObserver()
 
                             //Remove all credential off login in attendee
                             CredentialHelper.shared.removeAllCredentials()
-
-                            //Remove notification observer
-                            NotificationCenter.default.removeObserver(self, name: ShowNotificationCount, object: nil)
-                            NotificationCenter.default.removeObserver(self, name: UpdateNotificationCount, object: nil)
-                            NotificationCenter.default.removeObserver(self, name: OtherModuleNotification, object: nil)
 
                             //Default navigation bar color
                             CommonModel.sharedInstance.applyDefaultNavigationTheme()
@@ -476,7 +471,7 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
                             EventData.sharedInstance.resetEventDetails()
                             AttendeeInfo.sharedInstance.resetAttendeeDetails()
 
-                            let navController = self.storyboard?.instantiateViewController(withIdentifier: "InitalViewController") as! UINavigationController
+                            let navController = self?.storyboard?.instantiateViewController(withIdentifier: "InitalViewController") as! UINavigationController
                             AppDelegate.getAppDelegateInstance().window?.rootViewController = navController
                         }
                     }
@@ -683,13 +678,13 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     func getEventModuleData() {
-        NetworkingHelper.getRequestFromUrl(name:Get_AllModuleDetails_url, urlString: Get_AllModuleDetails_url.appendingFormat("Flag=%@",Get_AllDetails_url), callback: { response in
+        NetworkingHelper.getRequestFromUrl(name:Get_AllModuleDetails_url, urlString: Get_AllModuleDetails_url.appendingFormat("Flag=%@",Get_AllDetails_url), callback: { [weak self] response in
           //  print("All Module data : ",response)
-            self.triggerPopAfterActivityFinish()
+            self?.triggerPopAfterActivityFinish()
 
             print("After getting event modules data : ",CommonModel.sharedInstance.getCurrentDateInMM())
             //Fetch other details
-            self.getEventDetailsData()
+            self?.getEventDetailsData()
             
         }, errorBack: { error in
             //Fetch other details
@@ -699,7 +694,7 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func getEventDetailsData() {
         
-        NetworkingHelper.getRequestFromUrl(name:Get_Login_Details_Url, urlString: Get_Login_Details_Url, callback: { response in
+        NetworkingHelper.getRequestFromUrl(name:Get_Login_Details_Url, urlString: Get_Login_Details_Url, callback: { [weak self] response in
             
            // print("App theme data : ",response)
             print("After getting event details : ",CommonModel.sharedInstance.getCurrentDateInMM())
@@ -717,15 +712,15 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 CommonModel.sharedInstance.dissmissActitvityIndicator()
             
                 //Apply theme and data on list
-                self.setMenuList()
+                self?.setMenuList()
                 
-                if self.selectedIndexPath.row != -1 {
-                    let indexPath = IndexPath(row: self.selectedIndexPath.row, section: self.selectedIndexPath.section)
-                    self.tableView.selectRow(at: indexPath, animated: true, scrollPosition: UITableViewScrollPosition.none)
-                    self.tableView.delegate?.tableView!(self.tableView, didSelectRowAt: indexPath)
+                if self?.selectedIndexPath.row != -1 {
+                    let indexPath = IndexPath(row: (self?.selectedIndexPath.row)!, section: (self?.selectedIndexPath.section)!)
+                    self?.tableView.selectRow(at: indexPath, animated: true, scrollPosition: UITableViewScrollPosition.none)
+                    self?.tableView.delegate?.tableView!((self?.tableView)!, didSelectRowAt: indexPath)
                 }
                 else {
-                    self.onClickOfEventDetails(self.eventButton)
+                    self?.onClickOfEventDetails(self?.eventButton)
                 }
 
             print("After load event details on screen: ",CommonModel.sharedInstance.getCurrentDateInMM())
@@ -884,9 +879,6 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 else if viewController is NotificationViewController {
                     sideDrawerItem.dataCount = DBManager.sharedInstance.fetchUnreadNotificationsCount()
                 }
-
-                print("After update Side menu count : ",sideDrawerItem.dataCount)
-                print("module name : ",viewController.title)
 
 //                let indexPath = IndexPath.init(row: sideDrawerItem.moduleIndex, section: 1)
 //                self.tableView.reloadRows(at: [indexPath as IndexPath], with: UITableViewRowAnimation.automatic)

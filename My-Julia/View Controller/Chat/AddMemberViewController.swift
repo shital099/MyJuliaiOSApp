@@ -62,7 +62,7 @@ class AddMemberViewController: UIViewController,UITableViewDelegate, UITableView
     
     /*func fetchAllContactsList() {
         
-        NetworkingHelper.getRequestFromUrl(name:Chat_All_Contact_List,  urlString:Chat_All_Contact_List.appending(EventData.sharedInstance.eventId), callback: { response in
+        NetworkingHelper.getRequestFromUrl(name:Chat_All_Contact_List,  urlString:Chat_All_Contact_List.appending(EventData.sharedInstance.eventId), callback: { [weak self] response in
             print("Chat contact List :", response)
             if response is Array<Any> {
                 self.parseChatData(response: response)
@@ -100,13 +100,13 @@ class AddMemberViewController: UIViewController,UITableViewDelegate, UITableView
         let paramArr : [Any] = [attendeId]
         let paramDict = ["GroupChatId":self.chatGroupModel.groupId ?? "", "AttendeeId":paramArr] as [String : Any]
         
-        NetworkingHelper.postData(urlString:Chat_Add_Group_Members, param:paramDict as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { response in
+        NetworkingHelper.postData(urlString:Chat_Add_Group_Members, param:paramDict as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { [weak self] response in
             //dissmiss Indicator
             CommonModel.sharedInstance.dissmissActitvityIndicator()
             
             let responseCode = Int(response.value(forKey: "responseCode") as! String)
             if responseCode == 0 {
-                self.navigationController?.popViewController(animated: true)
+                self?.navigationController?.popViewController(animated: true)
             }
         }, errorBack: { error in
         })

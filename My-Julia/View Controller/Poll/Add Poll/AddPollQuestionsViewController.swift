@@ -103,7 +103,7 @@ class AddPollQuestionsViewController: UIViewController, UITableViewDataSource, U
         
         print("post poll parameter", parameter)
         NetworkingHelper.postData(urlString: Add_Poll_Speaker_Question, param:parameter as AnyObject, withHeader: true, isAlertShow: true, controller:self,
-                                  callback: { response in
+                                  callback: { [weak self] response in
                                     //dissmiss Indicator
                                     CommonModel.sharedInstance.dissmissActitvityIndicator()
                                     let responseCode = Int(response.value(forKey: "responseCode") as! String)
@@ -111,14 +111,14 @@ class AddPollQuestionsViewController: UIViewController, UITableViewDataSource, U
 
                                     if responseCode == 0 {
                                         DispatchQueue.main.async {
-                                            self.navigationController?.popViewController(animated: true)
+                                            self?.navigationController?.popViewController(animated: true)
                                             //Show status alert
-                                            self.delegate.updateQuestionDelegateCall(isAddPoll: self.isAddPoll)
+                                            self?.delegate.updateQuestionDelegateCall(isAddPoll: (self?.isAddPoll)!)
                                         }
                                     }
                                     else {
                                         CommonModel.sharedInstance.dissmissActitvityIndicator()
-                                        CommonModel.sharedInstance.showAlertWithStatus(title: "", message:response.value(forKey: "responseMsg") as! String, vc: self)
+                                        CommonModel.sharedInstance.showAlertWithStatus(title: "", message:response.value(forKey: "responseMsg") as! String, vc: self!)
                                     }
 
 
@@ -148,25 +148,25 @@ class AddPollQuestionsViewController: UIViewController, UITableViewDataSource, U
         
         print(" update parameter", parameter)
         NetworkingHelper.postData(urlString: Post_Update_Poll_Question, param:parameter as AnyObject, withHeader: false, isAlertShow: true, controller:self,
-                                  callback: { response in
+                                  callback: { [weak self] response in
 //                                    print("update list", response)
          //dissmiss Indicator
         CommonModel.sharedInstance.dissmissActitvityIndicator()
-         DBManager.sharedInstance.updateSpeakerPollQuestionsDataIntoDB(question: self.questionModel.questionText, opt1: self.questionModel.opt1, opt2: self.questionModel.opt2, opt3: self.questionModel.opt3, opt4: self.questionModel.opt4, questionsId: self.questionModel.questionsId)
+                                    DBManager.sharedInstance.updateSpeakerPollQuestionsDataIntoDB(question: (self?.questionModel.questionText)!, opt1: (self?.questionModel.opt1)!, opt2: (self?.questionModel.opt2)!, opt3: (self?.questionModel.opt3)!, opt4: (self?.questionModel.opt4)!, questionsId: (self?.questionModel.questionsId)!)
 
                                     print("Update Poll responce : ",response)
                                     let responseCode = Int(response.value(forKey: "responseCode") as! String)
 
                                     if responseCode == 0 {
                                         DispatchQueue.main.async {
-                                            self.navigationController?.popViewController(animated: true)
+                                            self?.navigationController?.popViewController(animated: true)
                                             //Show status alert
-                                            self.delegate.updateQuestionDelegateCall(isAddPoll: self.isAddPoll)
+                                            self?.delegate.updateQuestionDelegateCall(isAddPoll: (self?.isAddPoll)!)
                                         }
                                     }
                                     else {
                                         CommonModel.sharedInstance.dissmissActitvityIndicator()
-                                        CommonModel.sharedInstance.showAlertWithStatus(title: "", message:response.value(forKey: "responseMsg") as! String, vc: self)
+                                        CommonModel.sharedInstance.showAlertWithStatus(title: "", message:response.value(forKey: "responseMsg") as! String, vc: self!)
                                     }
 
 

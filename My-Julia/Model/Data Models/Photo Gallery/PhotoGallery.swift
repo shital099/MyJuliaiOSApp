@@ -10,9 +10,12 @@ import UIKit
 
 class PhotoGallery: NSObject {
     
-    var id : String!
-    var iconUrl : String!
+    var id : String = ""
+    var iconUrl : String = ""
     var isImageDeleted : Bool = false
     var postImageUrl : String = ""
 
+    deinit {
+       //  print("Gallery class is deallocated")
+    }
 }

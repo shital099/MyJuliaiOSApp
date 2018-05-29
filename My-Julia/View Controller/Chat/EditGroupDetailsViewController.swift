@@ -194,7 +194,7 @@ class EditGroupDetailsViewController: UIViewController, UIImagePickerControllerD
                 "EventId":EventData.sharedInstance.eventId] as [String : Any]
         }
 
-        NetworkingHelper.postData(urlString:Chat_Update_Group, param:paramDict as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { response in
+        NetworkingHelper.postData(urlString:Chat_Update_Group, param:paramDict as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { [weak self] response in
             //dissmiss Indicator
             CommonModel.sharedInstance.dissmissActitvityIndicator()
             print("Update Chat Group response : ", response)
@@ -203,15 +203,15 @@ class EditGroupDetailsViewController: UIViewController, UIImagePickerControllerD
             if responseCode == 0 {
 
                 //Show updated group name in group detail screen
-                if self.isIconEdit == false {
+                if self?.isIconEdit == false {
                     //Update group name and image into db
                     let iconImage = DBManager.sharedInstance.appendImagePath(path: response.value(forKey: "ImagePath") as Any)
 
-                    DBManager.sharedInstance.updateGroupNameIntoDB(groupName: self.textField.text!, groupIcon:iconImage, groupId: self.chatGroupModel.groupId)
-                    (self.delegate as! GroupDetailViewController).updateGroupName(groupName: self.textField.text!, groupIcon : iconImage)
+                    DBManager.sharedInstance.updateGroupNameIntoDB(groupName: (self?.textField.text)!, groupIcon:iconImage, groupId: (self?.chatGroupModel.groupId)!)
+                    (self?.delegate as! GroupDetailViewController).updateGroupName(groupName: (self?.textField.text)!, groupIcon : iconImage)
                 }
                 //self.dismiss(animated: true, completion: nil)
-                self.navigationController?.popViewController(animated: false)
+                self?.navigationController?.popViewController(animated: false)
             }
         }, errorBack: { error in
             print("Error while updating group info",error)

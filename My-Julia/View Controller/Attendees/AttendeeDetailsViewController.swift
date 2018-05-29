@@ -66,11 +66,11 @@ class AttendeeDetailsViewController: UIViewController, UITableViewDataSource, UI
     
     func getSpeakerDetailsData() {
         
-        NetworkingHelper.getRequestFromUrl(name:Speakers_Details_url,  urlString: Speakers_Details_url.appendingFormat(self.personModel.speakerId), callback: { response in
+        NetworkingHelper.getRequestFromUrl(name:Speakers_Details_url,  urlString: Speakers_Details_url.appendingFormat(self.personModel.speakerId), callback: { [weak self] response in
             
-            self.personModel = DBManager.sharedInstance.fetchSpeakersDetailsFromDB(speakerId: self.personModel.speakerId, attendeeId: self.personModel.personId)
+            self?.personModel = DBManager.sharedInstance.fetchSpeakersDetailsFromDB(speakerId: (self?.personModel.speakerId)!, attendeeId: (self?.personModel.personId)!)
             
-            self.tableViewObj.reloadData()
+            self?.tableViewObj.reloadData()
         }, errorBack: { error in
         })
     }
@@ -370,7 +370,7 @@ class AttendeeDetailsViewController: UIViewController, UITableViewDataSource, UI
 
             //Hide details screen if activity is not associated to logged in user
             if model.isAgendaActivity == false {
-                CommonModel.sharedInstance.showAlertWithStatus(title: Alert_Warning, message: Speaker_Session_Error, vc: self)
+                CommonModel.sharedInstance.showAlertWithStatus(title: Alert_Error, message: Speaker_Session_Error, vc: self)
             }
             else {
                 let viewController = self.storyboard?.instantiateViewController(withIdentifier: "AgendaDetailsViewController") as! AgendaDetailsViewController

@@ -69,7 +69,7 @@ class AttendeesViewController: UIViewController, UITableViewDelegate, UITableVie
 
     override func viewDidAppear(_ animated: Bool) {
         let urlStr = Get_AllModuleDetails_url.appendingFormat("Flag=%@",Attendees_List_url)
-        NetworkingHelper.getRequestFromUrl(name:Attendees_List_url,  urlString: urlStr, callback: { response in
+        NetworkingHelper.getRequestFromUrl(name:Attendees_List_url,  urlString: urlStr, callback: { [weak self] response in
             //self.fetchAttendeeListAndSortAlphabetically()
 
             DispatchQueue.main.async  {

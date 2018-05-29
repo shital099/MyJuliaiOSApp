@@ -200,17 +200,17 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
             paramArray.append(paramDict)
         }
 
-        NetworkingHelper.postData(urlString:Chat_Delete_Conversession, param:paramArray as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { response in
+        NetworkingHelper.postData(urlString:Chat_Delete_Conversession, param:paramArray as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { [weak self] response in
 
             let responseCode = Int(response.value(forKey: "responseCode") as! String)
             if responseCode == 0 {
                 DBManager.sharedInstance.deleteChatConversionFromDB(groupId: paramArray as NSArray)
-                self.deleteListArray.removeAllObjects()
+                self?.deleteListArray.removeAllObjects()
 
-                self.dataDict["Contacts"] = DBManager.sharedInstance.fetchChatListDataFromDB(isGroupList: false) as? [ChatGroupModel]
-                self.tableView.reloadData()
+                self?.dataDict["Contacts"] = DBManager.sharedInstance.fetchChatListDataFromDB(isGroupList: false) as? [ChatGroupModel]
+                self?.tableView.reloadData()
 
-                self.navigationItem.rightBarButtonItem = nil
+                self?.navigationItem.rightBarButtonItem = nil
             }
         },
                                   errorBack: { error in
@@ -222,13 +222,13 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
     func fetchContactsList() {
         
         let urlStr = Get_AllModuleDetails_url.appendingFormat("Flag=%@",Chat_Contact_List)
-        NetworkingHelper.getRequestFromUrl(name:Chat_Contact_List,  urlString:urlStr, callback: { response in
+        NetworkingHelper.getRequestFromUrl(name:Chat_Contact_List,  urlString:urlStr, callback: { [weak self] response in
             if response is Array<Any> {
 
                 //Fetch data from Sqlite database
-                self.dataDict["Contacts"] = DBManager.sharedInstance.fetchChatListDataFromDB(isGroupList: false) as? [ChatGroupModel]
-                self.dataDict["Groups"] = DBManager.sharedInstance.fetchChatListDataFromDB(isGroupList: true) as? [ChatGroupModel]
-                self.tableView.reloadData()
+                self?.dataDict["Contacts"] = DBManager.sharedInstance.fetchChatListDataFromDB(isGroupList: false) as? [ChatGroupModel]
+                self?.dataDict["Groups"] = DBManager.sharedInstance.fetchChatListDataFromDB(isGroupList: true) as? [ChatGroupModel]
+                self?.tableView.reloadData()
 
             }
         }, errorBack: { error in

@@ -36,15 +36,15 @@ class PollHistoryViewController: UIViewController, UITableViewDelegate, UITableV
         
         let urlStr = GetPoll_Question_List_url.appendingFormat("%@",self.sessionModel.activityId)
         
-        NetworkingHelper.getRequestFromUrl(name:GetPoll_Question_List_url,  urlString:urlStr, callback: { response in
-            self.listArray = DBManager.sharedInstance.fetchPollActivityQuestionsListFromDB(sessionId: self.sessionModel.sessionId, activityId: self.sessionModel.activityId) as! [PollModel]
-            self.tableView.reloadData()
+        NetworkingHelper.getRequestFromUrl(name:GetPoll_Question_List_url,  urlString:urlStr, callback: { [weak self] response in
+            self?.listArray = DBManager.sharedInstance.fetchPollActivityQuestionsListFromDB(sessionId: (self?.sessionModel.sessionId)!, activityId: (self?.sessionModel.activityId)!) as! [PollModel]
+            self?.tableView.reloadData()
             
-            if self.listArray.count == 0 {
-                self.messageLbl.isHidden = false
-                self.messageLbl.text = No_Poll_History_Text
+            if self?.listArray.count == 0 {
+                self?.messageLbl.isHidden = false
+                self?.messageLbl.text = No_Poll_History_Text
             }else {
-                self.messageLbl.isHidden = true
+                self?.messageLbl.isHidden = true
             }
         }, errorBack: { error in
             NSLog("error : %@", error)

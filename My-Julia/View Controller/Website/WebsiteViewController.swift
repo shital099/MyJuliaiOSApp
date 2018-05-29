@@ -63,7 +63,7 @@ class WebsiteViewController: UIViewController, UIWebViewDelegate {
     @objc func leftSideMenuButtonPressed(sender: UIBarButtonItem) {
         let masterVC : UIViewController!
         if IS_IPHONE {
-            masterVC =  self.menuContainerViewController.leftMenuViewController as! MenuViewController!
+            masterVC =  self.menuContainerViewController.leftMenuViewController as! MenuViewController?
         }
         else {
             masterVC = self.splitViewController?.viewControllers.first
@@ -80,9 +80,9 @@ class WebsiteViewController: UIViewController, UIWebViewDelegate {
     func getWebsiteData() {
 
         let urlStr = Get_AllModuleDetails_url.appendingFormat("Flag=%@",Website_List_url)
-        NetworkingHelper.getRequestFromUrl(name:Website_List_url,  urlString: urlStr, callback: { response in
-            self.model = DBManager.sharedInstance.fetchWebsiteDataFromDB()
-            self.loadUrlInWebview()
+        NetworkingHelper.getRequestFromUrl(name:Website_List_url,  urlString: urlStr, callback: { [weak self] response in
+            self?.model = DBManager.sharedInstance.fetchWebsiteDataFromDB()
+            self?.loadUrlInWebview()
         }, errorBack: { error in
             NSLog("error : %@", error)
         })

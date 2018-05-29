@@ -34,23 +34,23 @@ class ActivityFeedViewModelController: NSObject {
         // Move to a background thread to do some long running work
         DispatchQueue.global(qos: .background).async {
             let urlStr = Get_AllModuleDetails_url.appendingFormat("Flag=%@&PageNo=%d",ActivityFeed_List_url,self.pageNo)
-            NetworkingHelper.getRequestFromUrl(name:ActivityFeed_List_url,  urlString:urlStr, callback: { response in
+            NetworkingHelper.getRequestFromUrl(name:ActivityFeed_List_url,  urlString:urlStr, callback: { [weak self] response in
 
 //                //Change notification count in side menu
 //                let userDict:[String: Bool] = ["isClickOnNotification": false]
 //                NotificationCenter.default.post(name: BroadcastNotification, object: "", userInfo: userDict)
 
                 // Remove first page load data
-                if self.pageNo == 0 {
-                    self.pageNo = 0
-                    self.isLastPage = false
+                if self?.pageNo == 0 {
+                    self?.pageNo = 0
+                    self?.isLastPage = false
 
-                    if self.viewModels.count != 0 {
-                        self.viewModels.removeAllObjects()
+                    if self?.viewModels.count != 0 {
+                        self?.viewModels.removeAllObjects()
                     }
                 }
                 //Load data from db
-                self.loadItem()
+                self?.loadItem()
 
                 DispatchQueue.main.async {
                     //  self.sortData()
@@ -75,7 +75,7 @@ class ActivityFeedViewModelController: NSObject {
 
         let paramDict = ["ActivityFeedId": model.id, "Like":likeStatus, "AttendeeId":AttendeeInfo.sharedInstance.attendeeId] as [String : Any]
 
-        NetworkingHelper.postData(urlString:Post_Activity_Like_url, param:paramDict as AnyObject, withHeader: false, isAlertShow: true, controller:view, callback: { response in
+        NetworkingHelper.postData(urlString:Post_Activity_Like_url, param:paramDict as AnyObject, withHeader: false, isAlertShow: true, controller:view, callback: { [weak self] response in
 
             model.isUserLike = status
 
@@ -87,9 +87,9 @@ class ActivityFeedViewModelController: NSObject {
             else {
                 model.likesCount = String(Int(model.likesCount)! - 1)
             }
-            self.viewModels.replaceObject(at: index, with: model)
+            self?.viewModels.replaceObject(at: index, with: model)
 
-            _ = self.updateLikesStatusDB(at: index)
+            _ = self?.updateLikesStatusDB(at: index)
 
             completionBlock(true, nil)
 

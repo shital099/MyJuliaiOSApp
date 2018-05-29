@@ -36,14 +36,9 @@ class AgendaViewController: UIViewController, UITableViewDataSource, UITableView
         
         //Set segment tint color
         self.segmentControl.tintColor = AppTheme.sharedInstance.backgroundColor.darker(by: 40)!
-        //self.segmentControl.tintColor = AppTheme.sharedInstance.backgroundColor.getDarkerColor()
 
         //Show menu icon in ipad and iphone
         self.setupMenuBarButtonItems()
-        
-        //        if IS_IPHONE {
-        //            self.setupMenuBarButtonItems()
-        //        }
 
         //Update dyanamic height of tableview cell
         self.tableviewObj.estimatedRowHeight = 300
@@ -251,6 +246,10 @@ class AgendaViewController: UIViewController, UITableViewDataSource, UITableView
         }
         else {
             model = self.dataDict[self.selectedDate]![sender.tag]
+            var array = self.dataDict[selectedDate]
+            array?.remove(at: indexPath.row)
+            array?.insert(model, at: sender.tag)
+            self.dataDict[selectedDate] = array
 
             if model.isAddedToSchedule {
                 CommonModel.sharedInstance.showAlertNotification(view: self.view, title: Agenda_Sucess, message: Deleted_Agenda_Text, alertType: TKAlertType.TKAlertTypeError.rawValue)
@@ -261,14 +260,22 @@ class AgendaViewController: UIViewController, UITableViewDataSource, UITableView
         }
         
         model.isAddedToSchedule = !model.isAddedToSchedule
-        
-        //add this activity to my schedule
-        DBManager.sharedInstance.addToMyScheduleDataIntoDB(model: model)
 
-        //Fetch Activity data from db and refresh tableview
-        self.fetchActivitiesListAndSort()
+        DispatchQueue.global(qos: .userInitiated).async {
+            // Download file or perform expensive task
+            //add this activity to my schedule
+            DBManager.sharedInstance.addToMyScheduleDataIntoDB(model: model)
+            //Fetch Activity data from db and refresh tableview
+           // self.fetchActivitiesListAndSort()
+
+            DispatchQueue.main.async {
+                // Update the UI
+            }
+        }
+
         tableviewObj.reloadData()
     }
+
     
     // MARK: - UICollectionViewDataSource
     

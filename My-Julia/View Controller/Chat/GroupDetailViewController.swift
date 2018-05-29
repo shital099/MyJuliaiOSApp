@@ -169,15 +169,15 @@ class GroupDetailViewController: UIViewController , UITableViewDataSource, UITab
     
     func fetchAllGroupMembers() {
         
-        NetworkingHelper.getRequestFromUrl(name:Chat_Get_Group_Members,  urlString:Chat_Get_Group_Members.appending(self.chatGroupModel.groupId), callback: { response in
+        NetworkingHelper.getRequestFromUrl(name:Chat_Get_Group_Members,  urlString:Chat_Get_Group_Members.appending(self.chatGroupModel.groupId), callback: { [weak self] response in
             CommonModel.sharedInstance.dissmissActitvityIndicator()
 
             if response is Array<Any> {
-                self.parseMemberData(response: response)
+                self?.parseMemberData(response: response)
             }
 
             //Show group details on view
-            self.showGroupInfo()
+            self?.showGroupInfo()
         }, errorBack: { error in
             NSLog("error : %@", error)
             CommonModel.sharedInstance.dissmissActitvityIndicator()

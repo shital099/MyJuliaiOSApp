@@ -130,26 +130,26 @@ class ActivityFeedbackViewController: UIViewController, UITableViewDataSource, U
         DBManager.sharedInstance.deleteActivityFeedbackDataFromDB(activityId:self.activityId)
         
         let urlStr = Get_Activity_Feedback_List_url.appendingFormat("%@",activityId)
-        NetworkingHelper.getRequestFromUrl(name:Get_Activity_Feedback_List_url,  urlString:urlStr, callback: { response in
+        NetworkingHelper.getRequestFromUrl(name:Get_Activity_Feedback_List_url,  urlString:urlStr, callback: { [weak self] response in
             print("Activity Feedback List :", response)
             
-            self.listArray = DBManager.sharedInstance.fetchActivityFeedbackDataFromDB(activityId:self.activityId) as! [FeedbackModel]
-            self.tableView.reloadData()
+            self?.listArray = DBManager.sharedInstance.fetchActivityFeedbackDataFromDB(activityId:(self?.activityId)!) as! [FeedbackModel]
+            self?.tableView.reloadData()
 
             if response is NSDictionary {
                 //Already feedback submitted
-                self.submittedMessageLbl.text = Activity_Feedback_submitted
-                self.topView.isHidden = true
+                self?.submittedMessageLbl.text = Activity_Feedback_submitted
+                self?.topView.isHidden = true
             }
             else {
-                if self.listArray.count != 0 {
-                    self.sendBtn.isHidden = false
-                    self.topView.isHidden = false
-                    self.submittedMessageLbl.isHidden = true
+                if self?.listArray.count != 0 {
+                    self?.sendBtn.isHidden = false
+                    self?.topView.isHidden = false
+                    self?.submittedMessageLbl.isHidden = true
                 }
                 else {
-                    self.submittedMessageLbl.text = Activity_No_Feedback_Added
-                    self.topView.isHidden = true
+                    self?.submittedMessageLbl.text = Activity_No_Feedback_Added
+                    self?.topView.isHidden = true
                 }   
             }
         }, errorBack: { error in
@@ -215,20 +215,20 @@ class ActivityFeedbackViewController: UIViewController, UITableViewDataSource, U
         }
         print("Post Activity Feedbck :",paramArr)
         
-        NetworkingHelper.postData(urlString:Post_Activity_Feedback_url, param:paramArr as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { response in
+        NetworkingHelper.postData(urlString:Post_Activity_Feedback_url, param:paramArr as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { [weak self] response in
             //dissmiss Indicator
             CommonModel.sharedInstance.dissmissActitvityIndicator()
             
             if response is NSDictionary {
                 
                 if (response.value(forKey: "responseCode") != nil) {
-                    self.showStatusView(isSucess: true)
+                    self?.showStatusView(isSucess: true)
                     
                     //Delete db data aslo
-                    DBManager.sharedInstance.deleteActivityFeedbackDataFromDB(activityId: self.activityId)
+                    DBManager.sharedInstance.deleteActivityFeedbackDataFromDB(activityId: (self?.activityId)!)
                 }
                 else {
-                    self.showStatusView(isSucess: false)
+                    self?.showStatusView(isSucess: false)
                 }
             }
         }, errorBack: { error in

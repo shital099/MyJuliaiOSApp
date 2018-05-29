@@ -82,7 +82,7 @@ class LoginViewController: UIViewController {
 
         let parameters : NSDictionary = [ "AttendeeCode": self.inputText.text!, "DeviceToken":AppDelegate.getAppDelegateInstance().deviceToken, "TimeZone" : timezone ?? ""]
 
-        NetworkingHelper.postData(urlString:Get_AuthToken_Url, param:parameters, withHeader: false, isAlertShow: true, controller:self, callback: { response in
+        NetworkingHelper.postData(urlString:Get_AuthToken_Url, param:parameters, withHeader: false, isAlertShow: true, controller:self, callback: { [weak self] response in
 
             //   print("\nAuth token response - ",CommonModel.sharedInstance.getCurrentDateInMM())
 
@@ -97,10 +97,10 @@ class LoginViewController: UIViewController {
                 event.auth_token = dict.value(forKey: "token") as! String
                 event.attendeeId = dict.value(forKey: "AttendeeId") as! String
                 event.attendeeStatus = dict.value(forKey: "IsAccept") as! Bool
-                event.attendeeCode = self.inputText.text!
+                event.attendeeCode = (self?.inputText.text)!
 
-                self.loginView.isHidden = true
-                self.otpView.isHidden = false
+                self?.loginView.isHidden = true
+                self?.otpView.isHidden = false
 
                 //self.getEventDetailsData()
 
@@ -111,7 +111,7 @@ class LoginViewController: UIViewController {
             }
             else {
                 CommonModel.sharedInstance.dissmissActitvityIndicator()
-                CommonModel.sharedInstance.showAlertWithStatus(title: "", message:response.value(forKey: "responseMsg") as! String, vc: self)
+                CommonModel.sharedInstance.showAlertWithStatus(title: "", message:response.value(forKey: "responseMsg") as! String, vc: self!)
             }
         }, errorBack: { error in
             NSLog("error in Auth token: %@", error)
@@ -124,7 +124,7 @@ class LoginViewController: UIViewController {
 
         let parameters : NSDictionary = [ "AttendeeCode": self.inputText.text!, "DeviceToken":AppDelegate.getAppDelegateInstance().deviceToken, "TimeZone" : timezone ?? ""]
 
-        NetworkingHelper.postData(urlString:Get_AuthToken_Url, param:parameters, withHeader: false, isAlertShow: true, controller:self, callback: { response in
+        NetworkingHelper.postData(urlString:Get_AuthToken_Url, param:parameters, withHeader: false, isAlertShow: true, controller:self, callback: { [weak self] response in
 
             //   print("\nAuth token response - ",CommonModel.sharedInstance.getCurrentDateInMM())
 
@@ -139,10 +139,10 @@ class LoginViewController: UIViewController {
                 event.auth_token = dict.value(forKey: "token") as! String
                 event.attendeeId = dict.value(forKey: "AttendeeId") as! String
                 event.attendeeStatus = dict.value(forKey: "IsAccept") as! Bool
-                event.attendeeCode = self.inputText.text!
+                event.attendeeCode = (self?.inputText.text)!
 
-                self.loginView.isHidden = true
-                self.otpView.isHidden = false
+                self?.loginView.isHidden = true
+                self?.otpView.isHidden = false
 
                 //self.getEventDetailsData()
 
@@ -153,7 +153,7 @@ class LoginViewController: UIViewController {
             }
             else {
                 CommonModel.sharedInstance.dissmissActitvityIndicator()
-                CommonModel.sharedInstance.showAlertWithStatus(title: "", message:response.value(forKey: "responseMsg") as! String, vc: self)
+                CommonModel.sharedInstance.showAlertWithStatus(title: "", message:response.value(forKey: "responseMsg") as! String, vc: self!)
             }
         }, errorBack: { error in
             NSLog("error in Auth token: %@", error)

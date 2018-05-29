@@ -68,9 +68,9 @@ class EmailListViewController: UIViewController, UITableViewDelegate, UITableVie
         queue.addOperation { () -> Void in
             let urlStr = Get_AllModuleDetails_url.appendingFormat("Flag=%@",Email_List_url)
 
-            NetworkingHelper.getRequestFromUrl(name:Email_List_url,  urlString:urlStr , callback: { response in
+            NetworkingHelper.getRequestFromUrl(name:Email_List_url,  urlString:urlStr , callback: { [weak self] response in
                 //Fetch data from Sqlite database
-                self.listArray = DBManager.sharedInstance.fetchEmailDataFromDB() as! [EmailModel]
+                self?.listArray = DBManager.sharedInstance.fetchEmailDataFromDB() as! [EmailModel]
             }, errorBack: { error in
             })
         }

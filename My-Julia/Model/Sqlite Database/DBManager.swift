@@ -2105,7 +2105,6 @@ class DBManager: NSObject {
                 }
                 while results.next() == true {
                     model.unreadCount = Int32(results.object(forColumnIndex: 0) as! Int)
-                    print("Unread message count : ",model.unreadCount)
                 }
 
                 array.append(model)
@@ -2983,21 +2982,51 @@ class DBManager: NSObject {
                 let results:FMResultSet? = self.database.executeQuery(querySQL, withArgumentsIn: [EventData.sharedInstance.eventId])
                 
                 while results?.next() == true {
+                    //weak var model: PhotoGallery?
+
+                    var model : PhotoGallery? = PhotoGallery()
+                    model?.id = (results?.string(forColumn: "Id"))!
+                    model?.iconUrl = (results?.string(forColumn: "Images"))!
+                    model?.isImageDeleted = (results?.bool(forColumn: "isDeleted"))!
                     
-                   let model = PhotoGallery()
-                    model.id = results?.string(forColumn: "Id")
-                    model.iconUrl = results?.string(forColumn: "Images")
-                    model.isImageDeleted = (results?.bool(forColumn: "isDeleted"))!
-                    
-                    array.append(model)
+                    array.append(model!)
+                    model = nil
                 }
           //  }
             database.close()
         }
         return array as NSArray
     }
-    
-    
+
+    //After Api merge
+    func fetchGalleryDataFromDB(callback: (_ array: AnyObject) -> ()) {
+        var array = [PhotoGallery]()
+
+        if self.openDatabase() {
+
+            // for i in 0...20 {
+
+            let querySQL = "Select * from Gallery where EventID = ?"
+            let results:FMResultSet? = self.database.executeQuery(querySQL, withArgumentsIn: [EventData.sharedInstance.eventId])
+
+            while results?.next() == true {
+                //weak var model: PhotoGallery?
+
+                var model : PhotoGallery? = PhotoGallery()
+                model?.id = (results?.string(forColumn: "Id"))!
+                model?.iconUrl = (results?.string(forColumn: "Images"))!
+                model?.isImageDeleted = (results?.bool(forColumn: "isDeleted"))!
+
+                array.append(model!)
+                model = nil
+            }
+            //  }
+            self.database.close()
+        }
+
+        callback(array as AnyObject)
+    }
+
     // MARK: - Website methods
     
     func saveWebsiteDataIntoDB(response: AnyObject) {
@@ -4759,7 +4788,6 @@ class DBManager: NSObject {
                     let sessionId = results.string(forColumn: "SessionID")!
                     let activitySessionId = results.string(forColumn: "ActivitySessionId")!
                     let activityId = results.string(forColumn: "ActivityID")!
-                    print("Activity session id",activitySessionId)
 
                     let isAddToSchedule = model.isAddedToSchedule == true ? 1 : 0
 

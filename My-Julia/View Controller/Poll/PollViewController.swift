@@ -83,36 +83,36 @@ class PollViewController: UIViewController, UITableViewDataSource, UITableViewDe
         CommonModel.sharedInstance.showActitvityIndicator()
 
         let urlStr = GetPoll_Question_List_url.appendingFormat("%@",self.sessionModel.activityId)
-        NetworkingHelper.getRequestFromUrl(name:GetPoll_Question_List_url,  urlString:urlStr, callback: { response in
+        NetworkingHelper.getRequestFromUrl(name:GetPoll_Question_List_url,  urlString:urlStr, callback: { [weak self] response in
            // print("poll questions", response)
             CommonModel.sharedInstance.dissmissActitvityIndicator()
 
             if response is Array<Any> {
               //  self.parsePollData(response: response)
-                self.pollarray = DBManager.sharedInstance.fetchPollActivityQuestionsListFromDB(sessionId: self.sessionModel.sessionId, activityId: self.sessionModel.activityId) as! [PollModel]
-                self.fetchUserAnswerData()
+                self?.pollarray = DBManager.sharedInstance.fetchPollActivityQuestionsListFromDB(sessionId: (self?.sessionModel.sessionId)!, activityId: (self?.sessionModel.activityId)!) as! [PollModel]
+                self?.fetchUserAnswerData()
 
-                if self.pollarray.count == 0 {
-                    self.topView.isHidden = true
+                if self?.pollarray.count == 0 {
+                    self?.topView.isHidden = true
                 }
-                else if self.pollarray.count == 1 {
-                    self.progressCount = 0
+                else if self?.pollarray.count == 1 {
+                    self?.progressCount = 0
                 }
                 else {
-                    self.progressCount = 1.0 / Float(self.pollarray.count)
+                    self?.progressCount = 1.0 / Float((self?.pollarray.count)!)
                 }
                 
-                self.noOfQuestionsLbl.text = "Question \(self.questionIndex) of \(self.pollarray.count)"
-                self.progressView.progress = self.progressCount
+                self?.noOfQuestionsLbl.text = "Question \(self?.questionIndex) of \(self?.pollarray.count)"
+                self?.progressView.progress = (self?.progressCount)!
             }
             
-            if self.pollarray.count == 0 {
-                self.messageLbl.isHidden = false
-                self.messageLbl.text = No_Poll_Question_Text
-                self.topView.isHidden = true
+            if self?.pollarray.count == 0 {
+                self?.messageLbl.isHidden = false
+                self?.messageLbl.text = No_Poll_Question_Text
+                self?.topView.isHidden = true
             }else {
-                self.messageLbl.isHidden = true
-                self.topView.isHidden = false
+                self?.messageLbl.isHidden = true
+                self?.topView.isHidden = false
             }
             
         }, errorBack: { error in
@@ -200,7 +200,7 @@ class PollViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
         paramArray.append(paramDict)
     
-        NetworkingHelper.postData(urlString:Post_Poll_Responce_url, param:paramArray as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { response in
+        NetworkingHelper.postData(urlString:Post_Poll_Responce_url, param:paramArray as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { [weak self] response in
             
             //dissmiss Indicator
             CommonModel.sharedInstance.dissmissActitvityIndicator()
@@ -210,19 +210,19 @@ class PollViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
                     //Replace user answered status
                     model.isUserAnswered = true
-                    self.pollarray.remove(at: self.questionIndex - 1)
-                    self.pollarray.insert(model, at: self.questionIndex - 1)
+                    self?.pollarray.remove(at: (self?.questionIndex)! - 1)
+                    self?.pollarray.insert(model, at: (self?.questionIndex)! - 1)
 
-                    if self.questionIndex != self.pollarray.count {
-                        self.changeProgressStatus(cell: selectedCell, sender: selectedCell.submitBtn)
+                    if self?.questionIndex != self?.pollarray.count {
+                        self?.changeProgressStatus(cell: selectedCell, sender: selectedCell.submitBtn)
                     }
                     else {
                         //Show sucess view
-                        self.sucessView.isHidden = false
+                        self?.sucessView.isHidden = false
                     }
                 }
                 else {
-                    CommonModel.sharedInstance.showAlertWithStatus(title: "", message: Feedback_Error_Message, vc: self)
+                    CommonModel.sharedInstance.showAlertWithStatus(title: "", message: Feedback_Error_Message, vc: self!)
                 }
             }
         }, errorBack: { error in

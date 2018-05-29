@@ -215,7 +215,7 @@ class UserProfileViewController: UIViewController, UINavigationControllerDelegat
             paramDict = ["EventId" : EventData.sharedInstance.eventId, "AttendeeId" : EventData.sharedInstance.attendeeId, "IsVisible" : switchSet.isOn, "IsDND" : dndSwitchSet.isOn] as [String : Any]
         }
         
-        NetworkingHelper.postData(urlString: Post_Visiblity_url, param: paramDict as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { response in
+        NetworkingHelper.postData(urlString: Post_Visiblity_url, param: paramDict as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { [weak self] response in
             
             //Dismiss Indicator
             CommonModel.sharedInstance.dissmissActitvityIndicator()
@@ -224,10 +224,10 @@ class UserProfileViewController: UIViewController, UINavigationControllerDelegat
             if responseCode == 0 {
                 let iconurl = DBManager.sharedInstance.appendImagePath(path: response.value(forKey: "Imgpath") as! String)
                 _ = NSURL(string:iconurl)! as URL
-                DBManager.sharedInstance.updateUserProfileDataIntoDB(setting: self.switchSet.isOn, dnd: self.dndSwitchSet.isOn, profileImgPath:iconurl)
-                AttendeeInfo.sharedInstance.isvisible = self.switchSet.isOn
-                AttendeeInfo.sharedInstance.isDND = self.dndSwitchSet.isOn
-                CommonModel.sharedInstance.showAlertWithStatus(title: Alert_Sucess, message: Sucess_Update_Profile, vc: self)
+                DBManager.sharedInstance.updateUserProfileDataIntoDB(setting: (self?.switchSet.isOn)!, dnd: (self?.dndSwitchSet.isOn)!, profileImgPath:iconurl)
+                AttendeeInfo.sharedInstance.isvisible = (self?.switchSet.isOn)!
+                AttendeeInfo.sharedInstance.isDND = (self?.dndSwitchSet.isOn)!
+                CommonModel.sharedInstance.showAlertWithStatus(title: Alert_Sucess, message: Sucess_Update_Profile, vc: self!)
                 
 //                self.switchSet.isEnabled = false
 //                self.editbtn.setTitle(" ", for: .normal)

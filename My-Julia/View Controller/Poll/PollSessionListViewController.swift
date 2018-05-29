@@ -122,9 +122,9 @@ class PollSessionListViewController: UIViewController, UITableViewDataSource, UI
         
         let urlStr = Get_AllModuleDetails_url.appendingFormat("Flag=%@",GetPollActivities__url)
         CommonModel.sharedInstance.dissmissActitvityIndicator()
-        NetworkingHelper.getRequestFromUrl(name:GetPollActivities__url,  urlString:urlStr, callback: { response in
+        NetworkingHelper.getRequestFromUrl(name:GetPollActivities__url,  urlString:urlStr, callback: { [weak self] response in
 
-            self.sortData(dataArray: DBManager.sharedInstance.fetchPollActivitiesDataFromDB())
+            self?.sortData(dataArray: DBManager.sharedInstance.fetchPollActivitiesDataFromDB())
         }, errorBack: { error in
             CommonModel.sharedInstance.dissmissActitvityIndicator()
         })

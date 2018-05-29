@@ -167,10 +167,10 @@ class SpeakerActivityListViewController: UIViewController, UITableViewDataSource
 
         let parameter = ["EventId" : EventData.sharedInstance.eventId, "SpeakerId" : AttendeeInfo.sharedInstance.speakerId]
         print(AttendeeInfo.sharedInstance.speakerId)
-        NetworkingHelper.postData(urlString: Get_Speaker_Activity_url, param: parameter as AnyObject, withHeader: true, isAlertShow: false, controller:self, callback: { response in
+        NetworkingHelper.postData(urlString: Get_Speaker_Activity_url, param: parameter as AnyObject, withHeader: true, isAlertShow: false, controller:self, callback: { [weak self] response in
             print("Activity list :", response)
             if response is Array<Any> {
-                self.sortData(dataArray: DBManager.sharedInstance.fetchSpeakerPollActListFromDB() as! [AgendaModel] as NSArray)
+                self?.sortData(dataArray: DBManager.sharedInstance.fetchSpeakerPollActListFromDB() as! [AgendaModel] as NSArray)
 //                self.parseSpeakerData(response: response)
             }
         }, errorBack: { error in

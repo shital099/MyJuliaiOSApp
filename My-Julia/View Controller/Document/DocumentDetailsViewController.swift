@@ -59,7 +59,7 @@ class DocumentDetailsViewController: UIViewController, UIWebViewDelegate {
     func updateReadStatus()  {
 
         let urlStr = UpdateReadStatus.appendingFormat("flag=%@&Id=%@",Update_Documents_List,self.model.docId)
-        NetworkingHelper.getRequestFromUrl(name:UpdateReadStatus,  urlString:urlStr, callback: { response in
+        NetworkingHelper.getRequestFromUrl(name:UpdateReadStatus,  urlString:urlStr, callback: { [weak self] response in
 
         }, errorBack: { error in
         })

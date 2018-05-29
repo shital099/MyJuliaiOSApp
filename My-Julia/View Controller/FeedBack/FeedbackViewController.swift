@@ -122,7 +122,7 @@ class FeedbackViewController: UIViewController, UITableViewDataSource, UITableVi
     @objc func leftSideMenuButtonPressed(sender: UIBarButtonItem) {
         let masterVC : UIViewController!
         if IS_IPHONE {
-            masterVC =  self.menuContainerViewController.leftMenuViewController as! MenuViewController!
+            masterVC =  self.menuContainerViewController.leftMenuViewController as! MenuViewController
         }
         else {
             masterVC = self.splitViewController?.viewControllers.first
@@ -146,28 +146,28 @@ class FeedbackViewController: UIViewController, UITableViewDataSource, UITableVi
     func checkUserFeedback() {
 
 //        let urlStr = Check_User_Feedback_url.appendingFormat("%@/%@",EventData.sharedInstance.attendeeId,EventData.sharedInstance.eventId)
-        NetworkingHelper.getRequestFromUrl(name:Check_User_Feedback_url,  urlString: Check_User_Feedback_url, callback: { response in
+        NetworkingHelper.getRequestFromUrl(name:Check_User_Feedback_url,  urlString: Check_User_Feedback_url, callback: { [weak self] response in
 
             if response is NSDictionary {
                 if response.value(forKey: "responseCode") as! Bool == true {
-                    self.submittedMessageLbl.text = Activity_Feedback_submitted
-                    self.topView.isHidden = true
-                    self.submittedMessageLbl.isHidden = false
+                    self?.submittedMessageLbl.text = Activity_Feedback_submitted
+                    self?.topView.isHidden = true
+                    self?.submittedMessageLbl.isHidden = false
                 }
                 else {
-                    NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardChange), name: .UIKeyboardWillShow, object: nil)
-                    NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardChange), name: .UIKeyboardWillHide, object: nil)
+                    NotificationCenter.default.addObserver(self, selector: #selector(self?.keyboardChange), name: .UIKeyboardWillShow, object: nil)
+                    NotificationCenter.default.addObserver(self, selector: #selector(self?.keyboardChange), name: .UIKeyboardWillHide, object: nil)
 
                     //Fetch data from Sqlite database
-                    self.feedbackarray = DBManager.sharedInstance.fetchFeedbackDataFromDB() as! [FeedbackModel]
+                    self?.feedbackarray = DBManager.sharedInstance.fetchFeedbackDataFromDB() as! [FeedbackModel]
 
                     //Hide send button if no questions added in list
-                    if self.feedbackarray.count == 0 {
-                        self.sendBtn.isHidden = true
+                    if self?.feedbackarray.count == 0 {
+                        self?.sendBtn.isHidden = true
                     }
                     else {
-                        self.sendBtn.isHidden = false
-                        self.tableView.reloadData()
+                        self?.sendBtn.isHidden = false
+                        self?.tableView.reloadData()
                     }
                 }
             }
@@ -196,17 +196,17 @@ class FeedbackViewController: UIViewController, UITableViewDataSource, UITableVi
             paramArr.append(paramDict)
         }
         
-        NetworkingHelper.postData(urlString:Post_Feedback_Responce_url, param:paramArr as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { response in
+        NetworkingHelper.postData(urlString:Post_Feedback_Responce_url, param:paramArr as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { [weak self] response in
             //dissmiss Indicator
             CommonModel.sharedInstance.dissmissActitvityIndicator()
             
             if response is NSDictionary {
                 
                 if (response.value(forKey: "responseCode") != nil) {
-                    self.showStatusView(isSucess: true)
+                    self?.showStatusView(isSucess: true)
                 }
                 else {
-                    self.showStatusView(isSucess: false)
+                    self?.showStatusView(isSucess: false)
                 }
             }
         }, errorBack: { error in
@@ -721,7 +721,7 @@ class FeedbackViewController: UIViewController, UITableViewDataSource, UITableVi
 //            paramArr.append(paramDict)
 //        }
 //
-//        NetworkingHelper.postData(urlString:Post_Feedback_Responce_url, param:paramArr as AnyObject, withHeader: false, callback: { response in
+//        NetworkingHelper.postData(urlString:Post_Feedback_Responce_url, param:paramArr as AnyObject, withHeader: false, callback: { [weak self] response in
 //            //dissmiss Indicator
 //            CommonModel.sharedInstance.dissmissActitvityIndicator()
 //

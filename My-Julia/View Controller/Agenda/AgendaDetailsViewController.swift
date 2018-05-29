@@ -49,6 +49,9 @@ class AgendaDetailsViewController: UIViewController,UIImagePickerControllerDeleg
        
         //Set separator color according to background color
         CommonModel.sharedInstance.applyTableSeperatorColor(object: tableviewObj)
+
+        //Fetch agenda details
+        agendaModel = DBManager.sharedInstance.fetchActivityDetailsFromDB(activityId: agendaModel.activityId)
     }
 
     override func didReceiveMemoryWarning() {
@@ -58,8 +61,6 @@ class AgendaDetailsViewController: UIViewController,UIImagePickerControllerDeleg
     
     override func viewDidAppear(_ animated: Bool) {
 
-        //Fetch agenda details
-        agendaModel = DBManager.sharedInstance.fetchActivityDetailsFromDB(activityId: agendaModel.activityId)
 
         //Check reminder added or not
         reminderStatus = DBManager.sharedInstance.isReminderAddedIntoDB(activityId: agendaModel.activityId)
@@ -108,15 +109,15 @@ class AgendaDetailsViewController: UIViewController,UIImagePickerControllerDeleg
     
     func getActivityDetailsData() {
         
-        NetworkingHelper.getRequestFromUrl(name:Agenda_Details_url,  urlString: Agenda_Details_url.appendingFormat(self.agendaModel.activityId), callback: { response in
+        NetworkingHelper.getRequestFromUrl(name:Agenda_Details_url,  urlString: Agenda_Details_url.appendingFormat(self.agendaModel.activityId), callback: { [weak self] response in
             
             if response is NSDictionary {
                 let dict = response as! NSDictionary
                 if (dict.value(forKey:"speaker") as? NSNull) == nil {
-                    self.agendaModel = DBManager.sharedInstance.fetchActivityDetailsFromDB(activityId:self.agendaModel.activityId)
+                    self?.agendaModel = DBManager.sharedInstance.fetchActivityDetailsFromDB(activityId:(self?.agendaModel.activityId)!)
                 }
             }
-            self.tableviewObj.reloadData()
+            self?.tableviewObj.reloadData()
         }, errorBack: { error in
             NSLog("error : %@", error)
         })

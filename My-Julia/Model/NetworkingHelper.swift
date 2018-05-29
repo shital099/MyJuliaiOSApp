@@ -16,7 +16,7 @@ import UIKit
 let BASE_URL = "http://srv01.gcotechcenter.local:2400/"     //SRV 2
 //let BASE_URL = "https://apps.gcotechcenter.com/"
 
-//let BASE_URL = "http://srv01.gcotechcenter.local:5400/"     //Production
+//let BASE_URL = "http://srv01.gcotechcenter.local:5400/"     //Production4
 
 //TEST Enviorment
 //let BASE_URL = "http://srv01.gcotechcenter.local:3400/"     //TEST Enviorment
@@ -193,19 +193,19 @@ class NetworkingHelper: NSObject {
 //        }
 
         let url = BASE_URL + urlString
-       weak var manager = AFHTTPSessionManager()
-        manager?.requestSerializer = AFJSONRequestSerializer()
+        let manager = AFHTTPSessionManager()
+        manager.requestSerializer = AFJSONRequestSerializer()
 
         if urlString != Get_AuthToken_Url {
-            manager?.requestSerializer.setValue("Basic ".appending(EventData.sharedInstance.auth_token), forHTTPHeaderField: "Authorization")
+            manager.requestSerializer.setValue("Basic ".appending(EventData.sharedInstance.auth_token), forHTTPHeaderField: "Authorization")
         }
-        manager?.requestSerializer.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        manager?.requestSerializer.setValue("application/json", forHTTPHeaderField: "Accept")
+        manager.requestSerializer.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        manager.requestSerializer.setValue("application/json", forHTTPHeaderField: "Accept")
         
-        manager?.responseSerializer = AFJSONResponseSerializer()
+        manager.responseSerializer = AFJSONResponseSerializer()
        // print("Post URL : ",urlString)
 
-        manager?.post(url, parameters: param, progress: nil, success: { (task: URLSessionDataTask, responseObject: Any) in
+        manager.post(url, parameters: param, progress: nil, success: { (task: URLSessionDataTask, responseObject: Any) in
             
             if urlString == Get_Latest_Questions_List_url {
                 //Add Question Activity List in database

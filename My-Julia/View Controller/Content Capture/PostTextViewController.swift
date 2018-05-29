@@ -109,14 +109,14 @@ class PostTextViewController: UIViewController, UITextViewDelegate {
         
         let paramDict : NSMutableDictionary? = ["Comment":output ,"AttendeeId":AttendeeInfo.sharedInstance.attendeeId, "EventId":event.eventId]
 
-        NetworkingHelper.postData(urlString:Post_Activity_Feed_url, param:paramDict as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { response in
+        NetworkingHelper.postData(urlString:Post_Activity_Feed_url, param:paramDict as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { [weak self] response in
             //dissmiss Indicator
             CommonModel.sharedInstance.dissmissActitvityIndicator()
 
             if response is NSDictionary {
                 if (response.value(forKey: "responseCode") != nil) {
                     // CommonModel.sharedInstance.showAlertWithStatus(message: Feedback_Sucess_Message, vc: self)
-                    self.navigationController?.popViewController(animated: true)
+                    self?.navigationController?.popViewController(animated: true)
                 }
                 else {
                     // CommonModel.sharedInstance.showAlertWithStatus(message: Feedback_Error_Message, vc: self)

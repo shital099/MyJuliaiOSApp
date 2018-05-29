@@ -156,11 +156,11 @@ class CommentsListViewController: UIViewController, UITableViewDelegate, UITable
 
     func getComments() {
         
-        NetworkingHelper.getRequestFromUrl(name:Get_Comments_url,  urlString: Get_Comments_url.appendingFormat(self.feedModel.id), callback: { response in
+        NetworkingHelper.getRequestFromUrl(name:Get_Comments_url,  urlString: Get_Comments_url.appendingFormat(self.feedModel.id), callback: { [weak self] response in
             
             //Fetch data from Sqlite database
-            self.listArray = DBManager.sharedInstance.fetchActivityFeedsCommentsDataFromDB(activityFeedId: self.feedModel.id).mutableCopy() as! NSMutableArray
-            self.tableView.reloadData()
+            self?.listArray = DBManager.sharedInstance.fetchActivityFeedsCommentsDataFromDB(activityFeedId: (self?.feedModel.id)!).mutableCopy() as! NSMutableArray
+            self?.tableView.reloadData()
             
           //  DBManager.sharedInstance.fe(response: response)
 
@@ -219,7 +219,7 @@ class CommentsListViewController: UIViewController, UITableViewDelegate, UITable
 
         let paramDict = ["ActivityFeedId": feedModel.id,"comment":output,"AttendeeId":AttendeeInfo.sharedInstance.attendeeId] as [String : Any]
 
-        NetworkingHelper.postData(urlString:Post_Activity_Comment_url, param:paramDict as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { response in
+        NetworkingHelper.postData(urlString:Post_Activity_Comment_url, param:paramDict as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { [weak self] response in
             
             //dissmiss Indicator
             //CommonModel.sharedInstance.dissmissActitvityIndicator()
@@ -233,12 +233,12 @@ class CommentsListViewController: UIViewController, UITableViewDelegate, UITable
                     model.createdDate = "" //(results?.string(forColumn: "CreatedDate"))!
                     model.userIconUrl = AttendeeInfo.sharedInstance.iconUrl
                     model.userId = AttendeeInfo.sharedInstance.attendeeId
-                    self.listArray.add(model)
-                    self.tableView.reloadData()
+                    self?.listArray.add(model)
+                    self?.tableView.reloadData()
 
-                    self.commentTextView.text = ""
-                    self.sendButton.isEnabled = false
-                    self.placeholderLabel.isHidden = !self.commentTextView.text.isEmpty
+                    self?.commentTextView.text = ""
+                    self?.sendButton.isEnabled = false
+                    self?.placeholderLabel.isHidden = !(self?.commentTextView.text.isEmpty)!
                 }
             }
             else {
