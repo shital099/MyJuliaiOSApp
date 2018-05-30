@@ -164,7 +164,7 @@ class CustomAlertView: UIViewController, UITextFieldDelegate {
         //Show Indicator
         CommonModel.sharedInstance.showActitvityIndicator()
 
-        let parameters : NSDictionary = [ "AttendeeCode": self.attendeeCodeTextField.text!, "EventId" : self.eventId, "DeviceToken":AppDelegate.getAppDelegateInstance().deviceToken]
+        let parameters : NSDictionary = [ "AttendeeCode": self.attendeeCodeTextField.text!, "EventId" : self.eventId, "DeviceToken":AppDelegate.getAppDelegateInstance().deviceToken, "OS" : "iOS"]
 
         NetworkingHelper.postData(urlString:Get_AuthToken_Url, param:parameters, withHeader: false, isAlertShow: true, controller:self, callback: {[weak self] response in
 
@@ -222,7 +222,7 @@ class CustomAlertView: UIViewController, UITextFieldDelegate {
             let responseCode = Int(response.value(forKey: "responseCode") as! String)
 
 //            self?.attendeeCodeTextField.resignFirstResponder()
-//            self?.delegate?.loginButtonTapped(selectedOption: "", textFieldValue: (self?.attendeeCodeTextField.text!)
+//            self?.delegate?.loginButtonTapped(selectedOption: "", textFieldValue: (self?.attendeeCodeTextField.text)!)
 //            self?.dismiss(animated: true, completion: nil)
 
             if responseCode == 0 {
@@ -235,7 +235,7 @@ class CustomAlertView: UIViewController, UITextFieldDelegate {
                 CommonModel.sharedInstance.showAlertWithStatus(title: "", message:response.value(forKey: "responseMsg") as! String, vc: self!)
             }
         }, errorBack: { error in
-            NSLog("error in Validate OTP : %@ ≤", error)
+            NSLog("error in Validate OTP : ", error)
         })
     }
 

@@ -12,7 +12,6 @@ class TermsAndConditionsViewController: UIViewController {
 
     @IBOutlet weak var contentLabel: UILabel!
     @IBOutlet weak var scrollView: UIScrollView!
-    @IBOutlet weak var contentText: UITextView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -67,19 +66,20 @@ class TermsAndConditionsViewController: UIViewController {
 
     func fetchContentFromServer() {
 
-        NetworkingHelper.getRequestFromUrl(name:Get_TermsAndCondition_Url, urlString: Get_TermsAndCondition_Url, callback: { [weak self] response in
-            print("\n Terms and conditions Details : ",response)
+        NetworkingHelper.getRequestFromUrl(name:Get_TermsAndCondition_Url, urlString: Get_TermsAndCondition_Url, callback: { response in
 
             if response is NSArray {
                 let array = response as! NSArray
                 if array.count != 0 {
                     let dict = array[0] as! NSDictionary
-                    let content = DBManager.sharedInstance.isNullString(str: dict.value(forKey:"TermsCondition") as Any)
-                    self?.contentLabel.attributedText =  CommonModel.sharedInstance.stringFromHtml(string: content)
+                    var content = DBManager.sharedInstance.isNullString(str: dict.value(forKey:"TermsCondition") as Any)
                    // self.contentText.attributedText = CommonModel.sharedInstance.stringFromHtml(string: content)
-
-                    self?.scrollView.bounces = false
-                    self?.scrollView.contentSize = CGSize(width: (self?.scrollView.frame.size.width)!, height: (self?.contentLabel.frame.size.height)! + 100)
+                    DispatchQueue.main.async {
+                        content = content.appendingFormat("<br>",content)
+                        self.contentLabel.attributedText =  CommonModel.sharedInstance.stringFromHtml(string: content)
+                    }
+                    self.scrollView.bounces = false
+                    self.scrollView.contentSize = CGSize(width: self.scrollView.frame.size.width, height: self.contentLabel.frame.size.height + 120)
 
                 }
             }

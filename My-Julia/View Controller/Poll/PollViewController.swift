@@ -102,7 +102,7 @@ class PollViewController: UIViewController, UITableViewDataSource, UITableViewDe
                     self?.progressCount = 1.0 / Float((self?.pollarray.count)!)
                 }
                 
-                self?.noOfQuestionsLbl.text = "Question \(self?.questionIndex) of \(self?.pollarray.count)"
+                self?.noOfQuestionsLbl.text = String(format:"Question %d of %d",(self?.questionIndex)!,(self?.pollarray.count)!)
                 self?.progressView.progress = (self?.progressCount)!
             }
             

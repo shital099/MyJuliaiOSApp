@@ -244,8 +244,10 @@ class FeedbackViewController: UIViewController, UITableViewDataSource, UITableVi
         let result = (textView.text as NSString?)?.replacingCharacters(in: range, with: text)
         ansDict.setValue(result, forKey: textView.accessibilityIdentifier!)
 
+        print("test character length : ",textView.text.count)
+
         //Retrict feedback text length
-        if(textView.text.count > 500 && range.length == 0) {
+        if(textView.text.count > 498 && range.length == 0) {
             return false
         }
 

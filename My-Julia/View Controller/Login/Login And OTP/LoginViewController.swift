@@ -80,7 +80,7 @@ class LoginViewController: UIViewController {
 
         let timezone = TimeZone.current.abbreviation()
 
-        let parameters : NSDictionary = [ "AttendeeCode": self.inputText.text!, "DeviceToken":AppDelegate.getAppDelegateInstance().deviceToken, "TimeZone" : timezone ?? ""]
+        let parameters : NSDictionary = [ "AttendeeCode": self.inputText.text!, "DeviceToken":AppDelegate.getAppDelegateInstance().deviceToken, "OS" : "iOS", "TimeZone" : timezone ?? ""]
 
         NetworkingHelper.postData(urlString:Get_AuthToken_Url, param:parameters, withHeader: false, isAlertShow: true, controller:self, callback: { [weak self] response in
 

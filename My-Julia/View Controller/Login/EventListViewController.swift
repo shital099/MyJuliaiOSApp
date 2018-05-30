@@ -189,7 +189,6 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
             self.present(customAlert, animated: true, completion: nil)
         }
 
-
 //        let blurEffect = UIBlurEffect(style: .light)
 //        let blurredEffectView = UIVisualEffectView(effect: blurEffect)
 //        blurredEffectView.frame = cell.pastEventview.frame
@@ -208,11 +207,12 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         refreshAlert.addAction(UIAlertAction(title: "YES", style: .default, handler: { (action: UIAlertAction!) in
 
             //Delete past event Data
-            let model = self.listArray[indexPath.row] as EventModel!
+            let model = self.listArray[indexPath.row] as EventModel?
             DBManager.sharedInstance.deleteEventAllDetails(eventId: (model?.eventId)!)
 
             self.listArray.remove(at: indexPath.row)
-            self.tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.bottom)
+           // self.tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.bottom)
+            self.tableView.reloadData()
         }))
 
         refreshAlert.addAction(UIAlertAction(title: "NO", style: .default, handler: { (action: UIAlertAction!) in
