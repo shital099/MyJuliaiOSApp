@@ -132,15 +132,18 @@ class UserProfileViewController: UIViewController, UINavigationControllerDelegat
     
     
     @IBAction func editProIcon(sender: UIButton) {
-        //self.showActionSheet()
-        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.photoLibrary) {
-            
-            self.picker.allowsEditing = true
-            self.picker.sourceType = .photoLibrary
-            self.picker.modalPresentationStyle = .overFullScreen
-            self.picker.delegate = self
-            self.picker.mediaTypes = [kUTTypeImage as String] //UIImagePickerController.availableMediaTypes(for: .photoLibrary)!
-            self.present(self.picker, animated: true, completion: nil)
+
+        if AttachmentHandler.shared.authorisationStatusCheck(attachmentTypeEnum: AttachmentHandler.AttachmentType.photoLibrary, vc: self) {
+            //self.showActionSheet()
+            if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.photoLibrary) {
+
+                self.picker.allowsEditing = true
+                self.picker.sourceType = .photoLibrary
+                self.picker.modalPresentationStyle = .overFullScreen
+                self.picker.delegate = self
+                self.picker.mediaTypes = [kUTTypeImage as String] //UIImagePickerController.availableMediaTypes(for: .photoLibrary)!
+                self.present(self.picker, animated: true, completion: nil)
+            }
         }
     }
     

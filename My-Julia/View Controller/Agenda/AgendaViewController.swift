@@ -68,41 +68,164 @@ class AgendaViewController: UIViewController, UITableViewDataSource, UITableView
     override func viewDidAppear(_ animated: Bool) {
     }
 
+//    func fetchAgendaDataList()  {
+//        //Fetch all dates from DB
+//        // self.datesArray = DBManager.sharedInstance.fetchEventDatesFromDB()
+//
+//        //Add Some sample date selected
+//        self.selectedDate = "11-13-2000"//self.datesArray[0] as! String
+//
+//        // self.daysArray = DBManager.sharedInstance.fetchEventDayFromDB()
+//
+//        //Calculate days between events start and end date
+//        let dateFormatter = DateFormatter()
+//        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+//        var startDate = dateFormatter.date(from: EventData.sharedInstance.eventStartDate)
+//        let endDate = dateFormatter.date(from: EventData.sharedInstance.eventEndDate)
+//
+//        let diffInDays = Calendar.current.dateComponents([.day], from: startDate!, to: endDate!).day
+//        print("diffInDays : ",diffInDays)
+//        print("Sort sorting method : ",CommonModel.sharedInstance.getCurrentDateInMM())
+//
+//        for _ in 0...diffInDays! {
+//
+//            dateFormatter.dateFormat = "dd-MM-yyyy"
+//            let dateStr:String = dateFormatter.string(from: startDate!)
+//            self.datesArray.add(dateStr)
+//
+//            dateFormatter.dateFormat = "EEEE"
+//            let dayStr:String = dateFormatter.string(from: startDate!)
+//            self.daysArray.add(dayStr)
+//            //  print("days : ",dayStr)
+//            startDate = Calendar.current.date(byAdding: .day, value: 1, to: startDate!)!
+//        }
+//        print("dates array : ",self.datesArray.count)
+//
+//        if daysArray.count != 0 {
+//            self.messageLbl.isHidden = true
+//            self.headerBgView.isHidden = false
+//           // self.fetchActivitiesListAndSort()
+//        }
+//
+//        if datesArray.count != 0 {
+//
+//            //Show today's date activities
+//            let date = Date()
+//            let formatter = DateFormatter()
+//            formatter.dateFormat = "dd-MM-yyyy"
+//            let todaysDate = formatter.string(from: date)
+//            if self.datesArray.contains(todaysDate) {
+//                self.selectedDate = todaysDate
+//            }
+//            else {
+//                self.selectedDate = self.datesArray.lastObject as! String
+//            }
+//
+//            let indexPath = NSIndexPath(item: self.datesArray.index(of: self.selectedDate), section: 0) as IndexPath
+//            self.collectionView(self.collectionview, didSelectItemAt: indexPath)
+//            DispatchQueue.main.async {
+//                self.collectionview.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+//            }
+//
+//            self.onChangeOnBottomTab(segmentControl)
+//        }
+//    }
+//
+//    func fetchActivitiesListAndSort() {
+//
+//        //Fetch data from Sqlite database
+//        let listArray = DBManager.sharedInstance.fetchAllScheduleListFromDB(isAddedMySchedule: isMySchedules) as! [AgendaModel]
+//        print("dates array : ",self.datesArray.count)
+//
+//        for index in 0...datesArray.count - 1 {
+//
+//            let date : String = datesArray[index] as! String
+//            let predicate:NSPredicate = NSPredicate(format: "sortDate = %@", date)
+//            let filteredArray = listArray.filter { predicate.evaluate(with: $0) };
+//
+//            if isMySchedules {
+//                self.myScheduleDataDict[date] = filteredArray
+//            }
+//            else {
+//                self.dataDict[date] = filteredArray
+//            }
+//        }
+//        print("after sorting method : ",CommonModel.sharedInstance.getCurrentDateInMM())
+//
+//        //        if isMySchedules {
+//        //            self.myScheduleDataDict = DBManager.sharedInstance.fetchAllAgendaListFromDB(isAddedMySchedule: isMySchedules, datesArray: self.datesArray) as! [String : Array<AgendaModel>]
+//        //        }
+//        //        else {
+//        //            self.dataDict = DBManager.sharedInstance.fetchAllAgendaListFromDB(isAddedMySchedule: isMySchedules, datesArray: self.datesArray) as! [String : Array<AgendaModel>]
+//        //        }
+//        //    print("after sorting by 2 method : ",CommonModel.sharedInstance.getCurrentDateInMM())
+//        // print("nDataDict : ", nDataDict)
+//    }
+
     func fetchAgendaDataList()  {
         //Fetch all dates from DB
         // self.datesArray = DBManager.sharedInstance.fetchEventDatesFromDB()
-        
+
         //Add Some sample date selected
         self.selectedDate = "11-13-2000"//self.datesArray[0] as! String
-        
+
         // self.daysArray = DBManager.sharedInstance.fetchEventDayFromDB()
-        
+
         //Calculate days between events start and end date
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
         var startDate = dateFormatter.date(from: EventData.sharedInstance.eventStartDate)
         let endDate = dateFormatter.date(from: EventData.sharedInstance.eventEndDate)
-        
+        print("Start sorting method : ",CommonModel.sharedInstance.getCurrentDateInMM())
+
         let diffInDays = Calendar.current.dateComponents([.day], from: startDate!, to: endDate!).day
-       // print("diffInDays : ",diffInDays)
-        
+        print("diffInDays : ",diffInDays)
+        print("fetch data from db : ",CommonModel.sharedInstance.getCurrentDateInMM())
+
+        //Fetch data from Sqlite database
+        let listArray = DBManager.sharedInstance.fetchAllScheduleListFromDB(isAddedMySchedule: isMySchedules) as! [AgendaModel]
+        print("data array count : ",listArray.count)
+        print("fetch data from db finish: ",CommonModel.sharedInstance.getCurrentDateInMM())
+        print("for loop start: ",CommonModel.sharedInstance.getCurrentDateInMM())
+
         for _ in 0...diffInDays! {
-            
+
             dateFormatter.dateFormat = "dd-MM-yyyy"
             let dateStr:String = dateFormatter.string(from: startDate!)
             self.datesArray.add(dateStr)
-            
+
             dateFormatter.dateFormat = "EEEE"
             let dayStr:String = dateFormatter.string(from: startDate!)
             self.daysArray.add(dayStr)
             //  print("days : ",dayStr)
             startDate = Calendar.current.date(byAdding: .day, value: 1, to: startDate!)!
+
+            //Sort activity list according to date
+            let predicate:NSPredicate = NSPredicate(format: "sortDate = %@", dateStr)
+            let filteredArray = listArray.filter { predicate.evaluate(with: $0) };
+
+            if isMySchedules {
+                self.myScheduleDataDict[dateStr] = filteredArray
+            }
+            else {
+                self.dataDict[dateStr] = filteredArray
+            }
         }
+        print("for loop end: ",CommonModel.sharedInstance.getCurrentDateInMM())
+
+//        if isMySchedules {
+//            self.myScheduleDataDict = DBManager.sharedInstance.fetchAllAgendaListFromDB(isAddedMySchedule: isMySchedules, datesArray: self.datesArray) as! [String : Array<AgendaModel>]
+//        }
+//        else {
+//            self.dataDict = DBManager.sharedInstance.fetchAllAgendaListFromDB(isAddedMySchedule: isMySchedules, datesArray: self.datesArray) as! [String : Array<AgendaModel>]
+//        }
+
+        print("Finish All DB method: ",CommonModel.sharedInstance.getCurrentDateInMM())
 
         if daysArray.count != 0 {
             self.messageLbl.isHidden = true
             self.headerBgView.isHidden = false
-           // self.fetchActivitiesListAndSort()
+            // self.fetchActivitiesListAndSort()
         }
 
         if datesArray.count != 0 {
@@ -125,10 +248,43 @@ class AgendaViewController: UIViewController, UITableViewDataSource, UITableView
                 self.collectionview.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
             }
 
-            self.onChangeOnBottomTab(segmentControl)
+           // self.onChangeOnBottomTab(segmentControl)
         }
+
+        print("after sorting method : ",CommonModel.sharedInstance.getCurrentDateInMM())
     }
- 
+
+    func fetchActivitiesListAndSort() {
+
+        //Fetch data from Sqlite database
+        let listArray = DBManager.sharedInstance.fetchAllScheduleListFromDB(isAddedMySchedule: isMySchedules) as! [AgendaModel]
+        print("dates array : ",self.datesArray.count)
+
+        for index in 0...datesArray.count - 1 {
+
+            let date : String = datesArray[index] as! String
+            let predicate:NSPredicate = NSPredicate(format: "sortDate = %@", date)
+            let filteredArray = listArray.filter { predicate.evaluate(with: $0) };
+
+            if isMySchedules {
+                self.myScheduleDataDict[date] = filteredArray
+            }
+            else {
+                self.dataDict[date] = filteredArray
+            }
+        }
+        print("after sorting method : ",CommonModel.sharedInstance.getCurrentDateInMM())
+
+//                if isMySchedules {
+//                    self.myScheduleDataDict = DBManager.sharedInstance.fetchAllAgendaListFromDB(isAddedMySchedule: isMySchedules, datesArray: self.datesArray) as! [String : Array<AgendaModel>]
+//                }
+//                else {
+//                    self.dataDict = DBManager.sharedInstance.fetchAllAgendaListFromDB(isAddedMySchedule: isMySchedules, datesArray: self.datesArray) as! [String : Array<AgendaModel>]
+//                }
+//            print("after sorting by 2 method : ",CommonModel.sharedInstance.getCurrentDateInMM())
+        // print("nDataDict : ", nDataDict)
+    }
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -176,39 +332,7 @@ class AgendaViewController: UIViewController, UITableViewDataSource, UITableView
             (masterVC as! MenuViewController).toggleLeftSplitMenuController()
         }
     }
-    
-    func fetchActivitiesListAndSort() {
-    
-        //Fetch data from Sqlite database
-        let listArray = DBManager.sharedInstance.fetchAllScheduleListFromDB(isAddedMySchedule: isMySchedules) as! [AgendaModel]
-        print("dates array : ",self.datesArray.count)
 
-        for index in 0...datesArray.count - 1 {
-
-            let date : String = datesArray[index] as! String
-            let predicate:NSPredicate = NSPredicate(format: "sortDate = %@", date)
-            let filteredArray = listArray.filter { predicate.evaluate(with: $0) };
-
-            if isMySchedules {
-                self.myScheduleDataDict[date] = filteredArray
-            }
-            else {
-                self.dataDict[date] = filteredArray
-            }
-        }
-        print("after sorting by 1 method : ",CommonModel.sharedInstance.getCurrentDateInMM())
-
-//        if isMySchedules {
-//            self.myScheduleDataDict = DBManager.sharedInstance.fetchAllAgendaListFromDB(isAddedMySchedule: isMySchedules, datesArray: self.datesArray) as! [String : Array<AgendaModel>]
-//        }
-//        else {
-//            self.dataDict = DBManager.sharedInstance.fetchAllAgendaListFromDB(isAddedMySchedule: isMySchedules, datesArray: self.datesArray) as! [String : Array<AgendaModel>]
-//        }
-    //    print("after sorting by 2 method : ",CommonModel.sharedInstance.getCurrentDateInMM())
-       // print("nDataDict : ", nDataDict)
-    }
-    
-    
     // MARK: - Button Action Method
     
     @IBAction func onChangeOnBottomTab(_ sender: Any) {

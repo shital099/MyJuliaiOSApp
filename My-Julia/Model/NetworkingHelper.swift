@@ -164,16 +164,16 @@ class NetworkingHelper: NSObject {
         //Check internet connection
         AFNetworkReachabilityManager.shared().setReachabilityStatusChange { (status: AFNetworkReachabilityStatus) -> Void in
 
-//            switch status {
-//            case .unknown:
-//                print("Unknown")
-//            case .notReachable:
-//                print("notReachable")
-//            case .reachableViaWWAN:
-//                print("reachableViaWWAN")
-//            case .reachableViaWiFi:
-//                print("reachableViaWiFi")
-//            }
+            switch status {
+            case .unknown:
+                print("Unknown")
+            case .notReachable:
+                print("notReachable")
+            case .reachableViaWWAN:
+                print("reachableViaWWAN")
+            case .reachableViaWiFi:
+                print("reachableViaWiFi")
+            }
 
             if status == .notReachable {
                 if isAlertShow {

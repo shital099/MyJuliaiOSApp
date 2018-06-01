@@ -79,8 +79,8 @@ let Ask_Valid_Question = "Question can't be post empty"
 //Chat
 let Empty_Group_Member_Message = "Please select atleast one group member"
 let Empty_Group_Name_Message = "Please enter group name"
-let Disable_chat_message = "You can't send messages because this user 'Do not disturb' setting is activated"
-let GroupName_Validation_Message = "Group name should not be empty"
+let Disable_chat_message = "You can't send messages because 'Do not disturb' setting is activated to this user"
+let GroupName_Validation_Message = "Group name should not be blank"
 
 //Reminder
 let No_Reminder_Text = "No Reminder Added"
@@ -100,7 +100,7 @@ let Activity_Page_Limit = 15            //Set default limit 20 in server and app
 let Event_Feedback_submitted = "You have already submitted the feedback"
 
 //Speaker Details
-let Speaker_Session_Error = "You haven't associated this activity."
+let Speaker_Session_Error = "You are not associated to this activity."
 
 enum TKAlertType : NSInteger {
     case TKAlertTypeSucess = 0

@@ -11,6 +11,8 @@
 #import "Mp3Recorder.h"
 #import "UUProgressHUD.h"
 #import "ACMacros.h"
+#import <AVFoundation/AVFoundation.h>
+#import <Photos/Photos.h>
 
 #define TRIM(string) [string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]
 
@@ -22,6 +24,12 @@
     NSTimer *playTimer;
     
     UILabel *placeHold;
+
+    NSString *alertForPhotoLibraryMessage;
+
+    NSString *alertForCameraAccessMessage;
+
+
 }
 @end
 
@@ -29,6 +37,9 @@
 
 - (id)initWithSuperVC:(UIViewController *)superVC withSize:(CGSize)size
 {
+    alertForPhotoLibraryMessage = @"App does not have access to your photos. To enable access, tap settings and turn on Photo Library Access.";
+    alertForCameraAccessMessage = @"App does not have access to your camera. To enable access, tap settings and turn on Camera.";
+
     self.superVC = superVC;
 //    CGRect frame = CGRectMake(0, Main_Screen_Height-40, Main_Screen_Width, 40);
     CGRect frame = CGRectMake(0, size.height-45, size.width, 45);
@@ -270,7 +281,7 @@
 - (void)cameraButtonClick:(UIButton *)sender
 {
     [self.TextViewInput resignFirstResponder];
-    
+
     UIAlertController * alert=[UIAlertController alertControllerWithTitle:@"Choose photo"
                                                                   message:@""
                                                            preferredStyle:UIAlertControllerStyleAlert];
@@ -279,20 +290,105 @@
                                                         style:UIAlertActionStyleDefault
                                                       handler:^(UIAlertAction * action)
                                 {
-                                    [self addCarema];
+                                    [self checkCameraAccess];
                                 }];
     
     UIAlertAction* noButton = [UIAlertAction actionWithTitle:@"Images"
                                                        style:UIAlertActionStyleDefault
                                                      handler:^(UIAlertAction * action)
                                {
-                                   [self openPicLibrary];
+                                   [self checkPhotoLibraryccess];
                                }];
-    
+    UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
+                                                           style:UIAlertActionStyleDefault
+                                                         handler:^(UIAlertAction * action)
+                                   {
+                                   }];
+
     [alert addAction:yesButton];
     [alert addAction:noButton];
-    
+    [alert addAction:cancelAction];
+
     [self.superVC presentViewController:alert animated:YES completion:nil];
+}
+
+-(void)checkCameraAccess {
+    NSString *mediaType = AVMediaTypeVideo;
+    AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:mediaType];
+    if(authStatus == AVAuthorizationStatusAuthorized) {
+        [self addCarema];
+        // do your logic
+    } else if(authStatus == AVAuthorizationStatusDenied){
+        // denied
+        [self addAlertForSettings:self->alertForCameraAccessMessage];
+    } else if(authStatus == AVAuthorizationStatusRestricted){
+        // restricted, normally won't happen
+        [self addAlertForSettings:self->alertForCameraAccessMessage];
+    } else if(authStatus == AVAuthorizationStatusNotDetermined){
+        // not determined?!
+        [AVCaptureDevice requestAccessForMediaType:mediaType completionHandler:^(BOOL granted) {
+            if(granted){
+                NSLog(@"Granted access to %@", mediaType);
+                [self addCarema];
+            } else {
+                NSLog(@"Not granted access to %@", mediaType);
+                [self addAlertForSettings:self->alertForCameraAccessMessage];
+            }
+        }];
+    } else {
+        // impossible, unknown authorization status
+    }
+}
+
+-(void)checkPhotoLibraryccess {
+    PHAuthorizationStatus status = [PHPhotoLibrary authorizationStatus];
+
+    if (status == PHAuthorizationStatusAuthorized) {
+        // Access has been granted.
+        [self openPicLibrary];
+    }
+
+    else if (status == PHAuthorizationStatusDenied) {
+        // Access has been denied.
+        [self addAlertForSettings:self->alertForPhotoLibraryMessage];
+    }
+
+    else if (status == PHAuthorizationStatusNotDetermined) {
+
+        // Access has not been determined.
+        [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
+
+            if (status == PHAuthorizationStatusAuthorized) {
+                // Access has been granted.
+                [self openPicLibrary];
+            }
+
+            else {
+                // Access has been denied.
+                [self addAlertForSettings:self->alertForPhotoLibraryMessage];
+            }
+        }];
+    }
+
+    else if (status == PHAuthorizationStatusRestricted) {
+        // Restricted access - normally won't happen.
+        [self addAlertForSettings:self->alertForPhotoLibraryMessage];
+    }
+
+}
+
+- (void)addAlertForSettings:(NSString*)value {
+
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Access denied"
+                                                                   message:value
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+
+    UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+                                                          handler:^(UIAlertAction * action) {}];
+
+    [alert addAction:defaultAction];
+    [self.superVC presentViewController:alert animated:YES completion:nil];
+
 }
 
 - (void)sendMessage:(UIButton *)sender

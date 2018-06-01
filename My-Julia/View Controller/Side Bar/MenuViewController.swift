@@ -184,8 +184,9 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
             }
 
-            SDImageCache.shared().clearMemory()
-            SDImageCache.shared().clearDisk()
+//            SDImageCache.shared().clearMemory()
+//            SDImageCache.shared().clearDisk()
+
 
             //Show user porfile picture
             self.userProfileIcon.sd_setImage(with: URL(string:AttendeeInfo.sharedInstance.iconUrl), placeholderImage: UIImage(named: "user-profile"))
@@ -212,13 +213,14 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 self.eventNameLbl.textColor = AppTheme.sharedInstance.eventNameTextColor
                 self.eventNameLbl.font = UIFont.getFont(fontName: AppTheme.sharedInstance.iconTextFontName, fontStyle: AppTheme.sharedInstance.iconTextFontStyle, fontSize: CGFloat(AppTheme.sharedInstance.iconTextFontSize))
 
-                SDImageCache.shared().removeImage(forKey: AppTheme.sharedInstance.eventIconImage, withCompletion: nil)
+                    SDImageCache.shared().removeImage(forKey: AppTheme.sharedInstance.eventIconImage, withCompletion: nil)
                 self.iconImage.sd_setImage(with: NSURL(string:AppTheme.sharedInstance.eventIconImage as String)! as URL, placeholderImage: #imageLiteral(resourceName: "noImg_2"))
             }
             else {
                 self.eventNameLbl.isHidden = true
                 self.iconImage.isHidden = true
                 self.eventLogoImage.isHidden = false
+
                 SDImageCache.shared().removeImage(forKey: AppTheme.sharedInstance.eventLogoImage, withCompletion: nil)
                 self.eventLogoImage.sd_setImage(with: NSURL(string:AppTheme.sharedInstance.eventLogoImage as String)! as URL, placeholderImage: #imageLiteral(resourceName: "noImg_2"))
             }
@@ -425,17 +427,26 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     @IBAction func onClickOfRefreshBtn(_ sender: Any) {
-        //Show Indicator
-        CommonModel.sharedInstance.showActitvityIndicator()
         print("Click on refresh button : ",CommonModel.sharedInstance.getCurrentDateInMM())
 
-        self.getEventModuleData()
+        //Check internet connection
+        AFNetworkReachabilityManager.shared().setReachabilityStatusChange { (status: AFNetworkReachabilityStatus) -> Void in
+            if status == .notReachable {
+                print("Network not found..")
+                CommonModel.sharedInstance.showAlertWithStatus(title: "Error", message: Internet_Error_Message, vc: self)
+            }
+            else {
+                //Show Indicator
+                CommonModel.sharedInstance.showActitvityIndicator()
+                self.getEventModuleData()
+            }
+        }
+        AFNetworkReachabilityManager.shared().startMonitoring()
     }
     
     @IBAction func onClickOfBackBtn(_ sender: Any) {
         
         //let lJasopeftMenuViewController = self.storyboard?.instantiateViewController(withIdentifier: "InitalViewController") as! UINavigationController
-
         
         let refreshAlert = UIAlertController(title: "Switch event", message: "Are you sure want to switch event? ", preferredStyle: UIAlertControllerStyle.alert)
         
@@ -565,9 +576,21 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
             cell.imageview?.image = nil
         }
         else {
+            // remove icon cache images
+//            if SDImageCache.shared().defaultCachePath(forKey: item.smallIconImage) != item.smallIconImage {
+//                SDImageCache.shared().removeImage(forKey: item.smallIconImage, withCompletion: nil)
+//            }
+
+//            print("item no : ",item.moduleTitle)
+//            print("image cache : ",SDImageCache.shared().cachePath(forKey: item.smallIconImage, inPath: item.smallIconImage) ?? "")
+//            print("image path : ",item.smallIconImage)
+
+
             //SDImageCache.shared().removeImage(forKey: item.smallIconImage, withCompletion: nil)
             cell.imageview.sd_setImage(with: NSURL(string:item.smallIconImage as String)! as URL, placeholderImage: nil)
             cell.imageview?.backgroundColor = nil
+
+            // SDImageCache.shared().removeImage(forKey: sideDrawerItem.smallIconImage, withCompletion: nil)
          }
         
         if selectedIndexPath.row == indexPath.row && selectedIndexPath.section == indexPath.section {

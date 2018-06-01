@@ -4023,7 +4023,7 @@ class DBManager: NSObject {
                 
                 let model = ChatGroupModel()
                 model.groupId = results?.string(forColumn: "attendeeID")
-                model.fromId = results?.string(forColumn: "attendeeID")
+                model.fromId = EventData.sharedInstance.attendeeId //results?.string(forColumn: "attendeeID")
                 model.name = results?.string(forColumn: "name")
                 model.iconUrl = results?.string(forColumn: "iconUrl")
                 model.dndSetting = (results?.bool(forColumn: "DNDSetting"))!
@@ -4522,6 +4522,10 @@ class DBManager: NSObject {
             else {
                 sqlQuery = "Select * from Agenda where EventID = ? ORDER BY ActivityStartDate ASC"
                 results = database.executeQuery(sqlQuery, withArgumentsIn: [eventId])
+
+               // sqlQuery = "Select Agenda.*, MySchedule.isUserSchedule from Agenda LEFT JOIN MySchedule Where MySchedule.ActivityId ActivityId in (Select distinct ActivityId from MySchedule where AttendeeId = \'\(attendeeId)' AND EventID = \'\(EventData.sharedInstance.eventId)' AND isUserSchedule = '1') AND Agenda.EventID = \'\(EventData.sharedInstance.eventId)'AND AttendeeId = \'\(EventData.sharedInstance.attendeeId)'"
+                //print("sqlQuery : ",sqlQuery)
+                //results = database.executeQuery(sqlQuery, withArgumentsIn: [eventId])
             }
             
             while results?.next() == true {
@@ -4544,9 +4548,13 @@ class DBManager: NSObject {
                 model.sortStartDate = results.string(forColumn: "SortStartDate")
                 model.sortEndDate = results.string(forColumn: "SortEndDate")
 //                model.isAddedToSchedule = results.bool(forColumn: "isUserSchedule")
-                model.isAddedToSchedule = self.checkIsActivityAddeddInMySchedule(activityId: model.activityId)
                  model.activityStatus = false
-                
+                if isAddedMySchedule {
+                    model.isAddedToSchedule = true
+                }
+                else {
+                    model.isAddedToSchedule = self.checkIsActivityAddeddInMySchedule(activityId: model.activityId)
+                }
                 //Fetch speakers list of activity
                 model.speakers = self.fetchSpeakersOfActivityDataFromDB(activityId: model.activityId) as! [PersonModel]
 
@@ -4618,7 +4626,13 @@ class DBManager: NSObject {
                     model.descText = results.string(forColumn: "Description")
                     model.sortStartDate = results.string(forColumn: "SortStartDate")
                     model.sortEndDate = results.string(forColumn: "SortEndDate")
-                    model.isAddedToSchedule = self.checkIsActivityAddeddInMySchedule(activityId: model.activityId)
+
+                    if isAddedMySchedule {
+                        model.isAddedToSchedule = true
+                    }
+                    else {
+                        model.isAddedToSchedule = self.checkIsActivityAddeddInMySchedule(activityId: model.activityId)
+                    }
                     model.activityStatus = false
 
                     //Fetch speakers list of activity

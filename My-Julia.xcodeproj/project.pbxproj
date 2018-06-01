@@ -17,6 +17,7 @@
 		7E2E3F1220A2E15400967213 /* CustomUITextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E2E3F1120A2E15400967213 /* CustomUITextView.swift */; };
 		7E41126C1EC97559009031B9 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E41126B1EC97559009031B9 /* libsqlite3.tbd */; };
 		7E41127A1EC984E5009031B9 /* libAFNetworking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E4112791EC984E5009031B9 /* libAFNetworking.a */; };
+		7E49743C20BFD29B005E0DD3 /* AttachmentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E49743B20BFD29B005E0DD3 /* AttachmentHandler.swift */; };
 		7E5F088620610173002687D0 /* database.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 7E5F072120610172002687D0 /* database.sqlite */; };
 		7E5F088720610173002687D0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7E5F072220610172002687D0 /* Assets.xcassets */; };
 		7E5F088820610173002687D0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7E5F072320610172002687D0 /* LaunchScreen.storyboard */; };
@@ -144,7 +145,7 @@
 		7E5F090420610173002687D0 /* NameListTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E5F080D20610173002687D0 /* NameListTableView.m */; };
 		7E5F090520610173002687D0 /* ListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E5F080E20610173002687D0 /* ListTableViewCell.xib */; };
 		7E5F090620610173002687D0 /* ListTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E5F081020610173002687D0 /* ListTableViewCell.m */; };
-		7E5F090720610173002687D0 /* ChatContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5F081120610173002687D0 /* ChatContactsViewController.swift */; };
+		7E5F090720610173002687D0 /* EventData.sharedInstance.attendeeId.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5F081120610173002687D0 /* EventData.sharedInstance.attendeeId.swift */; };
 		7E5F090820610173002687D0 /* ActivityPostLikesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5F081320610173002687D0 /* ActivityPostLikesViewController.swift */; };
 		7E5F090920610173002687D0 /* PostActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5F081420610173002687D0 /* PostActivityViewController.swift */; };
 		7E5F090A20610173002687D0 /* ActivityFeedListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5F081520610173002687D0 /* ActivityFeedListViewController.swift */; };
@@ -289,6 +290,7 @@
 		7E41126B1EC97559009031B9 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		7E4112771EC9807F009031B9 /* AFNetworking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AFNetworking.framework; path = "../../../Library/Developer/Xcode/DerivedData/EventApp-bnzckdsfhlarzhgnbusyxnrrnuui/Build/Products/Debug-iphonesimulator/AFNetworking/AFNetworking.framework"; sourceTree = "<group>"; };
 		7E4112791EC984E5009031B9 /* libAFNetworking.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libAFNetworking.a; path = "../../../Library/Developer/Xcode/DerivedData/EventApp-bnzckdsfhlarzhgnbusyxnrrnuui/Build/Products/Debug-iphonesimulator/AFNetworking/libAFNetworking.a"; sourceTree = "<group>"; };
+		7E49743B20BFD29B005E0DD3 /* AttachmentHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttachmentHandler.swift; sourceTree = "<group>"; };
 		7E5F072120610172002687D0 /* database.sqlite */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = database.sqlite; sourceTree = "<group>"; };
 		7E5F072220610172002687D0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7E5F072420610172002687D0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -476,7 +478,7 @@
 		7E5F080E20610173002687D0 /* ListTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ListTableViewCell.xib; sourceTree = "<group>"; };
 		7E5F080F20610173002687D0 /* UIViewExt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewExt.h; sourceTree = "<group>"; };
 		7E5F081020610173002687D0 /* ListTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListTableViewCell.m; sourceTree = "<group>"; };
-		7E5F081120610173002687D0 /* ChatContactsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatContactsViewController.swift; sourceTree = "<group>"; };
+		7E5F081120610173002687D0 /* EventData.sharedInstance.attendeeId.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventData.sharedInstance.attendeeId.swift; sourceTree = "<group>"; };
 		7E5F081320610173002687D0 /* ActivityPostLikesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityPostLikesViewController.swift; sourceTree = "<group>"; };
 		7E5F081420610173002687D0 /* PostActivityViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostActivityViewController.swift; sourceTree = "<group>"; };
 		7E5F081520610173002687D0 /* ActivityFeedListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityFeedListViewController.swift; sourceTree = "<group>"; };
@@ -1308,7 +1310,7 @@
 				7E5F080420610173002687D0 /* EditGroupDetailsViewController.swift */,
 				7E5F080520610173002687D0 /* AddMemberViewController.swift */,
 				7E5F080620610173002687D0 /* CreateGroupViewController.swift */,
-				7E5F081120610173002687D0 /* ChatContactsViewController.swift */,
+				7E5F081120610173002687D0 /* EventData.sharedInstance.attendeeId.swift */,
 				7E5F080720610173002687D0 /* ChatSelectionView */,
 			);
 			path = Chat;
@@ -1507,6 +1509,7 @@
 				7E5F085720610173002687D0 /* PostPhotoViewController.swift */,
 				7E5F085820610173002687D0 /* UIImageExtension.swift */,
 				7E5F085920610173002687D0 /* PostTextViewController.swift */,
+				7E49743B20BFD29B005E0DD3 /* AttachmentHandler.swift */,
 			);
 			path = "Content Capture";
 			sourceTree = "<group>";
@@ -2041,7 +2044,7 @@
 				7E5F08E720610173002687D0 /* FMResultSet+ResultSet.swift in Sources */,
 				7E5F08D920610173002687D0 /* NotificationViewModelController.swift in Sources */,
 				7E5F08D420610173002687D0 /* Map.swift in Sources */,
-				7E5F090720610173002687D0 /* ChatContactsViewController.swift in Sources */,
+				7E5F090720610173002687D0 /* EventData.sharedInstance.attendeeId.swift in Sources */,
 				7EB8530F2091E6C3004948AB /* ImageProcessor.swift in Sources */,
 				7E5F08CE20610173002687D0 /* EmergencyModel.swift in Sources */,
 				7E5F094120610173002687D0 /* ViewController.swift in Sources */,
@@ -2075,6 +2078,7 @@
 				7E5F08D320610173002687D0 /* Sponsors.swift in Sources */,
 				7E5F08F420610173002687D0 /* WiFiViewController.swift in Sources */,
 				7E5F094520610173002687D0 /* CustomAlertViewDelegate.swift in Sources */,
+				7E49743C20BFD29B005E0DD3 /* AttachmentHandler.swift in Sources */,
 				7E5F08A820610173002687D0 /* FMDatabaseQueue.m in Sources */,
 				7E5F094320610173002687D0 /* TermsAndConditionsViewController.swift in Sources */,
 				7E5F08FC20610173002687D0 /* ChatViewController.swift in Sources */,

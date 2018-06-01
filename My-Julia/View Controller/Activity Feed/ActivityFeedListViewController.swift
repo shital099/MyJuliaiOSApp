@@ -36,8 +36,9 @@ class ActivityFeedListViewController: UIViewController, UITableViewDataSource, U
 //    var pageNo : NSInteger = 0
 //    var isLastPage : Bool = false
 
-    let picker = UIImagePickerController()
-    var actionSheetContoller : UIAlertController!
+   // let picker = UIImagePickerController()
+   // var actionSheetContoller : UIAlertController!
+    var attachmentHandler : AttachmentHandler!
 
    // var dataArray : [ActivityFeedsModel] = []
    // var dataArray:NSMutableArray = []
@@ -51,7 +52,7 @@ class ActivityFeedListViewController: UIViewController, UITableViewDataSource, U
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        picker.delegate = self
+       // picker.delegate = self
 
         //apply application theme on screen
         CommonModel.sharedInstance.applyThemeOnScreen(viewController: self, bgImage: bgImageView)
@@ -305,6 +306,8 @@ class ActivityFeedListViewController: UIViewController, UITableViewDataSource, U
         //cell.textLbl.attributedText =  CommonModel.sharedInstance.stringFromHtml(string: model.messageText)
         //cell.textLbl.text = model.messageText
 
+        print("read status : ",model.isRead)
+
         if cell.messageLbl.optimumSize.height > 55 {
             cell.readMoreLbl.isHidden = false
         }
@@ -348,7 +351,7 @@ class ActivityFeedListViewController: UIViewController, UITableViewDataSource, U
             if !model.postImageUrl.isEmpty {
                 //print("feed image url ",model.postImageUrl)
                 let url = NSURL(string: model.postImageUrl)! as URL
-                cell.postImageView.sd_setImage(with: url, placeholderImage: nil)
+                cell.postImageView.sd_setImage(with: url, placeholderImage: #imageLiteral(resourceName: "no_image"))
                 cell.postImageView.contentMode = .scaleAspectFit
             }
         }
@@ -440,13 +443,33 @@ class ActivityFeedListViewController: UIViewController, UITableViewDataSource, U
 
     @IBAction func postActBtn(_ sender: Any) {
         
-        self.showActionSheet()
+       // self.showActionSheet()
+        AttachmentHandler.shared.showAttachmentActionSheet(vc: self, isShowTextOption: true, button: self.postAct)
+        AttachmentHandler.shared.imagePickedBlock = { (image) in
+            self.isRefreshList = true
 
+            /* get your image here */
+            print("Get image : ",image)
+            let viewController = self.storyboard?.instantiateViewController(withIdentifier: "PostPhotoViewController") as! PostPhotoViewController
+            viewController.capturedPhoto = image
+            let imageNo = Int(arc4random_uniform(1000)) + 1
+            viewController.imageName = String(format:"CapturedPhoto-%d",imageNo) //"CapturedPhoto".appendingFormat("%d", imageNo)
+            self.navigationController?.pushViewController(viewController, animated: true)
+        }
+
+        AttachmentHandler.shared.textPickedBlock = { (text) in
+
+            /* text option selected */
+            print("Text option click : ")
+            self.isRefreshList = true
+            let viewController = self.storyboard?.instantiateViewController(withIdentifier: "PostTextViewController") as! PostTextViewController
+            self.navigationController?.pushViewController(viewController, animated: true)
+        }
 //        let viewController = storyboard?.instantiateViewController(withIdentifier: "ContentCaptureViewController") as! ContentCaptureViewController
 //        self.navigationController?.pushViewController(viewController, animated: true)
     }
     
-    func showActionSheet() {
+   /* func showActionSheet() {
         
         actionSheetContoller = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .actionSheet)
         
@@ -473,6 +496,7 @@ class ActivityFeedListViewController: UIViewController, UITableViewDataSource, U
         })
         let photoAction = UIAlertAction(title: "Take photo", style: .default, handler: {
             (alert: UIAlertAction!) -> Void in
+
             if UIImagePickerController.isSourceTypeAvailable(.camera) {
                     self.picker.delegate = self
                     self.picker.sourceType = .camera;
@@ -499,8 +523,6 @@ class ActivityFeedListViewController: UIViewController, UITableViewDataSource, U
         
         // this is the center of the screen currently but it can be any point in the view
         self.present(actionSheetContoller, animated: true, completion: nil)
-        
-    
     }
     
     //MARK: - UIImagePickerController Delegates Methods
@@ -555,7 +577,7 @@ class ActivityFeedListViewController: UIViewController, UITableViewDataSource, U
        
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         dismiss(animated:true, completion: nil) //5
-    }
+    }*/
 }
 
 // MARK: - Custom TableView Cell Class

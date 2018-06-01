@@ -314,19 +314,22 @@ class AgendaDetailsViewController: UIViewController,UIImagePickerControllerDeleg
     }
     
     @IBAction func onClickOfCameraBtn(sender: AnyObject) {
-        
-        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
-             let imagePicker = UIImagePickerController()
-            imagePicker.delegate = self
-    imagePicker.sourceType = UIImagePickerControllerSourceType.camera;
-    imagePicker.allowsEditing = false
-            self.present(imagePicker, animated: true, completion: nil)
-            
-            let indexPath = IndexPath(row: 2, section: 0)
-                    tableviewObj.reloadRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
-              }
+
+        if AttachmentHandler.shared.authorisationStatusCheck(attachmentTypeEnum: AttachmentHandler.AttachmentType.camera, vc: self) {
+            if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
+                let imagePicker = UIImagePickerController()
+                imagePicker.delegate = self
+                imagePicker.sourceType = UIImagePickerControllerSourceType.camera;
+                imagePicker.allowsEditing = false
+                self.present(imagePicker, animated: true, completion: nil)
+
+                let indexPath = IndexPath(row: 2, section: 0)
+                tableviewObj.reloadRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
+            }
         }
-    
+    }
+
+
     func refreshTableStatus() {
         
         let indexPath = IndexPath(row: 2, section: 0)

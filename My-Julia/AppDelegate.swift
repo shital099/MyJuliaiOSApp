@@ -204,9 +204,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         print("Before clear memory : ",SDImageCache.shared().getDiskCount())
 
-        SDImageCache.shared().clearDisk(onCompletion: {})
+       // SDImageCache.shared().clearDisk(onCompletion: {})
 
-        print("After clear memory : ",SDImageCache.shared().getDiskCount())
+       // print("After clear memory : ",SDImageCache.shared().getDiskCount())
 
     }
 
@@ -243,8 +243,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func receivedNotification(application: UIApplication, userInfo : [AnyHashable : Any]) {
-        //Save notification dat into db and navigate to screen
 
+        var pushNotiAllow = true
+
+        //Check if remote push notifications are enabled in setting
+        if #available(iOS 10.0, *) {
+            let current = UNUserNotificationCenter.current()
+            current.getNotificationSettings(completionHandler: { settings in
+
+                if settings.authorizationStatus == .denied || settings.authorizationStatus == .notDetermined {
+                    pushNotiAllow = false
+                }
+            })
+        }
+        else {
+            // Fallback on earlier versions
+            if UIApplication.shared.isRegisteredForRemoteNotifications {
+                print("APNS-YES")
+            } else {
+                print("APNS-NO")
+                pushNotiAllow = false
+            }
+        }
+
+        //Save notification dat into db and navigate to screen
         if (userInfo["Chat"] != nil) {
             let body = userInfo["Chat"]
             let alertBody = userInfo["aps"] as? NSDictionary
@@ -299,7 +321,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let moduleId = userInfo["ModuleId"] as? String
         if self.appIsStarting == false {
             let alertBody = userInfo["aps"] as? NSDictionary
-            self.showNotificationAlertMessage(title: APP_NAME, message:  alertBody!["alert"] as! String, application: application)
+
+            //If notication is allow for application then show pop
+            if pushNotiAllow == true {
+                self.showNotificationAlertMessage(title: APP_NAME, message:  alertBody!["alert"] as! String, application: application)
+            }
 
             let imageDataDict:[String: String] = ["moduleId": moduleId!]
             NotificationCenter.default.post(name: ShowNotificationCount, object: nil, userInfo: imageDataDict)

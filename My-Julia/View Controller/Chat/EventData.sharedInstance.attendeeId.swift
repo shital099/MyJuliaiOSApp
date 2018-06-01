@@ -104,6 +104,16 @@ class ChatContactsViewController: UIViewController, headerDelegate, UISearchBarD
                 vc.chatGroupModel = model as! ChatGroupModel
 //            }
             vc.isFromContactList = true
+//            let cModel = ChatGroupModel()
+//            cModel.groupId = personModel.personId
+//            cModel.fromId = EventData.sharedInstance.attendeeId
+//            cModel.name = personModel.name
+//            cModel.iconUrl = personModel.iconUrl
+//            cModel.isGroupChat = false
+//            vc.chatGroupModel = cModel
+print("from id ",vc.chatGroupModel.fromId)
+            print("to id ",vc.chatGroupModel.groupId)
+
             self.navigationController?.pushViewController(vc, animated: true)
         }
 
@@ -239,6 +249,10 @@ class ChatContactsViewController: UIViewController, headerDelegate, UISearchBarD
     @IBAction func onClickOfCreateBtn(sender : AnyObject) {
         
         if self.headerView.headerDataArr == nil {
+            CommonModel.sharedInstance.showAlertWithStatus(title: "", message: Empty_Group_Member_Message, vc: self)
+            return
+        }
+        else if self.headerView.headerDataArr.count == 0 {
             CommonModel.sharedInstance.showAlertWithStatus(title: "", message: Empty_Group_Member_Message, vc: self)
             return
         }

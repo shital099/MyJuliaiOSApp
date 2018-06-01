@@ -283,13 +283,22 @@ class GalleryViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     @IBAction func postGallery(_ sender: Any) {
         
-        self.showActionSheet()
-        
-        //        let viewController = storyboard?.instantiateViewController(withIdentifier: "ContentCaptureViewController") as! ContentCaptureViewController
-        //        self.navigationController?.pushViewController(viewController, animated: true)
+       // self.showActionSheet()
+        AttachmentHandler.shared.showAttachmentActionSheet(vc: self, isShowTextOption: true, button: self.postGallery)
+        AttachmentHandler.shared.imagePickedBlock = { (image) in
+            self.isRefreshList = true
+
+            /* get your image here */
+            print("Get image : ",image)
+            let viewController = self.storyboard?.instantiateViewController(withIdentifier: "PostPhotoViewController") as! PostPhotoViewController
+            viewController.capturedPhoto = image
+            let imageNo = Int(arc4random_uniform(1000)) + 1
+            viewController.imageName = String(format:"CapturedPhoto-%d",imageNo) //"CapturedPhoto".appendingFormat("%d", imageNo)
+            self.navigationController?.pushViewController(viewController, animated: true)
+        }
     }
     
-    func showActionSheet() {
+   /* func showActionSheet() {
         
         actionSheetContoller = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .actionSheet)
         
@@ -391,6 +400,7 @@ class GalleryViewController: UIViewController, UIImagePickerControllerDelegate, 
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         dismiss(animated:true, completion: nil) //5
     }
+     */
 
     // MARK: - UICollectionViewDataSource
     //1
