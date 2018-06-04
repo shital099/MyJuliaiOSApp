@@ -22,7 +22,7 @@ class AgendaDetailsViewController: UIViewController,UIImagePickerControllerDeleg
     var note = Notes()
     var reminderStatus : Bool = false
     var alert : TKAlert!
-    var isRefresh : Bool = false
+    var isRefresh : Bool = true
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,7 +51,7 @@ class AgendaDetailsViewController: UIViewController,UIImagePickerControllerDeleg
         CommonModel.sharedInstance.applyTableSeperatorColor(object: tableviewObj)
 
         //Fetch agenda details
-        agendaModel = DBManager.sharedInstance.fetchActivityDetailsFromDB(activityId: agendaModel.activityId)
+      //  agendaModel = DBManager.sharedInstance.fetchActivityDetailsFromDB(activityId: agendaModel.activityId)
     }
 
     override func didReceiveMemoryWarning() {
@@ -60,7 +60,6 @@ class AgendaDetailsViewController: UIViewController,UIImagePickerControllerDeleg
     }
     
     override func viewDidAppear(_ animated: Bool) {
-
 
         //Check reminder added or not
         reminderStatus = DBManager.sharedInstance.isReminderAddedIntoDB(activityId: agendaModel.activityId)

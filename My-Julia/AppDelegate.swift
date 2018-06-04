@@ -144,6 +144,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             application.registerForRemoteNotifications(matching: [.badge, .sound, .alert])
         }
 
+
+        //Check internet connection
+        AFNetworkReachabilityManager.shared().setReachabilityStatusChange { (status: AFNetworkReachabilityStatus) -> Void in
+            print("Network status.....",AFNetworkReachabilityManager.shared().isReachable)
+        }
+        AFNetworkReachabilityManager.shared().startMonitoring()
+
         return true;
     }
 
@@ -414,14 +421,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
         self.appIsStarting = true
 
-//        if #available(iOS 10.0, *) {
-//            UNUserNotificationCenter.current().getDeliveredNotifications(completionHandler: {(notifications: [UNNotification]) in
-//                print("All received Notifications : ",notifications)
-//            })
-//        } else {
-//            // Fallback on earlier versions
-//        }
-
         //Refresh side menu count when application enter foreground
         if isAppLogin == true {
             let dataDict:[String: Any] = ["Order": 0, "Flag":Update_SideMenu_List]
@@ -486,28 +485,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let dateComponents = (Calendar.current as NSCalendar).components(calendarUnit, from: date)
         return dateComponents
     }
-    
-//    func keyboardWillShow(notification: NSNotification) {
-//        
-//        let vc = notification.object as! UIViewController
-//        
-//        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-//            if vc.view.frame.origin.y == 0{
-//                vc.view.frame.origin.y -= keyboardSize.height
-//            }
-//        }
-//    }
-//    
-//    func keyboardWillHide(notification: NSNotification) {
-//        
-//        let vc = notification.object as! UIViewController
-//
-//        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-//            if vc.view.frame.origin.y != 0{
-//                vc.view.frame.origin.y += keyboardSize.height
-//            }
-//        }
-//    }
 
 }
 

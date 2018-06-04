@@ -115,7 +115,6 @@ class DocumentsListViewController: UIViewController, UITableViewDelegate, UITabl
         cell.timeLbl.text = String(format:"Valid from : %@ - %@",CommonModel.sharedInstance.getDateAndTime(dateStr: model.startDateStr),  CommonModel.sharedInstance.getDateAndTime(dateStr: model.endDateStr))
 
         cell.statusImageview.isHidden  = model.isRead
-        print("model isread : ",model.isRead)
 
         if let htmlData = model.descStr.data(using: String.Encoding.unicode) {
             do {

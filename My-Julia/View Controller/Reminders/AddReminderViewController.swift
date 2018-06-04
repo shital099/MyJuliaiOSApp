@@ -28,7 +28,7 @@ class AddReminderViewController: UIViewController , TKAlertDelegate {
         super.viewDidLoad()
 
         self.timeButton.layer.borderWidth = 1
-        self.timeButton.layer.borderColor = UIColor.lightGray.cgColor
+        self.timeButton.layer.borderColor = UIColor(red: 215.0/255.0, green: 215.0/255.0, blue: 215.0/255.0, alpha: 1).cgColor
         self.timeButton.layer.cornerRadius = 3.0
         self.customTimeDoneBtn.isEnabled = false
     }
@@ -150,6 +150,7 @@ class AddReminderViewController: UIViewController , TKAlertDelegate {
     }
 
     @IBAction func saveReminderBtnClick (sender: UIButton){
+        print("self time : ",self.time)
 
         if (self.titleTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)! {
             CommonModel.sharedInstance.showAlertWithStatus(title: "", message: "Please enter reminder title", vc: self)
@@ -159,14 +160,18 @@ class AddReminderViewController: UIViewController , TKAlertDelegate {
             CommonModel.sharedInstance.showAlertWithStatus(title: "", message: "Select reminder date", vc: self)
             return
         }
-
-        self.saveReminderIntoDB(time: self.time)
+        else if self.timeTextField.titleLabel?.text?.count == nil {
+            CommonModel.sharedInstance.showAlertWithStatus(title: "", message: "Select remind me before time", vc: self)
+            return
+        }
+        self.saveReminderIntoDB()
     }
 
 
     // MARK: - Database Methods
 
-    func saveReminderIntoDB(time : Int) {
+    func saveReminderIntoDB() {
+
         self.customTimeDoneBtn.isEnabled = false
 
         let reminder = ReminderModel()
@@ -177,7 +182,6 @@ class AddReminderViewController: UIViewController , TKAlertDelegate {
         let outputFormatter : DateFormatter = DateFormatter();
         outputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
         reminder.sortDate = outputFormatter.string(from: timeDatePicker.date)
-       // outputFormatter.dateFormat = "HH:mm:ss"
         reminder.activityStartTime = outputFormatter.string(from: timeDatePicker.date)
         reminder.activityEndTime = outputFormatter.string(from: timeDatePicker.date)
 
@@ -197,7 +201,7 @@ class AddReminderViewController: UIViewController , TKAlertDelegate {
             event.startDate = self.timeDatePicker.date
             event.endDate = self.timeDatePicker.date
             event.calendar = store.defaultCalendarForNewEvents
-            let interval = TimeInterval(-(60 * time));
+            let interval = TimeInterval(-(60 * self.time));
             let alarm = EKAlarm(relativeOffset:interval)
             event.alarms = [alarm]
 

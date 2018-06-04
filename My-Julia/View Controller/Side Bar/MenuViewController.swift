@@ -133,10 +133,6 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
             //Change header color
             if IS_IPHONE {
                 var navController = UINavigationController()
-                //Back Button
-                //            navController.navigationBar.backIndicatorImage = UIImage(named: "nav_back_button")
-                //            navController.navigationBar.backIndicatorTransitionMaskImage = UIImage(named: "nav_back_button")
-                //            navController.navigationBar.backItem?.title = " "
 
                 navController = (self.menuContainerViewController.centerViewController as? UINavigationController)!
                 // Set Navigation bar background Image
@@ -180,8 +176,6 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
             else {
                 //        //Apply navigation theme
                 CommonModel.sharedInstance.applyNavigationTheme()
-                //navController = (self.splitViewController?.navigationController)!
-
             }
 
 //            SDImageCache.shared().clearMemory()
@@ -191,10 +185,11 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
             //Show user porfile picture
             self.userProfileIcon.sd_setImage(with: URL(string:AttendeeInfo.sharedInstance.iconUrl), placeholderImage: UIImage(named: "user-profile"))
 
+        //Check internet connection
+        if AFNetworkReachabilityManager.shared().isReachable == true {
             //Remove background cache image path
-            // if SDImageCache.shared().cachePath(forKey: AppTheme.sharedInstance.backgroundImage, inPath: AppTheme.sharedInstance.backgroundImage) != AppTheme.sharedInstance.backgroundImage {
             SDImageCache.shared().removeImage(forKey: AppTheme.sharedInstance.backgroundImage, withCompletion: nil)
-            // }
+        }
 
             //Apply menu bckground theme color
             self.bgImageView.backgroundColor = AppTheme.sharedInstance.menuBackgroundColor
@@ -213,7 +208,10 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 self.eventNameLbl.textColor = AppTheme.sharedInstance.eventNameTextColor
                 self.eventNameLbl.font = UIFont.getFont(fontName: AppTheme.sharedInstance.iconTextFontName, fontStyle: AppTheme.sharedInstance.iconTextFontStyle, fontSize: CGFloat(AppTheme.sharedInstance.iconTextFontSize))
 
+                //Check internet connection
+                if AFNetworkReachabilityManager.shared().isReachable == true {
                     SDImageCache.shared().removeImage(forKey: AppTheme.sharedInstance.eventIconImage, withCompletion: nil)
+                }
                 self.iconImage.sd_setImage(with: NSURL(string:AppTheme.sharedInstance.eventIconImage as String)! as URL, placeholderImage: #imageLiteral(resourceName: "noImg_2"))
             }
             else {
@@ -221,7 +219,10 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 self.iconImage.isHidden = true
                 self.eventLogoImage.isHidden = false
 
-                SDImageCache.shared().removeImage(forKey: AppTheme.sharedInstance.eventLogoImage, withCompletion: nil)
+                //Check internet connection
+                if AFNetworkReachabilityManager.shared().isReachable == true {
+                    SDImageCache.shared().removeImage(forKey: AppTheme.sharedInstance.eventLogoImage, withCompletion: nil)
+                }
                 self.eventLogoImage.sd_setImage(with: NSURL(string:AppTheme.sharedInstance.eventLogoImage as String)! as URL, placeholderImage: #imageLiteral(resourceName: "noImg_2"))
             }
 
@@ -269,8 +270,11 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
             sideDrawerItem.customModuleContent = data.moduleContent
             sideDrawerItem.dataCount = 0
 
-            //remove icon cache images
-            SDImageCache.shared().removeImage(forKey: sideDrawerItem.smallIconImage, withCompletion: nil)
+            //Check internet connection
+            if AFNetworkReachabilityManager.shared().isReachable == true {
+                //remove icon cache images
+                SDImageCache.shared().removeImage(forKey: sideDrawerItem.smallIconImage, withCompletion: nil)
+            }
 
             if data.isUserRelated == true {
                 section1.addItem(sideDrawerItem)
@@ -430,27 +434,40 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
         print("Click on refresh button : ",CommonModel.sharedInstance.getCurrentDateInMM())
 
         //Check internet connection
-        AFNetworkReachabilityManager.shared().setReachabilityStatusChange { (status: AFNetworkReachabilityStatus) -> Void in
-            if status == .notReachable {
-                print("Network not found..")
-                CommonModel.sharedInstance.showAlertWithStatus(title: "Error", message: Internet_Error_Message, vc: self)
-            }
-            else {
-                //Show Indicator
-                CommonModel.sharedInstance.showActitvityIndicator()
-                self.getEventModuleData()
-            }
+        if AFNetworkReachabilityManager.shared().isReachable == true {
+            //Show Indicator
+            CommonModel.sharedInstance.showActitvityIndicator()
+            self.getEventModuleData()
         }
-        AFNetworkReachabilityManager.shared().startMonitoring()
+        else {
+            CommonModel.sharedInstance.showAlertWithStatus(title: "Error", message: Internet_Error_Message, vc: self)
+        }
+
+//        AFNetworkReachabilityManager.shared().setReachabilityStatusChange { (status: AFNetworkReachabilityStatus) -> Void in
+//            if status == .notReachable {
+//                print("Network not found..")
+//                CommonModel.sharedInstance.showAlertWithStatus(title: "Error", message: Internet_Error_Message, vc: self)
+//            }
+//            else {
+//                //Show Indicator
+//                CommonModel.sharedInstance.showActitvityIndicator()
+//                self.getEventModuleData()
+//            }
+//        }
+//        AFNetworkReachabilityManager.shared().startMonitoring()
     }
     
     @IBAction func onClickOfBackBtn(_ sender: Any) {
-        
-        //let lJasopeftMenuViewController = self.storyboard?.instantiateViewController(withIdentifier: "InitalViewController") as! UINavigationController
-        
+
         let refreshAlert = UIAlertController(title: "Switch event", message: "Are you sure want to switch event? ", preferredStyle: UIAlertControllerStyle.alert)
         
         refreshAlert.addAction(UIAlertAction(title: "Confirm", style: .default, handler: { (action: UIAlertAction!) in
+
+            //Check internet connection
+            if AFNetworkReachabilityManager.shared().isReachable == false {
+                CommonModel.sharedInstance.showAlertWithStatus(title: "Error", message: Internet_Error_Message, vc: self)
+                return
+            }
 
             //dissmiss Indicator
             CommonModel.sharedInstance.showActitvityIndicator()
@@ -879,7 +896,6 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
             //Fetch all module data and update side menu list when app open in foreground
             for item in section.items {
                 let sideDrawerItem = item as! SideDrawerMenu
-                print("Before update Side menu count : ",sideDrawerItem.dataCount)
 
                 let viewController = CommonModel.sharedInstance.fetchViewControllerObject(moduleId: sideDrawerItem.moduleId)
 

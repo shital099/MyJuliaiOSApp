@@ -284,7 +284,7 @@ class GalleryViewController: UIViewController, UIImagePickerControllerDelegate, 
     @IBAction func postGallery(_ sender: Any) {
         
        // self.showActionSheet()
-        AttachmentHandler.shared.showAttachmentActionSheet(vc: self, isShowTextOption: true, button: self.postGallery)
+        AttachmentHandler.shared.showAttachmentActionSheet(vc: self, isShowTextOption: false, button: self.postGallery)
         AttachmentHandler.shared.imagePickedBlock = { (image) in
             self.isRefreshList = true
 

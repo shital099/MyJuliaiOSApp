@@ -64,12 +64,12 @@ class UserProfileViewController: UIViewController, UINavigationControllerDelegat
         switchSet.isOn = AttendeeInfo.sharedInstance.isvisible
         dndSwitchSet.isOn = AttendeeInfo.sharedInstance.isDND
 
-       // editbtn.setImage(UIImage(named: "edit_user"), for: .normal)
-        //        ed itbtn.setImage(UIImage(named: "save"), for: .selected)
-        // switchSet.isEnabled = false
-
         if (AttendeeInfo.sharedInstance.iconUrl != nil) {
-            SDImageCache.shared().removeImage(forKey: AttendeeInfo.sharedInstance.iconUrl, withCompletion: nil)
+            //Check internet connection
+            if AFNetworkReachabilityManager.shared().isReachable == true {
+                SDImageCache.shared().removeImage(forKey: AttendeeInfo.sharedInstance.iconUrl, withCompletion: nil)
+            }
+
             userIcon.sd_setImage(with: URL(string:AttendeeInfo.sharedInstance.iconUrl), placeholderImage: #imageLiteral(resourceName: "user"))
             userIcon.contentMode = UIViewContentMode.scaleAspectFill
             userIcon.clipsToBounds = true
@@ -109,41 +109,25 @@ class UserProfileViewController: UIViewController, UINavigationControllerDelegat
         }
    }
     
-    
-//    @IBAction func editbtn(sender: UIButton) {
-//        
-//      //  editbtn.isSelected = !editbtn.isSelected
-//        print("Edit button ", editbtn.isSelected)
-//        
-//        if editbtn.isSelected == false {
-//            switchSet.isEnabled = true
-//            editproBtn.isHidden = false
-//            editImageIcon.isHidden = false
-//            
-//            editbtn.setTitle("SAVE", for: .normal)
-//            editbtn.setTitleColor(.black, for: .normal)
-//            editbtn.setImage(nil, for: .normal)
-//            editbtn.isSelected = true
-//        }
-//        else {
-//            self.postVisiblity()
-//        }
-//    }
-    
-    
     @IBAction func editProIcon(sender: UIButton) {
 
-        if AttachmentHandler.shared.authorisationStatusCheck(attachmentTypeEnum: AttachmentHandler.AttachmentType.photoLibrary, vc: self) {
-            //self.showActionSheet()
-            if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.photoLibrary) {
+        //Check internet connection
+        if AFNetworkReachabilityManager.shared().isReachable == true {
+            if AttachmentHandler.shared.authorisationStatusCheck(attachmentTypeEnum: AttachmentHandler.AttachmentType.photoLibrary, vc: self) {
+                //self.showActionSheet()
+                if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.photoLibrary) {
 
-                self.picker.allowsEditing = true
-                self.picker.sourceType = .photoLibrary
-                self.picker.modalPresentationStyle = .overFullScreen
-                self.picker.delegate = self
-                self.picker.mediaTypes = [kUTTypeImage as String] //UIImagePickerController.availableMediaTypes(for: .photoLibrary)!
-                self.present(self.picker, animated: true, completion: nil)
+                    self.picker.allowsEditing = true
+                    self.picker.sourceType = .photoLibrary
+                    self.picker.modalPresentationStyle = .overFullScreen
+                    self.picker.delegate = self
+                    self.picker.mediaTypes = [kUTTypeImage as String] //UIImagePickerController.availableMediaTypes(for: .photoLibrary)!
+                    self.present(self.picker, animated: true, completion: nil)
+                }
             }
+        }
+        else {
+            CommonModel.sharedInstance.showAlertWithStatus(title: "Error", message: Internet_Error_Message, vc: self)
         }
     }
     
