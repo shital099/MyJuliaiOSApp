@@ -34,6 +34,7 @@ var profileSettingVisible : Bool = true
 var isLiveQuestionScreenOpen : Bool = false
 var isChatPresent : Bool = false
 
+
 extension UIApplication {
     
     var statusBarView: UIView? {
@@ -47,19 +48,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var deviceToken : String = ""
     var window: UIWindow?
-    var appIsStarting : Bool = false
+    var appIsStarting : Bool = true
+    var isAppOpenFirstTime : Bool = true
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
 
 
-//        // do something with the notification
-//        if launchOptions?[UIApplicationLaunchOptionsKey.remoteNotification] != nil {
-//            // Do what you want to happen when a remote notification is tapped.
-//            print("Notification in App launch : ", launchOptions?[UIApplicationLaunchOptionsKey.remoteNotification] ?? "")
-//                // Fallback on earlier versions
-//            //Save notification data into db and navigate to screen
-//            //self.receivedNotification(application: application, data: launchOptions?[UIApplicationLaunchOptionsKey.remoteNotification] as AnyObject)
+        // do something with the notification
+        if launchOptions?[UIApplicationLaunchOptionsKey.remoteNotification] != nil {
+            // Do what you want to happen when a remote notification is tapped.
+            print("Notification in App launch : ", launchOptions?[UIApplicationLaunchOptionsKey.remoteNotification] ?? "")
+                // Fallback on earlier versions
+            //Save notification data into db and navigate to screen
+            //self.receivedNotification(application: application, userInfo: (launchOptions?[UIApplicationLaunchOptionsKey.remoteNotification] as AnyObject) as! [AnyHashable : Any], pushNotiAllow: false)
+        }
+
+//        //Launched from push notification
+//        let remoteNotif = launchOptions?[UIApplicationLaunchOptionsKey.remoteNotification] as? NSDictionary
+//        if remoteNotif != nil {
+//            let aps = remoteNotif!["aps" as NSString] as? [String:AnyObject]
+//            NSLog("\n Custom: \(String(describing: aps))")
+//        }
+//        else {
+//            print("//////////////////////////Normal launch")
 //        }
 
         //Get crash reports
@@ -87,7 +99,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             UserDefaults.standard.synchronize()
         }
 
-        //Copy database table and data76
+        //Copy database table and data
         DBManager.sharedInstance.copyFile(fileName: DATABASE_NAME)
         
         NotificationCenter.default.addObserver(self, selector: #selector(AppDelegate.rotated), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
@@ -106,23 +118,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // Fallback on earlier versions
         }
         
-        //Remove all badges number
-        UIApplication.shared.applicationIconBadgeNumber = 0
 
         //Status bar color
       //  self.setStatusBarBackgroundColor(color: .white)
 
        // salt=81D9B8148F5EA6C7
         let cryptoLib = CryptLib.sharedManager() as!  CryptLib
-        cryptoLib.key = "23501748FEB710349F13763248DFC6C2"
-        cryptoLib.iv = "abcdefghijklmnop"
+        cryptoLib.key = CRYPTO_KEY
+        cryptoLib.iv = CRYPTO_IV
 
-
-//        let encryptedString = (CryptLib.sharedManager() as AnyObject).encryptPlainText(with: "mmm")
-//        print("encryptedString : ",encryptedString ?? "")
-//
-//        let decryptedMsg = (CryptLib.sharedManager() as AnyObject).decryptCipherText(with: "WIC9w2qonPp0WgPIl0WVPA==\n")
-//        print("decryptedMsg : ",decryptedMsg ?? "")
 
         // iOS 10 support
         if #available(iOS 10, *) {
@@ -150,6 +154,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("Network status.....",AFNetworkReachabilityManager.shared().isReachable)
         }
         AFNetworkReachabilityManager.shared().startMonitoring()
+
+        //Remove all badges number
+        UIApplication.shared.applicationIconBadgeNumber = 0
+
+        if #available(iOS 10.0, *) {
+            let center = UNUserNotificationCenter.current()
+            center.removeAllPendingNotificationRequests() // To remove all pending notifications which are not delivered yet but scheduled.
+            center.removeAllDeliveredNotifications() // To remove all delivered notifications
+        } else {
+            UIApplication.shared.cancelAllLocalNotifications()
+        }
+
+        let state : UIApplicationState = application.applicationState
+        print("\nIn app delegate method app state : ",state.rawValue)
 
         return true;
     }
@@ -192,7 +210,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return UIInterfaceOrientationMask.portrait;
         }
     }
-    
+
+    func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+//        // fetch data from internet now
+//        guard let data = fetchSomeData() else {
+//            // data download failed
+//            completionHandler(.failed)
+//            return
+//        }
+//
+//        if data.isNew {
+//            // data download succeeded and is new
+//            completionHandler(.newData)
+//        } else {
+//            // data downloaded succeeded and is not new
+//            completionHandler(.noData)
+//        }
+
+        print("performFetchWithCompletionHandler .....")
+    }
+
+
+
    // MARK: - Push Notification Delegate Methods
     
     // Called when APNs has assigned the device a unique token
@@ -226,30 +265,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         //Remove all badges number
         UIApplication.shared.applicationIconBadgeNumber = 0
-
-        print("App State : ",self.appIsStarting)
-        print("Notification Received : ",userInfo )
-
         let state : UIApplicationState = application.applicationState
 
+        print("Notification Received : ",userInfo )
+
+        print("\n App State : ",state.rawValue)
+        print("appIsStarting : ",appIsStarting)
+
         if (state == UIApplicationState.background ) {
-            // app is inactive
-            self.receivedNotification(application: application, userInfo: userInfo)
+            print("App is background")
+            appIsStarting = false
+
+            // app is background
+            self.checkNotificationAllowStatus(application: application, userInfo: userInfo)
             completionHandler(UIBackgroundFetchResult.noData);
         }
-        else if (state == UIApplicationState.inactive &&
-            self.appIsStarting) {
+        else if (state == UIApplicationState.inactive) {
+            print("App is inactive")
+               appIsStarting = true
             // user tapped notification
-            self.receivedNotification(application: application, userInfo: userInfo)
+            self.checkNotificationAllowStatus(application: application, userInfo: userInfo)
             completionHandler(UIBackgroundFetchResult.newData);
         } else {
             // app is active
-            self.receivedNotification(application: application, userInfo: userInfo)
+            print("App is active")
+             appIsStarting = false
+            self.checkNotificationAllowStatus(application: application, userInfo: userInfo)
             completionHandler(UIBackgroundFetchResult.noData);
         }
+
+//        self.checkNotificationAllowStatus(application: application, userInfo: userInfo)
+
     }
 
-    func receivedNotification(application: UIApplication, userInfo : [AnyHashable : Any]) {
+    func checkNotificationAllowStatus(application: UIApplication, userInfo : [AnyHashable : Any]) {
 
         var pushNotiAllow = true
 
@@ -260,6 +309,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
                 if settings.authorizationStatus == .denied || settings.authorizationStatus == .notDetermined {
                     pushNotiAllow = false
+                    print("in denied pushNotiAllow : ",pushNotiAllow)
+                }
+                else{
+                    pushNotiAllow = true
+                }
+
+                DispatchQueue.main.async  {
+                    if pushNotiAllow == true {
+                        self.receivedNotification(application: application, userInfo: userInfo, pushNotiAllow: pushNotiAllow)
+                    }
                 }
             })
         }
@@ -267,11 +326,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // Fallback on earlier versions
             if UIApplication.shared.isRegisteredForRemoteNotifications {
                 print("APNS-YES")
-            } else {
+                pushNotiAllow = true
+            }
+            else {
                 print("APNS-NO")
                 pushNotiAllow = false
             }
+
+            DispatchQueue.main.async  {
+                if pushNotiAllow == true {
+                    self.receivedNotification(application: application, userInfo: userInfo, pushNotiAllow: pushNotiAllow)
+                }
+            }
         }
+    }
+
+    func receivedNotification(application: UIApplication, userInfo : [AnyHashable : Any], pushNotiAllow : Bool ) {
+
+        print("pushNotiAllow : ",pushNotiAllow)
 
         //Save notification dat into db and navigate to screen
         if (userInfo["Chat"] != nil) {
@@ -325,13 +397,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             DBManager.sharedInstance.saveDocumentsDataIntoDB(response: alertBody)
         }
 
+//        let state : UIApplicationState = application.applicationState
+//        if (state == UIApplicationState.background ) {
+//                        print("App is background")
+//                        // app is background
+//                        self.checkNotificationAllowStatus(application: application, userInfo: userInfo)
+//                        completionHandler(UIBackgroundFetchResult.noData);
+//                    }
+//                    else if (state == UIApplicationState.inactive && !self.appIsStarting) {
+//                        print("App is inactive")
+//                        // user tapped notification
+//                        self.checkNotificationAllowStatus(application: application, userInfo: userInfo)
+//                        completionHandler(UIBackgroundFetchResult.noData);
+//                    } else {
+//                        // app is active
+//                        print("App is active")
+//                        self.checkNotificationAllowStatus(application: application, userInfo: userInfo)
+//                        completionHandler(UIBackgroundFetchResult.newData);
+//                    }
+
         let moduleId = userInfo["ModuleId"] as? String
         if self.appIsStarting == false {
             let alertBody = userInfo["aps"] as? NSDictionary
 
             //If notication is allow for application then show pop
             if pushNotiAllow == true {
-                self.showNotificationAlertMessage(title: APP_NAME, message:  alertBody!["alert"] as! String, application: application)
+                if !isAppOpenFirstTime {
+                    self.showNotificationAlertMessage(title: APP_NAME, message:  alertBody!["alert"] as! String, application: application)
+                }
             }
 
             let imageDataDict:[String: String] = ["moduleId": moduleId!]
@@ -340,7 +433,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         else {
             let imageDataDict:[String: String] = ["moduleId": moduleId!]
             NotificationCenter.default.post(name: ShowNotificationCount, object: nil, userInfo: imageDataDict)
-            NotificationCenter.default.post(name: OtherModuleNotification, object: nil, userInfo: imageDataDict)
+           // if !isAppOpenFirstTime {
+                NotificationCenter.default.post(name: OtherModuleNotification, object: nil, userInfo: imageDataDict)
+           // }
         }
     }
 
@@ -396,9 +491,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             alert.contentView.layer.borderWidth = 1.0
 
             alert.show(true)
-
         }
-
     }
 
     //MARK: - UIApplication Methods
@@ -406,20 +499,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
-
-         self.appIsStarting = false
+        print("Will resign active")
+         //self.appIsStarting = false
     }
     
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-        self.appIsStarting = false
+        print("did enter background")
+       // self.appIsStarting = false
 
     }
     
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
-        self.appIsStarting = true
+        //self.appIsStarting = true
+        print("Will enter foreground")
 
         //Refresh side menu count when application enter foreground
         if isAppLogin == true {
@@ -430,17 +525,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-        self.appIsStarting = false
+       // self.appIsStarting = false
+        print("did become active")
+
+        self.isAppOpenFirstTime = false
 
         //Remove all badges number
-        UIApplication.shared.applicationIconBadgeNumber = 0
+        application.applicationIconBadgeNumber = 0
+        application.cancelAllLocalNotifications()
 
        // DBManager.sharedInstance.copyDatabaseIntoDocumentsDirectory()
         
         //Create database
         if DBManager.sharedInstance.createDatabase() {
         }
-        
+
     }
     
     func applicationWillTerminate(_ application: UIApplication) {

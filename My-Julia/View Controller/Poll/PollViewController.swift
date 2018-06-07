@@ -44,6 +44,9 @@ class PollViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
         progressView = DDProgressView()
         if IS_IPAD {
+
+            print("self.splitViewController?.displayMode : ",self.splitViewController?.displayMode)
+
             //Remove spit view width(250) from view
             if self.splitViewController?.displayMode == UISplitViewControllerDisplayMode.primaryHidden {
                 progressView.frame = CGRect(x: 40.0, y: 50.0, width: self.view.bounds.size.width - 80 , height: 0.0)

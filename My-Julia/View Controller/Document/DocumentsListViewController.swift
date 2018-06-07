@@ -92,7 +92,7 @@ class DocumentsListViewController: UIViewController, UITableViewDelegate, UITabl
         })
     }
 
-    // MARK: - Table View
+    // MARK: - Table View Data Source Methods
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }

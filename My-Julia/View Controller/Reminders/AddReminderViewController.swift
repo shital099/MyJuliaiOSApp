@@ -47,10 +47,7 @@ class AddReminderViewController: UIViewController , TKAlertDelegate {
     // MARK: - Button Action Methods
 
     @IBAction func textFieldEditing(_ sender: UITextField) {
-        
-        //      sender.inputView = self.dateCustomView
         self.dateTextField.inputView = dateCustomView
-        //        timeDatePicker.addTarget(self, action: Selector("datePickerValueChanged:"), for: UIControlEvents.valueChanged)
     }
 
     @IBAction func addToReminderTime() {
@@ -64,14 +61,9 @@ class AddReminderViewController: UIViewController , TKAlertDelegate {
             alert.style.headerHeight = 0
             alert.tintColor = UIColor(red: 0.5, green: 0.7, blue: 0.2, alpha: 1)
             alert.customFrame = CGRect(x: ((self.view.frame.size.width - 320)/2) + 270, y: (self.view.frame.size.height - 270)/2, width: 320, height: 270)
-            
-                        self.timeCustomView.frame = CGRect(x: 0, y: 0, width: self.timeCustomView.frame.size.width, height: self.timeCustomView.frame.size.height)
-                        alert.contentView.addSubview(timeCustomView)
-            //        alert.customFrame = CGRect(x: (self.view.frame.size.width - 300)/2, y: 100, width: 300, height: 250)
-            //        let view = AlertCustomContentView(frame: CGRect(x: 0, y: 0, width: 300, height: 210))
-            //        alert.contentView.addSubview(view)
-            // << alert-custom-content-swift
-            
+            self.timeCustomView.frame = CGRect(x: 0, y: 0, width: self.timeCustomView.frame.size.width, height: self.timeCustomView.frame.size.height)
+            alert.contentView.addSubview(timeCustomView)
+
             //          alert.style.centerFrame = false
             alert.style.centerFrame = true
             
@@ -160,10 +152,10 @@ class AddReminderViewController: UIViewController , TKAlertDelegate {
             CommonModel.sharedInstance.showAlertWithStatus(title: "", message: "Select reminder date", vc: self)
             return
         }
-        else if self.timeTextField.titleLabel?.text?.count == nil {
-            CommonModel.sharedInstance.showAlertWithStatus(title: "", message: "Select remind me before time", vc: self)
-            return
-        }
+//        else if self.timeTextField.titleLabel?.text?.count == nil {
+//            CommonModel.sharedInstance.showAlertWithStatus(title: "", message: "Select remind me before time", vc: self)
+//            return
+//        }
         self.saveReminderIntoDB()
     }
 
@@ -177,7 +169,12 @@ class AddReminderViewController: UIViewController , TKAlertDelegate {
         let reminder = ReminderModel()
         
         reminder.title = titleTextField.text!
-        reminder.reminderTime = String(time)
+        if time == 0 {
+            reminder.reminderTime = "0"
+        }
+        else {
+            reminder.reminderTime = String(time)
+        }
 
         let outputFormatter : DateFormatter = DateFormatter();
         outputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
@@ -186,9 +183,7 @@ class AddReminderViewController: UIViewController , TKAlertDelegate {
         reminder.activityEndTime = outputFormatter.string(from: timeDatePicker.date)
 
         DBManager.sharedInstance.saveNewReminderDataIntoDB(reminder: reminder)
-        
-        alert.dismiss(true)
-        
+
         let store: EKEventStore = EKEventStore()
         
         //Add reminder into calender
@@ -198,8 +193,10 @@ class AddReminderViewController: UIViewController , TKAlertDelegate {
             }
             let event = EKEvent(eventStore: store)
             event.title = reminder.title
-            event.startDate = self.timeDatePicker.date
-            event.endDate = self.timeDatePicker.date
+            DispatchQueue.main.async  {
+                event.startDate = self.timeDatePicker.date
+                event.endDate = self.timeDatePicker.date
+            }
             event.calendar = store.defaultCalendarForNewEvents
             let interval = TimeInterval(-(60 * self.time));
             let alarm = EKAlarm(relativeOffset:interval)

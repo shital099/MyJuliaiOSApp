@@ -73,9 +73,6 @@ let No_Option2_Message = "Option 2 is required"
 let No_Option3_Message = "Option 3 is required"
 let No_Option4_Message = "Option 4 is required"
 
-//Queationlet
-let Ask_Valid_Question = "Question can't be post empty"
-
 //Chat
 let Empty_Group_Member_Message = "Please select atleast one group member"
 let Empty_Group_Name_Message = "Please enter group name"
@@ -89,9 +86,10 @@ let No_Reminder_Text = "No Reminder Added"
 let No_Data_Text = "No Data Added"
 
 //Question and Chat
+let Ask_Valid_Question = "Question can't be post empty"
 let Question_History_Time = 5
 let Chat_History_Time = 5
-let Question_Sent_Message = "Message sent sucessfully"
+let Question_Sent_Message = "Question posted sucessfully"
 
 //Activity Feeds
 let Activity_Page_Limit = 15            //Set default limit 20 in server and application

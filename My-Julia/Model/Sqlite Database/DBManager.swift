@@ -56,15 +56,15 @@ class DBManager: NSObject {
         else {
             //print("DB Copy error message ")
             //Add 1 colum in Attendee Table
-            _ = addDBColumn(sTable:"Attendees", sColumnName:"DNDSetting", type: "boolean", value : false)
-        
-            //Add 1 colum in Attendee Profile Table
-            _ = addDBColumn(sTable:"AttendeeProfile", sColumnName:"DNDSetting",type: "boolean", value : false)
-         
-            //Add 2 colum in Documents Table
-            _ = addDBColumn(sTable:"Documents", sColumnName:"StartDate",type: "text", value : "")
-            _ = addDBColumn(sTable:"Documents", sColumnName:"EndDate",type: "text", value : "")
-            
+//            _ = addDBColumn(sTable:"Attendees", sColumnName:"DNDSetting", type: "boolean", value : false)
+//
+//            //Add 1 colum in Attendee Profile Table
+//            _ = addDBColumn(sTable:"AttendeeProfile", sColumnName:"DNDSetting",type: "boolean", value : false)
+//
+//            //Add 2 colum in Documents Table
+//            _ = addDBColumn(sTable:"Documents", sColumnName:"StartDate",type: "text", value : "")
+//            _ = addDBColumn(sTable:"Documents", sColumnName:"EndDate",type: "text", value : "")
+
         }
     }
     
@@ -138,7 +138,7 @@ class DBManager: NSObject {
                     let document_sql = "CREATE TABLE IF NOT EXISTS Documents (EventID text, docId text unique, Title text, Description text, UrlPath text, StartDate text, EndDate text, CreatedDate text, IsRead boolean);"
 
                     //Create Emergency Details table
-                    let emergency_sql = "CREATE TABLE IF NOT EXISTS EmergencyInfo (id INTEGER PRIMARY KEY AUTOINCREMENT, EventID text, Title text unique, Description text, ContactNo text , Address text, Email text);"
+                    let emergency_sql = "CREATE TABLE IF NOT EXISTS EmergencyInfo (id INTEGER PRIMARY KEY AUTOINCREMENT, emergencyId text unique, EventID text, Title text, Description text, ContactNo text , Address text, Email text);"
                     
                     //Create User Profile table
                     let profile_sql = "CREATE TABLE IF NOT EXISTS AttendeeProfile (id INTEGER PRIMARY KEY AUTOINCREMENT, EventID text, AttendeeId text unique, AttendeeName text, AttendeeCode text, AttendeeEmail text, ContactNo text, ProfileSetting bool default true, QRCode text, GroupsName text, Department text, ImgPath text, DNDSetting boolean default false, isSpeaker boolean default false, SpeakerId text);"
@@ -189,7 +189,10 @@ class DBManager: NSObject {
                     //Poll Speaker Act questions
                     let poll_act_question_sql = "CREATE TABLE IF NOT EXISTS SpeakerPollQuestions(id INTEGER PRIMARY KEY AUTOINCREMENT, EventID text, ActivityId text, CreatedDate text, Question text, QuestionId text, Option1 text, Option2 text, Option3 text, Option4 text, Op1Id text, Op2Id text, Op3Id text, Op4Id text, UNIQUE (EventID, ActivityId, QuestionId ) ON CONFLICT REPLACE );"
 
-                    let sql_stmt = login_details_sql + event_sql_stmt + module_sql_stmt + attendee_sql + note_sql + reminder_sql + speaker_sql + map_sql + feedback_sql + sponsor_sql + event_details_sql + document_sql + emergency_sql + gallery_sql + website_sql + wifi_details_sql + email_details_sql + activity_details_sql + profile_sql + sessions_sql + sessions_que_sql + poll_activity_sql + poll_sessions_que_sql + myschedule_sql + agenda_sql + noti_sql + activityFeed_sql + activityFeedComments_sql + activityFeedLikes_sql + act_feedback_sql + chatlist_sql + chathistorySql + poll_speaker_act_sql + poll_act_question_sql + speaker_activities_sql
+                    //Feedback Activity table
+                    let activity_feedback_sql = "CREATE TABLE IF NOT EXISTS PostedActivityFeedback(id INTEGER PRIMARY KEY AUTOINCREMENT, EventID text, ActivityId text, AttendeeId text, UNIQUE (EventID, ActivityId, AttendeeId ) ON CONFLICT REPLACE );"
+
+                    let sql_stmt = login_details_sql + event_sql_stmt + module_sql_stmt + attendee_sql + note_sql + reminder_sql + speaker_sql + map_sql + feedback_sql + sponsor_sql + event_details_sql + document_sql + emergency_sql + gallery_sql + website_sql + wifi_details_sql + email_details_sql + activity_details_sql + profile_sql + sessions_sql + sessions_que_sql + poll_activity_sql + poll_sessions_que_sql + myschedule_sql + agenda_sql + noti_sql + activityFeed_sql + activityFeedComments_sql + activityFeedLikes_sql + act_feedback_sql + chatlist_sql + chathistorySql + poll_speaker_act_sql + poll_act_question_sql + speaker_activities_sql + activity_feedback_sql
                     
                    // do {
                         success = database.executeStatements(sql_stmt)
@@ -864,6 +867,8 @@ class DBManager: NSObject {
             //  Update isdeleted flag for all module
             try database.executeUpdate("UPDATE Module SET isDeleted = ? WHERE EventID = ?", values: [true, eventId])
 
+            print("Fetch All module Data : ",responce)
+
             if (responce.value(forKey:"ModuleRelated") as? NSNull) == nil {
 
                 var orderSequence : Int = 1
@@ -1537,6 +1542,8 @@ class DBManager: NSObject {
                 
                // do {
                     let  dict = item as! NSDictionary
+
+                    let id = self.isNullString(str: dict.value(forKey: "ContactId") as Any)
                     let title = self.isNullString(str: dict.value(forKey: "Title") as Any)
                     let desc = self.isNullString(str: dict.value(forKey: "Description") as Any)
                     let contactNo = self.isNullString(str: dict.value(forKey: "ContactNo") as Any)
@@ -1544,7 +1551,7 @@ class DBManager: NSObject {
                     let email = self.isNullString(str: dict.value(forKey:"Email") as Any)
                     
                     //try database.executeUpdate("INSERT OR REPLACE INTO EmergencyInfo (EventID, Title, Description, ContactNo , Address, Email) VALUES (?, ?, ?, ?, ?, ?)", values: [eventId, title , desc , contactNo , address, email ])
-                    sqlQuery += "INSERT OR REPLACE INTO EmergencyInfo (EventID, Title, Description, ContactNo , Address, Email) VALUES ('\(eventId)', \"\(title)\",'\(desc)','\(contactNo)',\"\(address)\", \"\(email)\");"
+                    sqlQuery += "INSERT OR REPLACE INTO EmergencyInfo (emergencyId, EventID, Title, Description, ContactNo , Address, Email) VALUES ('\(id)','\(eventId)', \"\(title)\",'\(desc)','\(contactNo)',\"\(address)\", \"\(email)\");"
 
 //                } catch {
 //                    print("error = \(error)")
@@ -2096,8 +2103,8 @@ class DBManager: NSObject {
                 //Fetch unread messages count
                 let results:FMResultSet!
                 if model.isGroupChat == true {
-                   let countQuery = "Select Count(IsRead) from ChatHistory Where IsRead = ? AND GroupId = ? AND EventID = ?"
-                    results = database.executeQuery(countQuery, withArgumentsIn: [0, model.groupId, EventData.sharedInstance.eventId])
+                   let countQuery = "Select Count(IsRead) from ChatHistory Where IsRead = ? AND GroupId = ? AND EventID = ? AND AttendeeId = ?"
+                    results = database.executeQuery(countQuery, withArgumentsIn: [0, model.groupId, EventData.sharedInstance.eventId,EventData.sharedInstance.attendeeId])
                 }
                 else {
                    let countQuery = "Select Count(IsRead) from ChatHistory Where IsRead = ? AND FromId = ? AND ToId = ? AND EventID = ?"
@@ -2620,7 +2627,8 @@ class DBManager: NSObject {
 //            let querySQL = "Select Count(IsRead) from ChatHistory Where IsRead = ? AND ToId = ? AND EventID = ?"
 //            let results:FMResultSet = database.executeQuery(querySQL, withArgumentsIn: [0,EventData.sharedInstance.attendeeId, EventData.sharedInstance.eventId])
 
-            let querySQL = "Select Count(IsRead) from ChatHistory Where IsRead = ? AND EventID = ? AND FromId != ?"
+//            let querySQL = "Select Count(IsRead) from ChatHistory Where IsRead = ? AND EventID = ? AND FromId != ?"
+            let querySQL = "Select Count(IsRead) from ChatHistory Where IsRead = ? AND EventID = ? AND AttendeeId == ?"
             let results:FMResultSet = database.executeQuery(querySQL, withArgumentsIn: [0, EventData.sharedInstance.eventId,EventData.sharedInstance.attendeeId])
 
             while results.next() == true {
@@ -3186,7 +3194,8 @@ class DBManager: NSObject {
         let model = Notes()
 
         if openDatabase() {
-            
+            database.beginTransaction()
+
             let querySQL = "Select * from Notes WHERE ActivityId = '\(activityId )' AND EventID = ? AND AttendeeId = ?"
             let results:FMResultSet? = database.executeQuery(querySQL, withArgumentsIn: [EventData.sharedInstance.eventId,EventData.sharedInstance.attendeeId])
             
@@ -3199,6 +3208,7 @@ class DBManager: NSObject {
                 model.sessionId = (results?.string(forColumn: "SessionId"))!
                 model.activityId = (results?.string(forColumn: "ActivityId"))!
             }
+            database.commit()
             database.close()
         }
         return model
@@ -3885,7 +3895,6 @@ class DBManager: NSObject {
         
         let (dateStr, endDate) = self.getCurrentTime()
 
-       // let sqlQuery = "Select * from Agenda WHERE (StartTime <= ? AND EndTime >= ?) AND SortActivityDate = ? AND EventID = ? ORDER BY SortActivityDate DESC"
         let sqlQuery = "Select * from Agenda WHERE ActivityStartDate < ? AND ActivityEndDate > ? AND SortActivityDate = ? AND EventID = ? ORDER BY SortActivityDate DESC"
         return database.executeQuery(sqlQuery, withArgumentsIn: [endDate, endDate,dateStr, eventId])
     }
@@ -4833,16 +4842,65 @@ class DBManager: NSObject {
         return false
     }
 
-    func fetchMyScheduleListFromDB(sessionId: String, activitySessionId : String ) -> Bool {
-        
-        var querySQL = ""
-        let results : FMResultSet!
-        querySQL = "Select isUserSchedule from Agenda WHERE ActivitySessionId = ? AND EventID = ?"
-        results = database.executeQuery(querySQL, withArgumentsIn: [sessionId, EventData.sharedInstance.eventId])
-        while results?.next() == true {
-            return results.bool(forColumn: "isUserSchedule")
+    func fetchMyScheduleListFromDB(activityId: String ) -> NSArray {
+        let array: NSMutableArray = []
+
+        if openDatabase() {
+            database.beginTransaction()
+
+            let eventId = EventData.sharedInstance.eventId
+            let attendeeId = EventData.sharedInstance.attendeeId
+
+            var sqlQuery = "Select * from Agenda where EventID = \'\(eventId)' AND ActivityId = \'\(activityId)' AND ActivityId in (Select ActivityId from MySchedule where AttendeeId = \'\(attendeeId)' AND EventID = \'\(EventData.sharedInstance.eventId)' AND isUserSchedule = '1') ORDER BY ActivityStartDate ASC"
+
+            let results : FMResultSet = database.executeQuery(sqlQuery, withArgumentsIn: [])
+
+            while results.next() == true {
+
+                let model = AgendaModel()
+                model.sessionId = results.string(forColumn: "SessionID")
+                model.activitySessionId = results.string(forColumn: "ActivitySessionId")
+                model.activityId = results.string(forColumn: "ActivityID")
+                model.activityName = results.string(forColumn: "ActivityName")
+                model.agendaId = results.string(forColumn: "AgendaId")
+                model.agendaName = results.string(forColumn: "AgendaName")
+                model.startActivityDate = results.string(forColumn: "ActivityStartDate")
+                model.endActivityDate = results.string(forColumn: "ActivityEndDate")
+                model.sortDate = results.string(forColumn: "SortActivityDate")
+                model.location = results.string(forColumn: "Location")
+                model.startTime = results.string(forColumn: "StartTime")
+                model.endTime = results.string(forColumn: "EndTime")
+                model.day = results.string(forColumn: "Day")
+                model.descText = results.string(forColumn: "Description")
+                model.sortStartDate = results.string(forColumn: "SortStartDate")
+                model.sortEndDate = results.string(forColumn: "SortEndDate")
+                model.activityStatus = false
+                model.isAddedToSchedule = self.checkIsActivityAddeddInMySchedule(activityId: model.activityId) //results.bool(forColumn: "isUserSchedule")
+
+                //Fetch speakers list of activity
+                model.speakers = self.fetchSpeakersOfActivityDataFromDB(activityId: model.activityId) as! [PersonModel]
+
+                //Check activity status, currently activity is going on or not
+                //model.activityStatus = self.fetchActivityStatus().next() == true ? true : false
+                let (dateStr, _) = self.getCurrentTime()
+
+                let activityId = model.activityId as String
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "HH:mm:ss"
+                let currentTime = dateFormatter.string(from: Date())
+                let sqlQuery = "Select * from Agenda WHERE (StartTime <= '\(currentTime)' AND EndTime >= '\(currentTime)' AND SortActivityDate = '\(dateStr)') AND ActivityID = '\(activityId)' AND EventID = '\(eventId)' ORDER BY SortActivityDate DESC"
+                let results1 : FMResultSet = database.executeQuery(sqlQuery, withArgumentsIn: [])
+                while results1.next() == true {
+                    if results.string(forColumn: "SortActivityDate") == dateStr {
+                        model.activityStatus = true
+                    }
+                }
+                array.add(model)
+            }
+            database.commit()
+            database.close()
         }
-        return false
+        return array as NSArray
     }
 
     
@@ -4863,7 +4921,166 @@ class DBManager: NSObject {
         
         return activityName
     }
-    
+
+
+    // MARK: - Pending Action Methods
+
+    func saveFeedbackGivenActivityDataIntoDB(responce: AnyObject) {
+
+        if openDatabase() {
+
+            database.beginTransaction()
+            let eventId = EventData.sharedInstance.eventId
+
+            var sqlQuery = ""
+            if responce is NSDictionary {
+                let dict = responce as! NSDictionary
+                let eventArray = dict.value(forKey: "lstEventFeedbackActions") as! Array<Any>
+                if eventArray.count != 0 {
+
+                    let eventId  = ((eventArray.first) as! NSDictionary).value(forKey: "eventId") as! String
+                    sqlQuery +=  "INSERT OR REPLACE INTO PostedActivityFeedback (EventID, ActivityId, AttendeeId) VALUES ('\(eventId)','\(eventId)','\(EventData.sharedInstance.attendeeId)');"
+                }
+
+                let activityArray = dict.value(forKey: "lstActivitiyFeedbackActions") as! Array<Any>
+
+                for item in activityArray as NSArray {
+                    let  dict = item as! NSDictionary
+
+                    let activityId = dict.value(forKey: "ActivityId") as! String
+                    sqlQuery +=  "INSERT OR REPLACE INTO PostedActivityFeedback (EventID, ActivityId, AttendeeId) VALUES ('\(eventId)','\(activityId)','\(EventData.sharedInstance.attendeeId)');"
+                }
+            }
+
+            if !database.executeStatements(sqlQuery) {
+                print(self.database.lastError(), self.database.lastErrorMessage())
+            }
+
+            database.commit()
+            database.close()
+        }
+    }
+
+    func saveFeedbackGivenToEventDataIntoDB() {
+
+        if openDatabase() {
+
+            database.beginTransaction()
+            let eventId = EventData.sharedInstance.eventId
+            do {
+                try database.executeUpdate("Insert Or replace PostedActivityFeedback(EventID, ActivityId, AttendeeId)", values: [eventId, eventId, EventData.sharedInstance.attendeeId])
+
+            } catch  {
+
+            }
+
+            database.commit()
+            database.close()
+        }
+    }
+
+    func checkEventFeedbackisAlreadySubmitted() -> Bool {
+
+        var isSubmitted : Bool = false
+
+        if openDatabase() {
+
+            let querySQL =  "Select * from PostedActivityFeedback WHERE EventID < ? AND ActivityId = ? AND AttendeeId = ?"
+            let results:FMResultSet = database.executeQuery(querySQL, withArgumentsIn: [EventData.sharedInstance.eventId, EventData.sharedInstance.eventId,EventData.sharedInstance.attendeeId])
+
+            while results.next() == true {
+                isSubmitted = true
+            }
+
+            database.close()
+        }
+
+        return isSubmitted
+    }
+
+    func fetchAllPendingActionPollActivitiesFromDB() -> NSArray {
+        var array = [AgendaModel]()
+
+        if openDatabase() {
+
+            database.beginTransaction()
+
+            //Fetch current date and time
+            let (dateStr, endDate) = self.getCurrentTime()
+            let querySQL = "Select * from Agenda WHERE ActivityStartDate < ? AND ActivityEndDate > ? AND SortActivityDate = ? AND EventID = ? ORDER BY SortActivityDate DESC"
+            let results:FMResultSet = database.executeQuery(querySQL, withArgumentsIn: [endDate, endDate, dateStr, EventData.sharedInstance.eventId])
+
+            while results.next() == true {
+
+                let model = AgendaModel()
+                model.sessionId = results.string(forColumn: "SessionID")
+                model.activitySessionId = results.string(forColumn: "ActivitySessionId")
+                model.activityId = results.string(forColumn: "ActivityID")
+                model.activityName = results.string(forColumn: "ActivityName")
+                model.agendaId = results.string(forColumn: "AgendaId")
+                model.agendaName = results.string(forColumn: "AgendaName")
+                model.startActivityDate = results.string(forColumn: "ActivityStartDate")
+                model.endActivityDate = results.string(forColumn: "ActivityEndDate")
+                model.sortDate = results.string(forColumn: "SortActivityDate")
+                model.location = results.string(forColumn: "Location")
+                model.startTime = results.string(forColumn: "StartTime")
+                model.endTime = results.string(forColumn: "EndTime")
+                model.day = results.string(forColumn: "Day")
+                model.descText = results.string(forColumn: "Description")
+                model.sortStartDate = results.string(forColumn: "SortStartDate")
+                model.sortEndDate = results.string(forColumn: "SortEndDate")
+                model.activityStatus = false
+                array.append(model)
+            }
+
+            database.commit()
+            database.close()
+        }
+        return array as NSArray
+    }
+
+    func fetchAllPendingActionFeebackActivitiesFromDB() -> NSArray {
+        var array = [AgendaModel]()
+
+        if openDatabase() {
+
+            database.beginTransaction()
+
+            //Fetch current date and time
+            let (_, endDate) = self.getCurrentTime()
+            let querySQL =  "Select * from Agenda WHERE ActivityEndDate < ? AND EventID = ? ORDER BY SortActivityDate DESC"
+            let results:FMResultSet = database.executeQuery(querySQL, withArgumentsIn: [endDate, EventData.sharedInstance.eventId])
+
+            while results.next() == true {
+
+                let model = AgendaModel()
+                model.sessionId = results.string(forColumn: "SessionID")
+                model.activitySessionId = results.string(forColumn: "ActivitySessionId")
+                model.activityId = results.string(forColumn: "ActivityID")
+                model.activityName = results.string(forColumn: "ActivityName")
+                model.agendaId = results.string(forColumn: "AgendaId")
+                model.agendaName = results.string(forColumn: "AgendaName")
+                model.startActivityDate = results.string(forColumn: "ActivityStartDate")
+                model.endActivityDate = results.string(forColumn: "ActivityEndDate")
+                model.sortDate = results.string(forColumn: "SortActivityDate")
+                model.location = results.string(forColumn: "Location")
+                model.startTime = results.string(forColumn: "StartTime")
+                model.endTime = results.string(forColumn: "EndTime")
+                model.day = results.string(forColumn: "Day")
+                model.descText = results.string(forColumn: "Description")
+                model.sortStartDate = results.string(forColumn: "SortStartDate")
+                model.sortEndDate = results.string(forColumn: "SortEndDate")
+                model.activityStatus = false
+                array.append(model)
+            }
+
+            database.commit()
+            database.close()
+        }
+        return array as NSArray
+    }
+
+
   /*  func fetchEventDatesFromDB() -> NSArray {
         let array: NSMutableArray = []
         
@@ -4925,17 +5142,6 @@ class DBManager: NSObject {
         return ""
     }
 
-    
-//    func trimImagePath(path : Any) -> Any {
-//        
-//        if (path as? NSNull) == nil {
-//            let pathStr = path as! String
-//            return BASE_URL.appending(pathStr.replacingOccurrences(of: "../", with: "", options: .literal, range: nil))
-//        }
-//
-//        return ""
-//    }
-    
     func isNullString(str : Any) -> String {
         var finalStr = ""
 

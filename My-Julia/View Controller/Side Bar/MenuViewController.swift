@@ -59,16 +59,14 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
         userProfileIcon.layer.cornerRadius = userProfileIcon.frame.size.width / 2
         userProfileIcon.clipsToBounds = true
 
-        //        self.createAlertView()
         //Apply navigation theme
         CommonModel.sharedInstance.applyNavigationTheme()
 
         //Show application version
         self.appVersionName.text = APP_VERSION
 
+        print("Menu View Did load : ",CommonModel.sharedInstance.getCurrentDateInMM())
         self.setMenuList()
-        
-        self.triggerPopAfterActivityFinish()
     }
 
     override func didReceiveMemoryWarning() {
@@ -93,6 +91,8 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     override func viewDidAppear(_ animated: Bool) {
 
+        print("Menu View Did Appear : ",CommonModel.sharedInstance.getCurrentDateInMM())
+        self.triggerPopAfterActivityFinish()
         //Add observer
         self.addNotificationObserver()
     }

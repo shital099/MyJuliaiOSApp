@@ -52,6 +52,10 @@ class AgendaDetailsViewController: UIViewController,UIImagePickerControllerDeleg
 
         //Fetch agenda details
       //  agendaModel = DBManager.sharedInstance.fetchActivityDetailsFromDB(activityId: agendaModel.activityId)
+
+        //Check reminder and notes is added or not
+        reminderStatus = DBManager.sharedInstance.isReminderAddedIntoDB(activityId: agendaModel.activityId)
+        note = DBManager.sharedInstance.fetchNotesFromDB(activityId: agendaModel.activityId)
     }
 
     override func didReceiveMemoryWarning() {
@@ -60,21 +64,17 @@ class AgendaDetailsViewController: UIViewController,UIImagePickerControllerDeleg
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        print("activity id : ",agendaModel.activityId)
 
-        //Check reminder added or not
-        reminderStatus = DBManager.sharedInstance.isReminderAddedIntoDB(activityId: agendaModel.activityId)
-
+        //Fetch agenda details
         if isRefresh == true {
             //Fetch agenda details
             agendaModel = DBManager.sharedInstance.fetchActivityDetailsFromDB(activityId: agendaModel.activityId)
-           // self.tableviewObj.reloadData()
             isRefresh = false
         }
         else {
             //Fetch note data
-            print("activity id : ",agendaModel.activityId)
             note = DBManager.sharedInstance.fetchNotesFromDB(activityId: agendaModel.activityId)
-           // self.refreshTableStatus()
         }
         self.tableviewObj.reloadData()
     }
@@ -251,17 +251,17 @@ class AgendaDetailsViewController: UIViewController,UIImagePickerControllerDeleg
         reminder.title = agendaModel.activityName
         reminder.message = agendaModel.location
         reminder.sortDate = agendaModel.startActivityDate
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
-//        let date = dateFormatter.date(from: agendaModel.startActivityDate)
-//        dateFormatter.dateFormat = "dd-MM-yyyy"
-//        reminder.sortDate = dateFormatter.string(from: date!)
         reminder.activityStartTime = agendaModel.startActivityDate
         reminder.activityEndTime = agendaModel.endActivityDate
         reminder.sessionId = agendaModel.sessionId
         reminder.activityId = agendaModel.activityId
-        reminder.reminderTime = String(time)
-        
+        //reminder.reminderTime = String(time)
+        if time == 0 {
+            reminder.reminderTime = "0"
+        }
+        else {
+            reminder.reminderTime = String(time)
+        }
         DBManager.sharedInstance.saveNewReminderDataIntoDB(reminder: reminder)
         
         reminderStatus = true
@@ -276,10 +276,6 @@ class AgendaDetailsViewController: UIViewController,UIImagePickerControllerDeleg
                 return
             }
             let event = EKEvent(eventStore: store)
-//            let dateFormatter = DateFormatter()
-//            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
-//            event.startDate = dateFormatter.date(from: self.agendaModel.startActivityDate)!
-//            event.endDate = dateFormatter.date(from: self.agendaModel.endActivityDate)!
             event.title = self.agendaModel.activityName
             event.accessibilityValue = self.agendaModel.activityId as String
 
@@ -290,9 +286,6 @@ class AgendaDetailsViewController: UIViewController,UIImagePickerControllerDeleg
             let alarm = EKAlarm(relativeOffset:interval)
             event.alarms = [alarm]
 
-            print("event start", event.startDate )
-            print("event end", event.endDate  )
-
             //Add reminder into calender
             do {
                 let predicate = store.predicateForEvents(withStart: event.startDate, end: event.endDate, calendars: nil)
@@ -300,7 +293,6 @@ class AgendaDetailsViewController: UIViewController,UIImagePickerControllerDeleg
                 for singleEvent in existingEvents {
                     if singleEvent.title == self.agendaModel.activityName {
                         // Event exist
-                        print("Reminder added..")
                         try store.remove(singleEvent, span: .thisEvent, commit: true)
                     }
                 }

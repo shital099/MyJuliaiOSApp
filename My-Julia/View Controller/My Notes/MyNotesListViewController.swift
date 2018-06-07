@@ -32,10 +32,6 @@ class MyNotesListViewController: UIViewController, MyNoteDelegate, UITableViewDa
         
         //Show menu icon in ipad and iphone
         self.setupMenuBarButtonItems()
-        
-        //        if IS_IPHONE {
-        //            self.setupMenuBarButtonItems()
-        //        }
 
         //apply application theme on screen
         CommonModel.sharedInstance.applyThemeOnScreen(viewController: self, bgImage: bgImageView)
@@ -49,8 +45,11 @@ class MyNotesListViewController: UIViewController, MyNoteDelegate, UITableViewDa
     
     override func viewDidAppear(_ animated: Bool) {
         //Fetch data from Sqlite database
-        listArray = DBManager.sharedInstance.fetchAllNotesListFromDB() as! [Notes]
-        self.tableView.reloadData()
+        DispatchQueue.main.async {
+            // Update UI
+            self.listArray = DBManager.sharedInstance.fetchAllNotesListFromDB() as! [Notes]
+            self.tableView.reloadData()
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -222,7 +221,7 @@ class MyNotesListViewController: UIViewController, MyNoteDelegate, UITableViewDa
 
             //Delete section if deleted row is last row of section
             if listArray.count == 0 {
-//                let indexSet = NSMutableIndexSet()
+               //let indexSet = NSMutableIndexSet()
 //                indexSet.add(indexPath.section)
 //                tableView.deleteSections(indexSet as IndexSet, with: UITableViewRowAnimation.automatic)
                 self.tableView.reloadData()

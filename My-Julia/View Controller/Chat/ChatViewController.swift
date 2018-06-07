@@ -48,25 +48,16 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
         
         // self.initBar()
         self.addRefreshViews()
-        self.loadBaseViewsAndData()
+        //Show textview bottom view
+         self.loadBaseViewsAndData()
+
         self.chatModel.isGroupChat = self.chatGroupModel.isGroupChat
-        
-        //        let listArray : NSMutableArray = []
-        //        self.chatModel.dataSource = listArray
 
         //Create delete message button object
         self.deleteBtn = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.trash, target: self, action: #selector(ChatViewController.onClickOfDeleteMessageBtn))
         self.detailsBtn = UIBarButtonItem(image: #imageLiteral(resourceName: "info"),  style: .plain, target: self, action: #selector(ChatViewController.onClickOfGroupInfoBtn))
 
         self.navigationItem.rightBarButtonItems = self.chatGroupModel.isGroupChat == true ? [self.detailsBtn] : []
-
-        //        if !self.chatModel.isGroupChat {
-        //            self.navigationItem.rightBarButtonItem = deleteBtn
-        //            self.navigationItem.rightBarButtonItem = nil
-        //        }
-        //        else {
-        //            self.navigationItem.rightBarButtonItems = [detailsBtn]
-        //        }
 
         //Fetch all chat history from database
         self.parseChatHistoryData(response: "" as AnyObject, isChatHistory:  true)
@@ -76,15 +67,10 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
         
         timer = Timer.scheduledTimer(timeInterval: TimeInterval(Chat_History_Time), target: self, selector: #selector(getRunTimedQuestions), userInfo: nil, repeats: true)
         self.getCurrentTime()
-        //  self.previousTime = self.lastHistoryTime
-        
+
         //Remove extra lines from tableview
         chatTableView?.tableFooterView = UIView()
 
-        //        self.chatModel.dataSource.removeAllObjects()
-        //        self.chatModel.populateRandomDataSource()
-        //        self.chatTableView?.reloadData()
-        
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(self.receiveMessage),
@@ -116,17 +102,24 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
         //Remove notification observer
         NotificationCenter.default.removeObserver(self, name: Notification.Name("ChatMessageNotificationId"), object: nil)
 
-//        if (self.isMovingFromParentViewController){
-//            // Your code...
-//            self.navigationController?.popToRootViewController(animated: false)
-//        }
-
         if isFromContactList == true {
           self.navigationController?.popToRootViewController(animated: false)
         }
     }
 
     override func viewDidAppear(_ animated: Bool) {
+        print("self.splitViewController?.displayMode : ",self.splitViewController?.displayMode ?? "")
+        //Show textview bottom view
+       // self.loadBaseViewsAndData()
+
+        if IS_IPAD {
+            //change width of bottom view according to split view 
+            var newFrame : CGRect = IFView.frame;
+            newFrame.size.width = self.view.size.width
+            IFView.frame = newFrame;
+            IFView.changeInputViewFrame(IFView.frame)
+            UIView.commitAnimations()
+        }
 
         //Update notification read/unread message count in side menu bar
         let dataDict:[String: Any] = ["Order": self.view.tag, "Flag":Update_Chat_List]
@@ -336,7 +329,7 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
 
                 NetworkingHelper.postData(urlString:Chat_Group_History, param:paramDict as AnyObject, withHeader: false, isAlertShow: false, controller:self, callback: { [weak self] response in
 
-                  //  print("Group Chat history  : ",response)
+                    print("Group Chat history  : ",response)
                 if response is Array<Any> {
                     self?.parseChatHistoryData(response: response, isChatHistory:  true)
                 }
@@ -351,7 +344,7 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
                 let paramDict = ["ToId":self.chatGroupModel.groupId] as [String : Any]
                 NetworkingHelper.postData(urlString:Chat_History, param:paramDict as AnyObject, withHeader: false, isAlertShow: false, controller:self, callback: { [weak self] response in
 
-//                print("Chat history  : ",response)
+                print("Chat history  : ",response)
                 if response is Array<Any> {
                     self?.parseChatHistoryData(response: response, isChatHistory:  true)
                 }
@@ -522,6 +515,8 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
     func refreshChatHistoryList() {
         
         let paramDict = ["FromId":AttendeeInfo.sharedInstance.attendeeId  ,"ToId":self.chatGroupModel.groupId, "EventId":EventData.sharedInstance.eventId, "HistoryDate" : "", "Seconds": Chat_History_Time] as [String : Any]
+        print("Refresh request : ",paramDict)
+
         NetworkingHelper.postData(urlString: Chat_Refresh_Chat_history, param:paramDict as AnyObject, withHeader: false, isAlertShow: false, controller:self, callback: { [weak self] response in
 
             print("Refresh Chat list responce : ",response)
@@ -587,59 +582,25 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
     }
 
     func loadBaseViewsAndData()  {
-
         self.chatModel = ChatModel.init()
         self.chatModel.isGroupChat = false
         self.chatModel.screen_size = self.view.frame.size
-        //self.chatModel.populateRandomDataSource()
 
-        var size : CGSize = self.view.frame.size
-        print("View frame : ",self.view.frame)
-        print("Window frame : ",AppDelegate.getAppDelegateInstance().window?.frame ?? "")
-
-//        if UIDevice.current.orientation.isLandscape {
-//            size.height -= 64
-//        } else {
-//        }
-
-        //Calculate bottom view size
-//        if IS_IPAD {
-//            size.width -= SPLIT_WIDTH
-//        }
+        let size : CGSize = self.view.frame.size
 
         if IS_IPAD {
-           //  size.height -= 64
-
-            if self.splitViewController?.displayMode == UISplitViewControllerDisplayMode.allVisible {
-                size.width -= SPLIT_WIDTH
-            }
+//            if self.splitViewController?.displayMode == UISplitViewControllerDisplayMode.allVisible {
+//                size.width -= SPLIT_WIDTH
+//            }
+//            else {
+//
+//            }
         }
 
         IFView = UUInputFunctionView.init(superVC: self, with:size)
         IFView.delegate = self;
         IFView.backgroundColor = AppTheme.sharedInstance.backgroundColor.darker(by: 40)!
         self.view.addSubview(IFView)
-
-        /*   if chatGroupModel.dndSetting == true {
-         disableChatView.frame = CGRect(x: 0, y: size.height-45, width: size.width, height: 45)
-         disableChatView.backgroundColor = UIColor.lightGray
-         disableChatView.textColor = UIColor.white
-         disableChatView.text = Disable_chat_message
-         disableChatView.numberOfLines = 0
-         disableChatView.sizeToFit()
-         disableChatView.textAlignment = .center
-         self.view.addSubview(disableChatView)
-
-         // IFView.disableChatView.isHidden = false;
-         }
-         else {
-         IFView = UUInputFunctionView.init(superVC: self, with:size)
-         IFView.delegate = self;
-         self.view.addSubview(IFView)
-         }*/
-
-        //  self.chatTableView?.reloadData()
-        // self.tableViewScrollToBottom()
     }
 
     @objc func keyboardChange(notification: NSNotification) {
@@ -671,6 +632,8 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
         //            newFrame.origin.y = keyboardEndFrame.origin.y - newFrame.size.height;
         //            IFView.frame = newFrame;
 
+        print("self.view.frame.size.width : ",self.view.frame.size.width)
+        
         newFrame.size.width = self.view.frame.size.width
         IFView.frame = newFrame;
         IFView.changeInputViewFrame(IFView.frame)

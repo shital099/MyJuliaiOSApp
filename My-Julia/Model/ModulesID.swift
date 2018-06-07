@@ -69,7 +69,7 @@ class ModulesID: NSObject {
         [
             "ModuleID" : "a5c29038-e3cc-46cb-8c67-349726d93cad",
             "ModuleName" : "MyNotes",
-            "ClassName" : "MyNotesListViewController"
+            "ClassName" : "PendingActionListVC"
         ],
         [
             "ModuleID" : "3b96ac96-56d8-4fce-aa48-5308f740f753",
@@ -136,8 +136,13 @@ class ModulesID: NSObject {
             "ModuleName" : "Q&A",
             "ClassName" : "SessionListViewController"
         ],
+        [
+            "ModuleID" : "68b46c79-3ba3-42df-8af3-b180e995a3a2",
+            "ModuleName" : "Pending Actions",
+            "ClassName" : "PendingActionListVC"
+        ],
         ]
-    
+
     //MARK: Shared Instance
     
     static let sharedInstance: ModulesID = ModulesID()

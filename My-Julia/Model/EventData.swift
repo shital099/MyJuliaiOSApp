@@ -49,5 +49,7 @@ class EventData: NSObject {
         eventCoverImage = nil
         attendeeId = ""
         attendeeCode = ""
+
+        auth_token = ""
     }
 }

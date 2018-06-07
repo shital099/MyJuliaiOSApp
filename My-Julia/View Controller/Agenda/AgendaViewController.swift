@@ -204,12 +204,13 @@ class AgendaViewController: UIViewController, UITableViewDataSource, UITableView
             let predicate:NSPredicate = NSPredicate(format: "sortDate = %@", dateStr)
             let filteredArray = listArray.filter { predicate.evaluate(with: $0) };
 
+            //If actiivity is added inmyschedule
             if isMySchedules {
                 self.myScheduleDataDict[dateStr] = filteredArray
             }
-            else {
-                self.dataDict[dateStr] = filteredArray
-            }
+
+            //Add in agenda
+            self.dataDict[dateStr] = filteredArray
         }
         print("for loop end: ",CommonModel.sharedInstance.getCurrentDateInMM())
 
@@ -283,6 +284,48 @@ class AgendaViewController: UIViewController, UITableViewDataSource, UITableView
 //                }
 //            print("after sorting by 2 method : ",CommonModel.sharedInstance.getCurrentDateInMM())
         // print("nDataDict : ", nDataDict)
+    }
+
+    func fetchMySchdeuleActivitiesListAndSort(activityId : String) {
+
+        //Fetch data from Sqlite database
+        let listArray = DBManager.sharedInstance.fetchMyScheduleListFromDB(activityId: activityId) as! [AgendaModel]
+        print("listArray array : ",listArray.count)
+
+        if listArray.count != 0 {
+
+            //Calculate days between events start and end date
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+            let startDate = dateFormatter.date(from: (listArray.first?.startActivityDate)!)
+            let endDate = dateFormatter.date(from: (listArray.first?.endActivityDate)!)
+
+            let diffInDays = Calendar.current.dateComponents([.day], from: startDate!, to: endDate!).day
+            print("diffInDays : ",diffInDays ?? "")
+
+            for _ in 0...diffInDays! {
+
+                dateFormatter.dateFormat = "dd-MM-yyyy"
+                let dateStr:String = dateFormatter.string(from: startDate!)
+
+                //Sort activity list according to date
+                let predicate:NSPredicate = NSPredicate(format: "sortDate = %@", dateStr)
+                let filteredArray = listArray.filter { predicate.evaluate(with: $0) };
+
+                //If actiivity is added inmyschedule
+                if isMySchedules {
+                    self.myScheduleDataDict[dateStr] = filteredArray
+                }
+
+                //Add in agenda
+                self.dataDict[dateStr] = filteredArray
+            }
+            DispatchQueue.main.async {
+                // Update the UI
+                self.tableviewObj.reloadData()
+            }
+        }
+
     }
 
     override func didReceiveMemoryWarning() {
@@ -390,7 +433,8 @@ class AgendaViewController: UIViewController, UITableViewDataSource, UITableView
             //add this activity to my schedule
             DBManager.sharedInstance.addToMyScheduleDataIntoDB(model: model)
             //Fetch Activity data from db and refresh tableview
-           // self.fetchActivitiesListAndSort()
+            self.fetchActivitiesListAndSort()
+           // self.fetchMySchdeuleActivitiesListAndSort(activityId: model.activityId)
 
             DispatchQueue.main.async {
                 // Update the UI

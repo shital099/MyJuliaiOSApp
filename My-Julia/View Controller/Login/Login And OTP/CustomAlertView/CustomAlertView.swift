@@ -65,7 +65,6 @@ class CustomAlertView: UIViewController, UITextFieldDelegate {
         super.viewDidLayoutSubviews()
         view.layoutIfNeeded()
         self.cancelButton.addBorder(side: .Top, color: alertViewGrayColor, width: 1)
-        //cancelButton.addBorder(side: .Right, color: alertViewGrayColor, width: 1)
         downloadButton.addBorder(side: .Top, color: alertViewGrayColor, width: 1)
     }
 

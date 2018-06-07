@@ -9,22 +9,6 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "My-Julia/View Controller/FeedBack/FeedbackViewController.swift"
-            timestampString = "549356073.587595"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "250"
-            endingLineNumber = "250"
-            landmarkName = "textView(_:shouldChangeTextIn:replacementText:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "My-Julia/View Controller/Chat/ChatContactsViewController.swift"
             timestampString = "549540303.557001"
             startingColumnNumber = "9223372036854775807"
@@ -52,18 +36,29 @@
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.SymbolicBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            moduleName = "">
+            <Locations>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "My-Julia/View Controller/Reminders/AddReminderViewController.swift"
-            timestampString = "549807076.230711"
+            filePath = "My-Julia/View Controller/Login/EventListViewController.swift"
+            timestampString = "550069380.098437"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "188"
-            endingLineNumber = "188"
-            landmarkName = "saveReminderIntoDB()"
+            startingLineNumber = "481"
+            endingLineNumber = "481"
+            landmarkName = "loginButtonTapped(selectedOption:textFieldValue:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -73,13 +68,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "My-Julia/View Controller/Reminders/AddReminderViewController.swift"
-            timestampString = "549807076.231083"
+            filePath = "My-Julia/Model/Sqlite Database/DBManager.swift"
+            timestampString = "550069380.0985039"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "180"
-            endingLineNumber = "180"
-            landmarkName = "saveReminderIntoDB()"
+            startingLineNumber = "872"
+            endingLineNumber = "872"
+            landmarkName = "insertApplicationModulesDataIntoDB(responce:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

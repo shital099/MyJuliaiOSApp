@@ -260,5 +260,7 @@ class SessionCustomCell: UITableViewCell {
     @IBOutlet weak var statusImage: UIImageView!
     @IBOutlet weak var agenaNameLbl:UILabel!
 
+    @IBOutlet weak var button:UIButton!
+
 }
 

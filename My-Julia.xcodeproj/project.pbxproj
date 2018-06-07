@@ -223,6 +223,8 @@
 		7E63A2921F0B8E6600D87C65 /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E63A2911F0B8E6600D87C65 /* SpriteKit.framework */; };
 		7E70462F1ED6BB99006B30F7 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E70462E1ED6BB99006B30F7 /* libsqlite3.0.tbd */; };
 		7E7DD514208482B0006F2109 /* LazyImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E7DD513208482AF006F2109 /* LazyImage.swift */; };
+		7EA16B3C20C90937003E8C40 /* PendingActionListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EA16B3B20C90937003E8C40 /* PendingActionListVC.swift */; };
+		7EA16B3E20C92DFC003E8C40 /* FeedbackActivityListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EA16B3D20C92DFC003E8C40 /* FeedbackActivityListViewController.swift */; };
 		7EB850472091AD85004948AB /* HTMLConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7EB850452091AD85004948AB /* HTMLConverter.m */; };
 		7EB852E92091E64B004948AB /* ImageView+Kingfisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB852E82091E64B004948AB /* ImageView+Kingfisher.swift */; };
 		7EB853002091E6C3004948AB /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB852EB2091E6C3004948AB /* ImageCache.swift */; };
@@ -559,6 +561,8 @@
 		7E767CA42099958C00F8BF28 /* My_JuliaTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = My_JuliaTests.m; sourceTree = "<group>"; };
 		7E767CA62099958C00F8BF28 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7E7DD513208482AF006F2109 /* LazyImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LazyImage.swift; sourceTree = "<group>"; };
+		7EA16B3B20C90937003E8C40 /* PendingActionListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingActionListVC.swift; sourceTree = "<group>"; };
+		7EA16B3D20C92DFC003E8C40 /* FeedbackActivityListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackActivityListViewController.swift; sourceTree = "<group>"; };
 		7EB850452091AD85004948AB /* HTMLConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTMLConverter.m; sourceTree = "<group>"; };
 		7EB850462091AD85004948AB /* HTMLConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTMLConverter.h; sourceTree = "<group>"; };
 		7EB852E82091E64B004948AB /* ImageView+Kingfisher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "ImageView+Kingfisher.swift"; path = "../../../../../../Downloads/Kingfisher-master 2/Sources/ImageView+Kingfisher.swift"; sourceTree = "<group>"; };
@@ -1223,6 +1227,7 @@
 				7E5F084B20610173002687D0 /* Side Bar */,
 				7E5F084620610173002687D0 /* Event Details */,
 				7E5F07F020610173002687D0 /* App Notification */,
+				7EA16B3820C90871003E8C40 /* Pending Actions */,
 				7E5F07F320610173002687D0 /* WiFi */,
 				7E5F07F620610173002687D0 /* Attendees */,
 				7E5F07FB20610173002687D0 /* Home */,
@@ -1652,6 +1657,15 @@
 			path = "../../../../../Downloads/LazyImage-master/LazyImage/LazyImageLibrary";
 			sourceTree = "<group>";
 		};
+		7EA16B3820C90871003E8C40 /* Pending Actions */ = {
+			isa = PBXGroup;
+			children = (
+				7EA16B3B20C90937003E8C40 /* PendingActionListVC.swift */,
+				7EA16B3D20C92DFC003E8C40 /* FeedbackActivityListViewController.swift */,
+			);
+			path = "Pending Actions";
+			sourceTree = "<group>";
+		};
 		7EB850442091AD85004948AB /* HTML Converter */ = {
 			isa = PBXGroup;
 			children = (
@@ -1991,6 +2005,7 @@
 				7E5F08C020610173002687D0 /* UIView+WebCache.m in Sources */,
 				7E5F091C20610173002687D0 /* EmerViewController.swift in Sources */,
 				7E5F095220610173002687D0 /* AppDelegate.swift in Sources */,
+				7EA16B3C20C90937003E8C40 /* PendingActionListVC.swift in Sources */,
 				7E5F08FE20610173002687D0 /* ChatListViewController.swift in Sources */,
 				7E5F091020610173002687D0 /* AnimationListCell.swift in Sources */,
 				7E5F092220610173002687D0 /* QRView.swift in Sources */,
@@ -2036,6 +2051,7 @@
 				7E5F091120610173002687D0 /* GDetailViewController.swift in Sources */,
 				7E5F08DC20610173002687D0 /* EventModel.swift in Sources */,
 				7E5F092E20610173002687D0 /* EventAddressViewController.swift in Sources */,
+				7EA16B3E20C92DFC003E8C40 /* FeedbackActivityListViewController.swift in Sources */,
 				7E5F08C520610173002687D0 /* ChatGroupModel.m in Sources */,
 				7E5F08BB20610173002687D0 /* NSData+ImageContentType.m in Sources */,
 				7E5F08B820610173002687D0 /* SDWebImagePrefetcher.m in Sources */,

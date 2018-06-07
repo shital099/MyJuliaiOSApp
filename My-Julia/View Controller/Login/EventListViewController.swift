@@ -51,6 +51,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         //Open last open event automatically if attendee credential is stored
         let userCredential = CredentialHelper.shared.defaultCredential
         print("Default credential : ",userCredential?.user ?? "")
+        CommonModel.sharedInstance.showActitvityIndicator()
 
         if userCredential?.user != nil {
             //Fetch login attendee details from database
@@ -64,13 +65,20 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     override func viewDidAppear(_ animated: Bool) {
+        
         //Check logged in user details found or not in db
         if EventData.sharedInstance.eventId != "" {
+            print("In Event VC Auto token : ",EventData.sharedInstance.auth_token)
+
             //Check last login attendee status and open event
-           // CommonModel.sharedInstance.showActitvityIndicator()
             self.checkLoginAttendeeStatus()
         }
+        else {
+            CommonModel.sharedInstance.dissmissActitvityIndicator()
+        }
     }
+
+    
 
     /*
     // MARK: - Navigation
@@ -271,6 +279,8 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     func getEventDetailsData() {
         CommonModel.sharedInstance.showActitvityIndicator()
 
+        print("Login Auto token : ",EventData.sharedInstance.auth_token)
+
         NetworkingHelper.getRequestFromUrl(name:Get_Login_Details_Url, urlString: Get_Login_Details_Url, callback: { [weak self] response in
              //print("\nEvent Theme Details : ",response)
             print("Event login details : ",CommonModel.sharedInstance.getCurrentDateInMM())
@@ -372,8 +382,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         //Apply navigation theme
         CommonModel.sharedInstance.applyNavigationTheme()
 
-        CommonModel.sharedInstance.dissmissActitvityIndicator()
-        print("After dismiss indicator : ",CommonModel.sharedInstance.getCurrentDateInMM())
+      //  CommonModel.sharedInstance.dissmissActitvityIndicator()
 
         let appDelegate = AppDelegate.getAppDelegateInstance();
         if IS_IPHONE {

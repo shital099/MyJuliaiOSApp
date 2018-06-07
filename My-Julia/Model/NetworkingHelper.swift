@@ -25,6 +25,11 @@ let BASE_URL = "http://srv01.gcotechcenter.local:2400/"     //SRV 2
 //let BASE_URL = "https://apps.gcoeurope.com/Julia/"      //LIVE Enviorment
 //let BASE_URL = "http://roshan.gcotechcenter.local:8000/"
 
+/***** Messaging Crypto Setting ******/
+let CRYPTO_KEY = "23501748FEB710349F13763248DFC6C2"
+let CRYPTO_IV = "abcdefghijklmnop"
+
+
 /***** API'S *******/
 
 //Timezone
@@ -62,6 +67,9 @@ let Attendees_List_url = "Chat_Contacts" //"api/Chat/Contacts/"
 let Feedback_List_url = "api/Feedback/getFeedbackByEventId/"
 let Post_Feedback_Responce_url = "api/Feedback/AddMobilefeedback/"
 let Check_User_Feedback_url = "api/Feedback/CheckFeedbackPost/"
+
+/* Pending Action */
+let Check_Pending_Feedback_url = "api/Feedback/PendingActions"
 
 
 /* Activity Feedback */
@@ -371,6 +379,10 @@ class NetworkingHelper: NSObject {
             }
             else  if name == Documents_List_url {
                 DBManager.sharedInstance.saveAllEventDataIntoDB(response: responseObject as AnyObject, apiNname: name)
+                callback(responseObject as AnyObject)
+            }
+            else  if name == Check_Pending_Feedback_url {
+                DBManager.sharedInstance.saveFeedbackGivenActivityDataIntoDB(responce: responseObject as AnyObject)
                 callback(responseObject as AnyObject)
             }
             else {
