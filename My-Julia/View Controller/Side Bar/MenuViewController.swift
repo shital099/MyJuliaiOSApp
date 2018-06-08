@@ -521,7 +521,10 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         //Show user profile picture
         if (!AttendeeInfo.sharedInstance.iconUrl.isEmpty) {
-            SDImageCache.shared().removeImage(forKey: AttendeeInfo.sharedInstance.iconUrl, withCompletion: nil)
+            //Check internet connection
+            if AFNetworkReachabilityManager.shared().isReachable == true {
+                SDImageCache.shared().removeImage(forKey: AttendeeInfo.sharedInstance.iconUrl, withCompletion: nil)
+            }
             self.userProfileIcon.sd_setImage(with: URL(string:AttendeeInfo.sharedInstance.iconUrl), placeholderImage: UIImage(named: "user-profile"))
         }
         else {

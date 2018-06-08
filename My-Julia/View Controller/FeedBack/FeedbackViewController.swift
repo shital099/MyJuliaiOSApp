@@ -201,12 +201,12 @@ class FeedbackViewController: UIViewController, UITableViewDataSource, UITableVi
                 if (response.value(forKey: "responseCode") != nil) {
                     self?.showStatusView(isSucess: true)
                     //Save feedback is given to this event
-                    DBManager.sharedInstance.saveFeedbackGivenToEventDataIntoDB()
+                    DBManager.sharedInstance.saveFeedbackGivenToEventDataIntoDB(activityId: EventData.sharedInstance.eventId)
                 }
                 else {
                     self?.showStatusView(isSucess: false)
                     //Save feedback is given to this event
-                    DBManager.sharedInstance.saveFeedbackGivenToEventDataIntoDB()
+                    DBManager.sharedInstance.saveFeedbackGivenToEventDataIntoDB(activityId: EventData.sharedInstance.eventId)
                 }
             }
         }, errorBack: { error in

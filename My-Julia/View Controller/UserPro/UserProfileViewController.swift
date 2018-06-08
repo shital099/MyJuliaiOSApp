@@ -215,7 +215,28 @@ class UserProfileViewController: UIViewController, UINavigationControllerDelegat
                 AttendeeInfo.sharedInstance.isvisible = (self?.switchSet.isOn)!
                 AttendeeInfo.sharedInstance.isDND = (self?.dndSwitchSet.isOn)!
                 CommonModel.sharedInstance.showAlertWithStatus(title: Alert_Sucess, message: Sucess_Update_Profile, vc: self!)
-                
+
+
+                let masterVC : UIViewController!
+                if IS_IPHONE {
+                    masterVC =  self?.menuContainerViewController.leftMenuViewController as! MenuViewController?
+                }
+                else {
+                    masterVC = self?.splitViewController?.viewControllers.first
+                }
+
+                if ((masterVC as? MenuViewController) != nil) {
+
+                    //Show user profile picture
+                    if (!AttendeeInfo.sharedInstance.iconUrl.isEmpty) {
+                        //Check internet connection
+                        if AFNetworkReachabilityManager.shared().isReachable == true {
+                            SDImageCache.shared().removeImage(forKey: AttendeeInfo.sharedInstance.iconUrl, withCompletion: nil)
+                        }
+                        (masterVC as? MenuViewController)?.userProfileIcon.sd_setImage(with: URL(string:AttendeeInfo.sharedInstance.iconUrl), placeholderImage: UIImage(named: "user-profile"))
+                    }
+                }
+
 //                self.switchSet.isEnabled = false
 //                self.editbtn.setTitle(" ", for: .normal)
 //                self.editbtn.setImage(UIImage(named: "edit_user"), for: .normal)

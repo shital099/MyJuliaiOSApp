@@ -784,6 +784,32 @@ class CommonModel: NSObject {
         return result
     }
 
+    func getPendingActionDates(sDateStr: String, eDateStr : String) -> String
+    {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        let eventEndDate = dateFormatter.date(from: eDateStr)
+        let eventStartDate = dateFormatter.date(from: sDateStr)
+
+        var result = ""
+
+        dateFormatter.dateFormat = "dd-MM-yyyy"
+
+        if dateFormatter.string(from: eventStartDate!) != dateFormatter.string(from: eventEndDate!) {
+
+            dateFormatter.dateFormat = "dd-MM-yyyy hh:mm a"
+            result = String(format:"%@ - %@",dateFormatter.string(from: eventStartDate!),dateFormatter.string(from: eventEndDate!))
+        }
+        else {
+            dateFormatter.dateFormat = "dd-MM-yyyy"
+            result = dateFormatter.string(from: eventEndDate!)
+            dateFormatter.dateFormat = "hh:mm a"
+            result = String(format:"%@ - %@ to %@",result, dateFormatter.string(from: eventStartDate!),dateFormatter.string(from: eventEndDate!))
+        }
+
+        return result
+    }
+
 //    func getSessionDate(dateStr: String) -> String
 //    {
 //        let dateFormatter = DateFormatter()

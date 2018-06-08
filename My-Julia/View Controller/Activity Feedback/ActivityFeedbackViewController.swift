@@ -131,7 +131,7 @@ class ActivityFeedbackViewController: UIViewController, UITableViewDataSource, U
         
         let urlStr = Get_Activity_Feedback_List_url.appendingFormat("%@",activityId)
         NetworkingHelper.getRequestFromUrl(name:Get_Activity_Feedback_List_url,  urlString:urlStr, callback: { [weak self] response in
-            print("Activity Feedback List :", response)
+           // print("Activity Feedback List :", response)
             
             self?.listArray = DBManager.sharedInstance.fetchActivityFeedbackDataFromDB(activityId:(self?.activityId)!) as! [FeedbackModel]
             self?.tableView.reloadData()
@@ -140,6 +140,9 @@ class ActivityFeedbackViewController: UIViewController, UITableViewDataSource, U
                 //Already feedback submitted
                 self?.submittedMessageLbl.text = Activity_Feedback_submitted
                 self?.topView.isHidden = true
+
+                //Save feedback is given to activity
+                DBManager.sharedInstance.saveFeedbackGivenToEventDataIntoDB(activityId: (self?.activityId)!)
             }
             else {
                 if self?.listArray.count != 0 {
@@ -226,6 +229,9 @@ class ActivityFeedbackViewController: UIViewController, UITableViewDataSource, U
                     
                     //Delete db data aslo
                     DBManager.sharedInstance.deleteActivityFeedbackDataFromDB(activityId: (self?.activityId)!)
+
+                    //Save feedback is given to activity
+                    DBManager.sharedInstance.saveFeedbackGivenToEventDataIntoDB(activityId: (self?.activityId)!)
                 }
                 else {
                     self?.showStatusView(isSucess: false)

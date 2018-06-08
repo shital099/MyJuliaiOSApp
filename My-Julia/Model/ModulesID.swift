@@ -69,7 +69,7 @@ class ModulesID: NSObject {
         [
             "ModuleID" : "a5c29038-e3cc-46cb-8c67-349726d93cad",
             "ModuleName" : "MyNotes",
-            "ClassName" : "PendingActionListVC"
+            "ClassName" : "MyNotesListViewController"
         ],
         [
             "ModuleID" : "3b96ac96-56d8-4fce-aa48-5308f740f753",
@@ -137,7 +137,7 @@ class ModulesID: NSObject {
             "ClassName" : "SessionListViewController"
         ],
         [
-            "ModuleID" : "68b46c79-3ba3-42df-8af3-b180e995a3a2",
+            "ModuleID" : "7657a331-06b9-4bf8-9058-f3f5e0dbcc45",
             "ModuleName" : "Pending Actions",
             "ClassName" : "PendingActionListVC"
         ],

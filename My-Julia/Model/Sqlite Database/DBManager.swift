@@ -867,8 +867,6 @@ class DBManager: NSObject {
             //  Update isdeleted flag for all module
             try database.executeUpdate("UPDATE Module SET isDeleted = ? WHERE EventID = ?", values: [true, eventId])
 
-            print("Fetch All module Data : ",responce)
-
             if (responce.value(forKey:"ModuleRelated") as? NSNull) == nil {
 
                 var orderSequence : Int = 1
@@ -4938,7 +4936,7 @@ class DBManager: NSObject {
                 let eventArray = dict.value(forKey: "lstEventFeedbackActions") as! Array<Any>
                 if eventArray.count != 0 {
 
-                    let eventId  = ((eventArray.first) as! NSDictionary).value(forKey: "eventId") as! String
+                    let eventId  = ((eventArray.first) as! NSDictionary).value(forKey: "EventId") as! String
                     sqlQuery +=  "INSERT OR REPLACE INTO PostedActivityFeedback (EventID, ActivityId, AttendeeId) VALUES ('\(eventId)','\(eventId)','\(EventData.sharedInstance.attendeeId)');"
                 }
 
@@ -4961,17 +4959,16 @@ class DBManager: NSObject {
         }
     }
 
-    func saveFeedbackGivenToEventDataIntoDB() {
+    func saveFeedbackGivenToEventDataIntoDB(activityId : String) {
 
         if openDatabase() {
 
             database.beginTransaction()
             let eventId = EventData.sharedInstance.eventId
             do {
-                try database.executeUpdate("Insert Or replace PostedActivityFeedback(EventID, ActivityId, AttendeeId)", values: [eventId, eventId, EventData.sharedInstance.attendeeId])
+                try database.executeQuery("insert or replace into PostedActivityFeedback(EventID, ActivityId, AttendeeId)", values: [eventId, activityId, EventData.sharedInstance.attendeeId])
 
             } catch  {
-
             }
 
             database.commit()
@@ -4985,7 +4982,7 @@ class DBManager: NSObject {
 
         if openDatabase() {
 
-            let querySQL =  "Select * from PostedActivityFeedback WHERE EventID < ? AND ActivityId = ? AND AttendeeId = ?"
+            let querySQL =  "Select * from PostedActivityFeedback WHERE EventID = ? AND ActivityId = ? AND AttendeeId = ?"
             let results:FMResultSet = database.executeQuery(querySQL, withArgumentsIn: [EventData.sharedInstance.eventId, EventData.sharedInstance.eventId,EventData.sharedInstance.attendeeId])
 
             while results.next() == true {
@@ -4998,7 +4995,7 @@ class DBManager: NSObject {
         return isSubmitted
     }
 
-    func fetchAllPendingActionPollActivitiesFromDB() -> NSArray {
+    func fetchAllPendingActionPollActivitiesFromDB(isCheckingPendingAction : Bool) -> NSArray {
         var array = [AgendaModel]()
 
         if openDatabase() {
@@ -5007,7 +5004,7 @@ class DBManager: NSObject {
 
             //Fetch current date and time
             let (dateStr, endDate) = self.getCurrentTime()
-            let querySQL = "Select * from Agenda WHERE ActivityStartDate < ? AND ActivityEndDate > ? AND SortActivityDate = ? AND EventID = ? ORDER BY SortActivityDate DESC"
+            let querySQL = "Select * from Agenda WHERE ActivityStartDate < ? AND ActivityEndDate > ? AND SortActivityDate = ? AND EventID = ? ORDER BY ActivityStartDate DESC"
             let results:FMResultSet = database.executeQuery(querySQL, withArgumentsIn: [endDate, endDate, dateStr, EventData.sharedInstance.eventId])
 
             while results.next() == true {
@@ -5031,6 +5028,10 @@ class DBManager: NSObject {
                 model.sortEndDate = results.string(forColumn: "SortEndDate")
                 model.activityStatus = false
                 array.append(model)
+
+                if isCheckingPendingAction {
+                    break;
+                }
             }
 
             database.commit()
@@ -5039,7 +5040,7 @@ class DBManager: NSObject {
         return array as NSArray
     }
 
-    func fetchAllPendingActionFeebackActivitiesFromDB() -> NSArray {
+    func fetchAllPendingActionFeebackActivitiesFromDB(isCheckingPendingAction : Bool) -> NSArray {
         var array = [AgendaModel]()
 
         if openDatabase() {
@@ -5048,8 +5049,9 @@ class DBManager: NSObject {
 
             //Fetch current date and time
             let (_, endDate) = self.getCurrentTime()
-            let querySQL =  "Select * from Agenda WHERE ActivityEndDate < ? AND EventID = ? ORDER BY SortActivityDate DESC"
-            let results:FMResultSet = database.executeQuery(querySQL, withArgumentsIn: [endDate, EventData.sharedInstance.eventId])
+            let querySQL =  "Select * from Agenda WHERE ActivityEndDate < ? AND EventID = ? AND ActivityID NOT in ( Select ActivityId from PostedActivityFeedback where EventID = ? AND AttendeeId = ? ) GROUP BY ActivityID  ORDER BY ActivityEndDate DESC"
+
+            let results:FMResultSet = database.executeQuery(querySQL, withArgumentsIn: [endDate, EventData.sharedInstance.eventId, EventData.sharedInstance.eventId, EventData.sharedInstance.attendeeId])
 
             while results.next() == true {
 
@@ -5072,6 +5074,10 @@ class DBManager: NSObject {
                 model.sortEndDate = results.string(forColumn: "SortEndDate")
                 model.activityStatus = false
                 array.append(model)
+
+                if isCheckingPendingAction {
+                    break;
+                }
             }
 
             database.commit()

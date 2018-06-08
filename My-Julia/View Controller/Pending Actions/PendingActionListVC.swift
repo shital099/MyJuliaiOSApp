@@ -15,17 +15,24 @@ class PendingActionListVC: UIViewController, UITableViewDataSource, UITableViewD
 
    // var listArray : NSMutableArray = ["Update Profile", "Event Feedback","Agenda/Activity Feedback", "Submit Poll"]
     var listArray : NSMutableArray = ["Update Profile"]
+    var iconsArray : NSMutableArray = [#imageLiteral(resourceName: "profile_icon")]
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
 
+        //Show menu icon in ipad and iphone
+        self.setupMenuBarButtonItems()
+
         //Remove extra lines from tableview
         tableviewObj.tableFooterView = UIView()
 
         //Check attendee pending action status and according to this add option in array
-        self.checkPendingActionStatus()
+        //self.checkPendingActionStatus()
+
+        //Check attendee pending action status and according to this add option in array
+        self.callUserPendingFeedbackWS()
     }
 
     override func didReceiveMemoryWarning() {
@@ -33,7 +40,6 @@ class PendingActionListVC: UIViewController, UITableViewDataSource, UITableViewD
         // Dispose of any resources that can be recreated.
     }
     
-
     /*
     // MARK: - Navigation
 
@@ -43,6 +49,30 @@ class PendingActionListVC: UIViewController, UITableViewDataSource, UITableViewD
         // Pass the selected object to the new view controller.
     }
     */
+
+    // MARK: - Navigation UIBarButtonItems
+
+    func setupMenuBarButtonItems() {
+        // self.navigationItem.rightBarButtonItem = self.rightMenuBarButtonItem()
+        let barItem = CommonModel.sharedInstance.leftMenuBarButtonItem()
+        barItem.target = self;
+        barItem.action = #selector(self.leftSideMenuButtonPressed(sender:))
+        self.navigationItem.leftBarButtonItem = barItem
+    }
+
+    @objc func leftSideMenuButtonPressed(sender: UIBarButtonItem) {
+        let masterVC : UIViewController!
+        if IS_IPHONE {
+            masterVC =  self.menuContainerViewController.leftMenuViewController as! MenuViewController?
+        }
+        else {
+            masterVC = self.splitViewController?.viewControllers.first
+        }
+
+        if ((masterVC as? MenuViewController) != nil) {
+            (masterVC as! MenuViewController).toggleLeftSplitMenuController()
+        }
+    }
 
     // MARK: - Webservice Methods
 
@@ -55,7 +85,7 @@ class PendingActionListVC: UIViewController, UITableViewDataSource, UITableViewD
 
             }, errorBack: { error in
                 //Fetch updated status from database
-                self.callUserPendingFeedbackWS()
+                self.checkPendingActionStatus()
         })
     }
 
@@ -64,21 +94,21 @@ class PendingActionListVC: UIViewController, UITableViewDataSource, UITableViewD
         let checkEventFeedback = DBManager.sharedInstance.checkEventFeedbackisAlreadySubmitted()
         if !checkEventFeedback {
             self.listArray.add("Event Feedback")
-        }
-        else {
-            print("Event feedback not submitted")
+            self.iconsArray.add(#imageLiteral(resourceName: "pending_feedback_activity"))
         }
 
         //Fetch all completed activity from db
-        let feedbackArray = DBManager.sharedInstance.fetchAllPendingActionFeebackActivitiesFromDB()
+        let feedbackArray = DBManager.sharedInstance.fetchAllPendingActionFeebackActivitiesFromDB(isCheckingPendingAction: true)
         if feedbackArray.count != 0 {
             self.listArray.add("Agenda/Activity Feedback")
+            self.iconsArray.add(#imageLiteral(resourceName: "pending_feedback_activity"))
         }
 
         //Fetch all ongoing activity from db
-        let pollArray = DBManager.sharedInstance.fetchAllPendingActionPollActivitiesFromDB()
+        let pollArray = DBManager.sharedInstance.fetchAllPendingActionPollActivitiesFromDB(isCheckingPendingAction: true)
         if pollArray.count != 0 {
             self.listArray.add("Submit Poll")
+            self.iconsArray.add(#imageLiteral(resourceName: "pending_poll"))
         }
 
         self.tableviewObj.reloadData()
@@ -97,7 +127,8 @@ class PendingActionListVC: UIViewController, UITableViewDataSource, UITableViewD
         let cell = tableView.dequeueReusableCell(withIdentifier: "CellIdentifier", for: indexPath) as! MenuCustomCell
         cell.backgroundColor = cell.contentView.backgroundColor;
 
-        cell.nameLabel.text = listArray[indexPath.row] as? String
+        cell.nameLabel.text = self.listArray[indexPath.row] as? String
+        cell.imageview.image = (self.iconsArray[indexPath.row] as! UIImage)
 
         return cell
     }

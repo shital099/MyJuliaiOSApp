@@ -13,7 +13,7 @@ class FeedbackActivityListViewController: UIViewController, UITableViewDelegate,
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var bgImageView: UIImageView!
 
-    var dataList: NSMutableDictionary = [:]
+   // var dataList: NSMutableDictionary = [:]
     var sortedSections : Array<Any> = []
     var isPollList : Bool = false
 
@@ -21,6 +21,14 @@ class FeedbackActivityListViewController: UIViewController, UITableViewDelegate,
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+
+        if isPollList {
+            self.title = "Live Poll"
+        }
+        else {
+            self.title = "Agenda Feedback"
+        }
+
         //Remove extra lines from tableview
         tableView.tableFooterView = UIView()
 
@@ -28,19 +36,24 @@ class FeedbackActivityListViewController: UIViewController, UITableViewDelegate,
         self.tableView.estimatedRowHeight = 400
         self.tableView.rowHeight = UITableViewAutomaticDimension
 
-        //Register header cell
-        tableView.register(UINib(nibName: "CustomHeaderView", bundle: nil), forHeaderFooterViewReuseIdentifier: "HeaderCellId")
-
         self.tableView.tintColor = AppTheme.sharedInstance.menuBackgroundColor.darker(by: 15)
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+
+        CommonModel.sharedInstance.showActitvityIndicator()
 
         if isPollList == true {
             //Fetch all ongoing activity from db
-            self.sortData(dataArray: DBManager.sharedInstance.fetchAllPendingActionPollActivitiesFromDB())
+            self.sortedSections = DBManager.sharedInstance.fetchAllPendingActionPollActivitiesFromDB(isCheckingPendingAction: false) as! Array<Any>
         }
         else {
             //Fetch all completed activity from db
-            self.sortData(dataArray: DBManager.sharedInstance.fetchAllPendingActionFeebackActivitiesFromDB())
+            self.sortedSections = DBManager.sharedInstance.fetchAllPendingActionFeebackActivitiesFromDB(isCheckingPendingAction: false) as! Array<Any>
         }
+
+        CommonModel.sharedInstance.dissmissActitvityIndicator()
+        self.tableView.reloadData()
     }
 
     override func didReceiveMemoryWarning() {
@@ -58,63 +71,20 @@ class FeedbackActivityListViewController: UIViewController, UITableViewDelegate,
     }
     */
 
-    func sortData(dataArray : NSArray)  {
-
-        //Clear previous data
-        if sortedSections.count != 0 {
-            sortedSections.removeAll()
-        }
-        if dataList.count != 0 {
-            dataList.removeAllObjects()
-        }
-
-        for item in dataArray  {
-
-            let model = item as! AgendaModel
-            let dateStr = CommonModel.sharedInstance.getListHeaderDate(dateStr: model.sortDate)
-            if (dataList.value(forKey: dateStr) != nil) {
-                let array = dataList.value(forKey: dateStr) as! NSMutableArray
-                array.add(item)
-                dataList.setValue(array, forKey: dateStr)
-            }
-            else {
-                let array = NSMutableArray()
-                array.add(item)
-                dataList.setValue(array, forKey: dateStr)
-                sortedSections.append(dateStr)
-            }
-        }
-
-        print(" Data Array : ",dataArray.count)
-        tableView.reloadData()
-    }
-
     // MARK: - UITableView Data Source Methods
 
     func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return self.sortedSections.count
+        return 1 //self.sortedSections.count
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return ((self.dataList.value(forKey: sortedSections[section] as! String))! as AnyObject).count
+        return self.sortedSections.count //((self.dataList.value(forKey: sortedSections[section] as! String))! as AnyObject).count
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 28
-    }
-
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "HeaderCellId") as! CustomHeaderView
-        // headerView.backgroundColor = AppTheme.sharedInstance.menuBackgroundColor.darker(by: 15)
-
-        headerView.headerLabel.text = self.sortedSections[section] as? String
-        headerView.headerLabel.font = headerView.headerLabel.font.withSize(14)
-
-        headerView.setGradientColor()
-
-        return headerView
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -129,12 +99,14 @@ class FeedbackActivityListViewController: UIViewController, UITableViewDelegate,
         cell.bgImage?.layer.cornerRadius = 5.0
         cell.backgroundColor = cell.contentView.backgroundColor;
 
-        let model : AgendaModel = ((self.dataList[sortedSections[indexPath.section]]) as! Array)[indexPath.row]
+        let model = self.sortedSections[indexPath.row] as! AgendaModel //((self.dataList[sortedSections[indexPath.section]]) as! Array)[indexPath.row]
 
         cell.activityNameLbl.text = model.activityName
         cell.agenaNameLbl.text = model.agendaName
 
-        cell.timeLbl.text = String(format: "%@ - %@",CommonModel.sharedInstance.getTimeInDisplayFormat(dateStr: model.startTime),CommonModel.sharedInstance.getTimeInDisplayFormat(dateStr: model.endTime))
+       // cell.timeLbl.text = String(format: "%@ - %@",CommonModel.sharedInstance.getTimeInDisplayFormat(dateStr: model.startTime),CommonModel.sharedInstance.getTimeInDisplayFormat(dateStr: model.endTime))
+
+        cell.timeLbl.text = CommonModel.sharedInstance.getPendingActionDates(sDateStr: model.startActivityDate, eDateStr: model.endActivityDate)
 
         cell.locationLbl.text = model.location
 
@@ -164,7 +136,7 @@ class FeedbackActivityListViewController: UIViewController, UITableViewDelegate,
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
         let viewController = storyboard?.instantiateViewController(withIdentifier: "ActivityFeedbackViewController") as! ActivityFeedbackViewController
-        viewController.activityId = "" //(((self.dataList[sortedSections[indexPath.section]]) as! Array)[indexPath.row] as? AgendaModel)!.activityId as! String
+        viewController.activityId = (self.sortedSections[indexPath.row] as! AgendaModel).activityId //(((self.dataList[sortedSections[indexPath.section]]) as! Array)[indexPath.row] as? AgendaModel)!.activityId as! String
         self.navigationController?.pushViewController(viewController, animated: true)
     }
 }
