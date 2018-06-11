@@ -257,7 +257,8 @@ class PollSessionListViewController: UIViewController, UITableViewDataSource, UI
         if model.isActive {
             
             let viewController = storyboard?.instantiateViewController(withIdentifier: "PollViewController") as! PollViewController
-            viewController.sessionModel = ((self.dataList[sortedSections[indexPath.section]]) as! Array)[indexPath.row]
+           // viewController.sessionModel = ((self.dataList[sortedSections[indexPath.section]]) as! Array)[indexPath.row]
+            viewController.activityId = (((self.dataList[sortedSections[indexPath.section]]) as! Array)[indexPath.row] as SessionsModel).activityId
             self.navigationController?.pushViewController(viewController, animated: true)
         }
         else {

@@ -20,6 +20,7 @@ class PollViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
     var progressView : DDProgressView!
     var sessionModel = SessionsModel()
+    var activityId : String = ""
 
     var pollarray:[PollModel] = []
     var questionIndex : Int = 1
@@ -45,8 +46,6 @@ class PollViewController: UIViewController, UITableViewDataSource, UITableViewDe
         progressView = DDProgressView()
         if IS_IPAD {
 
-            print("self.splitViewController?.displayMode : ",self.splitViewController?.displayMode)
-
             //Remove spit view width(250) from view
             if self.splitViewController?.displayMode == UISplitViewControllerDisplayMode.primaryHidden {
                 progressView.frame = CGRect(x: 40.0, y: 50.0, width: self.view.bounds.size.width - 80 , height: 0.0)
@@ -66,7 +65,9 @@ class PollViewController: UIViewController, UITableViewDataSource, UITableViewDe
         //Sucess view
         UIColor().setIconColorImageToButton(button: self.tickImgBtn, image:"poll-completed-fill")
 
-        self.pollarray = DBManager.sharedInstance.fetchPollActivityQuestionsListFromDB(sessionId: self.sessionModel.sessionId, activityId: self.sessionModel.activityId) as! [PollModel]
+//        self.pollarray = DBManager.sharedInstance.fetchPollActivityQuestionsListFromDB(sessionId: self.sessionModel.sessionId, activityId: self.sessionModel.activityId) as! [PollModel]
+        self.pollarray = DBManager.sharedInstance.fetchPollActivityQuestionsListFromDB(sessionId: "0", activityId: self.activityId) as! [PollModel]
+
         self.fetchUserAnswerData()
 
         //Fetch data from json
@@ -85,14 +86,14 @@ class PollViewController: UIViewController, UITableViewDataSource, UITableViewDe
         //Show Indicator
         CommonModel.sharedInstance.showActitvityIndicator()
 
-        let urlStr = GetPoll_Question_List_url.appendingFormat("%@",self.sessionModel.activityId)
+        let urlStr = GetPoll_Question_List_url.appendingFormat("%@",self.activityId)
         NetworkingHelper.getRequestFromUrl(name:GetPoll_Question_List_url,  urlString:urlStr, callback: { [weak self] response in
            // print("poll questions", response)
             CommonModel.sharedInstance.dissmissActitvityIndicator()
 
             if response is Array<Any> {
               //  self.parsePollData(response: response)
-                self?.pollarray = DBManager.sharedInstance.fetchPollActivityQuestionsListFromDB(sessionId: (self?.sessionModel.sessionId)!, activityId: (self?.sessionModel.activityId)!) as! [PollModel]
+                self?.pollarray = DBManager.sharedInstance.fetchPollActivityQuestionsListFromDB(sessionId: (self?.activityId)!, activityId: (self?.activityId)!) as! [PollModel]
                 self?.fetchUserAnswerData()
 
                 if self?.pollarray.count == 0 {

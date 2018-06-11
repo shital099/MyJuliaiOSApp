@@ -4960,15 +4960,16 @@ class DBManager: NSObject {
     }
 
     func saveFeedbackGivenToEventDataIntoDB(activityId : String) {
-
+        
         if openDatabase() {
 
             database.beginTransaction()
-            let eventId = EventData.sharedInstance.eventId
-            do {
-                try database.executeQuery("insert or replace into PostedActivityFeedback(EventID, ActivityId, AttendeeId)", values: [eventId, activityId, EventData.sharedInstance.attendeeId])
 
-            } catch  {
+            let eventId = EventData.sharedInstance.eventId
+            let sqlQuery =  "INSERT OR REPLACE INTO PostedActivityFeedback (EventID, ActivityId, AttendeeId) VALUES ('\(eventId)','\(activityId)','\(EventData.sharedInstance.attendeeId)');"
+
+            if !database.executeStatements(sqlQuery) {
+                print(self.database.lastError(), self.database.lastErrorMessage())
             }
 
             database.commit()

@@ -531,15 +531,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.isAppOpenFirstTime = false
 
         //Remove all badges number
-        application.applicationIconBadgeNumber = 0
-        application.cancelAllLocalNotifications()
+        UIApplication.shared.applicationIconBadgeNumber = 0
+        if #available(iOS 10.0, *) {
+            let center = UNUserNotificationCenter.current()
+            center.removeAllPendingNotificationRequests() // To remove all pending notifications which are not delivered yet but scheduled.
+            center.removeAllDeliveredNotifications() // To remove all delivered notifications
+        } else {
+            UIApplication.shared.cancelAllLocalNotifications()
+        }
 
-       // DBManager.sharedInstance.copyDatabaseIntoDocumentsDirectory()
-        
         //Create database
         if DBManager.sharedInstance.createDatabase() {
         }
-
     }
     
     func applicationWillTerminate(_ application: UIApplication) {

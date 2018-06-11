@@ -181,9 +181,12 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
 //            SDImageCache.shared().clearMemory()
 //            SDImageCache.shared().clearDisk()
 
-
+        //Check internet connection
+        if AFNetworkReachabilityManager.shared().isReachable == true {
             //Show user porfile picture
+            SDImageCache.shared().removeImage(forKey: AttendeeInfo.sharedInstance.iconUrl, withCompletion: nil)
             self.userProfileIcon.sd_setImage(with: URL(string:AttendeeInfo.sharedInstance.iconUrl), placeholderImage: UIImage(named: "user-profile"))
+        }
 
         //Check internet connection
         if AFNetworkReachabilityManager.shared().isReachable == true {
@@ -639,7 +642,10 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     func menuItemSelected(index: NSInteger, section:NSInteger) {
-        
+
+        let array = self.navigationController?.viewControllers
+        print("array ",array)
+
         //Show selected row
         selectedIndexPath = IndexPath.init(row: index, section: section)
         tableView.reloadData()
@@ -713,6 +719,8 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
             }
             else {
                 let navVC = UINavigationController.init(rootViewController: viewController)
+                print("array ",navVC.viewControllers)
+
               //  viewController.view.tag = index         //Store row index
                 splitViewController?.showDetailViewController(navVC, sender: nil)
             }
@@ -726,12 +734,15 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
             self?.triggerPopAfterActivityFinish()
 
             print("After getting event modules data : ",CommonModel.sharedInstance.getCurrentDateInMM())
+
             //Fetch other details
             self?.getEventDetailsData()
             
         }, errorBack: { error in
             //Fetch other details
-            self.getEventDetailsData()
+            //self.getEventDetailsData()
+            CommonModel.sharedInstance.dissmissActitvityIndicator()
+            CommonModel.sharedInstance.showAlertWithStatus(title: "Error", message: Internet_Error_Message, vc: self)
         })
     }
     
@@ -741,7 +752,6 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
             
            // print("App theme data : ",response)
             print("After getting event details : ",CommonModel.sharedInstance.getCurrentDateInMM())
-
             //Fetch profile data
             _ = DBManager.sharedInstance.fetchProfileDataFromDB()
             

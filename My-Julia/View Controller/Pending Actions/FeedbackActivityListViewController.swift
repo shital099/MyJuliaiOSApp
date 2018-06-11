@@ -50,6 +50,11 @@ class FeedbackActivityListViewController: UIViewController, UITableViewDelegate,
         else {
             //Fetch all completed activity from db
             self.sortedSections = DBManager.sharedInstance.fetchAllPendingActionFeebackActivitiesFromDB(isCheckingPendingAction: false) as! Array<Any>
+
+            //If getting data is empty from navigate to back screen
+            if self.sortedSections.count == 0 {
+                self.navigationController?.popViewController(animated: true)
+            }
         }
 
         CommonModel.sharedInstance.dissmissActitvityIndicator()
@@ -99,6 +104,8 @@ class FeedbackActivityListViewController: UIViewController, UITableViewDelegate,
         cell.bgImage?.layer.cornerRadius = 5.0
         cell.backgroundColor = cell.contentView.backgroundColor;
 
+        cell.tag = indexPath.row
+
         let model = self.sortedSections[indexPath.row] as! AgendaModel //((self.dataList[sortedSections[indexPath.section]]) as! Array)[indexPath.row]
 
         cell.activityNameLbl.text = model.activityName
@@ -120,12 +127,20 @@ class FeedbackActivityListViewController: UIViewController, UITableViewDelegate,
         //Add button action
         cell.sendButtonTapped = { [unowned self] (selectedCell, sender) -> Void in
 
+
             if self.isPollList == true {
                 print("Submit poll click")
+                let viewController = self.storyboard?.instantiateViewController(withIdentifier: "PollViewController") as! PollViewController
+                viewController.activityId = (self.sortedSections[selectedCell.tag] as! AgendaModel).activityId
+                self.navigationController?.pushViewController(viewController, animated: true)
             }
             else {
                 print("Send feedback click")
+               let viewController = self.storyboard?.instantiateViewController(withIdentifier: "ActivityFeedbackViewController") as! ActivityFeedbackViewController
+                viewController.activityId = (self.sortedSections[selectedCell.tag] as! AgendaModel).activityId
+                self.navigationController?.pushViewController(viewController, animated: true)
             }
+
         }
 
         return cell
@@ -135,9 +150,19 @@ class FeedbackActivityListViewController: UIViewController, UITableViewDelegate,
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
-        let viewController = storyboard?.instantiateViewController(withIdentifier: "ActivityFeedbackViewController") as! ActivityFeedbackViewController
-        viewController.activityId = (self.sortedSections[indexPath.row] as! AgendaModel).activityId //(((self.dataList[sortedSections[indexPath.section]]) as! Array)[indexPath.row] as? AgendaModel)!.activityId as! String
-        self.navigationController?.pushViewController(viewController, animated: true)
+        if self.isPollList == true {
+            print("Submit poll click")
+            let viewController = self.storyboard?.instantiateViewController(withIdentifier: "PollViewController") as! PollViewController
+            viewController.activityId = (self.sortedSections[indexPath.row] as! AgendaModel).activityId
+            self.navigationController?.pushViewController(viewController, animated: true)
+        }
+        else {
+            print("Send feedback click")
+            let viewController = self.storyboard?.instantiateViewController(withIdentifier: "ActivityFeedbackViewController") as! ActivityFeedbackViewController
+            viewController.activityId = (self.sortedSections[indexPath.row] as! AgendaModel).activityId
+            self.navigationController?.pushViewController(viewController, animated: true)
+        }
+
     }
 }
 

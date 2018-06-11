@@ -31,7 +31,7 @@ class PendingActionListVC: UIViewController, UITableViewDataSource, UITableViewD
         //Check attendee pending action status and according to this add option in array
         //self.checkPendingActionStatus()
 
-        //Check attendee pending action status and according to this add option in array
+        //Check attendee pending action status and according to this add option in arvar
         self.callUserPendingFeedbackWS()
     }
 
@@ -39,7 +39,12 @@ class PendingActionListVC: UIViewController, UITableViewDataSource, UITableViewD
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
+
+    override func viewDidAppear(_ animated: Bool) {
+        //Fetch updated status from database
+        self.checkPendingActionStatus()
+    }
+
     /*
     // MARK: - Navigation
 
@@ -91,6 +96,13 @@ class PendingActionListVC: UIViewController, UITableViewDataSource, UITableViewD
 
     func checkPendingActionStatus() {
 
+        self.listArray.removeAllObjects()
+        self.iconsArray.removeAllObjects()
+
+        //Add Profile option
+        self.listArray.add("Update Profile")
+        self.iconsArray.add(#imageLiteral(resourceName: "profile_icon"))
+
         let checkEventFeedback = DBManager.sharedInstance.checkEventFeedbackisAlreadySubmitted()
         if !checkEventFeedback {
             self.listArray.add("Event Feedback")
@@ -140,6 +152,7 @@ class PendingActionListVC: UIViewController, UITableViewDataSource, UITableViewD
         let  cell = tableView.cellForRow(at: indexPath) as! MenuCustomCell
         if indexPath.row == 0 {
             let viewController = storyboard?.instantiateViewController(withIdentifier: "UserProfileViewController") as! UserProfileViewController
+            viewController.isFromPendingAction = true
             self.navigationController?.pushViewController(viewController, animated: true)
         }
         else {
