@@ -175,7 +175,7 @@ class AttachmentHandler: NSObject{
     func authorisationStatusCheck(attachmentTypeEnum: AttachmentType, vc: UIViewController)-> Bool {
 
         currentVC = vc
-        var statusValue : Bool = true
+        var statusValue : Bool = false
 
         if attachmentTypeEnum == .camera {
 
@@ -187,29 +187,30 @@ class AttachmentHandler: NSObject{
                                               completionHandler: { (granted:Bool) -> Void in
                                                 if granted {
                                                     print("access granted", terminator: "")
+                                                    statusValue = true
                                                 }
                                                 else {
                                                     print("access denied", terminator: "")
-                                                    statusValue = false
                                                     self.addAlertForSettings(AttachmentType.camera)
                                                 }
                 })
             case .authorized:
                 print("Access authorized", terminator: "")
+                statusValue = true
+                break
             case .denied, .restricted:
-                statusValue = false
                 self.addAlertForSettings(AttachmentType.camera)
-            default:
-                print("DO NOTHING", terminator: "")
+                break
             }
         }
         else {
             let status = PHPhotoLibrary.authorizationStatus()
             switch status {
-            case .authorized: break
+            case .authorized:
+                statusValue = true
+                break
             case .denied: do {
                 print("permission denied")
-                statusValue = false
                 self.addAlertForSettings(attachmentTypeEnum)
             }
                 break
@@ -218,17 +219,15 @@ class AttachmentHandler: NSObject{
                 PHPhotoLibrary.requestAuthorization({ (status) in
                     if status == PHAuthorizationStatus.authorized{
                         // photo library access given
+                        statusValue = true
                     }else{
                         print("restriced manually")
-                        statusValue = false
                         self.addAlertForSettings(attachmentTypeEnum)
                     }
                 })
             case .restricted:
                 print("permission restricted")
-                statusValue = false
                 self.addAlertForSettings(attachmentTypeEnum)
-            default:
                 break
             }
         }

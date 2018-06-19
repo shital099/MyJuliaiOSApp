@@ -55,6 +55,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
 
 
+//        if #available(iOS 10.0, *) {
+//            let center = UNUserNotificationCenter.current()
+//            center.getDeliveredNotifications(completionHandler: { (notifications: [UNNotification]) in
+//                print("Notifications : ",notifications)
+//            })
+//
+//        } else {
+//            // Fallback on earlier versions
+//        }
+
         // do something with the notification
         if launchOptions?[UIApplicationLaunchOptionsKey.remoteNotification] != nil {
             // Do what you want to happen when a remote notification is tapped.
@@ -138,13 +148,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             UIApplication.shared.registerUserNotificationSettings(UIUserNotificationSettings(types: [.badge, .sound, .alert], categories: nil))
             UIApplication.shared.registerForRemoteNotifications()
         }
-            // iOS 8 support
-        else if #available(iOS 8, *) {
-            UIApplication.shared.registerUserNotificationSettings(UIUserNotificationSettings(types: [.badge, .sound, .alert], categories: nil))
-            UIApplication.shared.registerForRemoteNotifications()
-        }
-            // iOS 7 support
-        else {  
+        else {
             application.registerForRemoteNotifications(matching: [.badge, .sound, .alert])
         }
 
@@ -156,6 +160,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         AFNetworkReachabilityManager.shared().startMonitoring()
 
         //Remove all badges number
+        UIApplication.shared.applicationIconBadgeNumber = 1
         UIApplication.shared.applicationIconBadgeNumber = 0
 
         if #available(iOS 10.0, *) {
@@ -531,7 +536,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.isAppOpenFirstTime = false
 
         //Remove all badges number
+        UIApplication.shared.applicationIconBadgeNumber = 1
         UIApplication.shared.applicationIconBadgeNumber = 0
+
         if #available(iOS 10.0, *) {
             let center = UNUserNotificationCenter.current()
             center.removeAllPendingNotificationRequests() // To remove all pending notifications which are not delivered yet but scheduled.

@@ -131,7 +131,7 @@ class ActivityFeedbackViewController: UIViewController, UITableViewDataSource, U
         
         let urlStr = Get_Activity_Feedback_List_url.appendingFormat("%@",activityId)
         NetworkingHelper.getRequestFromUrl(name:Get_Activity_Feedback_List_url,  urlString:urlStr, callback: { [weak self] response in
-           // print("Activity Feedback List :", response)
+            print("Activity Feedback List :", response)
             
             self?.listArray = DBManager.sharedInstance.fetchActivityFeedbackDataFromDB(activityId:(self?.activityId)!) as! [FeedbackModel]
             self?.tableView.reloadData()

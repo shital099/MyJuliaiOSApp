@@ -57,6 +57,9 @@ class FeedbackViewController: UIViewController, UITableViewDataSource, UITableVi
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(FeedbackViewController.hideKeyboard))
         tapGesture.cancelsTouchesInView = true
         tableView.addGestureRecognizer(tapGesture)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardChange), name: .UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardChange), name: .UIKeyboardWillHide, object: nil)
     }
 
     @objc func hideKeyboard() {
@@ -141,9 +144,10 @@ class FeedbackViewController: UIViewController, UITableViewDataSource, UITableVi
 
     func checkUserFeedback() {
 
-//        let urlStr = Check_User_Feedback_url.appendingFormat("%@/%@",EventData.sharedInstance.attendeeId,EventData.sharedInstance.eventId)
         NetworkingHelper.getRequestFromUrl(name:Check_User_Feedback_url,  urlString: Check_User_Feedback_url, callback: { [weak self] response in
 
+            print("Feedback responce : ",response)
+            
             if response is NSDictionary {
                 if response.value(forKey: "responseCode") as! Bool == true {
                     self?.submittedMessageLbl.text = Activity_Feedback_submitted
@@ -151,8 +155,8 @@ class FeedbackViewController: UIViewController, UITableViewDataSource, UITableVi
                     self?.submittedMessageLbl.isHidden = false
                 }
                 else {
-                    NotificationCenter.default.addObserver(self, selector: #selector(self?.keyboardChange), name: .UIKeyboardWillShow, object: nil)
-                    NotificationCenter.default.addObserver(self, selector: #selector(self?.keyboardChange), name: .UIKeyboardWillHide, object: nil)
+//                    NotificationCenter.default.addObserver(self, selector: #selector(self?.keyboardChange), name: .UIKeyboardWillShow, object: nil)
+//                    NotificationCenter.default.addObserver(self, selector: #selector(self?.keyboardChange), name: .UIKeyboardWillHide, object: nil)
 
                     //Fetch data from Sqlite database
                     self?.feedbackarray = DBManager.sharedInstance.fetchFeedbackDataFromDB() as! [FeedbackModel]

@@ -60,7 +60,7 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
         userProfileIcon.clipsToBounds = true
 
         //Apply navigation theme
-        CommonModel.sharedInstance.applyNavigationTheme()
+       // CommonModel.sharedInstance.applyNavigationTheme()
 
         //Show application version
         self.appVersionName.text = APP_VERSION
@@ -90,6 +90,9 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
      */
     
     override func viewDidAppear(_ animated: Bool) {
+
+        //Stop indicator
+        CommonModel.sharedInstance.dissmissActitvityIndicator()
 
         print("Menu View Did Appear : ",CommonModel.sharedInstance.getCurrentDateInMM())
         self.triggerPopAfterActivityFinish()
@@ -198,7 +201,7 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
             self.bgImageView.backgroundColor = AppTheme.sharedInstance.menuBackgroundColor
 
             //Apply navigation theme
-            CommonModel.sharedInstance.applyNavigationTheme()
+//            CommonModel.sharedInstance.applyNavigationTheme()
 
             //Check Event name and icon combination OR only icon
             if AppTheme.sharedInstance.isEventLogoIcon {
@@ -643,9 +646,6 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func menuItemSelected(index: NSInteger, section:NSInteger) {
 
-        let array = self.navigationController?.viewControllers
-        print("array ",array)
-
         //Show selected row
         selectedIndexPath = IndexPath.init(row: index, section: section)
         tableView.reloadData()
@@ -718,11 +718,18 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 splitViewController?.showDetailViewController(navController, sender: nil)
             }
             else {
-                let navVC = UINavigationController.init(rootViewController: viewController)
-                print("array ",navVC.viewControllers)
+//                let navController = self.storyboard?.instantiateViewController(withIdentifier: "NavigationController") as! UINavigationController
+//                print("before adding view controller to navigation ",navController.viewControllers)
+//
+//                navController.viewControllers = NSArray().adding(viewController) as! [UIViewController]
+//               // let navVC = UINavigationController.init(rootViewController: viewController)
+//                print("after adding in array ",navController.viewControllers)
+//
+//              //  viewController.view.tag = index         //Store row index
+//               // splitViewController?.showDetailViewController(navController, sender: nil)
 
-              //  viewController.view.tag = index         //Store row index
-                splitViewController?.showDetailViewController(navVC, sender: nil)
+                // let navController = splitViewController?.viewControllers.last as? UINavigationController
+                splitViewController?.showDetailViewController(UINavigationController(rootViewController: viewController), sender: nil)
             }
         }
         //}

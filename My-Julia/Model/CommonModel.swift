@@ -403,7 +403,7 @@ class CommonModel: NSObject {
 
             NSURLConnection.sendAsynchronousRequest(request, queue: queue) {
                 response, data, error -> Void in
-                if (data as NSData?) != nil {
+                if data != nil {
                     UINavigationBar.appearance().setBackgroundImage(UIImage(data: (data)!), for: .default)
                    // UINavigationBar.appearance().shadowImage = UIImage()
                 }

@@ -172,7 +172,7 @@ class DBManager: NSObject {
                      let noti_sql = "CREATE TABLE IF NOT EXISTS Notifications (EventID text, AttendeeId text, notiId text, Title text, Description text, CreatedDate text, IsRead boolean default false,  UNIQUE (EventID, notiId, AttendeeId) ON CONFLICT REPLACE);"
 
                     //Create Activity Feeds table
-                    let activityFeed_sql = "CREATE TABLE IF NOT EXISTS ActivityFeeds (id INTEGER PRIMARY KEY AUTOINCREMENT, EventID text, ActivityFeedID text, Message text, LikeCount text, CommentCount text, CreatedDate text, IsImageDeleted boolean default false, PostImagePath text, PostUserName text, PostUserImage text, PostUserId text, IsRead boolean, UNIQUE (EventID, ActivityFeedID) ON CONFLICT REPLACE);"
+                    let activityFeed_sql = "CREATE TABLE IF NOT EXISTS ActivityFeeds (id INTEGER PRIMARY KEY AUTOINCREMENT, EventID text, ActivityFeedID text, Message text, LikeCount text, CommentCount text, CreatedDate text, IsImageDeleted boolean default false, PostImagePath text, PostUserName text, PostUserImage text, PostUserId text, IsRead boolean default false, UNIQUE (EventID, ActivityFeedID) ON CONFLICT REPLACE);"
                     
                     let activityFeedLikes_sql = "CREATE TABLE IF NOT EXISTS ActivityFeedsLikes (id INTEGER PRIMARY KEY AUTOINCREMENT, EventID text, ActivityFeedID text, AttendeeId text, Name text, IconUrl text, IsUserLike boolean default false, CreatedDate text, UNIQUE (EventID, ActivityFeedID, AttendeeId) ON CONFLICT REPLACE);"
 
@@ -2625,7 +2625,6 @@ class DBManager: NSObject {
 //            let querySQL = "Select Count(IsRead) from ChatHistory Where IsRead = ? AND ToId = ? AND EventID = ?"
 //            let results:FMResultSet = database.executeQuery(querySQL, withArgumentsIn: [0,EventData.sharedInstance.attendeeId, EventData.sharedInstance.eventId])
 
-//            let querySQL = "Select Count(IsRead) from ChatHistory Where IsRead = ? AND EventID = ? AND FromId != ?"
             let querySQL = "Select Count(IsRead) from ChatHistory Where IsRead = ? AND EventID = ? AND AttendeeId == ?"
             let results:FMResultSet = database.executeQuery(querySQL, withArgumentsIn: [0, EventData.sharedInstance.eventId,EventData.sharedInstance.attendeeId])
 
@@ -2639,7 +2638,7 @@ class DBManager: NSObject {
         return count
     }
 
-    // MARK: - Activity Feed methods
+    // MARK: - Activity Feed methodsdfds
 
     func saveActivityFeedDataIntoDB(response: AnyObject) {
 
@@ -2662,9 +2661,9 @@ class DBManager: NSObject {
                     let username = self.isNullString(str: dict.value(forKey: "Name") as Any)
                     let usericon = "" //self.isNullString(str: dict.value(forKey: "Name") as Any)
                     let userId = self.isNullString(str: dict.value(forKey: "AttendeeId") as Any)
-                    let isRead = dict.value(forKey: "IsRead")
+                    let isRead = dict.value(forKey: "IsRead") as! Int
 
-                    try database.executeUpdate("INSERT OR REPLACE INTO ActivityFeeds (EventID, ActivityFeedID, Message, LikeCount, CommentCount, CreatedDate, IsImageDeleted, PostImagePath, PostUserName, PostUserImage, PostUserId, IsRead) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", values: [eventId, aId ,message,likesCount, commentsCount, postDateStr, isDeleted, image, username, usericon, userId, isRead ?? 0])
+                    try database.executeUpdate("INSERT OR REPLACE INTO ActivityFeeds (EventID, ActivityFeedID, Message, LikeCount, CommentCount, CreatedDate, IsImageDeleted, PostImagePath, PostUserName, PostUserImage, PostUserId, IsRead) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", values: [eventId, aId ,message,likesCount, commentsCount, postDateStr, isDeleted, image, username, usericon, userId, isRead])
 
                 } catch {
                     print("error = \(error)")
@@ -2695,7 +2694,7 @@ class DBManager: NSObject {
                     var username = ""
                     var usericon = ""
                     var userId = ""
-                    let isRead = dict.value(forKey: "IsRead")
+                    let isRead = dict.value(forKey: "IsRead") as! Int
 
                     if (dict.value(forKey: "FeedUser") as? NSNull) == nil {
                         let user = dict.value(forKey: "FeedUser") as! NSDictionary
@@ -2710,7 +2709,7 @@ class DBManager: NSObject {
                     }
                     
                     do {
-                        try database.executeUpdate("INSERT OR REPLACE INTO ActivityFeeds (EventID, ActivityFeedID, Message, LikeCount, CommentCount, CreatedDate, IsImageDeleted, PostImagePath, PostUserName, PostUserImage, PostUserId, IsRead) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", values: [eventId, aId ,message,likesCount, commentsCount, postDateStr, isDeleted, image, username, usericon, userId, isRead ?? 0])
+                        try database.executeUpdate("INSERT OR REPLACE INTO ActivityFeeds (EventID, ActivityFeedID, Message, LikeCount, CommentCount, CreatedDate, IsImageDeleted, PostImagePath, PostUserName, PostUserImage, PostUserId, IsRead) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", values: [eventId, aId ,message,likesCount, commentsCount, postDateStr, isDeleted, image, username, usericon, userId, isRead])
                     } catch {
                         print("error = \(error)")
                     }
@@ -4409,7 +4408,6 @@ class DBManager: NSObject {
     
     func saveAgendaDataIntoDB(responce: AnyObject) {
         print("Start saving agenda: ",CommonModel.sharedInstance.getCurrentDateInMM())
-
         if openDatabase() {
             
             database.beginTransaction()

@@ -237,6 +237,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
 
         let parameters : NSDictionary? = [ "SearchText": self.searchBar.text!]
         NetworkingHelper.postData(urlString:Search_Event_Url, param:parameters!, withHeader: false, isAlertShow: true, controller:self, callback: { [weak self] response in
+            self?.isSearching = true
 
             //Remove all objects
             if self?.searchListArray.count != 0 {
@@ -380,7 +381,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         SDWebImageDownloader.shared().setValue("Basic ".appending(EventData.sharedInstance.auth_token), forHTTPHeaderField: "Authorization")
 
         //Apply navigation theme
-        CommonModel.sharedInstance.applyNavigationTheme()
+       // CommonModel.sharedInstance.applyNavigationTheme()
 
       //  CommonModel.sharedInstance.dissmissActitvityIndicator()
 
@@ -451,7 +452,6 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
     // MARK: - UISearch bar delegate Methods
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        self.isSearching = true
 
         searchBar.resignFirstResponder()
 

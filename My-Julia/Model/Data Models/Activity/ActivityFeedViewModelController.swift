@@ -36,6 +36,7 @@ class ActivityFeedViewModelController: NSObject {
             let urlStr = Get_AllModuleDetails_url.appendingFormat("Flag=%@&PageNo=%d",ActivityFeed_List_url,self.pageNo)
             NetworkingHelper.getRequestFromUrl(name:ActivityFeed_List_url,  urlString:urlStr, callback: { [weak self] response in
 
+               // print("Actiivity feeds data : ",response)
 //                //Change notification count in side menu
 //                let userDict:[String: Bool] = ["isClickOnNotification": false]
 //                NotificationCenter.default.post(name: BroadcastNotification, object: "", userInfo: userDict)

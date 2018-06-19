@@ -440,7 +440,11 @@ class GalleryViewController: UIViewController, UIImagePickerControllerDelegate, 
         }
         else {
             if !model.iconUrl.isEmpty {
-                cell.imageView.sd_setImage(with: NSURL(string:model.iconUrl) as URL?, placeholderImage: #imageLiteral(resourceName: "no_image"))
+
+                cell.imageView.sd_setImage(with: NSURL(string:model.iconUrl) as URL?, placeholderImage: #imageLiteral(resourceName: "no_image"), options: SDWebImageOptions(rawValue: 2), completed: { (image, error, cacheType, imageURL) in
+
+                })
+               // cell.imageView.sd_setImage(with: NSURL(string:model.iconUrl) as URL?, placeholderImage: #imageLiteral(resourceName: "no_image"))
 //                cell.imageView.kf.setImage(with: NSURL(string:model.iconUrl) as URL?,
 //                                              placeholder: nil,
 //                                              options: [],

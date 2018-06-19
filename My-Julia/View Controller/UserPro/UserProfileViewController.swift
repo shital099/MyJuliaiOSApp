@@ -115,7 +115,9 @@ class UserProfileViewController: UIViewController, UINavigationControllerDelegat
 
         //Check internet connection
         if AFNetworkReachabilityManager.shared().isReachable == true {
-            if AttachmentHandler.shared.authorisationStatusCheck(attachmentTypeEnum: AttachmentHandler.AttachmentType.photoLibrary, vc: self) {
+            let result = AttachmentHandler.shared.authorisationStatusCheck(attachmentTypeEnum: AttachmentHandler.AttachmentType.photoLibrary, vc: self)
+            if result == true {
+
                 //self.showActionSheet()
                 if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.photoLibrary) {
 

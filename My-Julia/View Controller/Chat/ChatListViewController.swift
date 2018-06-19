@@ -224,7 +224,7 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
         let urlStr = Get_AllModuleDetails_url.appendingFormat("Flag=%@",Chat_Contact_List)
         NetworkingHelper.getRequestFromUrl(name:Chat_Contact_List,  urlString:urlStr, callback: { [weak self] response in
             if response is Array<Any> {
-print("Chat list ",response)
+                //print("Chat list ",response)
                 
                 //Fetch data from Sqlite database
                 self?.dataDict["Contacts"] = DBManager.sharedInstance.fetchChatListDataFromDB(isGroupList: false) as? [ChatGroupModel]
