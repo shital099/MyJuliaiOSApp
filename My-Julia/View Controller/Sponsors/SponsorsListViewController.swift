@@ -95,8 +95,8 @@ class SponsorsListViewController: UIViewController, UITableViewDelegate, UITable
         //Check internet connection
         if AFNetworkReachabilityManager.shared().isReachable == true {
             SDImageCache.shared().removeImage(forKey: sponsor.iconUrl, withCompletion: nil)
-            cell.imageview.sd_setImage(with: NSURL(string:sponsor.iconUrl) as URL?, placeholderImage: #imageLiteral(resourceName: "empty_sponsors"))
         }
+        cell.imageview.sd_setImage(with: NSURL(string:sponsor.iconUrl) as URL?, placeholderImage: #imageLiteral(resourceName: "empty_sponsors"))
 
         return cell
     }

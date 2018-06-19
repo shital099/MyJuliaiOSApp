@@ -213,7 +213,7 @@ class ViewController: UIViewController, UITextFieldDelegate, TKAlertDelegate {
         SDWebImageDownloader.shared().setValue("Basic ".appending(EventData.sharedInstance.auth_token), forHTTPHeaderField: "Authorization")
 
         //Apply navigation theme
-        CommonModel.sharedInstance.applyNavigationTheme()
+     //   CommonModel.sharedInstance.applyNavigationTheme()
 
         CommonModel.sharedInstance.dissmissActitvityIndicator()
 

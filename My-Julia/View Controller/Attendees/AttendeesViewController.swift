@@ -218,8 +218,8 @@ class AttendeesViewController: UIViewController, UITableViewDelegate, UITableVie
             //Check internet connection
             if AFNetworkReachabilityManager.shared().isReachable == true {
                 SDImageCache.shared().removeImage(forKey: model.iconUrl, withCompletion: nil)
-                cell.imageview.sd_setImage(with: URL(string:model.iconUrl), placeholderImage: #imageLiteral(resourceName: "user"))
             }
+            cell.imageview.sd_setImage(with: URL(string:model.iconUrl), placeholderImage: #imageLiteral(resourceName: "user"))
 
             //            cell.userIconImg.sd_setImage(with: URL(string:model.iconUrl), placeholderImage: #imageLiteral(resourceName: "user"),options: SDWebImageOptions(rawValue: 0), completed: { (image, error, cacheType, imageURL) in
 //                // Perform operation.

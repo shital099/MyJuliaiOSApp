@@ -354,8 +354,41 @@ class CommonModel: NSObject {
         if AppTheme.sharedInstance.isHeaderColor == false {
             
             if AppTheme.sharedInstance.headerImage != "" {
-                
-                self.imageFromUrl(urlString: AppTheme.sharedInstance.headerImage)
+
+                if let url = NSURL(string: AppTheme.sharedInstance.headerImage) {
+                    var request = URLRequest(url: url as URL)
+                    request.addValue("Basic ".appending(EventData.sharedInstance.auth_token), forHTTPHeaderField: "Authorization")
+                    let queue = OperationQueue()
+
+                    NSURLConnection.sendAsynchronousRequest(request, queue: queue) {
+                        response, data, error -> Void in
+                        if data != nil {
+                            UINavigationBar.appearance().setBackgroundImage(UIImage(data: (data)!), for: .default)
+                            // UINavigationBar.appearance().shadowImage = UIImage()
+                        }
+                        else {
+                            if let image = SDImageCache.shared().imageFromDiskCache(forKey: url.absoluteString) {
+                                //use image
+                                print("image 1 ", image)
+                                UINavigationBar.appearance().setBackgroundImage(image, for: .default)
+                            }
+
+//                            if let image = SDImageCache.shared().imageFromMemoryCache(forKey: url.absoluteString) {
+//                                //use image
+//                                print("image 2 ", image)
+//                            }
+
+                          //  let image = SDImageCache.shared().imageFromCache(forKey: SDImageCache.shared().defaultCachePath(forKey: AppTheme.sharedInstance.headerImage))
+//                            print("header image : ",image ?? "")
+//                            UINavigationBar.appearance().setBackgroundImage(image, for: .default)
+
+                            //                    UINavigationBar.appearance().setBackgroundImage(nil, for: .default)
+                            //                    UINavigationBar.appearance().barTintColor = AppTheme.sharedInstance.headerColor
+                        }
+                    }
+                }
+
+               // self.imageFromUrl(urlString: AppTheme.sharedInstance.headerImage)
 
               /*  let imageView : UIImageView = UIImageView()
                 let url = NSURL(string: AppTheme.sharedInstance.headerImage)! as URL

@@ -31,6 +31,7 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var userProfileIcon: UIImageView!
     @IBOutlet weak var appVersionName: UILabel!
+    @IBOutlet weak var headerImageView: UIImageView!
 
     //    @IBOutlet weak var qrView: QRView!
     // var profileView: UserProfileView!
@@ -141,18 +142,44 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 // Set Navigation bar background Image
                 if AppTheme.sharedInstance.isHeaderColor == false {
                     if AppTheme.sharedInstance.headerImage != "" {
-                        if let url = NSURL(string: AppTheme.sharedInstance.headerImage) {
-                            var request = URLRequest(url: url as URL)
-                            request.addValue("Basic ".appending(EventData.sharedInstance.auth_token), forHTTPHeaderField: "Authorization")
-                            let queue = OperationQueue()
+                        let url = NSURL(string: AppTheme.sharedInstance.headerImage)! as URL
+                        //Check internet connection
+                        if AFNetworkReachabilityManager.shared().isReachable == true {
+                            //Remove Cover image header image
+                            SDImageCache.shared().removeImage(forKey: AppTheme.sharedInstance.headerImage, withCompletion: nil)
+                        }
 
-                            NSURLConnection.sendAsynchronousRequest(request, queue: queue) {
-                                response, data, error -> Void in
-                                if (data as NSData?) != nil {
-                                    navController.navigationBar.setBackgroundImage(UIImage(data: (data)!), for: .default)
+                        self.headerImageView.sd_setImage(with: url, completed: { (image, error, cacheType, imageURL) in
+                            // Perform operation.
+                            if image != nil {
+                                DispatchQueue.main.async {
+                                    navController.navigationBar.setBackgroundImage(image, for: .default)
                                 }
                             }
-                        }
+                            else {
+                                DispatchQueue.main.async {
+                                    if let image = SDImageCache.shared().imageFromDiskCache(forKey: url.absoluteString) {
+                                        UINavigationBar.appearance().setBackgroundImage(image, for: .default)
+                                    }
+                                }
+                            }
+                        })
+
+//                        if let url = NSURL(string: AppTheme.sharedInstance.headerImage) {
+//
+//                            var request = URLRequest(url: url as URL)
+//                            request.addValue("Basic ".appending(EventData.sharedInstance.auth_token), forHTTPHeaderField: "Authorization")
+//                            let queue = OperationQueue()
+//
+//                            NSURLConnection.sendAsynchronousRequest(request, queue: queue) {
+//                                response, data, error -> Void in
+//                                if (data as NSData?) != nil {
+//                                    DispatchQueue.main.async {
+//                                        navController.navigationBar.setBackgroundImage(UIImage(data: (data)!), for: .default)
+//                                    }
+//                                }
+//                            }
+//                        }
                     }
                     else {
                         navController.navigationBar.setBackgroundImage(nil, for: .default)
@@ -177,6 +204,21 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 UINavigationBar.appearance().isTranslucent = true
             }
             else {
+
+                // Set Navigation bar background Image
+                if AppTheme.sharedInstance.isHeaderColor == false {
+                    if AppTheme.sharedInstance.headerImage != "" {
+                        let url = NSURL(string: AppTheme.sharedInstance.headerImage)! as URL
+                        //Check internet connection
+                        if AFNetworkReachabilityManager.shared().isReachable == true {
+                            //Remove Cover image header image
+                            SDImageCache.shared().removeImage(forKey: AppTheme.sharedInstance.headerImage, withCompletion: nil)
+                        }
+
+                        self.headerImageView.sd_setImage(with: url, completed: { (image, error, cacheType, imageURL) in
+                        })
+                    }
+                }
                 //        //Apply navigation theme
                 CommonModel.sharedInstance.applyNavigationTheme()
             }
@@ -188,8 +230,8 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
         if AFNetworkReachabilityManager.shared().isReachable == true {
             //Show user porfile picture
             SDImageCache.shared().removeImage(forKey: AttendeeInfo.sharedInstance.iconUrl, withCompletion: nil)
-            self.userProfileIcon.sd_setImage(with: URL(string:AttendeeInfo.sharedInstance.iconUrl), placeholderImage: UIImage(named: "user-profile"))
         }
+        self.userProfileIcon.sd_setImage(with: URL(string:AttendeeInfo.sharedInstance.iconUrl), placeholderImage: UIImage(named: "user-profile"))
 
         //Check internet connection
         if AFNetworkReachabilityManager.shared().isReachable == true {

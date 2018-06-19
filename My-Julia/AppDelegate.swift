@@ -216,26 +216,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 
-    func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-//        // fetch data from internet now
-//        guard let data = fetchSomeData() else {
-//            // data download failed
-//            completionHandler(.failed)
-//            return
-//        }
-//
-//        if data.isNew {
-//            // data download succeeded and is new
-//            completionHandler(.newData)
-//        } else {
-//            // data downloaded succeeded and is not new
-//            completionHandler(.noData)
-//        }
-
-        print("performFetchWithCompletionHandler .....")
-    }
-
-
 
    // MARK: - Push Notification Delegate Methods
     
@@ -273,9 +253,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let state : UIApplicationState = application.applicationState
 
         print("Notification Received : ",userInfo )
-
-        print("\n App State : ",state.rawValue)
-        print("appIsStarting : ",appIsStarting)
 
         if (state == UIApplicationState.background ) {
             print("App is background")
@@ -504,14 +481,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
-        print("Will resign active")
          //self.appIsStarting = false
     }
     
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-        print("did enter background")
        // self.appIsStarting = false
 
     }
@@ -519,7 +494,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
         //self.appIsStarting = true
-        print("Will enter foreground")
 
         //Refresh side menu count when application enter foreground
         if isAppLogin == true {
@@ -531,7 +505,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
        // self.appIsStarting = false
-        print("did become active")
 
         self.isAppOpenFirstTime = false
 
