@@ -364,7 +364,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         else if (userInfo["Wifi"] != nil) {
             let alertBody = DBManager.sharedInstance.convertToJsonData(text: userInfo["Wifi"] as! String) as! NSDictionary
-            DBManager.sharedInstance.saveWifiDataIntoDB(response: alertBody)
+            DBManager.sharedInstance.saveWifiDataIntoDB(response: alertBody, isNoticationData: false)
         }
         else if (userInfo["Activity Feeds"] != nil) {
             let alertBody = DBManager.sharedInstance.convertToJsonData(text: userInfo["Activity Feeds"] as! String) as! NSDictionary
@@ -372,11 +372,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         else if (userInfo["Map"] != nil) {
             let alertBody = DBManager.sharedInstance.convertToJsonData(text: userInfo["Map"] as! String) as! NSDictionary
-            DBManager.sharedInstance.saveMapDataIntoDB(response: alertBody)
+            DBManager.sharedInstance.saveMapDataIntoDB(response: alertBody, isNoticationData: false)
         }
         else if (userInfo["Documents"] != nil) {
             let alertBody = DBManager.sharedInstance.convertToJsonData(text: userInfo["Documents"] as! String) as! NSDictionary
-            DBManager.sharedInstance.saveDocumentsDataIntoDB(response: alertBody)
+            DBManager.sharedInstance.saveDocumentsDataIntoDB(response: alertBody, isNoticationData: false)
         }
 
 //        let state : UIApplicationState = application.applicationState

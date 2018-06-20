@@ -122,7 +122,7 @@ class DBManager: NSObject {
                     let act_feedback_sql = "CREATE TABLE IF NOT EXISTS ActivityFeedback (id INTEGER PRIMARY KEY AUTOINCREMENT, EventID text, QuestionId text, ActivityId text, Question text, OptionArray text, QuestionType text, CreatedDate text, UNIQUE (EventID, ActivityId, QuestionId ) ON CONFLICT REPLACE);"
 
                     //Create Gallery table
-                    let gallery_sql = "CREATE TABLE IF NOT EXISTS Gallery (EventID text, Id text unique, Images text, isDeleted boolean);"
+                    let gallery_sql = "CREATE TABLE IF NOT EXISTS Gallery (EventID text, Id text unique, Images text, ThumbnailIcon text, isDeleted boolean);"
                     
                     //Create Website table
                     let website_sql = "CREATE TABLE IF NOT EXISTS Website (EventID text, Id text unique, websiteUrl text);"
@@ -370,7 +370,7 @@ class DBManager: NSObject {
                         }
                         //Save WiFi List Profile
                         if (dict.value(forKey:"wifiList") as? NSNull) == nil {
-                            self.saveWifiDataIntoDB(response: dict.value(forKey:"wifiList") as AnyObject)
+                            self.saveWifiDataIntoDB(response: dict.value(forKey:"wifiList") as AnyObject, isNoticationData: false)
                         }
                         //Save Poll Activity List Profile
                         if (dict.value(forKey:"pollActivitylst") as? NSNull) == nil {
@@ -378,7 +378,7 @@ class DBManager: NSObject {
                         }
                         //Save Map list
                         if (dict.value(forKey:"maplist") as? NSNull) == nil {
-                            self.saveMapDataIntoDB(response: dict.value(forKey:"maplist") as AnyObject)
+                            self.saveMapDataIntoDB(response: dict.value(forKey:"maplist") as AnyObject, isNoticationData: false)
                         }
                             //Save Activity Feeds list
                         if (dict.value(forKey:"activtyfeed") as? NSNull) == nil {
@@ -398,7 +398,7 @@ class DBManager: NSObject {
                         }
                             //Save Document list
                         if (dict.value(forKey:"documents") as? NSNull) == nil {
-                            self.saveDocumentsDataIntoDB(response: dict.value(forKey:"documents") as AnyObject)
+                            self.saveDocumentsDataIntoDB(response: dict.value(forKey:"documents") as AnyObject, isNoticationData: false)
                         }
                             //Save Email List
                         if (dict.value(forKey:"emails") as? NSNull) == nil {
@@ -495,15 +495,70 @@ class DBManager: NSObject {
                     else if apiNname == Documents_List_url {
                         //Save Document list
                         if (dict.value(forKey:"documents") as? NSNull) == nil {
-                            self.saveDocumentsDataIntoDB(response: dict.value(forKey:"documents") as AnyObject)
+                            self.saveDocumentsDataIntoDB(response: dict.value(forKey:"documents") as AnyObject, isNoticationData: false)
                         }
                     }
                 }
             }
         }
-        
         database.close()
     }
+
+    func saveAllUnreadNotificationDataIntoDB(response: AnyObject){
+
+        print("All unread notifications : ",response)
+
+        if openDatabase() {
+            self.database.beginTransaction()
+
+            if response is NSArray {
+                let arr = response as! NSArray
+                let rawDict = arr[0]
+
+                if rawDict is NSDictionary {
+                    let dict = rawDict as! NSDictionary
+
+                    //Save events details
+                    //Save Notification List Profile
+                    if (dict.value(forKey:"notificationlst") as? NSNull) == nil {
+                        self.saveNotificationDataIntoDB(response: dict.value(forKey: "notificationlst") as AnyObject)
+                    }
+                    //Save WiFi List Profile
+                    if (dict.value(forKey:"Wifi") as? NSNull) == nil {
+                        self.saveWifiDataIntoDB(response: dict.value(forKey:"Wifi") as AnyObject, isNoticationData: true)
+                    }
+                    //Save Map list
+                    if (dict.value(forKey:"Map") as? NSNull) == nil {
+                        self.saveMapDataIntoDB(response: dict.value(forKey:"Map") as AnyObject, isNoticationData: true)
+                    }
+                    //Save Activity Feeds list
+                    if (dict.value(forKey:"ActivityFeeds") as? NSNull) == nil {
+                        self.saveActivityFeedDataIntoDB(response: dict.value(forKey:"ActivityFeeds") as AnyObject)
+                    }
+                    //Save Document list
+                    if (dict.value(forKey:"Documents") as? NSNull) == nil {
+                        self.saveDocumentsDataIntoDB(response: dict.value(forKey:"Documents") as AnyObject, isNoticationData: true)
+                    }
+                    //                        //Save Chat Attendee List
+                    //                        if (dict.value(forKey:"attChatList") as? NSNull) == nil {
+                    //                            print("Start Chat : ",CommonModel.sharedInstance.getCurrentDateInMM())
+                    //
+                    //                            //Delete chat list
+                    //                            self.updateChatListDataFromDB()
+                    //                            self.saveChatListIntoDB(response: dict.value(forKey:"attChatList") as AnyObject, isGroupChat: 0)
+                    //                            print("Start chat : ",CommonModel.sharedInstance.getCurrentDateInMM())
+                    //                        }
+                    //                        //Save Chat Group List
+                    //                        if (dict.value(forKey:"attGroupChatList") as? NSNull) == nil {
+                    //                            self.saveChatListIntoDB(response: dict.value(forKey:"attGroupChatList") as AnyObject, isGroupChat: 1)
+                    //                        }
+                }
+            }
+            database.commit()
+            database.close()
+        }
+    }
+
 
     // MARK: - Login attendee details methods
 
@@ -1079,7 +1134,7 @@ class DBManager: NSObject {
 
     // MARK: - Map methods
     
-    func saveMapDataIntoDB(response: AnyObject) {
+    func saveMapDataIntoDB(response: AnyObject, isNoticationData : Bool) {
         
         if openDatabase() {
             let eventId = EventData.sharedInstance.eventId
@@ -1101,11 +1156,14 @@ class DBManager: NSObject {
                 }
             }
             else {
-                //Delete local data which is deleted from admin
-                do {
-                    try database.executeUpdate("DELETE FROM Map WHERE EventID = ?", values: [eventId])
-                } catch {
-                    print("error = \(error)")
+                //when you are saving data at the time login delete previous data then insert new data
+                if isNoticationData == false {
+                    //Delete local data which is deleted from admin
+                    do {
+                        try database.executeUpdate("DELETE FROM Map WHERE EventID = ?", values: [eventId])
+                    } catch {
+                        print("error = \(error)")
+                    }
                 }
 
                 for item in response as! NSArray {
@@ -1406,7 +1464,7 @@ class DBManager: NSObject {
     
     // MARK: - Documents methods
     
-    func saveDocumentsDataIntoDB(response: AnyObject) {
+    func saveDocumentsDataIntoDB(response: AnyObject, isNoticationData: Bool) {
         
         if openDatabase() {
             let eventId = EventData.sharedInstance.eventId
@@ -1431,14 +1489,17 @@ class DBManager: NSObject {
                 }
             }
             else {
-                //Delete local data which is deleted from admin
-                do {
-                    try database.executeUpdate("DELETE FROM Documents WHERE EventID = ?", values: [eventId])
+                //when you are saving data at the time login delete previous data then insert new data
+                if isNoticationData == false {
 
-                } catch {
-                    print("error = \(error)")
+                    //Delete local data which is deleted from admin
+                    do {
+                        try database.executeUpdate("DELETE FROM Documents WHERE EventID = ?", values: [eventId])
+
+                    } catch {
+                        print("error = \(error)")
+                    }
                 }
-
                 for item in response as! NSArray {
                     do {
                         let  dict = item as! NSDictionary
@@ -1598,31 +1659,14 @@ class DBManager: NSObject {
             var sqlQuery = ""
             let eventId = EventData.sharedInstance.eventId
             
-//            //Delete local data which is deleted from admin
-//            do {
-//                try database.executeUpdate("DELETE FROM Notifications WHERE EventID = ?", values: [eventId])
-//
-//            } catch {
-//                print("error = \(error)")
-//            }
-
             for item in response as! NSArray {
-                
-              //  do {
                     let  dict = item as! NSDictionary
                     let id = dict.value(forKey: "Id") as! String
                     let title = self.isNullString(str: dict.value(forKey: "Title") as Any)
                     let desc = self.isNullString(str: dict.value(forKey: "Message") as Any)
                     let date = self.isNullString(str: dict.value(forKey: "CreatedDate") as Any)
                     let status = dict.value(forKey: "IsRead") as! Int
-                   // print("Name : ",desc)
-                   // print("Status : ",status)
-                  //  try database.executeUpdate("INSERT OR REPLACE INTO Notifications (EventID, notiId,AttendeeId, Title, Description, CreatedDate, IsRead) VALUES (?, ?, ?, ?, ?, ?, ?)", values: [eventId, id, EventData.sharedInstance.attendeeId, title , desc , date , status ?? 0])
                 sqlQuery += "INSERT OR REPLACE INTO Notifications (EventID, notiId,AttendeeId, Title, Description, CreatedDate, IsRead) VALUES ('\(eventId)', '\(id)','\(EventData.sharedInstance.attendeeId)', \"\(title)\",\"\(desc)\",'\(date)',\(status));"
-
-//                } catch {
-//                    print("error = \(error)")
-//                }
             }
             if !database.executeStatements(sqlQuery) {
                 print("Failed to insert notification ",database.lastError(), database.lastErrorMessage())
@@ -1714,7 +1758,7 @@ class DBManager: NSObject {
 
     // MARK: - WiFi methods
 
-    func saveWifiDataIntoDB(response: AnyObject) {
+    func saveWifiDataIntoDB(response: AnyObject, isNoticationData: Bool) {
         
         if openDatabase() {
             database.beginTransaction()
@@ -1742,12 +1786,15 @@ class DBManager: NSObject {
             }
             else {
 
-                //Delete local data which is deleted from admin
-                do {
-                    try database.executeUpdate("DELETE FROM WiFi WHERE EventID = ?", values: [eventId])
+                //when you are saving data at the time login delete previous data then insert new data
+                if isNoticationData == false {
+                    //Delete local data which is deleted from admin
+                    do {
+                        try database.executeUpdate("DELETE FROM WiFi WHERE EventID = ?", values: [eventId])
 
-                } catch {
-                    print("error = \(error)")
+                    } catch {
+                        print("error = \(error)")
+                    }
                 }
 
                 for item in response as! NSArray {
@@ -2935,6 +2982,8 @@ class DBManager: NSObject {
     
     func saveGalleryDataIntoDB(response: AnyObject) {
 
+        print("Gallery info : ",response)
+        
         if openDatabase() {
             self.database.beginTransaction()
 
@@ -2955,12 +3004,12 @@ class DBManager: NSObject {
                     let  dict = item as! NSDictionary
                     let id = dict.value(forKey: "ImageID") as! String
                     let image = self.appendImagePath(path: dict.value(forKey: "ImageIconUrl") as Any)
+                    let thumbnailImage = self.appendImagePath(path: dict.value(forKey: "ThubmnailImgPath") as Any)
+
+
                     let isDeleted = dict.value(forKey: "IsDeleted")
 
-                    //CreatedDate
-                  //  try database.executeUpdate("INSERT OR REPLACE INTO Gallery (EventID, Id, Images, isDeleted) VALUES (?, ?, ?, ?)", values: [eventId, id ,image , isDeleted ?? false])
-
-                sqlQuery += "INSERT OR REPLACE INTO Gallery (EventID, Id, Images, isDeleted) VALUES ('\(eventId)', '\(id)', \"\(image)\",\(isDeleted ?? 0));"
+                sqlQuery += "INSERT OR REPLACE INTO Gallery (EventID, Id, Images, ThumbnailIcon, isDeleted) VALUES ('\(eventId)', '\(id)', \"\(image)\",\"\(thumbnailImage)\",\(isDeleted ?? 0));"
 
 //                } catch {
 //                    print("error = \(error)")
@@ -2968,7 +3017,7 @@ class DBManager: NSObject {
             }
 
             if !database.executeStatements(sqlQuery) {
-                //print(database.lastError(), database.lastErrorMessage())
+                print(database.lastError(), database.lastErrorMessage())
             }
 
             self.database.commit()
@@ -2992,6 +3041,7 @@ class DBManager: NSObject {
                     var model : PhotoGallery? = PhotoGallery()
                     model?.id = (results?.string(forColumn: "Id"))!
                     model?.iconUrl = (results?.string(forColumn: "Images"))!
+                    model?.thumbnailIconUrl = (results?.string(forColumn: "ThumbnailIcon"))!
                     model?.isImageDeleted = (results?.bool(forColumn: "isDeleted"))!
                     
                     array.append(model!)
@@ -3020,6 +3070,7 @@ class DBManager: NSObject {
                 var model : PhotoGallery? = PhotoGallery()
                 model?.id = (results?.string(forColumn: "Id"))!
                 model?.iconUrl = (results?.string(forColumn: "Images"))!
+                model?.thumbnailIconUrl = (results?.string(forColumn: "ThumbnailIcon"))!
                 model?.isImageDeleted = (results?.bool(forColumn: "isDeleted"))!
 
                 array.append(model!)
@@ -4798,7 +4849,18 @@ class DBManager: NSObject {
         if openDatabase() {
             database.beginTransaction()
 
-           // do {
+            //remove this activity from myschdule table
+            if model.isAddedToSchedule == false {
+                do {
+                    try database.executeUpdate("DELETE FROM MySchedule WHERE ActivityID = ? AND EventID = ?", values: [model.activityId, EventData.sharedInstance.eventId])
+
+                } catch {
+                    print("error = \(error)")
+                }
+            }
+            else {
+
+                // do {
                 let sqlQuery = "Select * from Agenda Where ActivityID = ? AND EventID = ?"
                 let results : FMResultSet = database.executeQuery(sqlQuery, withArgumentsIn: [model.activityId, EventData.sharedInstance.eventId])
 
@@ -4814,12 +4876,13 @@ class DBManager: NSObject {
                 }
 
                 //try database.executeUpdate("insert or replace into MySchedule (EventID, SessionID, ActivitySessionId, ActivityID,  AttendeeId, isUserSchedule) VALUES (?, ?, ?, ?, ?, ?)", values: [EventData.sharedInstance.eventId, model.sessionId,  model.activitySessionId, model.activityId,  EventData.sharedInstance.attendeeId,model.isAddedToSchedule] )
-//            } catch {
-//                print("error = \(error)")
-//            }
+                //            } catch {
+                //                print("error = \(error)")
+                //            }
 
-            if !database.executeStatements(addToScheduleQuery) {
-                 print(database.lastError(), database.lastErrorMessage())
+                if !database.executeStatements(addToScheduleQuery) {
+                    print(database.lastError(), database.lastErrorMessage())
+                }
             }
         }
         database.commit()
@@ -4975,14 +5038,14 @@ class DBManager: NSObject {
         }
     }
 
-    func checkEventFeedbackisAlreadySubmitted() -> Bool {
+    func checkEventFeedbackisAlreadySubmitted(activityId : String) -> Bool {
 
         var isSubmitted : Bool = false
 
         if openDatabase() {
 
             let querySQL =  "Select * from PostedActivityFeedback WHERE EventID = ? AND ActivityId = ? AND AttendeeId = ?"
-            let results:FMResultSet = database.executeQuery(querySQL, withArgumentsIn: [EventData.sharedInstance.eventId, EventData.sharedInstance.eventId,EventData.sharedInstance.attendeeId])
+            let results:FMResultSet = database.executeQuery(querySQL, withArgumentsIn: [EventData.sharedInstance.eventId, activityId, EventData.sharedInstance.attendeeId])
 
             while results.next() == true {
                 isSubmitted = true

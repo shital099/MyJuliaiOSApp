@@ -12,6 +12,7 @@ class PhotoGallery: NSObject {
     
     var id : String = ""
     var iconUrl : String = ""
+    var thumbnailIconUrl : String = ""
     var isImageDeleted : Bool = false
     var postImageUrl : String = ""
 

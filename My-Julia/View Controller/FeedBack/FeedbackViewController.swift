@@ -45,11 +45,31 @@ class FeedbackViewController: UIViewController, UITableViewDataSource, UITableVi
         //Make button theme
         sendBtn.showButtonTheme()
 
-        //Check User has already submitted feedback
-        self.checkUserFeedback()
-
         self.sendBtn.isHidden = true
         self.submittedMessageLbl.isHidden = true
+
+        //Check internet connection
+        if AFNetworkReachabilityManager.shared().isReachable == true {
+            //Check User has already submitted feedback
+            self.checkUserFeedback()
+        }
+        else {
+            //Check event feedback
+            let checkEventFeedback = DBManager.sharedInstance.checkEventFeedbackisAlreadySubmitted(activityId: EventData.sharedInstance.attendeeId)
+            if !checkEventFeedback {
+                //Fetch data from Sqlite database
+                self.feedbackarray = DBManager.sharedInstance.fetchFeedbackDataFromDB() as! [FeedbackModel]
+                //Hide send button if no questions added in list
+                if self.feedbackarray.count != 0 {
+                    self.sendBtn.isHidden = false
+                }
+            }
+            else {
+                self.submittedMessageLbl.text = Activity_Feedback_submitted
+                self.topView.isHidden = true
+                self.submittedMessageLbl.isHidden = false
+            }
+        }
 
         //Sucess view
         UIColor().setIconColorImageToButton(button: self.tickImgBtn, image:"poll-completed-fill")
@@ -184,11 +204,8 @@ class FeedbackViewController: UIViewController, UITableViewDataSource, UITableVi
         
         //Show Indicator
         CommonModel.sharedInstance.showActitvityIndicator()
-        
         let event = EventData.sharedInstance
-        
         var paramArr : [Any] = []
-        
         let keys = self.ansDict.allKeys
         
         for index in 0 ... keys.count - 1 {

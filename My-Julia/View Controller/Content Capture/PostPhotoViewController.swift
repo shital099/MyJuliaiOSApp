@@ -16,7 +16,8 @@ class PostPhotoViewController: UIViewController, UITextViewDelegate {
     var placeholderLabel : UILabel!
 
 
-    var capturedPhoto : UIImage!
+    var originalImage : UIImage!
+    //var iconImage : UIImage!
     var imageName : String = ""
 
     override func viewDidLoad() {
@@ -25,7 +26,7 @@ class PostPhotoViewController: UIViewController, UITextViewDelegate {
         self.title = "New Feed"
         
         // Do any additional setup after loading the view.
-        capturedImageView.image = capturedPhoto
+        capturedImageView.image = originalImage
 
         textView.delegate = self
         
@@ -62,10 +63,21 @@ class PostPhotoViewController: UIViewController, UITextViewDelegate {
     @IBAction func onClickOfPostButton(sender: AnyObject) {
         
         //Rotate image
-        capturedPhoto = capturedPhoto.fixedOrientation().imageRotatedByDegrees(degrees: 360)
+        originalImage = originalImage.fixedOrientation().imageRotatedByDegrees(degrees: 360)
+        let image = originalImage.resized(withPercentage: 0.7)
+        let imgData: NSData = NSData(data: UIImageJPEGRepresentation((image)!, 1)!)
+        let imageSize: Int = imgData.length
+        print("uploading size of image in KB: %f ", Double(imageSize) / 1024.0)
 
-        let imageData = UIImageJPEGRepresentation(capturedPhoto, 0)
-        let base64String = imageData?.base64EncodedString()
+        let resizedImage = originalImage.resized(withPercentage: 0.1)
+        let rImgData: NSData = NSData(data: UIImageJPEGRepresentation((resizedImage)!, 0)!)
+        let rImageSize: Int = rImgData.length
+        print("resize uploading size of image in KB: %f ", Double(rImageSize) / 1024.0)
+
+        let imageData = UIImageJPEGRepresentation(originalImage, 0)
+        let originalIamgeStr = imageData?.base64EncodedString()
+        let resizedImageStr = rImgData.base64EncodedString()
+
         // print("base64String : ", base64String ?? "")
 
         // Create an instance of HTMLConverter.
@@ -81,7 +93,8 @@ class PostPhotoViewController: UIViewController, UITextViewDelegate {
         //Show Indicator
         CommonModel.sharedInstance.showActitvityIndicator()
         
-        let paramDict : NSMutableDictionary? = ["ImgData":base64String ?? "",
+        let paramDict : NSMutableDictionary? = ["ImgData":originalIamgeStr ?? "",
+                                                "ThubmnailImgData":resizedImageStr ,
                                                 "ContentType": "image/jpeg",
                                                 "ImgName": "",
                                                 "Comment":output ,
@@ -105,5 +118,42 @@ class PostPhotoViewController: UIViewController, UITextViewDelegate {
             }
         }, errorBack: { error in
         })
+    }
+}
+
+extension UIImage {
+
+    func resized(withPercentage percentage: CGFloat) -> UIImage? {
+        let canvasSize = CGSize(width: size.width * percentage, height: size.height * percentage)
+        UIGraphicsBeginImageContextWithOptions(canvasSize, false, scale)
+        defer { UIGraphicsEndImageContext() }
+        draw(in: CGRect(origin: .zero, size: canvasSize))
+        return UIGraphicsGetImageFromCurrentImageContext()
+    }
+
+    func resized(toWidth width: CGFloat) -> UIImage? {
+        let canvasSize = CGSize(width: width, height: CGFloat(ceil(width/size.width * size.height)))
+        UIGraphicsBeginImageContextWithOptions(canvasSize, false, scale)
+        defer { UIGraphicsEndImageContext() }
+        draw(in: CGRect(origin: .zero, size: canvasSize))
+        return UIGraphicsGetImageFromCurrentImageContext()
+    }
+    
+    func resizedTo1MB() -> UIImage? {
+        guard let imageData = UIImagePNGRepresentation(self) else { return nil }
+
+        var resizingImage = self
+        var imageSizeKB = Double(imageData.count) / 1000.0 // ! Or devide for 1024 if you need KB but not kB
+
+        while imageSizeKB > 1000 { // ! Or use 1024 if you need KB but not kB
+            guard let resizedImage = resizingImage.resized(withPercentage: 0.9),
+                let imageData = UIImagePNGRepresentation(resizedImage)
+                else { return nil }
+
+            resizingImage = resizedImage
+            imageSizeKB = Double(imageData.count) / 1000.0 // ! Or devide for 1024 if you need KB but not kB
+        }
+
+        return resizingImage
     }
 }

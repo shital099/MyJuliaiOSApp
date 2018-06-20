@@ -83,7 +83,8 @@ let GroupName_Validation_Message = "Group name should not be blank"
 let No_Reminder_Text = "No Reminder Added"
 
 //No Data
-let No_Data_Text = "No Data Added"
+let No_Data_Text = "No data Added"
+let No_Data_Found_Text = "No data found"
 
 //Question and Chat
 let Ask_Valid_Question = "Question can't be post empty"
@@ -92,7 +93,7 @@ let Chat_History_Time = 5
 let Question_Sent_Message = "Question posted sucessfully"
 
 //Activity Feeds
-let Activity_Page_Limit = 15            //Set default limit 20 in server and application
+let Activity_Page_Limit = 10            //Set default limit 10 in server and application
 
 //Feedback
 let Event_Feedback_submitted = "You have already submitted the feedback"

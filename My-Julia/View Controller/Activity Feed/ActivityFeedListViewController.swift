@@ -445,13 +445,12 @@ class ActivityFeedListViewController: UIViewController, UITableViewDataSource, U
         
        // self.showActionSheet()
         AttachmentHandler.shared.showAttachmentActionSheet(vc: self, isShowTextOption: true, button: self.postAct)
-        AttachmentHandler.shared.imagePickedBlock = { (image) in
+        AttachmentHandler.shared.imagePickedBlock = { (originalImage) in
             self.isRefreshList = true
 
             /* get your image here */
-            print("Get image : ",image)
             let viewController = self.storyboard?.instantiateViewController(withIdentifier: "PostPhotoViewController") as! PostPhotoViewController
-            viewController.capturedPhoto = image
+            viewController.originalImage = originalImage
             let imageNo = Int(arc4random_uniform(1000)) + 1
             viewController.imageName = String(format:"CapturedPhoto-%d",imageNo) //"CapturedPhoto".appendingFormat("%d", imageNo)
             self.navigationController?.pushViewController(viewController, animated: true)

@@ -54,16 +54,33 @@ class ActivityFeedbackViewController: UIViewController, UITableViewDataSource, U
         
         self.submittedMessageLbl.text = "" //Activity_No_Feedback_Added
 
-        //Fetch data from Sqlite database
-        self.listArray = DBManager.sharedInstance.fetchActivityFeedbackDataFromDB(activityId:self.activityId) as! [FeedbackModel]
+        //Check internet connection
+        if AFNetworkReachabilityManager.shared().isReachable == true {
+            //Fetch activity feedback from server
+            self.fetchActivityFeedbackList()
+        }
+        else {
 
-        if self.listArray.count == 0 {
-            self.submittedMessageLbl.text = Activity_No_Feedback_Added
+            //Check event feedback
+            let checkEventFeedback = DBManager.sharedInstance.checkEventFeedbackisAlreadySubmitted(activityId: self.activityId)
+            if !checkEventFeedback {
+                //Fetch data from Sqlite database
+                self.listArray = DBManager.sharedInstance.fetchActivityFeedbackDataFromDB(activityId:self.activityId) as! [FeedbackModel]
+
+                if self.listArray.count == 0 {
+                    self.submittedMessageLbl.text = No_Data_Found_Text
+                }
+                else {
+                    self.submittedMessageLbl.isHidden = true
+                }
+            }
+            else {
+                //Already feedback submitted
+                self.submittedMessageLbl.text = Activity_Feedback_submitted
+                self.topView.isHidden = true
+            }
         }
 
-        //Fetch activity feedback from server
-        self.fetchActivityFeedbackList()
-        
         //Hide send button if no questions added in list
         if self.listArray.count == 0 {
             self.sendBtn.isHidden = true

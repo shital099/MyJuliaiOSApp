@@ -16,6 +16,8 @@ class GDetailViewController: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var scrollView: UIScrollView!
 
     var listArray:[PhotoGallery] = []
+    var imageViewsArray:[UIImageView] = []
+
     var frame: CGRect!
     var screenWidth: CGFloat!
 
@@ -48,12 +50,21 @@ class GDetailViewController: UIViewController, UIScrollViewDelegate {
             self.scrollView.isPagingEnabled = true
             
             let subView = UIImageView(frame: frame)
-            subView.sd_setImage(with: NSURL(string:model.iconUrl) as URL?, placeholderImage: nil)
+            subView.accessibilityValue = model.iconUrl
+            subView.image = #imageLiteral(resourceName: "no_image")
+            //subView.sd_setImage(with: NSURL(string:model.iconUrl) as URL?, placeholderImage: nil)
             subView.tag = index
             subView.contentMode = UIViewContentMode.scaleAspectFit
-            self.scrollView .addSubview(subView)
+            self.scrollView.addSubview(subView)
             
             frame.origin.x += frame.size.width + 20
+
+            //Save all imageview in to array
+            self.imageViewsArray.append(subView)
+
+            if self.imgIndex == index {
+                subView.sd_setImage(with: NSURL(string:model.iconUrl) as URL?, placeholderImage: #imageLiteral(resourceName: "no_image"))
+            }
         }
 
         self.scrollView.delegate = self
@@ -61,9 +72,8 @@ class GDetailViewController: UIViewController, UIScrollViewDelegate {
         self.scrollView.contentSize = CGSize(width: screenWidth * CGFloat(listArray.count), height: 1)
         
         //self.scrollView.contentSize = CGSize(width: (CGFloat(listArray.count * 20) + frame.width) * CGFloat(listArray.count), height: 1)
-        
+
         let x : CGFloat = screenWidth * CGFloat(self.imgIndex)
-        print("X ", x)
         self.scrollView.setContentOffset(CGPoint(x: x, y: 0), animated: true)
     }
 
@@ -73,10 +83,18 @@ class GDetailViewController: UIViewController, UIScrollViewDelegate {
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-       // self.imgIndex = Int(scrollView.contentOffset.x / screenWidth);
-       // self.title = String(format: "%d of %d",self.imgIndex,listArray.count)
-        
         let pageNumber = Int(round(scrollView.contentOffset.x / scrollView.frame.size.width) + 1)
         self.title = String(format: "\(pageNumber) of %d",listArray.count)
+
+        //Load image into imageview
+        if self.imageViewsArray.count >= pageNumber {
+            let imageView = self.imageViewsArray[pageNumber - 1] as UIImageView
+            if let image = SDImageCache.shared().imageFromDiskCache(forKey: imageView.accessibilityValue!) {
+                imageView.image = image
+            }
+            else {
+                imageView.sd_setImage(with: NSURL(string:imageView.accessibilityValue!) as URL?, placeholderImage: #imageLiteral(resourceName: "no_image"))
+            }
+        }
     }
 }

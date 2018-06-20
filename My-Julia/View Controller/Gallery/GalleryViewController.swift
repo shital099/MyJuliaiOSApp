@@ -285,13 +285,12 @@ class GalleryViewController: UIViewController, UIImagePickerControllerDelegate, 
         
        // self.showActionSheet()
         AttachmentHandler.shared.showAttachmentActionSheet(vc: self, isShowTextOption: false, button: self.postGallery)
-        AttachmentHandler.shared.imagePickedBlock = { (image) in
+        AttachmentHandler.shared.imagePickedBlock = { (originalImage) in
             self.isRefreshList = true
 
             /* get your image here */
-            print("Get image : ",image)
             let viewController = self.storyboard?.instantiateViewController(withIdentifier: "PostPhotoViewController") as! PostPhotoViewController
-            viewController.capturedPhoto = image
+            viewController.originalImage = originalImage
             let imageNo = Int(arc4random_uniform(1000)) + 1
             viewController.imageName = String(format:"CapturedPhoto-%d",imageNo) //"CapturedPhoto".appendingFormat("%d", imageNo)
             self.navigationController?.pushViewController(viewController, animated: true)
@@ -439,28 +438,22 @@ class GalleryViewController: UIViewController, UIImagePickerControllerDelegate, 
             cell.imageView.image = UIImage(named: "no_image")
         }
         else {
-            if !model.iconUrl.isEmpty {
+            if !model.thumbnailIconUrl.isEmpty {
 
-                cell.imageView.sd_setImage(with: NSURL(string:model.iconUrl) as URL?, placeholderImage: #imageLiteral(resourceName: "no_image"), options: SDWebImageOptions(rawValue: 2), completed: { (image, error, cacheType, imageURL) in
+                cell.imageView.sd_setImage(with: NSURL(string:model.thumbnailIconUrl) as URL?, placeholderImage: #imageLiteral(resourceName: "no_image"), options: SDWebImageOptions(rawValue: 1), completed: { (image, error, cacheType, imageURL) in
+
+//                    if image != nil {
+//                    let imgData: NSData = NSData(data: UIImageJPEGRepresentation((image)!, 1)!)
+//                    var imageSize: Int = imgData.length
+//                    print("size of image in KB: %f ", Double(imageSize) / 1024.0)
+//
+//                    }
+//                    else {
+//                        print("Found nil image")
+//                    }
 
                 })
                // cell.imageView.sd_setImage(with: NSURL(string:model.iconUrl) as URL?, placeholderImage: #imageLiteral(resourceName: "no_image"))
-//                cell.imageView.kf.setImage(with: NSURL(string:model.iconUrl) as URL?,
-//                                              placeholder: nil,
-//                                              options: [],
-//                                              progressBlock: { receivedSize, totalSize in
-//                                                print("\(indexPath.row + 1): \(receivedSize)/\(totalSize)")
-//                },
-//                                              completionHandler: { image, error, cacheType, imageURL in
-//                                                print("\(indexPath.row + 1): Finished")
-//                })
-                //cell.imageView.contentMode = .scaleAspectFit
-
-//               self.lazyImage.showWithSpinner(imageView:cell.imageView, url:model.iconUrl) {
-//                    (error:LazyImageError?) in
-//                    //Lazy loading complete. Do something..
-//                print("Image loaded....")
-//                }
             }
         }
         return cell

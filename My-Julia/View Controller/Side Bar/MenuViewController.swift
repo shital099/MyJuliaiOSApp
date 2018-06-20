@@ -94,11 +94,20 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
         //Stop indicator
         CommonModel.sharedInstance.dissmissActitvityIndicator()
+        
+        self.fetchAllUnreadNotificationMessages()
 
         print("Menu View Did Appear : ",CommonModel.sharedInstance.getCurrentDateInMM())
         self.triggerPopAfterActivityFinish()
         //Add observer
         self.addNotificationObserver()
+    }
+
+    func fetchAllUnreadNotificationMessages() {
+        NetworkingHelper.getRequestFromUrl(name:Get_AllNotification_url, urlString: Get_AllNotification_url, callback: { [weak self] response in
+            //print("\nEvent Theme Details : ",response)
+            }, errorBack: { error in
+        })
     }
 
     func addNotificationObserver()  {

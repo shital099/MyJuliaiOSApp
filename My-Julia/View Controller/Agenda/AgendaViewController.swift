@@ -249,10 +249,11 @@ class AgendaViewController: UIViewController, UITableViewDataSource, UITableView
                 self.collectionview.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
             }
 
-           // self.onChangeOnBottomTab(segmentControl)
+            self.onChangeOnBottomTab(segmentControl)
         }
 
         print("after sorting method : ",CommonModel.sharedInstance.getCurrentDateInMM())
+        //self.tableviewObj.reloadData()
     }
 
     func fetchActivitiesListAndSort() {

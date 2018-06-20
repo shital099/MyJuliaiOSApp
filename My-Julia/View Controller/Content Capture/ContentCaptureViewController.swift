@@ -80,7 +80,6 @@ class ContentCaptureViewController: UIViewController, UIImagePickerControllerDel
     @IBAction func onClickOfPostText(sender: AnyObject) {
         
         let viewController = storyboard?.instantiateViewController(withIdentifier: "PostTextViewController") as! PostTextViewController
-        
         self.navigationController?.pushViewController(viewController, animated: true)
 
     }
@@ -190,7 +189,7 @@ class ContentCaptureViewController: UIViewController, UIImagePickerControllerDel
                     fileName = fileName.components(separatedBy: ".").first!
                 }
                 let viewController = self.storyboard?.instantiateViewController(withIdentifier: "PostPhotoViewController") as! PostPhotoViewController
-                viewController.capturedPhoto = chosenImage
+                viewController.originalImage = chosenImage
                 viewController.imageName = fileName
                 self.navigationController?.pushViewController(viewController, animated: true)
                 
@@ -198,7 +197,7 @@ class ContentCaptureViewController: UIViewController, UIImagePickerControllerDel
         }
         else {
             let viewController = self.storyboard?.instantiateViewController(withIdentifier: "PostPhotoViewController") as! PostPhotoViewController
-            viewController.capturedPhoto = chosenImage
+            viewController.originalImage = chosenImage
             let imageNo = Int(arc4random_uniform(1000) + 1)
             viewController.imageName = "CapturedPhoto".appendingFormat("%d", imageNo)
             self.navigationController?.pushViewController(viewController, animated: true)

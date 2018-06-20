@@ -103,7 +103,8 @@ class PendingActionListVC: UIViewController, UITableViewDataSource, UITableViewD
         self.listArray.add("Update Profile")
         self.iconsArray.add(#imageLiteral(resourceName: "profile_icon"))
 
-        let checkEventFeedback = DBManager.sharedInstance.checkEventFeedbackisAlreadySubmitted()
+        //Check event feedback
+        let checkEventFeedback = DBManager.sharedInstance.checkEventFeedbackisAlreadySubmitted(activityId: EventData.sharedInstance.attendeeId)
         if !checkEventFeedback {
             self.listArray.add("Event Feedback")
             self.iconsArray.add(#imageLiteral(resourceName: "pending_feedback_activity"))

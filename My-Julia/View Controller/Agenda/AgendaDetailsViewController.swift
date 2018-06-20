@@ -347,7 +347,7 @@ class AgendaDetailsViewController: UIViewController,UIImagePickerControllerDeleg
         }
         
         let viewController = self.storyboard?.instantiateViewController(withIdentifier: "PostPhotoViewController") as! PostPhotoViewController
-        viewController.capturedPhoto = chosenImage
+        viewController.originalImage = chosenImage
         let imageNo = Int(arc4random_uniform(1000) + 1)
         viewController.imageName = "CapturedPhoto".appendingFormat("%d", imageNo)
         

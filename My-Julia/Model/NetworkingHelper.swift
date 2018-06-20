@@ -54,6 +54,8 @@ let Get_AllModuleDetails_url = "api/Common/getEventAllDetailsSP?"
 //All module Data
 let Get_AllDetails_url = "GetAllData"
 
+//Get All notifications
+let Get_AllNotification_url = "/api/Common/getUnreadCountDetailsSP"
 
 /* Agenda */
 let Agenda_List_url = "api/Agenda/getAgendaByActivityId/"
@@ -248,9 +250,7 @@ class NetworkingHelper: NSObject {
             }
         }, failure: { (task: URLSessionDataTask?, error: Error) in
   
-            if urlString == Get_Latest_Questions_List_url {
-            }
-            else if urlString == Chat_Refresh_Chat_history {
+            if urlString == Get_Latest_Questions_List_url || urlString == Chat_Refresh_Chat_history || urlString == Chat_History || urlString == Chat_Group_History || urlString == Get_Speaker_Activity_url {
             }
             else {
                 CommonModel.sharedInstance.dissmissActitvityIndicator()
@@ -382,6 +382,10 @@ class NetworkingHelper: NSObject {
             }
             else  if name == Check_Pending_Feedback_url {
                 DBManager.sharedInstance.saveFeedbackGivenActivityDataIntoDB(responce: responseObject as AnyObject)
+                callback(responseObject as AnyObject)
+            }
+            else  if name == Get_AllNotification_url {
+                DBManager.sharedInstance.saveAllUnreadNotificationDataIntoDB(response: responseObject as AnyObject)
                 callback(responseObject as AnyObject)
             }
             else {

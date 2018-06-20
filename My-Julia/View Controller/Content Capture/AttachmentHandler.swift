@@ -319,15 +319,15 @@ extension AttachmentHandler: UIImagePickerControllerDelegate, UINavigationContro
     
     @objc func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
 
-        if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
+        if let originalImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
 
             if let referenceUrl = info[UIImagePickerControllerReferenceURL] as? NSURL {
             }
             else {
-                UIImageWriteToSavedPhotosAlbum(image, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
+                UIImageWriteToSavedPhotosAlbum(originalImage, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
             }
 
-            self.imagePickedBlock?(image)
+            self.imagePickedBlock?(originalImage)
         }
         else{
             print("Something went wrong in  image")
@@ -420,3 +420,4 @@ extension AttachmentHandler: UIDocumentMenuDelegate, UIDocumentPickerDelegate{
     }
     
 }
+

@@ -20,8 +20,10 @@ class WiFiDetailsViewController: UIViewController, UITableViewDataSource, UITabl
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = wifiModel.name
-        
+        self.title = "WiFi details"
+
+        // self.title = wifiModel.name
+
         //apply application theme on screen
         CommonModel.sharedInstance.applyThemeOnScreen(viewController: self, bgImage: bgImageView)
         
