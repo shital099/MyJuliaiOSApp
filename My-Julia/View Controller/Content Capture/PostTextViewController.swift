@@ -105,7 +105,6 @@ class PostTextViewController: UIViewController, UITextViewDelegate {
 
         // Convert the plain text into an HTML text using the converter.
         let output : String = converter.toHTML(input)
-        print("Output : ",output)
         
         let paramDict : NSMutableDictionary? = ["Comment":output ,"AttendeeId":AttendeeInfo.sharedInstance.attendeeId, "EventId":event.eventId]
 

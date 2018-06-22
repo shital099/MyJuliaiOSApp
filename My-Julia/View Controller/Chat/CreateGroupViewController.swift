@@ -142,10 +142,6 @@ class CreateGroupViewController: UIViewController, UICollectionViewDelegate, UIC
         //Show Indicator
         CommonModel.sharedInstance.showActitvityIndicator()
         //Rotate image
-//        capturedPhoto = capturedPhoto.fixedOrientation().imageRotatedByDegrees(degrees: 360)
-//        let imageData = UIImageJPEGRepresentation(capturedPhoto, 0)
-//        let base64String = imageData?.base64EncodedString()
-
         var paramDict : [String : Any]
         var base64String = ""
         if capturedPhoto != nil {
@@ -170,8 +166,7 @@ class CreateGroupViewController: UIViewController, UICollectionViewDelegate, UIC
         NetworkingHelper.postData(urlString:Chat_Create_Group, param:paramDict as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { [weak self] response in
             //dissmiss Indicator
             CommonModel.sharedInstance.dissmissActitvityIndicator()
-            print("Create Chat Group response : ", response)
-            
+
             let responseCode = Int(response.value(forKey: "responseCode") as! String)
             if responseCode == 0 {
                 //Add group members in groups
@@ -179,7 +174,6 @@ class CreateGroupViewController: UIViewController, UICollectionViewDelegate, UIC
                 self?.addMembersInGroup(groupId: response.value(forKey: "GroupId") as! String)
             }
         }, errorBack: { error in
-            print("Create group error : ",error)
         })
     }
     
@@ -195,13 +189,11 @@ class CreateGroupViewController: UIViewController, UICollectionViewDelegate, UIC
         }
         
         let paramDict = ["GroupChatId":self.groupId ?? "", "AttendeeId":paramArr] as [String : Any]
-        print("Add group member : ",paramDict)
 
         NetworkingHelper.postData(urlString:Chat_Add_Group_Members, param:paramDict as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { [weak self] response in
             //dissmiss Indicator
             CommonModel.sharedInstance.dissmissActitvityIndicator()
-            print("Group Members response : ", response)
-            
+
             let responseCode = Int(response.value(forKey: "responseCode") as! String)
             if responseCode == 0 {
                 self?.navigationController?.popToRootViewController(animated: true)

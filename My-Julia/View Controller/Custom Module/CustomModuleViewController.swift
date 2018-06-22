@@ -39,10 +39,6 @@ class CustomModuleViewController: UIViewController {
                 webview.loadRequest(requestObj)
             }
             else {
-              //  contentStr = contentStr.appending(String(format:"<style>body{font-family: 'Helvetica'; font-size:12px;}</style>"))
-              //  contentStr = String(format:"<font face='Helvetica' size='6'>%@",contentStr)
-               // contentStr = String(format:"<html><body><font face='Helvetica' size='5'> %@ </body></html>",contentStr)
-                print("Content Str : ",contentStr)
                 webview.loadHTMLString(contentStr, baseURL: nil)
             }
         }

@@ -64,7 +64,6 @@ class AgendaDetailsViewController: UIViewController,UIImagePickerControllerDeleg
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        print("activity id : ",agendaModel.activityId)
 
         //Fetch agenda details
         if isRefresh == true {

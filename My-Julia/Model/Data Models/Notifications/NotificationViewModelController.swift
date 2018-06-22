@@ -33,7 +33,7 @@ class NotificationViewModelController: NSObject {
         DispatchQueue.global(qos: .background).async {
             let urlStr = Get_AllModuleDetails_url.appendingFormat("Flag=%@&PageNo=%d",Notification_List_url,self.pageNo)
             NetworkingHelper.getRequestFromUrl(name:Notification_List_url,  urlString:urlStr, callback: { [weak self] response in
-
+                
                 // Remove first page load data
                 if self?.pageNo == 0 {
                     self?.isLastPage = false

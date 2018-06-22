@@ -101,7 +101,6 @@ class AddPollQuestionsViewController: UIViewController, UITableViewDataSource, U
             [ "Id" : activityId,  "OptionValue" : questionModel.opt4, "OptionOrder" : "4", "EventId" : EventData.sharedInstance.eventId]]
             ] as [String : Any]
         
-        print("post poll parameter", parameter)
         NetworkingHelper.postData(urlString: Add_Poll_Speaker_Question, param:parameter as AnyObject, withHeader: true, isAlertShow: true, controller:self,
                                   callback: { [weak self] response in
                                     //dissmiss Indicator
@@ -123,7 +122,6 @@ class AddPollQuestionsViewController: UIViewController, UITableViewDataSource, U
 
 
         }, errorBack: { error in
-            print("Add poll error : ",error.description)
         })
     }
 
@@ -146,7 +144,6 @@ class AddPollQuestionsViewController: UIViewController, UITableViewDataSource, U
             ] as [String : Any]
             
         
-        print(" update parameter", parameter)
         NetworkingHelper.postData(urlString: Post_Update_Poll_Question, param:parameter as AnyObject, withHeader: false, isAlertShow: true, controller:self,
                                   callback: { [weak self] response in
 //                                    print("update list", response)

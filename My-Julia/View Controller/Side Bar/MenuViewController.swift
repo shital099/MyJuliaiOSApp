@@ -97,7 +97,6 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         self.fetchAllUnreadNotificationMessages()
 
-        print("Menu View Did Appear : ",CommonModel.sharedInstance.getCurrentDateInMM())
         self.triggerPopAfterActivityFinish()
         //Add observer
         self.addNotificationObserver()
@@ -106,6 +105,11 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func fetchAllUnreadNotificationMessages() {
         NetworkingHelper.getRequestFromUrl(name:Get_AllNotification_url, urlString: Get_AllNotification_url, callback: { [weak self] response in
             //print("\nEvent Theme Details : ",response)
+            //print("Notification data received : ",CommonModel.sharedInstance.getCurrentDateInMM())
+
+            let dataDict:[String: Any] = ["Order": 0, "Flag":Update_SideMenu_List]
+            NotificationCenter.default.post(name: UpdateNotificationCount, object: nil, userInfo: dataDict)
+
             }, errorBack: { error in
         })
     }
@@ -488,7 +492,6 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     @IBAction func onClickOfRefreshBtn(_ sender: Any) {
-        print("Click on refresh button : ",CommonModel.sharedInstance.getCurrentDateInMM())
 
         //Check internet connection
         if AFNetworkReachabilityManager.shared().isReachable == true {
@@ -530,12 +533,10 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
             CommonModel.sharedInstance.showActitvityIndicator()
 
             let paramDict = ["AttendeeId": EventData.sharedInstance.attendeeId ,"DeviceToken":AppDelegate.getAppDelegateInstance().deviceToken] as [String : Any]
-            print("Log out parameter : ",paramDict)
 
                 NetworkingHelper.postData(urlString:Logout_Url, param:paramDict as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { [weak self] response in
                     //dissmiss Indicator
                     CommonModel.sharedInstance.dissmissActitvityIndicator()
-                    print("Log out responce : ",response)
                     if response is NSDictionary {
                         let responseCode = Int(response.value(forKey: "responseCode") as! String)
                         if responseCode == 0 {
@@ -791,7 +792,7 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
           //  print("All Module data : ",response)
             self?.triggerPopAfterActivityFinish()
 
-            print("After getting event modules data : ",CommonModel.sharedInstance.getCurrentDateInMM())
+            //print("After getting event modules data : ",CommonModel.sharedInstance.getCurrentDateInMM())
 
             //Fetch other details
             self?.getEventDetailsData()
@@ -809,7 +810,6 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
         NetworkingHelper.getRequestFromUrl(name:Get_Login_Details_Url, urlString: Get_Login_Details_Url, callback: { [weak self] response in
             
            // print("App theme data : ",response)
-            print("After getting event details : ",CommonModel.sharedInstance.getCurrentDateInMM())
             //Fetch profile data
             _ = DBManager.sharedInstance.fetchProfileDataFromDB()
             
@@ -834,7 +834,7 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
                     self?.onClickOfEventDetails(self?.eventButton)
                 }
 
-            print("After load event details on screen: ",CommonModel.sharedInstance.getCurrentDateInMM())
+           // print("After load event details on screen: ",CommonModel.sharedInstance.getCurrentDateInMM())
 
           //  }
         }, errorBack: { error in

@@ -238,6 +238,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         let parameters : NSDictionary? = [ "SearchText": self.searchBar.text!]
         NetworkingHelper.postData(urlString:Search_Event_Url, param:parameters!, withHeader: false, isAlertShow: true, controller:self, callback: { [weak self] response in
             self?.isSearching = true
+            print(" before parsing : ", CommonModel.sharedInstance.getCurrentDateInMM())
 
             //Remove all objects
             if self?.searchListArray.count != 0 {
@@ -249,6 +250,8 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
             }
             else {
             }
+
+            print(" before stop indicator : ", CommonModel.sharedInstance.getCurrentDateInMM())
             CommonModel.sharedInstance.dissmissActitvityIndicator()
         }, errorBack: { error in
             NSLog("error in Auth token: %@", error)
@@ -273,8 +276,8 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         }
         self.tableView.reloadData()
 
-        print("Search event list : ",self.searchListArray)
-       // print(" After event load in list : ", CommonModel.sharedInstance.getCurrentDateInMM())
+     //   print("Search event list : ",self.searchListArray)
+        print(" After parse list : ", CommonModel.sharedInstance.getCurrentDateInMM())
     }
 
     func getEventDetailsData() {

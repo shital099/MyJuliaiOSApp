@@ -142,7 +142,6 @@ class AddReminderViewController: UIViewController , TKAlertDelegate {
     }
 
     @IBAction func saveReminderBtnClick (sender: UIButton){
-        print("self time : ",self.time)
 
         if (self.titleTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)! {
             CommonModel.sharedInstance.showAlertWithStatus(title: "", message: "Please enter reminder title", vc: self)

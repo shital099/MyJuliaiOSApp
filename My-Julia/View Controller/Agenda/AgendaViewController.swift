@@ -66,6 +66,15 @@ class AgendaViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     override func viewDidAppear(_ animated: Bool) {
+
+        //If MySchedules selected then 2 tab selected
+        if isMySchedules == true {
+            segmentControl.selectedSegmentIndex = 1
+        }
+        else {
+            segmentControl.selectedSegmentIndex = 0
+        }
+        self.onChangeOnBottomTab(segmentControl)
     }
 
 //    func fetchAgendaDataList()  {
@@ -221,8 +230,6 @@ class AgendaViewController: UIViewController, UITableViewDataSource, UITableView
 //            self.dataDict = DBManager.sharedInstance.fetchAllAgendaListFromDB(isAddedMySchedule: isMySchedules, datesArray: self.datesArray) as! [String : Array<AgendaModel>]
 //        }
 
-        print("Finish All DB method: ",CommonModel.sharedInstance.getCurrentDateInMM())
-
         if daysArray.count != 0 {
             self.messageLbl.isHidden = true
             self.headerBgView.isHidden = false
@@ -249,10 +256,10 @@ class AgendaViewController: UIViewController, UITableViewDataSource, UITableView
                 self.collectionview.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
             }
 
-            self.onChangeOnBottomTab(segmentControl)
+          //  self.onChangeOnBottomTab(segmentControl)
         }
 
-        print("after sorting method : ",CommonModel.sharedInstance.getCurrentDateInMM())
+       // print("after sorting method : ",CommonModel.sharedInstance.getCurrentDateInMM())
         //self.tableviewObj.reloadData()
     }
 
@@ -260,7 +267,7 @@ class AgendaViewController: UIViewController, UITableViewDataSource, UITableView
 
         //Fetch data from Sqlite database
         let listArray = DBManager.sharedInstance.fetchAllScheduleListFromDB(isAddedMySchedule: isMySchedules) as! [AgendaModel]
-        print("dates array : ",self.datesArray.count)
+       // print("dates array : ",self.datesArray.count)
 
         for index in 0...datesArray.count - 1 {
 
@@ -275,7 +282,7 @@ class AgendaViewController: UIViewController, UITableViewDataSource, UITableView
                 self.dataDict[date] = filteredArray
             }
         }
-        print("after sorting method : ",CommonModel.sharedInstance.getCurrentDateInMM())
+       // print("after sorting method : ",CommonModel.sharedInstance.getCurrentDateInMM())
 
 //                if isMySchedules {
 //                    self.myScheduleDataDict = DBManager.sharedInstance.fetchAllAgendaListFromDB(isAddedMySchedule: isMySchedules, datesArray: self.datesArray) as! [String : Array<AgendaModel>]
@@ -291,7 +298,6 @@ class AgendaViewController: UIViewController, UITableViewDataSource, UITableView
 
         //Fetch data from Sqlite database
         let listArray = DBManager.sharedInstance.fetchMyScheduleListFromDB(activityId: activityId) as! [AgendaModel]
-        print("listArray array : ",listArray.count)
 
         if listArray.count != 0 {
 
@@ -302,7 +308,6 @@ class AgendaViewController: UIViewController, UITableViewDataSource, UITableView
             let endDate = dateFormatter.date(from: (listArray.first?.endActivityDate)!)
 
             let diffInDays = Calendar.current.dateComponents([.day], from: startDate!, to: endDate!).day
-            print("diffInDays : ",diffInDays ?? "")
 
             for _ in 0...diffInDays! {
 

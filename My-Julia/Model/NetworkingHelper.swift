@@ -12,6 +12,7 @@ import UIKit
 //BASE URL AND Auth Key
 //let BASE_URL = "http://srv01:2300/" 
 
+//let BASE_URL = "http://amaresh.gcotechcenter.local:8000/"     //local machine
 //let BASE_URL = "http://srv01.gcotechcenter.local:1400/"  //SRV 1
 let BASE_URL = "http://srv01.gcotechcenter.local:2400/"     //SRV 2
 //let BASE_URL = "https://apps.gcotechcenter.com/"
@@ -300,7 +301,6 @@ class NetworkingHelper: NSObject {
         }
 
         let url = BASE_URL + urlString
-       // print("GET URL : ",urlString)
 
         manager?.get(url, parameters: nil, progress: nil, success: { (task: URLSessionTask!, responseObject: Any?) in
 
@@ -311,7 +311,6 @@ class NetworkingHelper: NSObject {
             }
             else  if name == Get_AllModuleDetails_url {
               //  DispatchQueue.global(qos: .background).async {
-                print("Get Event Module data : ",CommonModel.sharedInstance.getCurrentDateInMM())
 
                     DBManager.sharedInstance.saveAllEventDataIntoDB(response: responseObject as AnyObject, apiNname: name)
                // }

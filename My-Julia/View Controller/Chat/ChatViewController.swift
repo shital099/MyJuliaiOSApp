@@ -329,7 +329,6 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
 
                 NetworkingHelper.postData(urlString:Chat_Group_History, param:paramDict as AnyObject, withHeader: false, isAlertShow: false, controller:self, callback: { [weak self] response in
 
-                    print("Group Chat history  : ",response)
                 if response is Array<Any> {
                     self?.parseChatHistoryData(response: response, isChatHistory:  true)
                 }
@@ -344,7 +343,6 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
                 let paramDict = ["ToId":self.chatGroupModel.groupId] as [String : Any]
                 NetworkingHelper.postData(urlString:Chat_History, param:paramDict as AnyObject, withHeader: false, isAlertShow: false, controller:self, callback: { [weak self] response in
 
-                print("Chat history  : ",response)
                 if response is Array<Any> {
                     self?.parseChatHistoryData(response: response, isChatHistory:  true)
                 }
@@ -357,17 +355,6 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
     func parseChatHistoryData(response: AnyObject, isChatHistory: Bool) {
         
         if isChatHistory {
-
-            //            let listArray : NSMutableArray = []
-            //            for item in response as! NSArray{
-            //                let  dict = item as! NSDictionary
-            //
-            //                let messageF = self.setMessageFrame(dict: dict)
-            //                listArray.add(messageF)
-            //            }
-            //            self.chatModel.dataSource = listArray
-            //            self.chatTableView?.reloadData()
-            //            self.tableViewScrollToBottom()
 
             self.chatModel.dataSource = NSMutableArray(array: DBManager.sharedInstance.fetchChatHistoryMessages(groupId: self.chatGroupModel.groupId, fromId: self.chatGroupModel.fromId, isGroupChat: self.chatGroupModel.isGroupChat, lastFetchTime: "All") as! [UUMessageFrame])
             self.chatTableView?.reloadData()
@@ -454,8 +441,7 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
         //  CommonModel.sharedInstance.showActitvityIndicator()
         
         let paramDict = ["FromId":AttendeeInfo.sharedInstance.attendeeId  ,"ToId":self.chatGroupModel.groupId, paramKey: message , "IsGroupChat" : self.chatGroupModel.isGroupChat, "EventId":EventData.sharedInstance.eventId] as [String : Any]
-        print("Post respoonce : ",paramDict)
-        
+
         NetworkingHelper.postData(urlString:Chat_Post_Message, param:paramDict as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { [weak self] response in
             print("Post Chat message response : ", response)
             

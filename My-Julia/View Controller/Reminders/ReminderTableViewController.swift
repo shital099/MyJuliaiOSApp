@@ -75,7 +75,6 @@ class ReminderTableViewController: UIViewController , UITableViewDelegate , UITa
         for item in reminderarray  {
 
             let dateStr = CommonModel.sharedInstance.getListHeaderDate(dateStr: item.sortDate)
-            print("Date Str : ",dateStr)
             
             if (dataList.value(forKey: dateStr) != nil) {
                 let array = dataList.value(forKey: dateStr) as! NSMutableArray

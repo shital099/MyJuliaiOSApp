@@ -166,8 +166,6 @@ class FeedbackViewController: UIViewController, UITableViewDataSource, UITableVi
 
         NetworkingHelper.getRequestFromUrl(name:Check_User_Feedback_url,  urlString: Check_User_Feedback_url, callback: { [weak self] response in
 
-            print("Feedback responce : ",response)
-            
             if response is NSDictionary {
                 if response.value(forKey: "responseCode") as! Bool == true {
                     self?.submittedMessageLbl.text = Activity_Feedback_submitted
@@ -525,7 +523,6 @@ class FeedbackViewController: UIViewController, UITableViewDataSource, UITableVi
         let optionDict = model.optionsArr[view.tag] as! NSDictionary
         model.answerText = optionDict["OptionValue"] as! String        
         ansDict.setValue(optionDict["OptionId"], forKey: model.questionId)
-        print("Ans Dict - ", self.ansDict)
         tableView.reloadData()
     }
     

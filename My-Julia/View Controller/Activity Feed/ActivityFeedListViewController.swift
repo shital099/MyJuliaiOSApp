@@ -61,10 +61,6 @@ class ActivityFeedListViewController: UIViewController, UITableViewDataSource, U
 
         //Show menu icon in ipad and iphone
         self.setupMenuBarButtonItems()
-        
-        //        if IS_IPHONE {
-        //            self.setupMenuBarButtonItems()
-        //        }
 
         
         let refreshControl: UIRefreshControl = {
@@ -305,8 +301,6 @@ class ActivityFeedListViewController: UIViewController, UITableViewDataSource, U
         cell.messageLbl.delegate = self
         //cell.textLbl.attributedText =  CommonModel.sharedInstance.stringFromHtml(string: model.messageText)
         //cell.textLbl.text = model.messageText
-
-        print("read status : ",model.isRead)
 
         if cell.messageLbl.optimumSize.height > 55 {
             cell.readMoreLbl.isHidden = false

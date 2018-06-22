@@ -31,9 +31,13 @@ class ActivityFeedViewModelController: NSObject {
 
     func retrieveActivityFeeds(_ completionBlock: @escaping (_ success: Bool, _ error: NSError?) -> ()) {
 
+
         // Move to a background thread to do some long running work
         DispatchQueue.global(qos: .background).async {
             let urlStr = Get_AllModuleDetails_url.appendingFormat("Flag=%@&PageNo=%d",ActivityFeed_List_url,self.pageNo)
+
+            print("Actiivity feeds url : ",urlStr)
+
             NetworkingHelper.getRequestFromUrl(name:ActivityFeed_List_url,  urlString:urlStr, callback: { [weak self] response in
 
                // print("Actiivity feeds data : ",response)

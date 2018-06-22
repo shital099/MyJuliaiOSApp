@@ -64,7 +64,6 @@ class ActivityFeedDetailsViewController: UIViewController, RTLabelDelegate, SFSa
         // get translation-
         let translation = panGesture.translation(in: view)
         panGesture.setTranslation(CGPoint.zero, in: view)
-        print(translation)
         
         // create a new Label and give it the parameters of the old one
         let label = panGesture.view as! UIImageView

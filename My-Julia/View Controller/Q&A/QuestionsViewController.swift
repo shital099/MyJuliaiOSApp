@@ -417,7 +417,6 @@ class QuestionsViewController: UIViewController, UITableViewDataSource, UITableV
 
        // let paramDict = ["Question": queTextView.text ,"ActivityId":self.sessionModel.activityId, "CreatedBy": AttendeeInfo.sharedInstance.attendeeId, "EventId":EventData.sharedInstance.eventId, "Session":self.sessionModel.sessionId] as [String : Any]
         let paramDict = ["Question": queTextView.text ,"ActivityId":self.sessionModel.activityId, "CreatedBy": AttendeeInfo.sharedInstance.attendeeId, "EventId":EventData.sharedInstance.eventId, "Session":0] as [String : Any]
-        print("Post Question : ",paramDict)
 
         NetworkingHelper.postData(urlString:PostQuestion_List_url, param:paramDict as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { [weak self] response in
             //dissmiss Indicator

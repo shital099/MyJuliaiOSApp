@@ -236,7 +236,6 @@ print("from id ",vc.chatGroupModel.fromId)
     // MARK: - headerDelegate methods
     
     func btnActionDelegate(_ arr: NSMutableArray!) {
-        print("Btn Delegate click")
         self.headerView.headerDataArr = arr
         self.tableView.btnActionArr = arr as! [Any]!
         self.tableView.beginUpdates()

@@ -123,14 +123,12 @@ class ActivityQuestionsListViewController : UIViewController, UITableViewDataSou
 //        print(" fetch latest poll Parameter list", paramDict)
         NetworkingHelper.postData(urlString: Get_Speaker_latest_Poll, param:paramDict as AnyObject, withHeader: true, isAlertShow: false, controller:self, callback:
             {[weak self] response in
-            print("activities Questions list", response)
             if response is Array<Any> {
 //            self.parseActivityData(response: response)
                 self?.listArray = DBManager.sharedInstance.fetchSpeakerPollQuestions(activityId: (self?.model.activityId)!) as! [PollModel]
                 self?.tableView.reloadData()
             }
         }, errorBack: { error in
-            print("error",error)
         })
     }
     
