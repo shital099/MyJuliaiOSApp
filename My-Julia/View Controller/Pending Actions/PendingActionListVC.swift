@@ -21,6 +21,9 @@ class PendingActionListVC: UIViewController, UITableViewDataSource, UITableViewD
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
+        //apply application theme on screen
+        CommonModel.sharedInstance.applyThemeOnScreen(viewController: self, bgImage: bgImageView)
 
         //Show menu icon in ipad and iphone
         self.setupMenuBarButtonItems()
@@ -104,7 +107,7 @@ class PendingActionListVC: UIViewController, UITableViewDataSource, UITableViewD
         self.iconsArray.add(#imageLiteral(resourceName: "profile_icon"))
 
         //Check event feedback
-        let checkEventFeedback = DBManager.sharedInstance.checkEventFeedbackisAlreadySubmitted(activityId: EventData.sharedInstance.attendeeId)
+        let checkEventFeedback = DBManager.sharedInstance.checkEventFeedbackisAlreadySubmitted(activityId: EventData.sharedInstance.eventId)
         if !checkEventFeedback {
             self.listArray.add("Event Feedback")
             self.iconsArray.add(#imageLiteral(resourceName: "pending_feedback_activity"))

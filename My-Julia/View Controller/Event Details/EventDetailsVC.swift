@@ -55,31 +55,28 @@ class EventDetailsVC: UIViewController, UITableViewDataSource, UITableViewDelega
         
         //This tableHeaderView plays the placeholder role here.
         self.tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: CGFloat(CHTwitterCoverViewHeight)))
-       // self.tableView.addTwitterCover(with: UIImage(named:"event_placeholder"))
-        
-    //    self.coverImageView.sd_setImage(with: url, placeholderImage: nil, options: SDWebImageOptions(rawValue: 4), completed: { (image, error, cacheType, imageURL) in
-            self.coverImageView.sd_setImage(with: url, completed: { (image, error, cacheType, imageURL) in
 
-            // Perform operation.
+        //Cache cover image
 
-            if image != nil {
-                //Check internet connection
-                if AFNetworkReachabilityManager.shared().isReachable == true {
-                    //Remove Cover image header image
-                    if !(SDImageCache.shared().cachePath(forKey: urlString, inPath: urlString)?.contains(urlString))! {
-                        SDImageCache.shared().removeImage(forKey: urlString, withCompletion: nil)
-                    }
-                }
-                self.tableView.addTwitterCover(with: image)
+        if AFNetworkReachabilityManager.shared().isReachable == false {
+            if let eventImage = SDImageCache.shared().imageFromDiskCache(forKey:url.absoluteString) {
+                //use cache image
+                self.tableView.addTwitterCover(with: eventImage)
             }
-            else {
-                print("Cover image donwloaded failed......")
-                if let cImage = SDImageCache.shared().imageFromMemoryCache(forKey:urlString) {
-                    //use image
-                    self.tableView.addTwitterCover(with: cImage)
+        }
+        else {
+            SDImageCache.shared().removeImage(forKey: urlString, withCompletion: nil)
+
+          //  self.coverImageView.sd_setImage(with: url, placeholderImage: nil, options: SDWebImageOptions(rawValue: 1), completed: { (image, error, cacheType, imageURL) in
+                 self.coverImageView.sd_setImage(with: url, completed: { (image, error, cacheType, imageURL) in
+                if image != nil {
+                    self.tableView.addTwitterCover(with: image)
                 }
-            }
-        })
+                else {
+                    print("Cover image donwloaded failed......")
+                }
+            })
+        }
     }
 
 

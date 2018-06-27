@@ -365,6 +365,11 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
             }
             else {
                 SDImageCache.shared().removeImage(forKey: model.iconUrl, withCompletion: nil)
+                //Check internet connection
+                if AFNetworkReachabilityManager.shared().isReachable == true {
+                    SDImageCache.shared().removeImage(forKey: model.iconUrl, withCompletion: nil)
+                }
+
                 cell.userIconImg.sd_setImage(with: URL(string:model.iconUrl), placeholderImage: #imageLiteral(resourceName: "group_icon"))
                 cell.userIconImg?.layer.cornerRadius = cell.userIconImg.frame.size.height/2
                 cell.userIconImg.contentMode = UIViewContentMode.scaleAspectFill
@@ -377,6 +382,11 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
             model = (self.dataDict["Contacts"]?[indexPath.row])!
             
             if model.visibilitySetting == true && !model.iconUrl.isEmpty {
+                //Check internet connection
+                if AFNetworkReachabilityManager.shared().isReachable == true {
+                    SDImageCache.shared().removeImage(forKey: model.iconUrl, withCompletion: nil)
+                }
+
                 cell.userIconImg.sd_setImage(with: URL(string:model.iconUrl), placeholderImage: #imageLiteral(resourceName: "user"))
                 cell.userIconImg?.layer.cornerRadius = cell.userIconImg.frame.size.height/2
                 cell.userIconImg.layer.borderColor = UIColor.gray.cgColor

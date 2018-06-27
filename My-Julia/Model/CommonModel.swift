@@ -657,6 +657,7 @@ class CommonModel: NSObject {
             dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS"
             date = dateFormatter.date(from: dateStr)
         }
+        print("Noti time : ",dateStr)
         dateFormatter.dateFormat = "dd-MM-yyyy hh:mm a"
         let result:String = dateFormatter.string(from: date!)
         return result

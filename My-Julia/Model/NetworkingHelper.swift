@@ -251,7 +251,7 @@ class NetworkingHelper: NSObject {
             }
         }, failure: { (task: URLSessionDataTask?, error: Error) in
   
-            if urlString == Get_Latest_Questions_List_url || urlString == Chat_Refresh_Chat_history || urlString == Chat_History || urlString == Chat_Group_History || urlString == Get_Speaker_Activity_url {
+            if urlString == Get_Latest_Questions_List_url || urlString == Chat_Refresh_Chat_history || urlString == Chat_History || urlString == Chat_Group_History || urlString == Get_Speaker_Activity_url || urlString == Get_Speaker_latest_Poll {
             }
             else {
                 CommonModel.sharedInstance.dissmissActitvityIndicator()

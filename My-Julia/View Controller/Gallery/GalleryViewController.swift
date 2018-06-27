@@ -39,7 +39,9 @@ class GalleryViewController: UIViewController, UIImagePickerControllerDelegate, 
       //   self.addOption("Scale in", action: scaleInSelected)
 
         CommonModel.sharedInstance.applyThemeOnScreen(viewController: self, bgImage: bgImageView)
-        
+
+        self.navigationItem.rightBarButtonItem?.tintColor = AppTheme.sharedInstance.headerTextColor
+
         //Fetch data from Sqlite database
          DBManager.sharedInstance.fetchGalleryDataFromDB(callback: { [weak self] array in
             self?.listArray = array as! [PhotoGallery]
@@ -250,6 +252,7 @@ class GalleryViewController: UIViewController, UIImagePickerControllerDelegate, 
                 //Fetch data from Sqlite database
                 DBManager.sharedInstance.fetchGalleryDataFromDB(callback: { [weak self] array in
                     self?.listArray = array as! [PhotoGallery]
+                    print("After fetching from db : ",self?.listArray.count)
 
 //                    if (array as NSArray).count != 0 {
 //                        self?.listArray.removeAll()
@@ -442,16 +445,9 @@ class GalleryViewController: UIViewController, UIImagePickerControllerDelegate, 
 
                 cell.imageView.sd_setImage(with: NSURL(string:model.thumbnailIconUrl) as URL?, placeholderImage: #imageLiteral(resourceName: "no_image"), options: SDWebImageOptions(rawValue: 1), completed: { (image, error, cacheType, imageURL) in
 
-//                    if image != nil {
-//                    let imgData: NSData = NSData(data: UIImageJPEGRepresentation((image)!, 1)!)
-//                    var imageSize: Int = imgData.length
-//                    print("size of image in KB: %f ", Double(imageSize) / 1024.0)
-//
-//                    }
-//                    else {
-//                        print("Found nil image")
-//                    }
-
+                    if image == nil {
+                        cell.imageView.image = #imageLiteral(resourceName: "no_image")
+                    }
                 })
                // cell.imageView.sd_setImage(with: NSURL(string:model.iconUrl) as URL?, placeholderImage: #imageLiteral(resourceName: "no_image"))
             }

@@ -2448,6 +2448,7 @@
 				SWIFT_REFLECTION_METADATA_LEVEL = none;
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
+				VALID_ARCHS = "arm64 armv7 armv6";
 			};
 			name = Debug;
 		};
@@ -2497,6 +2498,7 @@
 				SWIFT_REFLECTION_METADATA_LEVEL = none;
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
+				VALID_ARCHS = "arm64 armv7 armv6";
 			};
 			name = Release;
 		};

@@ -1466,6 +1466,8 @@ class DBManager: NSObject {
         print("Activity Feedback : ",responce)
         
         if openDatabase() {
+            database.beginTransaction()
+
             let eventId = EventData.sharedInstance.eventId
             
             //Delete local data which is deleted from admin
@@ -1503,7 +1505,8 @@ class DBManager: NSObject {
                 print("error = \(error)")
             }
         }
-        
+
+        database.commit()
         database.close()
     }
     
@@ -1703,6 +1706,8 @@ class DBManager: NSObject {
         var sqlQuery = "" //self.parseAndSaveNotificationDataIntoDB(response: response)
         let eventId = EventData.sharedInstance.eventId
 
+        print("Notification data : ",response)
+
         for item in response as! NSArray {
             let  dict = item as! NSDictionary
             let id = dict.value(forKey: "Id") as! String
@@ -1818,6 +1823,7 @@ class DBManager: NSObject {
 
     func saveWifiDataIntoDB(response: AnyObject, isNoticationData: Bool) {
         let eventId = EventData.sharedInstance.eventId
+        print("Wifi details : ",response)
 
         //Notification data save into DB
         if response is Dictionary<String, Any> {
@@ -1854,7 +1860,7 @@ class DBManager: NSObject {
             if isNoticationData == false {
                 //Delete local data which is deleted from admin
                 do {
-                    try database.executeUpdate("DELETE FROM WiFi WHERE EventID = ?", values: [eventId])
+                    try database.executeUpdate("DELETE FROM Wifi WHERE EventID = ?", values: [eventId])
 
                 } catch {
                     print("error = \(error)")
@@ -1951,7 +1957,7 @@ class DBManager: NSObject {
 
             //Delete local data which is deleted from admin
             do {
-                try database.executeUpdate("Update WiFi SET IsRead = ? Where Id = ? AND EventID = ?", values: [1,wifiId, EventData.sharedInstance.eventId])
+                try database.executeUpdate("Update Wifi SET IsRead = ? Where Id = ? AND EventID = ?", values: [1,wifiId, EventData.sharedInstance.eventId])
             } catch {
                 print("error = \(error)")
             }
@@ -2032,6 +2038,75 @@ class DBManager: NSObject {
             
             if !database.executeStatements(sqlQuery) {
             }
+    }
+
+    func saveChatNotificationUnreadMessagesIntoDB(response: AnyObject) {
+
+        if openDatabase() {
+            database.beginTransaction()
+
+            let eventId = EventData.sharedInstance.eventId
+            let attendeeId = EventData.sharedInstance.attendeeId
+
+            var sqlQuery = ""
+            var groupId = ""
+
+            for item in response as! NSArray {
+
+                let  dict = item as! NSDictionary
+                var isGroupChat = 0
+
+                //Group history
+                if (dict.value(forKey: "GroupChatId") as? NSNull) == nil  {
+                    groupId = dict.value(forKey: "GroupChatId") as! String
+                    isGroupChat = 1
+                }
+                else {
+                    groupId = dict.value(forKey: "ToId") as! String
+                }
+
+                let chatId = dict.value(forKey: "ChatId") as! String
+                let createdBy = dict.value(forKey: "CreatedBy") as! String
+                let fromId = dict.value(forKey: "FromId") as! String
+                let toId = dict.value(forKey: "ToId") as! String
+                let createdDateStr = dict.value(forKey: "CreatedDate") as! String
+                let modifiedDateStr = dict.value(forKey: "CreatedDate") as! String
+                let message = self.isNullString(str: dict.value(forKey: "Message") as Any)
+                let name = self.isNullString(str: dict.value(forKey: "FromName") as Any)
+                let iconImage = self.appendImagePath(path: dict.value(forKey: "FromIconUrl") as Any)
+                let pictureImage = self.appendImagePath(path: dict.value(forKey: "ImageUrl") as Any)
+                let toName = self.isNullString(str: dict.value(forKey: "ToName") as Any)
+                let toIconUrl = self.appendImagePath(path: dict.value(forKey: "ToIconUrl") as Any)
+                let isDeleted = 0 //dict.value(forKey: "FromDeleted") as! Int
+                var isRead = dict.value(forKey: "IsRead") as! Int
+
+                //update read message status
+                if createdBy == EventData.sharedInstance.attendeeId {
+                    isRead = 1
+                }
+
+                var type = 0
+                if (dict.value(forKey: "ImageUrl") as? NSNull) == nil {
+                    type = 1
+                }
+
+                var fromMe = 1
+                //Check message frame
+                if AttendeeInfo.sharedInstance.attendeeId == toId {
+                    fromMe = 0
+                }
+
+                sqlQuery += "INSERT OR REPLACE INTO ChatHistory (EventID,AttendeeId, GroupId, FromId, ChatMessageId, CreatedBy, ToId , CreatedDate , ModifiedDate, UserIconUrl, UserName,  ToUserName, ToIconUrl , MessageIconUrl, Message, MessageType, MessageFromMe, isGroupChat, isDeleted ,  IsRead ) VALUES ('\(eventId)','\(attendeeId)','\(groupId)', '\(fromId)', '\(chatId)', '\(createdBy)', '\(toId)','\(createdDateStr)', '\(modifiedDateStr)', \"\(iconImage)\", \"\(name)\", \"\(toName)\", \"\(toIconUrl)\", \"\(pictureImage)\", \"\(message)\", '\(type)', \(fromMe), '\(isGroupChat)', \(isDeleted),\(isRead));"
+
+            }
+
+            if !database.executeStatements(sqlQuery) {
+                 print("", database.lastError(), database.lastErrorMessage())
+            }
+        }
+
+        database.commit()
+        database.close()
     }
 
     func saveChatNotificationMessageIntoDB(response: AnyObject) {
@@ -3528,18 +3603,34 @@ class DBManager: NSObject {
     }
     
     func savePollActivityQuestionsIntoDB(response: AnyObject) {
-        
+
+        var isDeleted : Bool = false
+
         if openDatabase() {
-            
+            self.database.beginTransaction()
+
+
             for item in response as! NSArray {
                 do {
                     if item is NSDictionary {
                         
                         let  dict = item as! NSDictionary
-                        
+                        let activityId = self.isNullString(str: dict.value(forKey: "ActivityId") as Any)
+
+                        if isDeleted == false {
+                            //Delete local data which is deleted from admin
+                            do {
+                                try database.executeUpdate("DELETE FROM PollQuestions WHERE EventID = ? AND ActivityId = ?", values: [EventData.sharedInstance.eventId, activityId])
+
+                            } catch {
+                                print("error = \(error)")
+                            }
+                        }
+
+                        isDeleted = true
+
                         let queId = self.isNullString(str: dict.value(forKey: "Id") as Any)
                         let eventId = self.isNullString(str: dict.value(forKey: "EventId") as Any)
-                        let activityId = self.isNullString(str: dict.value(forKey: "ActivityId") as Any)
                         let sessionId = 0 //dict.value(forKey: "Session")
                         let question = self.isNullString(str: dict.value(forKey: "Questions") as Any)
                         let optionsCount = 4 //dict.value(forKey: "Options") as Array
@@ -3555,6 +3646,9 @@ class DBManager: NSObject {
                     print("error = \(error)")
                 }
             }
+
+            database.commit()
+            database.close()
         }
     }
     
@@ -3599,38 +3693,45 @@ class DBManager: NSObject {
     //MARK: -  Add Speaker Poll Methods
 
     //Get Speaker Poll Activities
-    func saveSpeakerPollActListIntoDB(response: AnyObject) -> String {
+    func saveSpeakerPollActListIntoDB(response: AnyObject) {
+        if openDatabase() {
+            self.database.beginTransaction()
 
-        var sqlQuery = ""
-        //Delete local data which is deleted from admin
-        do {
-            try database.executeUpdate("DELETE FROM PollSpeakerActivity WHERE EventID = ?", values: [EventData.sharedInstance.eventId])
+            var sqlQuery = ""
+            //Delete local data which is deleted from admin
+            do {
+                try database.executeUpdate("DELETE FROM PollSpeakerActivity WHERE EventID = ?", values: [EventData.sharedInstance.eventId])
 
-        } catch {
-            print("error = \(error)")
-        }
-
-        let eventId = EventData.sharedInstance.eventId
-        let speakerId = AttendeeInfo.sharedInstance.speakerId
-
-        for item in response as! NSArray {
-
-            if item is NSDictionary {
-
-                let  dict = item as! NSDictionary
-                let actid = dict.value(forKey: "Value") as! String?
-                let actname =  dict.value(forKey: "Text") as! String?
-                let startdate = dict.value(forKey: "StartDateTime") as! String?
-                let endate = dict.value(forKey: "EndDateTime") as! String?
-
-                sqlQuery += "INSERT OR REPLACE INTO PollSpeakerActivity (EventId, ActivityId, ActivityName, ActivityStartDate, ActivityEndDate, SpeakerId) VALUES ('\(eventId)', '\(actid)', \"\(actname)\",'\(startdate)','\(endate)','\(speakerId)');"
-
-                //Create  table
-                // try database.executeUpdate("INSERT OR REPLACE INTO PollSpeakerActivity (EventId, ActivityId, ActivityName, ActivityStartDate, ActivityEndDate, SpeakerId) VALUES ( ?, ?, ?, ?, ?, ?)", values: [eventId, actid ?? "", actname, startdate, endate, speakerId])
-
+            } catch {
+                print("error = \(error)")
             }
+
+            let eventId = EventData.sharedInstance.eventId
+            let speakerId = AttendeeInfo.sharedInstance.speakerId
+
+            for item in response as! NSArray {
+
+                if item is NSDictionary {
+
+                    let  dict = item as! NSDictionary
+                    let actid = dict.value(forKey: "Value") as! String
+                    let activityName =  dict.value(forKey: "Text") as! String
+                    let startdate = dict.value(forKey: "StartDateTime") as! String
+                    let endate = dict.value(forKey: "EndDateTime") as! String
+
+                    sqlQuery += "INSERT OR REPLACE INTO PollSpeakerActivity (EventId, ActivityId, ActivityName, ActivityStartDate, ActivityEndDate, SpeakerId) VALUES ('\(eventId)', '\(actid)', \"\(activityName)\",'\(startdate)','\(endate)','\(speakerId)');"
+
+                    //Create  table
+                    // try database.executeUpdate("INSERT OR REPLACE INTO PollSpeakerActivity (EventId, ActivityId, ActivityName, ActivityStartDate, ActivityEndDate, SpeakerId) VALUES ( ?, ?, ?, ?, ?, ?)", values: [eventId, actid ?? "", actname, startdate, endate, speakerId])
+
+                }
+            }
+
+            if !database.executeStatements(sqlQuery) {
+            }
+            database.commit()
+            database.close()
         }
-        return sqlQuery
     }
 
     func fetchSpeakerPollActListFromDB() -> NSArray {
@@ -3661,8 +3762,11 @@ class DBManager: NSObject {
     //Speaker Poll Questions
 
     func saveSpeakerPollActQuestionIntoDB(response: AnyObject) {
+        var isDeleted : Bool = false
 
         if openDatabase() {
+            self.database.beginTransaction()
+
             let eventId = EventData.sharedInstance.eventId
 
             for item in response as! NSArray {
@@ -3670,9 +3774,21 @@ class DBManager: NSObject {
                     if item is NSDictionary {
 
                         let  dict = item as! NSDictionary
+                        let activityId = dict.value(forKey: "ActivityId") as! String
+
+                        if isDeleted == false {
+                            //Delete local data which is deleted from admin
+                            do {
+                                try database.executeUpdate("DELETE FROM SpeakerPollQuestions WHERE EventID = ? AND ActivityId = ?", values: [EventData.sharedInstance.eventId, activityId])
+
+                            } catch {
+                                print("error = \(error)")
+                            }
+                        }
+
+                        isDeleted = true
 
                         //                        let eventId = dict.value(forKey: "EventId") as! String!
-                        let activityId = dict.value(forKey: "ActivityId") as! String
                         let createdDate = dict.value(forKey: "CreatedDate") as! String
                         let question = dict.value(forKey: "Questions") as! String
                         let questionsId = dict.value(forKey: "Id") as! String
@@ -3694,6 +3810,9 @@ class DBManager: NSObject {
                     print("error = \(error)")
                 }
             }
+
+            database.commit()
+            database.close()
         }
     }
 
@@ -5267,8 +5386,8 @@ class DBManager: NSObject {
     func saveFeedbackGivenActivityDataIntoDB(responce: AnyObject) {
 
         if openDatabase() {
-
             database.beginTransaction()
+            
             let eventId = EventData.sharedInstance.eventId
 
             var sqlQuery = ""
@@ -5303,14 +5422,13 @@ class DBManager: NSObject {
     func saveFeedbackGivenToEventDataIntoDB(activityId : String) {
         
         if openDatabase() {
-
             database.beginTransaction()
 
             let eventId = EventData.sharedInstance.eventId
             let sqlQuery =  "INSERT OR REPLACE INTO PostedActivityFeedback (EventID, ActivityId, AttendeeId) VALUES ('\(eventId)','\(activityId)','\(EventData.sharedInstance.attendeeId)');"
 
             if !database.executeStatements(sqlQuery) {
-                print(self.database.lastError(), self.database.lastErrorMessage())
+                print("Error in submit PostedActivityFeedback : ",self.database.lastError(), self.database.lastErrorMessage())
             }
 
             database.commit()

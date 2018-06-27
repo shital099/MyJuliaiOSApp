@@ -55,7 +55,7 @@ class FeedbackViewController: UIViewController, UITableViewDataSource, UITableVi
         }
         else {
             //Check event feedback
-            let checkEventFeedback = DBManager.sharedInstance.checkEventFeedbackisAlreadySubmitted(activityId: EventData.sharedInstance.attendeeId)
+            let checkEventFeedback = DBManager.sharedInstance.checkEventFeedbackisAlreadySubmitted(activityId: EventData.sharedInstance.eventId)
             if !checkEventFeedback {
                 //Fetch data from Sqlite database
                 self.feedbackarray = DBManager.sharedInstance.fetchFeedbackDataFromDB() as! [FeedbackModel]
@@ -171,6 +171,9 @@ class FeedbackViewController: UIViewController, UITableViewDataSource, UITableVi
                     self?.submittedMessageLbl.text = Activity_Feedback_submitted
                     self?.topView.isHidden = true
                     self?.submittedMessageLbl.isHidden = false
+
+                    //Save feedback is given to this event
+                    DBManager.sharedInstance.saveFeedbackGivenToEventDataIntoDB(activityId: EventData.sharedInstance.eventId)
                 }
                 else {
 //                    NotificationCenter.default.addObserver(self, selector: #selector(self?.keyboardChange), name: .UIKeyboardWillShow, object: nil)
@@ -225,7 +228,7 @@ class FeedbackViewController: UIViewController, UITableViewDataSource, UITableVi
                 else {
                     self?.showStatusView(isSucess: false)
                     //Save feedback is given to this event
-                    DBManager.sharedInstance.saveFeedbackGivenToEventDataIntoDB(activityId: EventData.sharedInstance.eventId)
+                   // DBManager.sharedInstance.saveFeedbackGivenToEventDataIntoDB(activityId: EventData.sharedInstance.eventId)
                 }
             }
         }, errorBack: { error in
