@@ -105,7 +105,7 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func fetchAllUnreadNotificationMessages() {
         NetworkingHelper.getRequestFromUrl(name:Get_AllNotification_url, urlString: Get_AllNotification_url, callback: { [weak self] response in
             //print("\nEvent Theme Details : ",response)
-            //print("Notification data received : ",CommonModel.sharedInstance.getCurrentDateInMM())
+            print("Notification data received : ",response)
 
             let dataDict:[String: Any] = ["Order": 0, "Flag":Update_SideMenu_List]
             NotificationCenter.default.post(name: UpdateNotificationCount, object: nil, userInfo: dataDict)

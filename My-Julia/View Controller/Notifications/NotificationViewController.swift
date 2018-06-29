@@ -52,8 +52,15 @@ class NotificationViewController: UIViewController, UITableViewDelegate, UITable
 
     override func viewDidAppear(_ animated: Bool) {
 
+        //Update all notifcation as read
+        DBManager.sharedInstance.updateNotificationStatus()
+
+        //Update actiivty read/unread data count in side menu bar
+        let dataDict:[String: Any] = ["Order": self.view.tag, "Flag":Update_Broadcast_List]
+        NotificationCenter.default.post(name: UpdateNotificationCount, object: nil, userInfo: dataDict)
+
         //Update side menu notification count
-        self.notificationModelController.initializeModuleIndex(index : self.view.tag)
+       // self.notificationModelController.initializeModuleIndex(index : self.view.tag)
 
         //load data from db
         self.notificationModelController.loadItem()
@@ -90,6 +97,7 @@ class NotificationViewController: UIViewController, UITableViewDelegate, UITable
     // MARK: -  WebService Methods
 
     func getNotificationData() {
+
 
         notificationModelController.retrieveNotifications { [weak self] (success, error) in
             guard let strongSelf = self else { return }
@@ -128,7 +136,8 @@ class NotificationViewController: UIViewController, UITableViewDelegate, UITable
         cell.messageLabel.text = model.message
         cell.messageLabel.sizeToFit()
         cell.statusImg.isHidden  = model.isRead
-
+        print("model.title : ",model.title)
+        print("message : ",model.message)
         cell.timeLabel.text  =  CommonModel.sharedInstance.getDateAndTime(dateStr:model.cretedDate)
 
        let sucess =  self.notificationModelController.checkLoadMoreViewModel(at: indexPath.row)

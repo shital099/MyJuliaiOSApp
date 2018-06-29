@@ -121,9 +121,9 @@ class ActivityFeedViewModelController: NSObject {
 
         print("Activity feed Module index : ",self.moduleIndex)
 
-        //Update actiivty read/unread data count in side menu bar
-        let dataDict:[String: Any] = ["Order": moduleIndex, "Flag":Update_Activity_Feeds_List]
-        NotificationCenter.default.post(name: UpdateNotificationCount, object: nil, userInfo: dataDict)
+//        //Update actiivty read/unread data count in side menu bar
+//        let dataDict:[String: Any] = ["Order": moduleIndex, "Flag":Update_Activity_Feeds_List]
+//        NotificationCenter.default.post(name: UpdateNotificationCount, object: nil, userInfo: dataDict)
         // print("After load Data array count : ", self.dataArray.count)
     }
 

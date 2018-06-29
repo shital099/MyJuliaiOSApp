@@ -93,7 +93,6 @@ class AttendeeDetailsViewController: UIViewController, UITableViewDataSource, UI
         cModel.isGroupChat = false
         vc.chatGroupModel = cModel
         self.navigationController?.pushViewController(vc, animated: true)
-
     }
     
     // MARK: - UITableView Delegate Methods
@@ -109,18 +108,6 @@ class AttendeeDetailsViewController: UIViewController, UITableViewDataSource, UI
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-//        if section == 0 {
-//            return 1
-//        }
-//        else if section == 1 &&  (personModel.contactNo != "" || personModel.email != "" ){
-//            return 1
-//        }
-//        else if section == 2 && personModel.bioInfo != "" {
-//            return 1
-//        }
-//        else {
-//            return 0
-//        }
         if self.isSpeakerDetails == true && section == 3 {
             if personModel.activities.count == 0 {
                 return 1
@@ -138,14 +125,6 @@ class AttendeeDetailsViewController: UIViewController, UITableViewDataSource, UI
     {
         //Get Idetifier
         if indexPath.section == 0  {
-            //If speaker details and logged in attendee profile, hide chat and call buttons
-//            if isSpeakerDetails == true && self.personModel.personId == AttendeeInfo.sharedInstance.attendeeId {
-//                return 185
-//            }
-//            else {
-//                return 250
-//            }
-            
             return UITableViewAutomaticDimension
         }
         else if indexPath.section == 1 {

@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "My-Julia/Model/Sqlite Database/DBManager.swift"
-            timestampString = "551797853.96732"
+            timestampString = "551968183.274352"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "5394"
-            endingLineNumber = "5394"
+            startingLineNumber = "5397"
+            endingLineNumber = "5397"
             landmarkName = "saveFeedbackGivenActivityDataIntoDB(responce:)"
             landmarkType = "7">
          </BreakpointContent>

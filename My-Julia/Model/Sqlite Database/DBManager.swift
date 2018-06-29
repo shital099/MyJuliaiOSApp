@@ -172,7 +172,7 @@ class DBManager: NSObject {
                 let noti_sql = "CREATE TABLE IF NOT EXISTS Notifications (EventID text, AttendeeId text, notiId text, Title text, Description text, CreatedDate text, IsRead boolean default false,  UNIQUE (EventID, notiId, AttendeeId) ON CONFLICT REPLACE);"
 
                 //Create Activity Feeds table
-                let activityFeed_sql = "CREATE TABLE IF NOT EXISTS ActivityFeeds (id INTEGER PRIMARY KEY AUTOINCREMENT, EventID text, ActivityFeedID text, Message text, LikeCount text, CommentCount text, CreatedDate text, IsImageDeleted boolean default false, PostImagePath text, PostUserName text, PostUserImage text, PostUserId text, IsRead boolean default false, UNIQUE (EventID, ActivityFeedID) ON CONFLICT REPLACE);"
+                let activityFeed_sql = "CREATE TABLE IF NOT EXISTS ActivityFeeds (id INTEGER PRIMARY KEY AUTOINCREMENT, EventID text, ActivityFeedID text, AttendeeId text, Message text, LikeCount text, CommentCount text, CreatedDate text, IsImageDeleted boolean default false, PostImagePath text, PostUserName text, PostUserImage text, PostUserId text, IsRead boolean default false, UNIQUE (EventID, ActivityFeedID, AttendeeId) ON CONFLICT REPLACE);"
 
                 let activityFeedLikes_sql = "CREATE TABLE IF NOT EXISTS ActivityFeedsLikes (id INTEGER PRIMARY KEY AUTOINCREMENT, EventID text, ActivityFeedID text, AttendeeId text, Name text, IconUrl text, IsUserLike boolean default false, CreatedDate text, UNIQUE (EventID, ActivityFeedID, AttendeeId) ON CONFLICT REPLACE);"
 
@@ -706,8 +706,8 @@ class DBManager: NSObject {
 
                     //Save Notification List Profile
                     if (dict.value(forKey:"notificationlst") as? NSNull) == nil {
-                         self.saveNotificationDataIntoDB(response: dict.value(forKey: "notificationlst") as AnyObject)
-                       // sqlQuery += self.parseAndSaveNotificationDataIntoDB(response: dict.value(forKey: "notificationlst") as AnyObject)
+                        self.saveNotificationDataIntoDB(response: dict.value(forKey: "notificationlst") as AnyObject)
+                        // sqlQuery += self.parseAndSaveNotificationDataIntoDB(response: dict.value(forKey: "notificationlst") as AnyObject)
                     }
                     //Save WiFi List Profile
                     if (dict.value(forKey:"Wifi") as? NSNull) == nil {
@@ -717,11 +717,11 @@ class DBManager: NSObject {
                     //Save Map list
                     if (dict.value(forKey:"Map") as? NSNull) == nil {
                         self.saveMapDataIntoDB(response: dict.value(forKey:"Map") as AnyObject, isNoticationData: true)
-                       // sqlQuery += self.parseAndSaveMapDataIntoDB(response: dict.value(forKey:"Map") as AnyObject)
+                        // sqlQuery += self.parseAndSaveMapDataIntoDB(response: dict.value(forKey:"Map") as AnyObject)
                     }
                     //Save Document list
                     if (dict.value(forKey:"Documents") as? NSNull) == nil {
-                         self.saveDocumentsDataIntoDB(response: dict.value(forKey:"Documents") as AnyObject, isNoticationData: true)
+                        self.saveDocumentsDataIntoDB(response: dict.value(forKey:"Documents") as AnyObject, isNoticationData: true)
                         //sqlQuery += self.parseAndSaveDocumentDataIntoDB(response: dict.value(forKey:"Documents") as AnyObject)
                     }
                     //Save Activity Feeds list
@@ -729,19 +729,17 @@ class DBManager: NSObject {
                         self.saveActivityFeedDataIntoDB(response: dict.value(forKey:"ActivityFeeds") as AnyObject)
                     }
 
-                    //                        //Save Chat Attendee List
-                    //                        if (dict.value(forKey:"attChatList") as? NSNull) == nil {
-                    //                            print("Start Chat : ",CommonModel.sharedInstance.getCurrentDateInMM())
-                    //
-                    //                            //Delete chat list
-                    //                            self.updateChatListDataFromDB()
-                    //                            self.saveChatListIntoDB(response: dict.value(forKey:"attChatList") as AnyObject, isGroupChat: 0)
-                    //                            print("Start chat : ",CommonModel.sharedInstance.getCurrentDateInMM())
-                    //                        }
-                    //                        //Save Chat Group List
-                    //                        if (dict.value(forKey:"attGroupChatList") as? NSNull) == nil {
-                    //                            self.saveChatListIntoDB(response: dict.value(forKey:"attGroupChatList") as AnyObject, isGroupChat: 1)
-                    //                        }
+                    //Save Chat Attendee List
+                    if (dict.value(forKey:"attChatList") as? NSNull) == nil {
+                        print("Start Chat history : ",CommonModel.sharedInstance.getCurrentDateInMM())
+
+                        self.saveChatHistory(response: dict.value(forKey:"attChatList") as AnyObject)
+                        print("Start chat history: ",CommonModel.sharedInstance.getCurrentDateInMM())
+                    }
+                    //Save Chat Group List
+                    if (dict.value(forKey:"attGroupChatList") as? NSNull) == nil {
+                        self.saveChatGroupHistory(response: dict.value(forKey:"attGroupChatList") as AnyObject)
+                    }
                 }
             }
 
@@ -1783,7 +1781,7 @@ class DBManager: NSObject {
 
                 array.append(model)
 
-                self.updateNotificationStatus(notiId: model.id)
+               // self.updateNotificationStatus(notiId: model.id)
             }
             database.close()
         }
@@ -1805,18 +1803,18 @@ class DBManager: NSObject {
         return count
     }
 
-    func updateNotificationStatus(notiId : String) {
-        //if openDatabase() {
+    func updateNotificationStatus() {
+        if openDatabase() {
 
-        //Delete local data which is deleted from admin
-        do {
-            try database.executeUpdate("Update Notifications SET IsRead = ? Where notiId = ? AND EventID = ? AND AttendeeId = ?", values: [1, notiId, EventData.sharedInstance.eventId, EventData.sharedInstance.attendeeId])
-        } catch {
-            print("error = \(error)")
+            //Delete local data which is deleted from admin
+            do {
+                try database.executeUpdate("Update Notifications SET IsRead = ? Where EventID = ? AND AttendeeId = ?", values: [1, EventData.sharedInstance.eventId, EventData.sharedInstance.attendeeId])
+            } catch {
+                print("error = \(error)")
+            }
+
+            database.close()
         }
-
-        //   database.close()
-        //}
     }
 
     // MARK: - WiFi methods
@@ -2333,6 +2331,7 @@ class DBManager: NSObject {
             //                print("error = \(error)")
             //            }
             if !database.executeStatements(sqlQuery) {
+                print("Error in save chat history in db ",database.lastError(), database.lastErrorMessage())
             }
         }
         
@@ -2781,8 +2780,10 @@ class DBManager: NSObject {
                     let usericon = "" //self.isNullString(str: dict.value(forKey: "Name") as Any)
                     let userId = self.isNullString(str: dict.value(forKey: "AttendeeId") as Any)
                     let isRead = dict.value(forKey: "IsRead") as! Int
+                    //let attendeeId = self.isNullString(str: dict.value(forKey: "lstAttendeeId") as Any)
+                    let attendeeId = EventData.sharedInstance.attendeeId
 
-                    try database.executeUpdate("INSERT OR REPLACE INTO ActivityFeeds (EventID, ActivityFeedID, Message, LikeCount, CommentCount, CreatedDate, IsImageDeleted, PostImagePath, PostUserName, PostUserImage, PostUserId, IsRead) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", values: [eventId, aId ,message,likesCount, commentsCount, postDateStr, isDeleted, image, username, usericon, userId, isRead])
+                    try database.executeUpdate("INSERT OR REPLACE INTO ActivityFeeds (EventID, ActivityFeedID,AttendeeId, Message, LikeCount, CommentCount, CreatedDate, IsImageDeleted, PostImagePath, PostUserName, PostUserImage, PostUserId, IsRead) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", values: [eventId, aId ,attendeeId, message,likesCount, commentsCount, postDateStr, isDeleted, image, username, usericon, userId, isRead])
 
                 } catch {
                     print("error = \(error)")
@@ -2817,6 +2818,8 @@ class DBManager: NSObject {
                 var usericon = ""
                 var userId = ""
                 let isRead = dict.value(forKey: "IsRead") as! Int
+                let attendeeId = EventData.sharedInstance.attendeeId
+
 
                 if (dict.value(forKey: "FeedUser") as? NSNull) == nil {
                     let user = dict.value(forKey: "FeedUser") as! NSDictionary
@@ -2831,7 +2834,7 @@ class DBManager: NSObject {
                 }
 
                 do {
-                    try database.executeUpdate("INSERT OR REPLACE INTO ActivityFeeds (EventID, ActivityFeedID, Message, LikeCount, CommentCount, CreatedDate, IsImageDeleted, PostImagePath, PostUserName, PostUserImage, PostUserId, IsRead) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", values: [eventId, aId ,message,likesCount, commentsCount, postDateStr, isDeleted, image, username, usericon, userId, isRead])
+                    try database.executeUpdate("INSERT OR REPLACE INTO ActivityFeeds (EventID, ActivityFeedID, AttendeeId, Message, LikeCount, CommentCount, CreatedDate, IsImageDeleted, PostImagePath, PostUserName, PostUserImage, PostUserId, IsRead) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", values: [eventId, aId, attendeeId, message, likesCount, commentsCount, postDateStr, isDeleted, image, username, usericon, userId, isRead])
                 } catch {
                     print("error = \(error)")
                 }
@@ -2881,9 +2884,9 @@ class DBManager: NSObject {
 
         var count : Int = 0
         if openDatabase() {
-            let querySQL = "Select Count(IsRead) from ActivityFeeds Where IsRead = ? AND EventID = ?"
+            let querySQL = "Select Count(IsRead) from ActivityFeeds Where IsRead = ? AND EventID = ? AND AttendeeId = ?"
             var results:FMResultSet!
-            results = database.executeQuery(querySQL, withArgumentsIn: [0, EventData.sharedInstance.eventId])
+            results = database.executeQuery(querySQL, withArgumentsIn: [0, EventData.sharedInstance.eventId,EventData.sharedInstance.attendeeId])
             while results?.next() == true {
                 count = results?.object(forColumnIndex: 0) as! Int
             }
@@ -2892,10 +2895,10 @@ class DBManager: NSObject {
         return count
     }
 
-    func updateActivityFeedNotificationStatus(feedId : String) {
+    func updateActivityFeedNotificationStatus() {
         do {
-            // try database.executeUpdate("Update ActivityFeeds SET IsRead = ? Where EventID = ?", values: [1, EventData.sharedInstance.eventId])
-            try database.executeUpdate("Update ActivityFeeds SET IsRead = ? Where ActivityFeedID = ? AND EventID = ?", values: [1, feedId, EventData.sharedInstance.eventId])
+             try database.executeUpdate("Update ActivityFeeds SET IsRead = ? Where EventID = ? AND AttendeeId = ?", values: [1, EventData.sharedInstance.eventId, EventData.sharedInstance.attendeeId])
+           // try database.executeUpdate("Update ActivityFeeds SET IsRead = ? Where ActivityFeedID = ? AND EventID = ?", values: [1, feedId, EventData.sharedInstance.eventId])
         } catch {
             print("error = \(error)")
         }
@@ -2937,7 +2940,7 @@ class DBManager: NSObject {
         
         if openDatabase() {
             
-            let querySQL = "Select ActivityFeeds.*, ActivityFeedsLikes.IsUserLike from ActivityFeeds LEFT JOIN ActivityFeedsLikes ON ActivityFeeds.ActivityFeedID = ActivityFeedsLikes.ActivityFeedID AND ActivityFeedsLikes.AttendeeId = \'\(EventData.sharedInstance.attendeeId)' where ActivityFeeds.EventID = \'\(EventData.sharedInstance.eventId)' Order by CreatedDate DESC limit \(offset),\(limit)"
+            let querySQL = "Select ActivityFeeds.*, ActivityFeedsLikes.IsUserLike from ActivityFeeds LEFT JOIN ActivityFeedsLikes ON ActivityFeeds.ActivityFeedID = ActivityFeedsLikes.ActivityFeedID AND ActivityFeedsLikes.AttendeeId = \'\(EventData.sharedInstance.attendeeId)' where ActivityFeeds.EventID = \'\(EventData.sharedInstance.eventId)' AND ActivityFeeds.AttendeeId = \'\(EventData.sharedInstance.attendeeId)' Order by CreatedDate DESC limit \(offset),\(limit)"
             //  let querySQL = "Select * from ActivityFeeds where EventID = \'\(EventData.sharedInstance.eventId)'"
             let results:FMResultSet? = database.executeQuery(querySQL, withArgumentsIn: nil)
             
@@ -2964,7 +2967,7 @@ class DBManager: NSObject {
                 }
 
                 //Update activity feed read status
-                DBManager.sharedInstance.updateActivityFeedNotificationStatus(feedId: model.id)
+                //DBManager.sharedInstance.updateActivityFeedNotificationStatus(feedId: model.id)
 
                 array.append(model)
             }

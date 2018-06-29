@@ -75,9 +75,9 @@ class NotificationViewModelController: NSObject {
 
         print("Module index : ",self.moduleIndex)
 
-        //Update actiivty read/unread data count in side menu bar
-        let dataDict:[String: Any] = ["Order": moduleIndex, "Flag":Update_Broadcast_List]
-        NotificationCenter.default.post(name: UpdateNotificationCount, object: nil, userInfo: dataDict)
+//        //Update actiivty read/unread data count in side menu bar
+//        let dataDict:[String: Any] = ["Order": moduleIndex, "Flag":Update_Broadcast_List]
+//        NotificationCenter.default.post(name: UpdateNotificationCount, object: nil, userInfo: dataDict)
     }
 
   //  task.resume()
