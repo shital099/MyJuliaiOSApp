@@ -247,6 +247,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if isAppLogin == false {
             return
         }
+        print("Notification received time : ",CommonModel.sharedInstance.getCurrentDateInMM())
 
         //Remove all badges number
         UIApplication.shared.applicationIconBadgeNumber = 0
@@ -277,6 +278,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
 //        self.checkNotificationAllowStatus(application: application, userInfo: userInfo)
+        print("Notification end time : ",CommonModel.sharedInstance.getCurrentDateInMM())
 
     }
 
@@ -326,6 +328,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func receivedNotification(application: UIApplication, userInfo : [AnyHashable : Any], pushNotiAllow : Bool ) {
 
         print("pushNotiAllow : ",pushNotiAllow)
+        var eventId = ""
 
         //Save notification dat into db and navigate to screen
         if (userInfo["Chat"] != nil) {
@@ -335,6 +338,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let chatM = DBManager.sharedInstance.convertToJsonData(text: body as! String) as? NSDictionary
             let message = DBManager.sharedInstance.isNullString(str: chatM?["Message"] as Any)
             var decryptedMsg = (CryptLib.sharedManager() as AnyObject).decryptCipherText(with: message)
+
+            eventId = chatM?["EventId"] as! String
 
             //Chat Image notification
             if alertBody!["alert"] as! String == "Photo" || decryptedMsg == ""{
@@ -360,43 +365,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         else if (userInfo["Notification"] != nil) {
             let alertBody = DBManager.sharedInstance.convertToJsonData(text: userInfo["Notification"] as! String) as! NSDictionary
+            eventId = alertBody["EventId"] as! String
             DBManager.sharedInstance.saveBroadCastNotification(data: alertBody)
         }
         else if (userInfo["Wifi"] != nil) {
             let alertBody = DBManager.sharedInstance.convertToJsonData(text: userInfo["Wifi"] as! String) as! NSDictionary
+            eventId = alertBody["EventID"] as! String
             DBManager.sharedInstance.saveWifiDataIntoDB(response: alertBody, isNoticationData: false)
         }
         else if (userInfo["Activity Feeds"] != nil) {
             let alertBody = DBManager.sharedInstance.convertToJsonData(text: userInfo["Activity Feeds"] as! String) as! NSDictionary
+            eventId = alertBody["EventId"] as! String
             DBManager.sharedInstance.saveActivityFeedDataIntoDB(response: alertBody)
         }
         else if (userInfo["Map"] != nil) {
             let alertBody = DBManager.sharedInstance.convertToJsonData(text: userInfo["Map"] as! String) as! NSDictionary
+            eventId = alertBody["EventID"] as! String
             DBManager.sharedInstance.saveMapDataIntoDB(response: alertBody, isNoticationData: false)
         }
         else if (userInfo["Documents"] != nil) {
             let alertBody = DBManager.sharedInstance.convertToJsonData(text: userInfo["Documents"] as! String) as! NSDictionary
+            eventId = alertBody["EventId"] as! String
             DBManager.sharedInstance.saveDocumentsDataIntoDB(response: alertBody, isNoticationData: false)
         }
-
-//        let state : UIApplicationState = application.applicationState
-//        if (state == UIApplicationState.background ) {
-//                        print("App is background")
-//                        // app is background
-//                        self.checkNotificationAllowStatus(application: application, userInfo: userInfo)
-//                        completionHandler(UIBackgroundFetchResult.noData);
-//                    }
-//                    else if (state == UIApplicationState.inactive && !self.appIsStarting) {
-//                        print("App is inactive")
-//                        // user tapped notification
-//                        self.checkNotificationAllowStatus(application: application, userInfo: userInfo)
-//                        completionHandler(UIBackgroundFetchResult.noData);
-//                    } else {
-//                        // app is active
-//                        print("App is active")
-//                        self.checkNotificationAllowStatus(application: application, userInfo: userInfo)
-//                        completionHandler(UIBackgroundFetchResult.newData);
-//                    }
 
         let moduleId = userInfo["ModuleId"] as? String
         if self.appIsStarting == false {
@@ -405,19 +396,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             //If notication is allow for application then show pop
             if pushNotiAllow == true {
                 if !isAppOpenFirstTime {
-                    self.showNotificationAlertMessage(title: APP_NAME, message:  alertBody!["alert"] as! String, application: application)
+                    //When notiifcation recived of same logged in event then only show notification pop up
+                    if eventId == EventData.sharedInstance.eventId {
+                        self.showNotificationAlertMessage(title: APP_NAME, message:  alertBody!["alert"] as! String, application: application)
+                    }
                 }
             }
-
-            let imageDataDict:[String: String] = ["moduleId": moduleId!]
-            NotificationCenter.default.post(name: ShowNotificationCount, object: nil, userInfo: imageDataDict)
+            if eventId == EventData.sharedInstance.eventId {
+                let imageDataDict:[String: String] = ["moduleId": moduleId!]
+                NotificationCenter.default.post(name: ShowNotificationCount, object: nil, userInfo: imageDataDict)
+            }
         }
         else {
-            let imageDataDict:[String: String] = ["moduleId": moduleId!]
-            NotificationCenter.default.post(name: ShowNotificationCount, object: nil, userInfo: imageDataDict)
-           // if !isAppOpenFirstTime {
+            if eventId == EventData.sharedInstance.eventId {
+                let imageDataDict:[String: String] = ["moduleId": moduleId!]
+                NotificationCenter.default.post(name: ShowNotificationCount, object: nil, userInfo: imageDataDict)
                 NotificationCenter.default.post(name: OtherModuleNotification, object: nil, userInfo: imageDataDict)
-           // }
+            }
         }
     }
 

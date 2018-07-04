@@ -86,6 +86,10 @@ class FeedbackViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.endEditing(true)
     }
 
+    override func viewDidDisappear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver(keyboardChange)
+    }
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -116,8 +120,10 @@ class FeedbackViewController: UIViewController, UITableViewDataSource, UITableVi
             }
             
             tableView.contentInset = contentInsets
-            
-            tableView.scrollToRow(at: editingIndexPath as IndexPath, at: .top, animated: true)
+            print("editingIndexPath : ",editingIndexPath)
+            if editingIndexPath != nil {
+                tableView.scrollToRow(at: editingIndexPath as IndexPath, at: .top, animated: true)
+            }
             tableView.scrollIndicatorInsets = tableView.contentInset
         }
         else{

@@ -12,9 +12,9 @@ import UIKit
 //BASE URL AND Auth Key
 //let BASE_URL = "http://srv01:2300/" 
 
-//let BASE_URL = "http://amaresh.gcotechcenter.local:8000/"     //local machine
+let BASE_URL = "http://amaresh.gcotechcenter.local:8000/"     //local machine
 //let BASE_URL = "http://srv01.gcotechcenter.local:1400/"  //SRV 1
-let BASE_URL = "http://srv01.gcotechcenter.local:2400/"     //SRV 2
+//let BASE_URL = "http://srv01.gcotechcenter.local:2400/"     //SRV 2
 //let BASE_URL = "https://apps.gcotechcenter.com/"
 
 //let BASE_URL = "http://srv01.gcotechcenter.local:5400/"     //Production4
@@ -206,9 +206,10 @@ class NetworkingHelper: NSObject {
         let manager = AFHTTPSessionManager()
         manager.requestSerializer = AFJSONRequestSerializer()
 
-        if urlString != Get_AuthToken_Url {
+        if urlString != Get_AuthToken_Url || urlString != Get_ValidateOTP_Url {
             manager.requestSerializer.setValue("Basic ".appending(EventData.sharedInstance.auth_token), forHTTPHeaderField: "Authorization")
         }
+
         manager.requestSerializer.setValue("application/json", forHTTPHeaderField: "Content-Type")
         manager.requestSerializer.setValue("application/json", forHTTPHeaderField: "Accept")
         
@@ -224,7 +225,7 @@ class NetworkingHelper: NSObject {
             }
             else if urlString == Chat_Refresh_Chat_history {
                 //Add Question Activity List in database
-                DBManager.sharedInstance.saveChatHistory(response: responseObject as AnyObject)
+                DBManager.sharedInstance.saveChatHistory(response: responseObject as AnyObject, isNoticationData: false)
                 callback(responseObject as AnyObject)
             }
             else if urlString == Get_Speaker_Activity_url {
@@ -239,11 +240,11 @@ class NetworkingHelper: NSObject {
             }
             else if urlString == Chat_History {
                 // DBManager.sharedInstance.deleteChatHistory()
-                DBManager.sharedInstance.saveChatHistory(response: responseObject as AnyObject)
+                DBManager.sharedInstance.saveChatHistory(response: responseObject as AnyObject,isNoticationData: false)
                 callback(responseObject as AnyObject)
             }
             else if urlString == Chat_Group_History {
-                DBManager.sharedInstance.saveChatGroupHistory(response: responseObject as AnyObject)
+                DBManager.sharedInstance.saveChatGroupHistory(response: responseObject as AnyObject,isNoticationData: false)
                 callback(responseObject as AnyObject)
             }
             else {

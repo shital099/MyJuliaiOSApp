@@ -97,16 +97,16 @@ class PostTextViewController: UIViewController, UITextViewDelegate {
         
         let event = EventData.sharedInstance
 
-        // Create an instance of HTMLConverter.
-        let converter : HTMLConverter = HTMLConverter()
+//        // Create an instance of HTMLConverter.
+//        let converter : HTMLConverter = HTMLConverter()
+//
+//        // Prepare an input text.
+//        let input : String = textField.text
+//
+//        // Convert the plain text into an HTML text using the converter.
+//        let output : String = converter.toHTML(input)
 
-        // Prepare an input text.
-        let input : String = textField.text
-
-        // Convert the plain text into an HTML text using the converter.
-        let output : String = converter.toHTML(input)
-        
-        let paramDict : NSMutableDictionary? = ["Comment":output ,"AttendeeId":AttendeeInfo.sharedInstance.attendeeId, "EventId":event.eventId]
+        let paramDict : NSMutableDictionary? = ["Comment":textField.text ,"AttendeeId":AttendeeInfo.sharedInstance.attendeeId, "EventId":event.eventId]
 
         NetworkingHelper.postData(urlString:Post_Activity_Feed_url, param:paramDict as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { [weak self] response in
             //dissmiss Indicator

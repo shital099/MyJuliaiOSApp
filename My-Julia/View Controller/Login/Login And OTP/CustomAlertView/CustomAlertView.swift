@@ -52,7 +52,6 @@ class CustomAlertView: UIViewController, UITextFieldDelegate {
 
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: .UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: .UIKeyboardWillHide, object: nil)
-
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -60,7 +59,12 @@ class CustomAlertView: UIViewController, UITextFieldDelegate {
         setupView()
         animateView()
     }
-    
+
+    override func viewDidDisappear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver(keyboardWillShow)
+        NotificationCenter.default.removeObserver(keyboardWillHide)
+    }
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         view.layoutIfNeeded()
@@ -175,14 +179,6 @@ class CustomAlertView: UIViewController, UITextFieldDelegate {
 
             if responseCode == 0 {
 
-                let dict = response.value(forKey: "responseMsg") as! NSDictionary
-                let event = EventData.sharedInstance
-                event.eventId = dict.value(forKey: "EventId") as! String
-                event.auth_token = dict.value(forKey: "token") as! String
-                event.attendeeId = dict.value(forKey: "AttendeeId") as! String
-                event.attendeeStatus = dict.value(forKey: "IsAccept") as! Bool
-                event.attendeeCode = (self?.attendeeCodeTextField.text!)!
-
                 self?.attendeeCodeTextField.resignFirstResponder()
                 self?.loginView.isHidden = true
                 self?.otpView.isHidden = false
@@ -213,7 +209,8 @@ class CustomAlertView: UIViewController, UITextFieldDelegate {
 
     func validateOTP() {
 
-        let parameters : NSDictionary = [ "EventId": EventData.sharedInstance.eventId, "OTPCode":self.otpTextField.text!, "AttendeeId": EventData.sharedInstance.attendeeId,]
+        let parameters : NSDictionary = [ "EventId": self.eventId, "OTPCode":self.otpTextField.text!, "AttendeeCode": self.attendeeCodeTextField.text!]
+        print("Validate OTP request : ",parameters)
 
         NetworkingHelper.postData(urlString:Get_ValidateOTP_Url, param:parameters, withHeader: false, isAlertShow: true, controller:self, callback: { [weak self] response in
 
@@ -225,6 +222,15 @@ class CustomAlertView: UIViewController, UITextFieldDelegate {
 //            self?.dismiss(animated: true, completion: nil)
 
             if responseCode == 0 {
+
+                let dict = response.value(forKey: "responseMsg") as! NSDictionary
+                let event = EventData.sharedInstance
+                event.eventId = dict.value(forKey: "EventId") as! String
+                event.auth_token = dict.value(forKey: "token") as! String
+                event.attendeeId = dict.value(forKey: "AttendeeId") as! String
+                event.attendeeStatus = dict.value(forKey: "IsAccept") as! Bool
+                event.attendeeCode = (self?.attendeeCodeTextField.text!)!
+
                 self?.attendeeCodeTextField.resignFirstResponder()
                 self?.delegate?.loginButtonTapped(selectedOption: "", textFieldValue: (self?.attendeeCodeTextField.text)!)
                 self?.dismiss(animated: true, completion: nil)

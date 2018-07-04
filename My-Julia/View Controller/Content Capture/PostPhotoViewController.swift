@@ -80,15 +80,15 @@ class PostPhotoViewController: UIViewController, UITextViewDelegate {
 
         // print("base64String : ", base64String ?? "")
 
-        // Create an instance of HTMLConverter.
-        let converter : HTMLConverter = HTMLConverter()
-
-        // Prepare an input text.
-        let input : String = textView.text
-
-        // Convert the plain text into an HTML text using the converter.
-        let output : String = converter.toHTML(input)
-        print("html Output : ",output)
+//        // Create an instance of HTMLConverter.
+//        let converter : HTMLConverter = HTMLConverter()
+//
+//        // Prepare an input text.
+//        let input : String = textView.text
+//
+//        // Convert the plain text into an HTML text using the converter.
+//        let output : String = converter.toHTML(input)
+      //  print("html Output : ",output)
 
         //Show Indicator
         CommonModel.sharedInstance.showActitvityIndicator()
@@ -97,7 +97,7 @@ class PostPhotoViewController: UIViewController, UITextViewDelegate {
                                                 "ThubmnailImgData":resizedImageStr ,
                                                 "ContentType": "image/jpeg",
                                                 "ImgName": "",
-                                                "Comment":output ,
+                                                "Comment":textView.text ,
                                                 "AttendeeId":AttendeeInfo.sharedInstance.attendeeId,
                                                 "EventId":EventData.sharedInstance.eventId]
        // print("paramDict",              paramDict )

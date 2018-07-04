@@ -116,8 +116,6 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
     func addNotificationObserver()  {
         //Change notification and chat message read/unread count
-//        NotificationCenter.default.addObserver(self, selector:#selector(MenuViewController.changeSideMenuCountInSideMenu(notification:)), name:BroadcastNotification, object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(MenuViewController.changeSideMenuCountInSideMenu(notification:)), name:ChatNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(MenuViewController.openNotificationModuleScreenInSideMenu(notification:)), name:OtherModuleNotification, object: nil)
 
         NotificationCenter.default.addObserver(self, selector: #selector(MenuViewController.changeSideMenuUnreadMessageCount(notification:)), name:ShowNotificationCount, object: nil)
@@ -994,6 +992,7 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
 //                self.tableView.reloadRows(at: [indexPath as IndexPath], with: UITableViewRowAnimation.automatic)
             }
         }
+        print("Reload side menu count - ",CommonModel.sharedInstance.getCurrentDateInMM())
 
         self.tableView.reloadData()
     }

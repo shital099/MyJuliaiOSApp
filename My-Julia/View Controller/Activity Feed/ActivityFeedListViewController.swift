@@ -92,14 +92,7 @@ class ActivityFeedListViewController: UIViewController, UITableViewDataSource, U
     override func viewDidAppear(_ animated: Bool) {
 
         //Update side menu notification count
-     //   self.feedsModelController.initializeModuleIndex(index : self.view.tag)
-
-        //Update all notifcation as read
-        DBManager.sharedInstance.updateActivityFeedNotificationStatus()
-        
-        //Update actiivty read/unread data count in side menu bar
-        let dataDict:[String: Any] = ["Order": self.view.tag, "Flag":Update_Activity_Feeds_List]
-        NotificationCenter.default.post(name: UpdateNotificationCount, object: nil, userInfo: dataDict)
+        self.feedsModelController.initializeModuleIndex(index : self.view.tag)
 
         if self.isRefreshList == true {
             //load data from db
@@ -117,6 +110,15 @@ class ActivityFeedListViewController: UIViewController, UITableViewDataSource, U
             
             self.isRefreshList = false
         }
+
+//        print("start updating feed count - ",CommonModel.sharedInstance.getCurrentDateInMM())
+//
+//        //Update all notifcation as read
+//        DBManager.sharedInstance.updateActivityFeedNotificationStatus()
+//
+//        //Update actiivty read/unread data count in side menu bar
+//        let dataDict:[String: Any] = ["Order": self.view.tag, "Flag":Update_Activity_Feeds_List]
+//        NotificationCenter.default.post(name: UpdateNotificationCount, object: nil, userInfo: dataDict)
     }
     
     override func viewWillDisappear(_ animated: Bool) {

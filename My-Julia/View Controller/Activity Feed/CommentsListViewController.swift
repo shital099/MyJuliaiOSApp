@@ -217,7 +217,7 @@ class CommentsListViewController: UIViewController, UITableViewDelegate, UITable
         // Convert the plain text into an HTML text using the converter.
         let output : String = converter.toHTML(input)
 
-        let paramDict = ["ActivityFeedId": feedModel.id,"comment":output,"AttendeeId":AttendeeInfo.sharedInstance.attendeeId] as [String : Any]
+        let paramDict = ["ActivityFeedId": feedModel.id,"comment":self.commentTextView.text,"AttendeeId":AttendeeInfo.sharedInstance.attendeeId] as [String : Any]
 
         NetworkingHelper.postData(urlString:Post_Activity_Comment_url, param:paramDict as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { [weak self] response in
             

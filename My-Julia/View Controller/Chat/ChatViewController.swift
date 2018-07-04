@@ -501,12 +501,11 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
     func refreshChatHistoryList() {
         
         let paramDict = ["FromId":AttendeeInfo.sharedInstance.attendeeId  ,"ToId":self.chatGroupModel.groupId, "EventId":EventData.sharedInstance.eventId, "HistoryDate" : "", "Seconds": Chat_History_Time] as [String : Any]
-        print("Refresh request : ",paramDict)
 
         NetworkingHelper.postData(urlString: Chat_Refresh_Chat_history, param:paramDict as AnyObject, withHeader: false, isAlertShow: false, controller:self, callback: { [weak self] response in
 
-            print("Refresh Chat list responce : ",response)
-            
+            print("Refresh chat history responce : ",response)
+
             //            let listArray:[UUMessageFrame] = DBManager.sharedInstance.fetchChatHistoryMessages(groupId: self.chatGroupModel.groupId, fromId: self.chatGroupModel.fromId, isGroupChat: self.chatGroupModel.isGroupChat) as! [UUMessageFrame]
             //            self.chatModel.dataSource = NSMutableArray(array: listArray)
             //            self.chatTableView?.reloadData()
@@ -617,8 +616,6 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
         //            var newFrame : CGRect = IFView.frame;
         //            newFrame.origin.y = keyboardEndFrame.origin.y - newFrame.size.height;
         //            IFView.frame = newFrame;
-
-        print("self.view.frame.size.width : ",self.view.frame.size.width)
         
         newFrame.size.width = self.view.frame.size.width
         IFView.frame = newFrame;

@@ -343,7 +343,6 @@ class DBManager: NSObject {
     }
     
     func saveAllEventDataIntoDB(response: AnyObject, apiNname: String) {
-        print(" Before insertion all module into db : ", CommonModel.sharedInstance.getCurrentDateInMM())
 
         if openDatabase() {
             self.database.beginTransaction()
@@ -505,7 +504,6 @@ class DBManager: NSObject {
         }
         database.commit()
         database.close()
-        print(" After insertion all module into db : ", CommonModel.sharedInstance.getCurrentDateInMM())
     }
 
     /*func saveAllEventDataIntoDB(response: AnyObject, apiNname: String) {
@@ -733,12 +731,12 @@ class DBManager: NSObject {
                     if (dict.value(forKey:"attChatList") as? NSNull) == nil {
                         print("Start Chat history : ",CommonModel.sharedInstance.getCurrentDateInMM())
 
-                        self.saveChatHistory(response: dict.value(forKey:"attChatList") as AnyObject)
+                        self.saveChatHistory(response: dict.value(forKey:"attChatList") as AnyObject, isNoticationData: true)
                         print("Start chat history: ",CommonModel.sharedInstance.getCurrentDateInMM())
                     }
                     //Save Chat Group List
                     if (dict.value(forKey:"attGroupChatList") as? NSNull) == nil {
-                        self.saveChatGroupHistory(response: dict.value(forKey:"attGroupChatList") as AnyObject)
+                        self.saveChatGroupHistory(response: dict.value(forKey:"attGroupChatList") as AnyObject, isNoticationData: true)
                     }
                 }
             }
@@ -751,7 +749,6 @@ class DBManager: NSObject {
             print(" AFTER insertion notification into db : ", CommonModel.sharedInstance.getCurrentDateInMM())
         }
     }
-
 
     // MARK: - Login attendee details methods
 
@@ -1337,6 +1334,7 @@ class DBManager: NSObject {
                 do {
                     let  dict = response as! NSDictionary
                     let id = self.isNullString(str: dict.value(forKey: "Id") as Any)
+                    let eventId = self.isNullString(str: dict.value(forKey: "EventID") as Any)
                     let location = self.isNullString(str: dict.value(forKey: "Location") as Any)
                     let image = self.appendImagePath(path: dict.value(forKey: "ImagePath") as Any)
                     let date = self.isNullString(str: dict.value(forKey: "CreatedDate") as Any)
@@ -1555,7 +1553,6 @@ class DBManager: NSObject {
     // MARK: - Documents methods
     
     func saveDocumentsDataIntoDB(response: AnyObject, isNoticationData: Bool) {
-        let eventId = EventData.sharedInstance.eventId
 
         //Notification data save into DB
         if response is Dictionary<String, Any> {
@@ -1565,6 +1562,7 @@ class DBManager: NSObject {
                 do {
                     let  dict = response as! NSDictionary
                     let docId = self.isNullString(str: dict.value(forKey: "DocId") as Any)
+                    let eventId = self.isNullString(str: dict.value(forKey: "EventId") as Any)
                     let title = self.isNullString(str: dict.value(forKey: "Title") as Any)
                     let desc = self.isNullString(str: dict.value(forKey: "Description") as Any)
                     let sDate = self.isNullString(str: dict.value(forKey: "FromDateTime") as Any)
@@ -1583,6 +1581,8 @@ class DBManager: NSObject {
         }
 
         else {
+            let eventId = EventData.sharedInstance.eventId
+
             //when you are saving data at the time login delete previous data then insert new data
             if isNoticationData == false {
 
@@ -1741,10 +1741,9 @@ class DBManager: NSObject {
     func saveBroadCastNotification(data: NSDictionary) {
 
         if openDatabase() {
-            let eventId = EventData.sharedInstance.eventId
-
             do {
                 let id = data.value(forKey: "Id") as! String
+                let eventId = data.value(forKey: "EventId") as! String
                 let attendeeId = data.value(forKey: "AttendeeId") as! String
                 let title = self.isNullString(str: data.value(forKey: "Title") as Any)
                 let desc = self.isNullString(str: data.value(forKey: "Message") as Any)
@@ -1820,7 +1819,6 @@ class DBManager: NSObject {
     // MARK: - WiFi methods
 
     func saveWifiDataIntoDB(response: AnyObject, isNoticationData: Bool) {
-        let eventId = EventData.sharedInstance.eventId
         print("Wifi details : ",response)
 
         //Notification data save into DB
@@ -1833,6 +1831,7 @@ class DBManager: NSObject {
                 //Notification data save into DB
                 do {
                     let  dict = response as! NSDictionary
+                    let eventId = self.isNullString(str: dict.value(forKey: "EventID") as Any)
                     let id = self.isNullString(str: dict.value(forKey: "Id") as Any)
                     let name = self.isNullString(str: dict.value(forKey: "LocationName") as Any)
                     let network = self.isNullString(str: dict.value(forKey: "Network") as Any)
@@ -1853,6 +1852,7 @@ class DBManager: NSObject {
         }
         else {
             var sqlQuery = ""
+            let eventId = EventData.sharedInstance.eventId
 
             //when you are saving data at the time login delete previous data then insert new data
             if isNoticationData == false {
@@ -2110,11 +2110,11 @@ class DBManager: NSObject {
     func saveChatNotificationMessageIntoDB(response: AnyObject) {
         if openDatabase() {
 
-            let eventId = EventData.sharedInstance.eventId
+           // let eventId = EventData.sharedInstance.eventId
             let attendeeId = EventData.sharedInstance.attendeeId
 
             let  dict = response as! NSDictionary
-
+            let eventId = dict.value(forKey: "EventId") as! String
             var groupId = ""
             var fromId = ""
             var toId = ""
@@ -2251,177 +2251,161 @@ class DBManager: NSObject {
     //        database.close()
     //    }
 
-    func saveChatHistory(response: AnyObject) {
-        
-        if openDatabase() {
-            database.beginTransaction()
-            
-            let eventId = EventData.sharedInstance.eventId
-            let attendeeId = EventData.sharedInstance.attendeeId
-            //If fetching whole chat history then only remove previous chat
-            //            if isChatHistory {
-            //                //Delete local chat list data
-            //                do {
-            //                    try database.executeUpdate("DELETE FROM ChatHistory WHERE GroupId = ? AND EventID = ?", values: [groupId, eventId])
-            //
-            //                } catch {
-            //                    print("error = \(error)")
-            //                }
-            //            }
-
-            var sqlQuery = ""
-            var groupId = ""
-
-            for item in response as! NSArray {
-                
-                let  dict = item as! NSDictionary
-                var isGroupChat = 0
-
-                //Group history
-                if (dict.value(forKey: "GroupChatId") as? NSNull) == nil  {
-                    groupId = dict.value(forKey: "GroupChatId") as! String
-                    isGroupChat = 1
-                }
-                else {
-                    groupId = dict.value(forKey: "ToId") as! String
-                }
-                
-                let chatId = dict.value(forKey: "ChatId") as! String
-                let createdBy = dict.value(forKey: "CreatedBy") as! String
-                let fromId = dict.value(forKey: "FromId") as! String
-                let toId = dict.value(forKey: "ToId") as! String
-                let createdDateStr = dict.value(forKey: "CreatedDate") as! String
-                let modifiedDateStr = dict.value(forKey: "CreatedDate") as! String
-                let message = self.isNullString(str: dict.value(forKey: "Message") as Any)
-                let name = self.isNullString(str: dict.value(forKey: "FromName") as Any)
-                let iconImage = self.appendImagePath(path: dict.value(forKey: "FromIconUrl") as Any)
-                let pictureImage = self.appendImagePath(path: dict.value(forKey: "ImageUrl") as Any)
-                let toName = self.isNullString(str: dict.value(forKey: "ToName") as Any)
-                let toIconUrl = self.appendImagePath(path: dict.value(forKey: "ToIconUrl") as Any)
-                // let isFromDeleted = dict.value(forKey: "FromDeleted") as! Int
-                //  let isToDeleted = dict.value(forKey: "ToDeleted") as! Int
-                let isDeleted = 0 //dict.value(forKey: "FromDeleted") as! Int
-                var isRead = dict.value(forKey: "IsRead") as! Int
-                
-                //update read message status
-                if createdBy == EventData.sharedInstance.attendeeId {
-                    isRead = 1
-                }
-
-                var type = 0
-                if (dict.value(forKey: "ImageUrl") as? NSNull) == nil {
-                    type = 1
-                }
-                
-                var fromMe = 1
-                //Check message frame
-                if AttendeeInfo.sharedInstance.attendeeId == toId {
-                    fromMe = 0
-                }
-                
-                sqlQuery += "INSERT OR REPLACE INTO ChatHistory (EventID,AttendeeId, GroupId, FromId, ChatMessageId, CreatedBy, ToId , CreatedDate , ModifiedDate, UserIconUrl, UserName,  ToUserName, ToIconUrl , MessageIconUrl, Message, MessageType, MessageFromMe, isGroupChat, isDeleted ,  IsRead ) VALUES ('\(eventId)','\(attendeeId)','\(groupId)', '\(fromId)', '\(chatId)', '\(createdBy)', '\(toId)','\(createdDateStr)', '\(modifiedDateStr)', \"\(iconImage)\", \"\(name)\", \"\(toName)\", \"\(toIconUrl)\", \"\(pictureImage)\", \"\(message)\", '\(type)', \(fromMe), '\(isGroupChat)', \(isDeleted),\(isRead));"
-
-
-            }
-
-            //            //Update previous chat history data
-            //            do {
-            //                try database.executeUpdate("Update ChatHistory SET isDeleted = 1 Where GroupId = ? AND EventID = ?", values: [groupId, EventData.sharedInstance.eventId])
-            //            } catch {
-            //                print("error = \(error)")
-            //            }
-            if !database.executeStatements(sqlQuery) {
-                print("Error in save chat history in db ",database.lastError(), database.lastErrorMessage())
+    func saveChatHistory(response: AnyObject, isNoticationData: Bool) {
+        if isNoticationData == false {
+            if openDatabase() {
+                database.beginTransaction()
+                self.parseAndSaveChatMessage(response: response)
+                database.commit()
+                database.close()
             }
         }
-        
-        database.commit()
-        database.close()
+        else {
+            self.parseAndSaveChatMessage(response: response)
+        }
     }
 
-    func saveChatGroupHistory(response: AnyObject) {
+    func parseAndSaveChatMessage(response: AnyObject) {
 
-        if openDatabase() {
-            database.beginTransaction()
+        let attendeeId = EventData.sharedInstance.attendeeId
+        var sqlQuery = ""
+        var groupId = ""
 
-            let eventId = EventData.sharedInstance.eventId
-            let attendeeId = EventData.sharedInstance.attendeeId
+        for item in response as! NSArray {
 
-            //If fetching whole chat history then only remove previous chat
-            //            if isChatHistory {
-            //                //Delete local chat list data
-            //                do {
-            //                    try database.executeUpdate("DELETE FROM ChatHistory WHERE GroupId = ? AND EventID = ?", values: [groupId, eventId])
-            //
-            //                } catch {
-            //                    print("error = \(error)")
-            //                }
-            //            }
+            let  dict = item as! NSDictionary
+            var isGroupChat = 0
 
-            var sqlQuery = ""
-            var groupId = ""
-
-            for item in response as! NSArray {
-
-                let  dict = item as! NSDictionary
-                var isGroupChat = 0
-
-                //Group history
-                if (dict.value(forKey: "GroupChatId") as? NSNull) == nil  {
-                    groupId = dict.value(forKey: "GroupChatId") as! String
-                    isGroupChat = 1
-                }
-                else {
-                    groupId = dict.value(forKey: "ToId") as! String
-                }
-
-                let chatId = dict.value(forKey: "ChatId") as! String
-                let createdBy = dict.value(forKey: "CreatedBy") as! String
-                let fromId = dict.value(forKey: "FromId") as! String
-                let toId = dict.value(forKey: "ToId") as! String
-                let createdDateStr = dict.value(forKey: "CreatedDate") as! String
-                let modifiedDateStr = dict.value(forKey: "CreatedDate") as! String
-                let message = self.isNullString(str: dict.value(forKey: "Message") as Any)
-                let name = self.isNullString(str: dict.value(forKey: "FromName") as Any)
-                let iconImage = self.appendImagePath(path: dict.value(forKey: "FromIconUrl") as Any)
-                let pictureImage = self.appendImagePath(path: dict.value(forKey: "ImageUrl") as Any)
-                let toName = self.isNullString(str: dict.value(forKey: "ToName") as Any)
-                let toIconUrl = self.appendImagePath(path: dict.value(forKey: "ToIconUrl") as Any)
-                let isDeleted = 0
-                var isRead = dict.value(forKey: "IsRead") as! Int
-
-                //update read message status
-                if createdBy == EventData.sharedInstance.attendeeId {
-                    isRead = 1
-                }
-
-                var type = 0
-                if (dict.value(forKey: "ImageUrl") as? NSNull) == nil {
-                    type = 1
-                }
-
-                var fromMe = 1
-                //Check message frame
-                if AttendeeInfo.sharedInstance.attendeeId == toId {
-                    fromMe = 0
-                }
-
-                sqlQuery += "INSERT OR REPLACE INTO ChatHistory (EventID, AttendeeId, GroupId, CreatedBy, FromId, ChatMessageId, ToId , CreatedDate , ModifiedDate, UserIconUrl, UserName,  ToUserName, ToIconUrl , MessageIconUrl, Message, MessageType, MessageFromMe, isGroupChat, isDeleted, IsRead ) VALUES ('\(eventId)','\(attendeeId)','\(groupId)','\(createdBy)', '\(fromId)', '\(chatId)', '\(toId)','\(createdDateStr)', '\(modifiedDateStr)', \"\(iconImage)\", \"\(name)\", \"\(toName)\", \"\(toIconUrl)\", \"\(pictureImage)\", \"\(message)\", '\(type)', \(fromMe), '\(isGroupChat)',\(isDeleted), \(isRead));"
+            //Group history
+            if (dict.value(forKey: "GroupChatId") as? NSNull) == nil  {
+                groupId = dict.value(forKey: "GroupChatId") as! String
+                isGroupChat = 1
+            }
+            else {
+                groupId = dict.value(forKey: "ToId") as! String
             }
 
-            //Update previous chat history data
-            do {
-                try database.executeUpdate("Update ChatHistory SET isDeleted = 1 Where GroupId = ? AND EventID = ?", values: [groupId, EventData.sharedInstance.eventId])
-            } catch {
-                print("error = \(error)")
+            let eventId = dict.value(forKey: "EventId") as! String
+            let chatId = dict.value(forKey: "ChatId") as! String
+            let createdBy = dict.value(forKey: "CreatedBy") as! String
+            let fromId = dict.value(forKey: "FromId") as! String
+            let toId = dict.value(forKey: "ToId") as! String
+            let createdDateStr = dict.value(forKey: "CreatedDate") as! String
+            let modifiedDateStr = dict.value(forKey: "CreatedDate") as! String
+            let message = self.isNullString(str: dict.value(forKey: "Message") as Any)
+            let name = self.isNullString(str: dict.value(forKey: "FromName") as Any)
+            let iconImage = self.appendImagePath(path: dict.value(forKey: "FromIconUrl") as Any)
+            let pictureImage = self.appendImagePath(path: dict.value(forKey: "ImageUrl") as Any)
+            let toName = self.isNullString(str: dict.value(forKey: "ToName") as Any)
+            let toIconUrl = self.appendImagePath(path: dict.value(forKey: "ToIconUrl") as Any)
+            // let isFromDeleted = dict.value(forKey: "FromDeleted") as! Int
+            //  let isToDeleted = dict.value(forKey: "ToDeleted") as! Int
+            let isDeleted = 0 //dict.value(forKey: "FromDeleted") as! Int
+            var isRead = dict.value(forKey: "IsRead") as! Int
+
+            //update read message status
+            if createdBy == EventData.sharedInstance.attendeeId {
+                isRead = 1
             }
 
-            if !database.executeStatements(sqlQuery) {
+            var type = 0
+            if (dict.value(forKey: "ImageUrl") as? NSNull) == nil {
+                type = 1
             }
+
+            var fromMe = 1
+            //Check message frame
+            if AttendeeInfo.sharedInstance.attendeeId == toId {
+                fromMe = 0
+            }
+
+            sqlQuery += "INSERT OR REPLACE INTO ChatHistory (EventID,AttendeeId, GroupId, FromId, ChatMessageId, CreatedBy, ToId , CreatedDate , ModifiedDate, UserIconUrl, UserName,  ToUserName, ToIconUrl , MessageIconUrl, Message, MessageType, MessageFromMe, isGroupChat, isDeleted ,  IsRead ) VALUES ('\(eventId)','\(attendeeId)','\(groupId)', '\(fromId)', '\(chatId)', '\(createdBy)', '\(toId)','\(createdDateStr)', '\(modifiedDateStr)', \"\(iconImage)\", \"\(name)\", \"\(toName)\", \"\(toIconUrl)\", \"\(pictureImage)\", \"\(message)\", '\(type)', \(fromMe), '\(isGroupChat)', \(isDeleted),\(isRead));"
         }
 
-        database.commit()
-        database.close()
+        if !database.executeStatements(sqlQuery) {
+            print("Error in save chat history in db ",database.lastError(), database.lastErrorMessage())
+        }
+    }
+
+    func saveChatGroupHistory(response: AnyObject, isNoticationData : Bool) {
+
+        if isNoticationData == false {
+            if openDatabase() {
+                database.beginTransaction()
+                self.parseAndSaveGroupChatMessage(response: response)
+                database.commit()
+                database.close()
+            }
+        }
+        else {
+            self.parseAndSaveGroupChatMessage(response: response)
+        }
+    }
+
+    func parseAndSaveGroupChatMessage(response: AnyObject) {
+        let attendeeId = EventData.sharedInstance.attendeeId
+
+        var sqlQuery = ""
+        var groupId = ""
+
+        for item in response as! NSArray {
+
+            let  dict = item as! NSDictionary
+            var isGroupChat = 0
+
+            //Group history
+            if (dict.value(forKey: "GroupChatId") as? NSNull) == nil  {
+                groupId = dict.value(forKey: "GroupChatId") as! String
+                isGroupChat = 1
+            }
+            else {
+                groupId = dict.value(forKey: "ToId") as! String
+            }
+
+            let eventId = dict.value(forKey: "EventId") as! String
+            let chatId = dict.value(forKey: "ChatId") as! String
+            let createdBy = dict.value(forKey: "CreatedBy") as! String
+            let fromId = dict.value(forKey: "FromId") as! String
+            let toId = dict.value(forKey: "ToId") as! String
+            let createdDateStr = dict.value(forKey: "CreatedDate") as! String
+            let modifiedDateStr = dict.value(forKey: "CreatedDate") as! String
+            let message = self.isNullString(str: dict.value(forKey: "Message") as Any)
+            let name = self.isNullString(str: dict.value(forKey: "FromName") as Any)
+            let iconImage = self.appendImagePath(path: dict.value(forKey: "FromIconUrl") as Any)
+            let pictureImage = self.appendImagePath(path: dict.value(forKey: "ImageUrl") as Any)
+            let toName = self.isNullString(str: dict.value(forKey: "ToName") as Any)
+            let toIconUrl = self.appendImagePath(path: dict.value(forKey: "ToIconUrl") as Any)
+            let isDeleted = 0
+            var isRead = dict.value(forKey: "IsRead") as! Int
+
+            //update read message status
+            if createdBy == EventData.sharedInstance.attendeeId {
+                isRead = 1
+            }
+
+            var type = 0
+            if (dict.value(forKey: "ImageUrl") as? NSNull) == nil {
+                type = 1
+            }
+
+            var fromMe = 1
+            //Check message frame
+            if AttendeeInfo.sharedInstance.attendeeId == toId {
+                fromMe = 0
+            }
+
+            sqlQuery += "INSERT OR REPLACE INTO ChatHistory (EventID, AttendeeId, GroupId, CreatedBy, FromId, ChatMessageId, ToId , CreatedDate , ModifiedDate, UserIconUrl, UserName,  ToUserName, ToIconUrl , MessageIconUrl, Message, MessageType, MessageFromMe, isGroupChat, isDeleted, IsRead ) VALUES ('\(eventId)','\(attendeeId)','\(groupId)','\(createdBy)', '\(fromId)', '\(chatId)', '\(toId)','\(createdDateStr)', '\(modifiedDateStr)', \"\(iconImage)\", \"\(name)\", \"\(toName)\", \"\(toIconUrl)\", \"\(pictureImage)\", \"\(message)\", '\(type)', \(fromMe), '\(isGroupChat)',\(isDeleted), \(isRead));"
+        }
+
+        //Update previous chat history data
+        do {
+            try database.executeUpdate("Update ChatHistory SET isDeleted = 1 Where GroupId = ? AND EventID = ?", values: [groupId, EventData.sharedInstance.eventId])
+        } catch {
+            print("error = \(error)")
+        }
+
+        if !database.executeStatements(sqlQuery) {
+        }
     }
 
     func saveChatMessage(dict: NSDictionary) {
@@ -2748,6 +2732,7 @@ class DBManager: NSObject {
 
             while results.next() == true {
                 count = results.object(forColumnIndex: 0) as! Int
+                print("Chat unread count : ",count)
             }
             //  count = database.intForQuery(sql: querySQL)
 
@@ -2759,7 +2744,6 @@ class DBManager: NSObject {
     // MARK: - Activity Feed methodsdfds
 
     func saveActivityFeedDataIntoDB(response: AnyObject) {
-        let eventId = EventData.sharedInstance.eventId
 
         //Notification data save into DB
         if response is Dictionary<String, Any> {
@@ -2769,8 +2753,20 @@ class DBManager: NSObject {
 
                 do {
                     let  dict = response as! NSDictionary
+                    let eventId = self.isNullString(str: dict.value(forKey: "EventId") as Any)
                     let aId = dict.value(forKey: "ActivityFeedID") as! String
-                    let message = self.isNullString(str: dict.value(forKey: "Comment") as Any)
+                    // Create an instance of HTMLConverter.
+                    let converter : HTMLConverter = HTMLConverter()
+
+                    // Prepare an input text.
+                    let input : String = self.isNullString(str: dict.value(forKey: "Comment") as Any)
+
+                    var message : String = ""
+                    if input != "" {
+                        // Convert the plain text into an HTML text using the converter.
+                        message = converter.toHTML(input)
+                    }
+
                     let likesCount = 0
                     let commentsCount = 0
                     let postDateStr = self.isNullString(str: dict.value(forKey: "CreatedDate") as Any)
@@ -2803,12 +2799,15 @@ class DBManager: NSObject {
             //                }
 
             let sqlQuery = ""
+            // Create an instance of HTMLConverter.
+            let converter : HTMLConverter = HTMLConverter()
 
             for item in response as! NSArray {
                 let  dict = item as! NSDictionary
 
+                let eventId = dict.value(forKey: "EventId") as! String
                 let aId = dict.value(forKey: "ActivityFeedID") as! String
-                let message = self.isNullString(str: dict.value(forKey: "Comment") as Any)
+                //let message = self.isNullString(str: dict.value(forKey: "Comment") as Any)
                 let likesCount = dict.value(forKey: "Likes") as! Int
                 let commentsCount = dict.value(forKey: "Comments") as! Int
                 let postDateStr = dict.value(forKey: "CreatedDate") as! String
@@ -2820,6 +2819,13 @@ class DBManager: NSObject {
                 let isRead = dict.value(forKey: "IsRead") as! Int
                 let attendeeId = EventData.sharedInstance.attendeeId
 
+                // Prepare an input text.
+                let input : String = self.isNullString(str: dict.value(forKey: "Comment") as Any)
+                var message : String = ""
+                if input != "" {
+                    // Convert the plain text into an HTML text using the converter.
+                    message = converter.toHTML(input)
+                }
 
                 if (dict.value(forKey: "FeedUser") as? NSNull) == nil {
                     let user = dict.value(forKey: "FeedUser") as! NSDictionary
@@ -2852,7 +2858,9 @@ class DBManager: NSObject {
 
         if openDatabase() {
             let eventId = EventData.sharedInstance.eventId
-            
+            // Create an instance of HTMLConverter.
+            let converter : HTMLConverter = HTMLConverter()
+
             if response is NSDictionary {
                 let aDict = response as! NSDictionary
                 let aId = aDict.value(forKey: "ActivityFeedID") as! String
@@ -2861,7 +2869,15 @@ class DBManager: NSObject {
                 for item in arr as! Array<Any> {
                     do {
                         let  cDict = item as! NSDictionary
-                        let message = self.isNullString(str: cDict.value(forKey: "comment") as Any)
+                        //let message = self.isNullString(str: cDict.value(forKey: "comment") as Any)
+                        // Prepare an input text.
+                        let input : String = self.isNullString(str: cDict.value(forKey: "comment") as Any)
+                        var message : String = ""
+                        if input != "" {
+                            // Convert the plain text into an HTML text using the converter.
+                            message = converter.toHTML(input)
+                        }
+
                         let username = self.isNullString(str: cDict.value(forKey: "Name") as Any)
                         let usericon = self.appendImagePath(path: cDict.value(forKey: "iconurl") as Any)
                         let userId = self.isNullString(str: cDict.value(forKey: "userid") as Any)
@@ -2897,11 +2913,12 @@ class DBManager: NSObject {
 
     func updateActivityFeedNotificationStatus() {
         do {
-             try database.executeUpdate("Update ActivityFeeds SET IsRead = ? Where EventID = ? AND AttendeeId = ?", values: [1, EventData.sharedInstance.eventId, EventData.sharedInstance.attendeeId])
+             try database.executeUpdate("UPDATE ActivityFeeds SET IsRead = ? Where EventID = ? AND AttendeeId = ?", values: [1, EventData.sharedInstance.eventId, EventData.sharedInstance.attendeeId])
            // try database.executeUpdate("Update ActivityFeeds SET IsRead = ? Where ActivityFeedID = ? AND EventID = ?", values: [1, feedId, EventData.sharedInstance.eventId])
         } catch {
             print("error = \(error)")
         }
+        print("After update feeds counts in db - ",CommonModel.sharedInstance.getCurrentDateInMM())
     }
 
     func saveActivityFeedLikesDataIntoDB(response: AnyObject, activityFeedId : String, createdDate : String) {

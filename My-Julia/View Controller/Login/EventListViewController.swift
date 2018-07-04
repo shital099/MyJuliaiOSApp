@@ -70,6 +70,8 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         if EventData.sharedInstance.eventId != "" {
             print("In Event VC Auto token : ",EventData.sharedInstance.auth_token)
 
+            //Check event is expire or not
+             
             //Check last login attendee status and open event
             self.checkLoginAttendeeStatus()
         }
@@ -264,7 +266,8 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
 
             let  dict = item as! NSDictionary
             let model = EventModel()
-
+            print("Dict : ",dict)
+            
             model.eventId = DBManager.sharedInstance.isNullString(str: dict.value(forKey: "EventId") as Any)
             model.eventName = DBManager.sharedInstance.isNullString(str: dict.value(forKey: "EventName") as Any)
             model.eventStartDate = DBManager.sharedInstance.isNullString(str: dict.value(forKey: "StartDateTime") as Any)
