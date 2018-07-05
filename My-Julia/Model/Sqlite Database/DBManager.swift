@@ -803,6 +803,22 @@ class DBManager: NSObject {
         }
     }
 
+    func checkEventDateIsExpiryInDB() -> Bool {
+
+        var isExpire : Bool = true
+
+        if openDatabase() {
+            let (_, endDate) = self.getCurrentTime()
+            let querySQL = "Select * from EventDetails where EventId = ? AND EndDate >= ?"
+            let results:FMResultSet? = database.executeQuery(querySQL, withArgumentsIn: [EventData.sharedInstance.eventId, endDate])
+
+            while results?.next() == true {
+                isExpire = false
+            }
+            database.close()
+        }
+        return isExpire
+    }
 
     // MARK: - Event details methods
     
@@ -1741,6 +1757,7 @@ class DBManager: NSObject {
     func saveBroadCastNotification(data: NSDictionary) {
 
         if openDatabase() {
+            self.database.beginTransaction()
             do {
                 let id = data.value(forKey: "Id") as! String
                 let eventId = data.value(forKey: "EventId") as! String
@@ -1748,16 +1765,15 @@ class DBManager: NSObject {
                 let title = self.isNullString(str: data.value(forKey: "Title") as Any)
                 let desc = self.isNullString(str: data.value(forKey: "Message") as Any)
                 let date = self.isNullString(str: data.value(forKey: "CreatedDate") as Any)
-                let status = data.value(forKey: "IsRead")
+                let status = data.value(forKey: "IsRead") as! Int
 
-                try database.executeUpdate("INSERT OR REPLACE INTO Notifications (EventID,AttendeeId, notiId, Title, Description, CreatedDate, IsRead) VALUES (?, ?, ?, ?, ?, ?, ?)", values: [eventId,attendeeId, id, title , desc , date , status ?? 0])
+                try database.executeUpdate("INSERT OR REPLACE INTO Notifications (EventID,AttendeeId, notiId, Title, Description, CreatedDate, IsRead) VALUES (?, ?, ?, ?, ?, ?, ?)", values: [eventId,attendeeId, id, title , desc , date , status])
+            } catch{
 
-            } catch {
-                print("error = \(error)")
             }
+            database.commit()
+            database.close()
         }
-
-        database.close()
     }
 
     func fetchNotificationDataFromDB(limit : NSInteger, offset : NSInteger) -> NSArray {
@@ -1819,7 +1835,6 @@ class DBManager: NSObject {
     // MARK: - WiFi methods
 
     func saveWifiDataIntoDB(response: AnyObject, isNoticationData: Bool) {
-        print("Wifi details : ",response)
 
         //Notification data save into DB
         if response is Dictionary<String, Any> {
@@ -1831,7 +1846,7 @@ class DBManager: NSObject {
                 //Notification data save into DB
                 do {
                     let  dict = response as! NSDictionary
-                    let eventId = self.isNullString(str: dict.value(forKey: "EventID") as Any)
+                    let eventId = self.isNullString(str: dict.value(forKey: "EventId") as Any)
                     let id = self.isNullString(str: dict.value(forKey: "Id") as Any)
                     let name = self.isNullString(str: dict.value(forKey: "LocationName") as Any)
                     let network = self.isNullString(str: dict.value(forKey: "Network") as Any)
@@ -1848,7 +1863,6 @@ class DBManager: NSObject {
             }
             database.commit()
             database.close()
-
         }
         else {
             var sqlQuery = ""
@@ -1877,7 +1891,7 @@ class DBManager: NSObject {
                 let isRead = dict.value(forKey: "IsRead") as! Int
 
                 // try database.executeUpdate("INSERT OR REPLACE INTO Wifi (EventID, Id, Name, Network, Password, Note, CreatedDate, IsRead) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", values: [eventId, id ,name , network , password , note, date, isRead ])
-                sqlQuery += "INSERT OR REPLACE INTO Wifi (EventID, Id, Name, Network, Password, Note, CreatedDate, IsRead) VALUES ('\(eventId)', '\(id)',\"\(name)\",\"\(network)\",'\(password)',\"\(note)\",'\(date)',\(isRead));"
+                sqlQuery += "INSERT OR REPLACE INTO Wifi (EventID, Id, Name, Network, Password, Note, CreatedDate, IsRead) VALUES ('\(eventId)', '\(id)',\"\(name)\",\"\(network)\",\"\(password)\",\"\(note)\",'\(date)',\(isRead));"
                 //                    } catch {
                 //                        print("error = \(error)")
                 //                    }

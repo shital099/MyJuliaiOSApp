@@ -61,7 +61,7 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
         userProfileIcon.clipsToBounds = true
 
         //Apply navigation theme
-       // CommonModel.sharedInstance.applyNavigationTheme()
+        CommonModel.sharedInstance.applyNavigationTheme()
 
         //Show application version
         self.appVersionName.text = APP_VERSION
@@ -104,8 +104,7 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
     func fetchAllUnreadNotificationMessages() {
         NetworkingHelper.getRequestFromUrl(name:Get_AllNotification_url, urlString: Get_AllNotification_url, callback: { [weak self] response in
-            //print("\nEvent Theme Details : ",response)
-            print("Notification data received : ",response)
+            //print("Notification data received : ",response)
 
             let dataDict:[String: Any] = ["Order": 0, "Flag":Update_SideMenu_List]
             NotificationCenter.default.post(name: UpdateNotificationCount, object: nil, userInfo: dataDict)
@@ -631,6 +630,7 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
         cell.nameLabel?.text = item.moduleTitle
         cell.nameLabel.textColor = item.textColor
         cell.nameLabel.font = UIFont.getFont(fontName: item.fontName, fontStyle: item.fontStyle, fontSize: CGFloat(item.fontSize))
+
 
         //Show unread message count of chat 
         if item.dataCount == 0 {

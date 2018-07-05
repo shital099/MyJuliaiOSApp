@@ -115,10 +115,10 @@ class MyNotesListViewController: UIViewController, MyNoteDelegate, UITableViewDa
 
                 // If title and message is equal then remove dublication
                 if model.titleStr == model.messageStr {
-                    html = html.appendingFormat("<div style='text-align:justify; font-size:17px;font-family:HelveticaNeue;color:#362932;'><b> %@. %@</b><p></p><br>",String(format:"%d",index+1),model.titleStr)
+                    html = html.appendingFormat("<div style='text-align:justify; font-size:14px;font-family:HelveticaNeue;color:#362932;'><b> %@. %@</b><p></p><br>",String(format:"%d",index+1),model.titleStr)
                 }
                 else {
-                    html = html.appendingFormat("<div style='text-align:justify; font-size:17px;font-family:HelveticaNeue;color:#362932;'><b> %@. %@</b> <p> %@</p><br>",String(format:"%d",index+1),model.titleStr,model.messageStr)
+                    html = html.appendingFormat("<div style='text-align:justify; font-size:14px;font-family:HelveticaNeue;color:#362932;'><b> %@. %@</b> <p> %@</p><br>",String(format:"%d",index+1),model.titleStr,model.messageStr)
                 }
             }
         }

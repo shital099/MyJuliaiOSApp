@@ -69,11 +69,20 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         //Check logged in user details found or not in db
         if EventData.sharedInstance.eventId != "" {
             print("In Event VC Auto token : ",EventData.sharedInstance.auth_token)
-
-            //Check event is expire or not
-             
             //Check last login attendee status and open event
             self.checkLoginAttendeeStatus()
+
+//            //Check event is expire or not
+//             let result = DBManager.sharedInstance.checkEventDateIsExpiryInDB()
+//            if result == false {
+//                //Check last login attendee status and open event
+//                self.checkLoginAttendeeStatus()
+//            }
+//            else {
+//                print("Event Expire....")
+//                //Remove all credential off login in attendee
+//              //  CredentialHelper.shared.removeAllCredentials()
+//            }
         }
         else {
             CommonModel.sharedInstance.dissmissActitvityIndicator()
@@ -388,7 +397,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
         SDWebImageDownloader.shared().setValue("Basic ".appending(EventData.sharedInstance.auth_token), forHTTPHeaderField: "Authorization")
 
         //Apply navigation theme
-        CommonModel.sharedInstance.applyNavigationTheme()
+      //  CommonModel.sharedInstance.applyNavigationTheme()
 
       //  CommonModel.sharedInstance.dissmissActitvityIndicator()
 

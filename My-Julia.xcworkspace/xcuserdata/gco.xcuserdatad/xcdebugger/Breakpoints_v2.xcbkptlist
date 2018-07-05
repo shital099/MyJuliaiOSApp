@@ -26,12 +26,12 @@
                   moduleName = "My-Julia"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/gco/Shital%20Jadhav/JuliaApp_8Dec/MyJuliaiOSApp/My-Julia/View%20Controller/Login/Terms%20&amp;%20Conditions/TermsAndConditionsViewController.swift"
-                  timestampString = "552389704.747402"
+                  timestampString = "552488586.285934"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "77"
                   endingLineNumber = "77"
-                  offsetFromSymbolStart = "852">
+                  offsetFromSymbolStart = "1041">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
@@ -41,12 +41,12 @@
                   moduleName = "My-Julia"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/gco/Shital%20Jadhav/JuliaApp_8Dec/MyJuliaiOSApp/My-Julia/View%20Controller/Login/Terms%20&amp;%20Conditions/TermsAndConditionsViewController.swift"
-                  timestampString = "552389704.750137"
+                  timestampString = "552488586.288486"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "75"
                   endingLineNumber = "75"
-                  offsetFromSymbolStart = "24">
+                  offsetFromSymbolStart = "22">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -74,12 +74,12 @@
                   moduleName = "My-Julia"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/gco/Shital%20Jadhav/JuliaApp_8Dec/MyJuliaiOSApp/My-Julia/View%20Controller/Chat/EditGroupDetailsViewController.swift"
-                  timestampString = "552389704.755603"
+                  timestampString = "552488586.295794"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "210"
                   endingLineNumber = "210"
-                  offsetFromSymbolStart = "1500">
+                  offsetFromSymbolStart = "1946">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
@@ -89,12 +89,12 @@
                   moduleName = "My-Julia"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/gco/Shital%20Jadhav/JuliaApp_8Dec/MyJuliaiOSApp/My-Julia/View%20Controller/Chat/EditGroupDetailsViewController.swift"
-                  timestampString = "552389704.758462"
+                  timestampString = "552488586.299706"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "210"
                   endingLineNumber = "210"
-                  offsetFromSymbolStart = "4292">
+                  offsetFromSymbolStart = "5805">
                </Location>
             </Locations>
          </BreakpointContent>

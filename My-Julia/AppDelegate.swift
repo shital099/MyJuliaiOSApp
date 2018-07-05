@@ -54,36 +54,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
 
-
-//        if #available(iOS 10.0, *) {
-//            let center = UNUserNotificationCenter.current()
-//            center.getDeliveredNotifications(completionHandler: { (notifications: [UNNotification]) in
-//                print("Notifications : ",notifications)
-//            })
-//
-//        } else {
-//            // Fallback on earlier versions
-//        }
-
-        // do something with the notification
-        if launchOptions?[UIApplicationLaunchOptionsKey.remoteNotification] != nil {
-            // Do what you want to happen when a remote notification is tapped.
-            print("Notification in App launch : ", launchOptions?[UIApplicationLaunchOptionsKey.remoteNotification] ?? "")
-                // Fallback on earlier versions
-            //Save notification data into db and navigate to screen
-            //self.receivedNotification(application: application, userInfo: (launchOptions?[UIApplicationLaunchOptionsKey.remoteNotification] as AnyObject) as! [AnyHashable : Any], pushNotiAllow: false)
-        }
-
-//        //Launched from push notification
-//        let remoteNotif = launchOptions?[UIApplicationLaunchOptionsKey.remoteNotification] as? NSDictionary
-//        if remoteNotif != nil {
-//            let aps = remoteNotif!["aps" as NSString] as? [String:AnyObject]
-//            NSLog("\n Custom: \(String(describing: aps))")
-//        }
-//        else {
-//            print("//////////////////////////Normal launch")
-//        }
-
         //Get crash reports
         Fabric.with([Crashlytics.self])
 
@@ -247,8 +217,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if isAppLogin == false {
             return
         }
-        print("Notification received time : ",CommonModel.sharedInstance.getCurrentDateInMM())
-
         //Remove all badges number
         UIApplication.shared.applicationIconBadgeNumber = 0
         let state : UIApplicationState = application.applicationState
@@ -256,7 +224,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         print("Notification Received : ",userInfo )
 
         if (state == UIApplicationState.background ) {
-            print("App is background")
             appIsStarting = false
 
             // app is background
@@ -264,21 +231,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             completionHandler(UIBackgroundFetchResult.noData);
         }
         else if (state == UIApplicationState.inactive) {
-            print("App is inactive")
                appIsStarting = true
             // user tapped notification
             self.checkNotificationAllowStatus(application: application, userInfo: userInfo)
             completionHandler(UIBackgroundFetchResult.newData);
         } else {
             // app is active
-            print("App is active")
              appIsStarting = false
             self.checkNotificationAllowStatus(application: application, userInfo: userInfo)
             completionHandler(UIBackgroundFetchResult.noData);
         }
-
-//        self.checkNotificationAllowStatus(application: application, userInfo: userInfo)
-        print("Notification end time : ",CommonModel.sharedInstance.getCurrentDateInMM())
 
     }
 
@@ -293,7 +255,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
                 if settings.authorizationStatus == .denied || settings.authorizationStatus == .notDetermined {
                     pushNotiAllow = false
-                    print("in denied pushNotiAllow : ",pushNotiAllow)
                 }
                 else{
                     pushNotiAllow = true
@@ -309,11 +270,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         else {
             // Fallback on earlier versions
             if UIApplication.shared.isRegisteredForRemoteNotifications {
-                print("APNS-YES")
                 pushNotiAllow = true
             }
             else {
-                print("APNS-NO")
                 pushNotiAllow = false
             }
 
@@ -370,7 +329,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         else if (userInfo["Wifi"] != nil) {
             let alertBody = DBManager.sharedInstance.convertToJsonData(text: userInfo["Wifi"] as! String) as! NSDictionary
-            eventId = alertBody["EventID"] as! String
+            eventId = alertBody["EventId"] as! String
             DBManager.sharedInstance.saveWifiDataIntoDB(response: alertBody, isNoticationData: false)
         }
         else if (userInfo["Activity Feeds"] != nil) {

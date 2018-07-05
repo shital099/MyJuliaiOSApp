@@ -521,7 +521,8 @@ class QuestionsViewController: UIViewController, UITableViewDataSource, UITableV
     func mailComposeController(_ controller: MFMailComposeViewController,
                                didFinishWith result: MFMailComposeResult, error: Error?) {
         // Check the result or perform other tasks.
-        
+        print("error : ",error)
+
         // Dismiss the mail compose view controller.
         controller.dismiss(animated: true, completion: nil)
     }

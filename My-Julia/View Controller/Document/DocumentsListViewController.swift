@@ -40,7 +40,6 @@ class DocumentsListViewController: UIViewController, UITableViewDelegate, UITabl
         
         //Set separator color according to background color
         CommonModel.sharedInstance.applyTableSeperatorColor(object: tableView)
-
     }
 
     override func didReceiveMemoryWarning() {
