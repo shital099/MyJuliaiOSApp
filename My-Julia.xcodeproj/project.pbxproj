@@ -2410,7 +2410,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = "My-Julia/My-Julia.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: GCO (Global Conference Organisers) B.V";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
@@ -2441,8 +2441,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.gcotechcenter.MyJulia;
 				PRODUCT_MODULE_NAME = EventApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "7631dc5a-acda-4574-8d90-52dc0619e8c5";
-				PROVISIONING_PROFILE_SPECIFIER = MyJulia_Prod_Enterprise;
+				PROVISIONING_PROFILE = "ce5ad652-cb58-4611-8b81-688c6a46fe0b";
+				PROVISIONING_PROFILE_SPECIFIER = MyJulia_Dev_Enterprise;
 				SWIFT_OBJC_BRIDGING_HEADER = Event_Briding_Header.h;
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "";
 				SWIFT_REFLECTION_METADATA_LEVEL = none;
@@ -2460,8 +2460,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = "My-Julia/My-Julia.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: GCO (Global Conference Organisers) B.V";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: GCO (Global Conference Organisers) B.V";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = SKDTAX4HF9;
@@ -2491,8 +2491,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.gcotechcenter.MyJulia;
 				PRODUCT_MODULE_NAME = EventApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "7631dc5a-acda-4574-8d90-52dc0619e8c5";
-				PROVISIONING_PROFILE_SPECIFIER = MyJulia_Prod_Enterprise;
+				PROVISIONING_PROFILE = "ce5ad652-cb58-4611-8b81-688c6a46fe0b";
+				PROVISIONING_PROFILE_SPECIFIER = MyJulia_Dev_Enterprise;
 				SWIFT_OBJC_BRIDGING_HEADER = Event_Briding_Header.h;
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "";
 				SWIFT_REFLECTION_METADATA_LEVEL = none;

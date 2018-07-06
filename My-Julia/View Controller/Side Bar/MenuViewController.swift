@@ -61,7 +61,7 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
         userProfileIcon.clipsToBounds = true
 
         //Apply navigation theme
-        CommonModel.sharedInstance.applyNavigationTheme()
+       // CommonModel.sharedInstance.applyNavigationTheme()
 
         //Show application version
         self.appVersionName.text = APP_VERSION
@@ -992,7 +992,6 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
 //                self.tableView.reloadRows(at: [indexPath as IndexPath], with: UITableViewRowAnimation.automatic)
             }
         }
-        print("Reload side menu count - ",CommonModel.sharedInstance.getCurrentDateInMM())
 
         self.tableView.reloadData()
     }

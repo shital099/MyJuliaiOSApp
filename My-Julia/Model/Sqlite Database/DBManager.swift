@@ -809,7 +809,7 @@ class DBManager: NSObject {
 
         if openDatabase() {
             let (_, endDate) = self.getCurrentTime()
-            let querySQL = "Select * from EventDetails where EventId = ? AND EndDate >= ?"
+            let querySQL = "Select * from EventDetails where EventId = ? AND EndDate > ?"
             let results:FMResultSet? = database.executeQuery(querySQL, withArgumentsIn: [EventData.sharedInstance.eventId, endDate])
 
             while results?.next() == true {
@@ -2840,6 +2840,7 @@ class DBManager: NSObject {
                     // Convert the plain text into an HTML text using the converter.
                     message = converter.toHTML(input)
                 }
+                message = NSString(format: "%@", message) as String
 
                 if (dict.value(forKey: "FeedUser") as? NSNull) == nil {
                     let user = dict.value(forKey: "FeedUser") as! NSDictionary
@@ -2932,7 +2933,6 @@ class DBManager: NSObject {
         } catch {
             print("error = \(error)")
         }
-        print("After update feeds counts in db - ",CommonModel.sharedInstance.getCurrentDateInMM())
     }
 
     func saveActivityFeedLikesDataIntoDB(response: AnyObject, activityFeedId : String, createdDate : String) {

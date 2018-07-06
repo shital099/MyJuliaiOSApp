@@ -38,7 +38,7 @@ class ActivityFeedViewModelController: NSObject {
 
             NetworkingHelper.getRequestFromUrl(name:ActivityFeed_List_url,  urlString:urlStr, callback: { [weak self] response in
 
-                print("Actiivity feeds data : ",response)
+               // print("Actiivity feeds data : ",response)
 //                //Change notification count in side menu
 //                let userDict:[String: Bool] = ["isClickOnNotification": false]
 //                NotificationCenter.default.post(name: BroadcastNotification, object: "", userInfo: userDict)
@@ -116,8 +116,6 @@ class ActivityFeedViewModelController: NSObject {
 
 //        //Update activity feed read status
          DBManager.sharedInstance.updateActivityFeedNotificationStatus()
-
-        print("Activity feed Module index : ",self.moduleIndex)
 
         //Update actiivty read/unread data count in side menu bar
         let dataDict:[String: Any] = ["Order": moduleIndex, "Flag":Update_Activity_Feeds_List]

@@ -72,7 +72,21 @@ class PostTextViewController: UIViewController, UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         placeholderLabel.isHidden = !textView.text.isEmpty
     }
-    
+
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+
+        let result = (textView.text as NSString?)?.replacingCharacters(in: range, with: text)
+
+        print("activity feed text character length : ",textView.text.count)
+
+//        //Retrict feedback text length
+//        if(textView.text.count > 498 && range.length == 0) {
+//            return false
+//        }
+
+        return true
+    }
+
     @objc func dismissKeyboard() {
         view.endEditing(true)
     }
@@ -105,6 +119,8 @@ class PostTextViewController: UIViewController, UITextViewDelegate {
 //
 //        // Convert the plain text into an HTML text using the converter.
 //        let output : String = converter.toHTML(input)
+//
+//        print("html Output : ",output)
 
         let paramDict : NSMutableDictionary? = ["Comment":textField.text ,"AttendeeId":AttendeeInfo.sharedInstance.attendeeId, "EventId":event.eventId]
 

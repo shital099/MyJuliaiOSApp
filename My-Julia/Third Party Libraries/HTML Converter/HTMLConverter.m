@@ -363,7 +363,7 @@ static NSArray *_entityReferences;
 {
     if (_newLineFlag)
     {
-        [html appendString:@"<br/>"];
+        [html appendString:@"<br>"];
     }
     else
     {
@@ -382,7 +382,7 @@ static NSArray *_entityReferences;
             *index = *index + 1;
         }
 
-        [html appendString:@"<br/>"];
+        [html appendString:@"<br>"];
     }
     else
     {

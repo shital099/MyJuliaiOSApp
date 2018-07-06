@@ -351,12 +351,21 @@ class CommonModel: NSObject {
         let font : UIFont = UIFont.getFont(fontName: AppTheme.sharedInstance.headerFontName, fontStyle: AppTheme.sharedInstance.headerFontStyle, fontSize: CGFloat(AppTheme.sharedInstance.headerFontSize))
         
         UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey.foregroundColor:AppTheme.sharedInstance.headerTextColor, NSAttributedStringKey.font: font ]
+        print("AppTheme.sharedInstance.isHeaderColor : ",AppTheme.sharedInstance.isHeaderColor)
+        print("headerImage : ",AppTheme.sharedInstance.headerImage)
 
         if AppTheme.sharedInstance.isHeaderColor == false {
             
             if AppTheme.sharedInstance.headerImage != "" {
 
                 if let url = NSURL(string: AppTheme.sharedInstance.headerImage) {
+
+                    if let image = SDImageCache.shared().imageFromDiskCache(forKey: url.absoluteString) {
+                        //use image
+                        print("image 1 ", image)
+                        UINavigationBar.appearance().setBackgroundImage(image, for: .default)
+                    }
+                    
                     var request = URLRequest(url: url as URL)
                     request.addValue("Basic ".appending(EventData.sharedInstance.auth_token), forHTTPHeaderField: "Authorization")
                     let queue = OperationQueue()
@@ -414,11 +423,14 @@ class CommonModel: NSObject {
  */
             }
             else {
+                print("1 else : ",AppTheme.sharedInstance.headerImage)
                 UINavigationBar.appearance().setBackgroundImage(nil, for: .default)
                 UINavigationBar.appearance().barTintColor = AppTheme.sharedInstance.headerColor
             }
         }
         else {
+            print("2 else : ",AppTheme.sharedInstance.headerImage)
+
             UINavigationBar.appearance().setBackgroundImage(nil, for: .default)
             //Change header color
             UINavigationBar.appearance().barTintColor = AppTheme.sharedInstance.headerColor

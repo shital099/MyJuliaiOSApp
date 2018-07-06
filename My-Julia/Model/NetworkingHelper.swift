@@ -12,7 +12,7 @@ import UIKit
 //BASE URL AND Auth Key
 //let BASE_URL = "http://srv01:2300/" 
 
-//let BASE_URL = "http://amaresh.gcotechcenter.local:8000/"     //local machine
+let BASE_URL = "http://amaresh.gcotechcenter.local:8000/"     //local machine
 //let BASE_URL = "http://srv01.gcotechcenter.local:1400/"  //SRV 1
 //let BASE_URL = "http://srv01.gcotechcenter.local:2400/"     //SRV 2
 //let BASE_URL = "https://apps.gcotechcenter.com/"
@@ -23,7 +23,7 @@ import UIKit
 //let BASE_URL = "http://srv01.gcotechcenter.local:3400/"     //TEST Enviorment
 //let BASE_URL = "https://ems2-test.gcoeurope.com:3000/"     //TEST Enviorment
 
-let BASE_URL = "https://apps.gcoeurope.com/Julia/"      //LIVE Enviorment
+//let BASE_URL = "https://apps.gcoeurope.com/Julia/"      //LIVE Enviorment
 
 /***** Messaging Crypto Setting ******/
 let CRYPTO_KEY = "23501748FEB710349F13763248DFC6C2"
