@@ -103,14 +103,18 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
 
     func fetchAllUnreadNotificationMessages() {
-        NetworkingHelper.getRequestFromUrl(name:Get_AllNotification_url, urlString: Get_AllNotification_url, callback: { [weak self] response in
-            //print("Notification data received : ",response)
+
+        print(" before Fetching unread notification data : ", CommonModel.sharedInstance.getCurrentDateInMM())
+        let urlStr = Get_AllNotification_url.appendingFormat("Flag=%@",Get_Notification_GetAllData)
+        NetworkingHelper.getRequestFromUrl(name:Get_AllNotification_url, urlString: urlStr, callback: { [weak self] response in
+            print("Notification data received : ",response)
 
             let dataDict:[String: Any] = ["Order": 0, "Flag":Update_SideMenu_List]
             NotificationCenter.default.post(name: UpdateNotificationCount, object: nil, userInfo: dataDict)
 
             }, errorBack: { error in
         })
+        print("Finish Fetching unread notification data : ", CommonModel.sharedInstance.getCurrentDateInMM())
     }
 
     func addNotificationObserver()  {
@@ -119,7 +123,6 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
         NotificationCenter.default.addObserver(self, selector: #selector(MenuViewController.changeSideMenuUnreadMessageCount(notification:)), name:ShowNotificationCount, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(MenuViewController.changeSideMenuNotificationCount(notification:)), name:UpdateNotificationCount, object: nil)
-
     }
 
     func toggleLeftSplitMenuController()  {

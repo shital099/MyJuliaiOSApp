@@ -312,6 +312,21 @@ class CommonModel: NSObject {
         return vc!
     }
 
+    func fetchModuleIdFromViewController(vc: String ) -> String {
+
+        let predicate:NSPredicate = NSPredicate(format: "ClassName CONTAINS[c] %@", vc)
+        let filteredArray = ModulesID.sharedInstance.ModuleIDsListArray.filter { predicate.evaluate(with: $0) };
+
+        if filteredArray.count != 0 {
+            let dict = filteredArray.first
+            if !((dict?["ModuleID"]?.isEmpty)!) {
+                return dict!["ModuleID"]!
+            }
+        }
+
+        return ""
+    }
+
     func fetchModuleIdOfModuleName(moduleName: String ) -> String {
 
         let predicate:NSPredicate = NSPredicate(format: "ClassName CONTAINS[c] %@", moduleName)

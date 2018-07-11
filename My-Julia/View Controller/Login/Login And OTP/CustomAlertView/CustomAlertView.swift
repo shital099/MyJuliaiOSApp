@@ -209,7 +209,7 @@ class CustomAlertView: UIViewController, UITextFieldDelegate {
 
     func validateOTP() {
 
-        let parameters : NSDictionary = [ "EventId": self.eventId, "OTPCode":self.otpTextField.text!, "AttendeeCode": self.attendeeCodeTextField.text!]
+        let parameters : NSDictionary = [ "EventId": self.eventId, "OTPCode":self.otpTextField.text!, "AttendeeCode": self.attendeeCodeTextField.text!,"OS" : ""]
         print("Validate OTP request : ",parameters)
 
         NetworkingHelper.postData(urlString:Get_ValidateOTP_Url, param:parameters, withHeader: false, isAlertShow: true, controller:self, callback: { [weak self] response in
@@ -246,7 +246,10 @@ class CustomAlertView: UIViewController, UITextFieldDelegate {
 
     func resendOTP() {
 
-        NetworkingHelper.getRequestFromUrl(name:Post_ResendOTP_Url, urlString: Post_ResendOTP_Url, callback: { [weak self] response in
+        let parameters : NSDictionary = [ "EventId": self.eventId, "AttendeeCode": self.attendeeCodeTextField.text!]
+        print("Resend OTP request : ",parameters)
+
+        NetworkingHelper.postData(urlString: Post_ResendOTP_Url, param: parameters, withHeader: false, isAlertShow: false, controller: self, callback: { [weak self] response in
 
             print("\n Resend OTP response : ", response)
             let responseCode = Int(response.value(forKey: "responseCode") as! String)

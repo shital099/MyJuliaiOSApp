@@ -1720,8 +1720,6 @@ class DBManager: NSObject {
         var sqlQuery = "" //self.parseAndSaveNotificationDataIntoDB(response: response)
         let eventId = EventData.sharedInstance.eventId
 
-        print("Notification data : ",response)
-
         for item in response as! NSArray {
             let  dict = item as! NSDictionary
             let id = dict.value(forKey: "Id") as! String

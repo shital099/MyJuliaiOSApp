@@ -121,8 +121,12 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
             UIView.commitAnimations()
         }
 
+        let moduldId = CommonModel.sharedInstance.fetchModuleIdFromViewController(vc: "ChatListViewController")
+        let moduleOrder = DBManager.sharedInstance.fetchModuleOrderFromDB(moduleId: moduldId)
+        print("Module Order : ",moduleOrder)
+
         //Update notification read/unread message count in side menu bar
-        let dataDict:[String: Any] = ["Order": self.view.tag, "Flag":Update_Chat_List]
+        let dataDict:[String: Any] = ["Order": moduleOrder - 1 , "Flag":Update_Chat_List]
         NotificationCenter.default.post(name: UpdateNotificationCount, object: nil, userInfo: dataDict)
 
         isPausedTimer = false

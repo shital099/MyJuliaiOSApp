@@ -109,7 +109,6 @@ class MyNotesListViewController: UIViewController, MyNoteDelegate, UITableViewDa
             if index < listArray.count {
                 let model = listArray[index] as Notes
 
-                print("model.titleStr : ",model.titleStr)
                 model.titleStr = model.titleStr.replacingOccurrences(of: "\n", with: "<br>")
                 model.messageStr = model.messageStr.replacingOccurrences(of: "\n", with: "<br>")
 

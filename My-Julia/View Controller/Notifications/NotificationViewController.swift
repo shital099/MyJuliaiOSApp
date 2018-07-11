@@ -136,8 +136,6 @@ class NotificationViewController: UIViewController, UITableViewDelegate, UITable
         cell.messageLabel.text = model.message
         cell.messageLabel.sizeToFit()
         cell.statusImg.isHidden  = model.isRead
-        print("model.title : ",model.title)
-        print("message : ",model.message)
         cell.timeLabel.text  =  CommonModel.sharedInstance.getDateAndTime(dateStr:model.cretedDate)
 
        let sucess =  self.notificationModelController.checkLoadMoreViewModel(at: indexPath.row)

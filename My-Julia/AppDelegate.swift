@@ -241,7 +241,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.checkNotificationAllowStatus(application: application, userInfo: userInfo)
             completionHandler(UIBackgroundFetchResult.noData);
         }
-
     }
 
     func checkNotificationAllowStatus(application: UIApplication, userInfo : [AnyHashable : Any]) {
@@ -288,6 +287,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         print("pushNotiAllow : ",pushNotiAllow)
         var eventId = ""
+        var moduleFlag = ""
 
         //Save notification dat into db and navigate to screen
         if (userInfo["Chat"] != nil) {
@@ -321,31 +321,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
             //Save chat details into db
             DBManager.sharedInstance.saveChatNotificationMessageIntoDB(response: chatM!)
+            moduleFlag = Get_Notification_Chat
         }
         else if (userInfo["Notification"] != nil) {
             let alertBody = DBManager.sharedInstance.convertToJsonData(text: userInfo["Notification"] as! String) as! NSDictionary
             eventId = alertBody["EventId"] as! String
             DBManager.sharedInstance.saveBroadCastNotification(data: alertBody)
+
+            moduleFlag = Get_Notification_Notifications
         }
         else if (userInfo["Wifi"] != nil) {
             let alertBody = DBManager.sharedInstance.convertToJsonData(text: userInfo["Wifi"] as! String) as! NSDictionary
             eventId = alertBody["EventId"] as! String
             DBManager.sharedInstance.saveWifiDataIntoDB(response: alertBody, isNoticationData: false)
+            moduleFlag = Get_Notification_WifiList
         }
         else if (userInfo["Activity Feeds"] != nil) {
             let alertBody = DBManager.sharedInstance.convertToJsonData(text: userInfo["Activity Feeds"] as! String) as! NSDictionary
             eventId = alertBody["EventId"] as! String
             DBManager.sharedInstance.saveActivityFeedDataIntoDB(response: alertBody)
+            moduleFlag = Get_Notification_ActivityFeed
         }
         else if (userInfo["Map"] != nil) {
             let alertBody = DBManager.sharedInstance.convertToJsonData(text: userInfo["Map"] as! String) as! NSDictionary
             eventId = alertBody["EventID"] as! String
             DBManager.sharedInstance.saveMapDataIntoDB(response: alertBody, isNoticationData: false)
+            moduleFlag = Get_Notification_Map
         }
         else if (userInfo["Documents"] != nil) {
             let alertBody = DBManager.sharedInstance.convertToJsonData(text: userInfo["Documents"] as! String) as! NSDictionary
             eventId = alertBody["EventId"] as! String
             DBManager.sharedInstance.saveDocumentsDataIntoDB(response: alertBody, isNoticationData: false)
+
+            moduleFlag = Get_Notification_Document
         }
 
         let moduleId = userInfo["ModuleId"] as? String
@@ -373,6 +381,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 NotificationCenter.default.post(name: OtherModuleNotification, object: nil, userInfo: imageDataDict)
             }
         }
+
+        //Fetch module data from api and save into db
+        self.fetchAllUnreadNotificationMessages(flag:moduleFlag)
     }
 
     func showNotificationAlertMessage(title : String, message : String, application: UIApplication)  {
@@ -428,6 +439,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
             alert.show(true)
         }
+    }
+
+
+    func fetchAllUnreadNotificationMessages(flag : String) {
+
+        print(" before Fetching unread notification data : ", CommonModel.sharedInstance.getCurrentDateInMM())
+        let urlStr = Get_AllNotification_url.appendingFormat("Flag=%@",flag)
+        print("Notification api url : ",urlStr)
+
+        NetworkingHelper.getRequestFromUrl(name:Get_AllNotification_url, urlString: urlStr, callback: { [weak self] response in
+            print("Notification data received : ",response)
+
+            let dataDict:[String: Any] = ["Order": 0, "Flag":Update_SideMenu_List]
+            NotificationCenter.default.post(name: UpdateNotificationCount, object: nil, userInfo: dataDict)
+
+            }, errorBack: { error in
+        })
+        print("Finish Fetching unread notification data : ", CommonModel.sharedInstance.getCurrentDateInMM())
     }
 
     //MARK: - UIApplication Methods

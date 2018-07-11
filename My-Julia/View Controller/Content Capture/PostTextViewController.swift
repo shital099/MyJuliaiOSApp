@@ -77,7 +77,7 @@ class PostTextViewController: UIViewController, UITextViewDelegate {
 
         let result = (textView.text as NSString?)?.replacingCharacters(in: range, with: text)
 
-        print("activity feed text character length : ",textView.text.count)
+        print("activity feed text character length : ",result?.count)
 
 //        //Retrict feedback text length
 //        if(textView.text.count > 498 && range.length == 0) {
@@ -85,6 +85,10 @@ class PostTextViewController: UIViewController, UITextViewDelegate {
 //        }
 
         return true
+    }
+
+    func textViewDidEndEditing(_ textView: UITextView) {
+        print("textViewDidEndEditing activity feed text character length : ",textView.text.count)
     }
 
     @objc func dismissKeyboard() {

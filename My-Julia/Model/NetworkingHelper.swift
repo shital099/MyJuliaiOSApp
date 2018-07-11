@@ -4,7 +4,7 @@
 //  My-Julia
 //  n
 //  Created by GCO on 4/11/17. 
-//  Copyright © 2017 GCO. All rights reserved.
+//  Copyright © 2017 GCO. All rights ressex erved.
 //
 
 import UIKit
@@ -12,14 +12,14 @@ import UIKit
 //BASE URL AND Auth Key
 //let BASE_URL = "http://srv01:2300/" 
 
-let BASE_URL = "http://amaresh.gcotechcenter.local:8000/"     //local machine
+//let BASE_URL = "http://amaresh.gcotechcenter.local:8000/"     //local machine
 //let BASE_URL = "http://srv01.gcotechcenter.local:1400/"  //SRV 1
-//let BASE_URL = "http://srv01.gcotechcenter.local:2400/"     //SRV 2
+let BASE_URL = "http://srv01.gcotechcenter.local:2400/"     //SRV 2
 //let BASE_URL = "https://apps.gcotechcenter.com/"
 
 //let BASE_URL = "http://srv01.gcotechcenter.local:5400/"     //Production4
 
-//TEST Enviorment
+//TEST Enviorment0
 //let BASE_URL = "http://srv01.gcotechcenter.local:3400/"     //TEST Enviorment
 //let BASE_URL = "https://ems2-test.gcoeurope.com:3000/"     //TEST Enviorment
 
@@ -56,7 +56,14 @@ let Get_AllModuleDetails_url = "api/Common/getEventAllDetailsSP?"
 let Get_AllDetails_url = "GetAllData"
 
 //Get All notifications
-let Get_AllNotification_url = "/api/Common/getUnreadCountDetailsSP"
+let Get_AllNotification_url = "/api/Common/getUnreadCountDetailsSP?"
+let Get_Notification_Map = "Map"
+let Get_Notification_WifiList = "WifiList"
+let Get_Notification_GetAllData = "GetAllData"
+let Get_Notification_Notifications = "Notifications"
+let Get_Notification_Document = "Document"
+let Get_Notification_Chat = "Chat"
+let Get_Notification_ActivityFeed = "ActivityFeed"
 
 /* Agenda */
 let Agenda_List_url = "api/Agenda/getAgendaByActivityId/"
@@ -89,7 +96,7 @@ let Speakers_Details_url = "api/SpeakerActivity/getSpeakerDetails/"
 //let Sponsors_List_url = "api/Sponsor/getByEvent/"
 
 /* WiFi */
-//let WiFi_List_url = "api/Wifi/WifiList/"
+let WiFi_List_url = "WifiList"
 
 /* Local Info */
 //let LocalInfo_List_url = "api/module/localinfo/"
@@ -206,7 +213,7 @@ class NetworkingHelper: NSObject {
         let manager = AFHTTPSessionManager()
         manager.requestSerializer = AFJSONRequestSerializer()
 
-        if urlString != Get_AuthToken_Url || urlString != Get_ValidateOTP_Url {
+        if urlString != Get_AuthToken_Url || urlString != Get_ValidateOTP_Url || urlString != Post_ResendOTP_Url {
             manager.requestSerializer.setValue("Basic ".appending(EventData.sharedInstance.auth_token), forHTTPHeaderField: "Authorization")
         }
 

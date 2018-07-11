@@ -139,6 +139,10 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
                 }
             }
         }
+        else if destinationVC is  ChatContactsViewController {
+            let vc = destinationVC as! ChatContactsViewController
+            vc.view.tag = self.view.tag
+        }
     }
     
     // MARK: - Navigation UIBarButtonItems
@@ -471,8 +475,7 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
 
             //Update database status for chat hostory read
             DBManager.sharedInstance.updateChatListStatusIntoDB(groupId: vc.chatGroupModel.groupId)
-
-            vc.view.tag = self.view.tag
+           // vc.view.tag = self.view.tag
             self.navigationController?.pushViewController(vc, animated: true)
         }
     }

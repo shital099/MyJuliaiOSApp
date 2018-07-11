@@ -9,54 +9,6 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "My-Julia/View Controller/Login/Terms &amp; Conditions/TermsAndConditionsViewController.swift"
-            timestampString = "552560890.7043051"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "77"
-            endingLineNumber = "77"
-            landmarkName = "fetchContentFromServer()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.AnyObject) -&gt; () in EventApp.TermsAndConditionsViewController.fetchContentFromServer() -&gt; ()"
-                  moduleName = "My-Julia"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/gco/Shital%20Jadhav/JuliaApp_8Dec/MyJuliaiOSApp/My-Julia/View%20Controller/Login/Terms%20&amp;%20Conditions/TermsAndConditionsViewController.swift"
-                  timestampString = "552566280.169497"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "77"
-                  endingLineNumber = "77"
-                  offsetFromSymbolStart = "852">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; () in closure #1 (Swift.AnyObject) -&gt; () in EventApp.TermsAndConditionsViewController.fetchContentFromServer() -&gt; ()"
-                  moduleName = "My-Julia"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/gco/Shital%20Jadhav/JuliaApp_8Dec/MyJuliaiOSApp/My-Julia/View%20Controller/Login/Terms%20&amp;%20Conditions/TermsAndConditionsViewController.swift"
-                  timestampString = "552566280.172294"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "75"
-                  endingLineNumber = "75"
-                  offsetFromSymbolStart = "24">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "My-Julia/View Controller/Chat/EditGroupDetailsViewController.swift"
             timestampString = "552389704.234218"
             startingColumnNumber = "9223372036854775807"
@@ -74,7 +26,7 @@
                   moduleName = "My-Julia"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/gco/Shital%20Jadhav/JuliaApp_8Dec/MyJuliaiOSApp/My-Julia/View%20Controller/Chat/EditGroupDetailsViewController.swift"
-                  timestampString = "552566280.178713"
+                  timestampString = "553004003.3530459"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "210"
@@ -89,7 +41,7 @@
                   moduleName = "My-Julia"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/gco/Shital%20Jadhav/JuliaApp_8Dec/MyJuliaiOSApp/My-Julia/View%20Controller/Chat/EditGroupDetailsViewController.swift"
-                  timestampString = "552566280.180891"
+                  timestampString = "553004003.355741"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "210"

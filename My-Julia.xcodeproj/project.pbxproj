@@ -145,7 +145,7 @@
 		7E5F090420610173002687D0 /* NameListTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E5F080D20610173002687D0 /* NameListTableView.m */; };
 		7E5F090520610173002687D0 /* ListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E5F080E20610173002687D0 /* ListTableViewCell.xib */; };
 		7E5F090620610173002687D0 /* ListTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E5F081020610173002687D0 /* ListTableViewCell.m */; };
-		7E5F090720610173002687D0 /* EventData.sharedInstance.attendeeId.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5F081120610173002687D0 /* EventData.sharedInstance.attendeeId.swift */; };
+		7E5F090720610173002687D0 /* ChatContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5F081120610173002687D0 /* ChatContactsViewController.swift */; };
 		7E5F090820610173002687D0 /* ActivityPostLikesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5F081320610173002687D0 /* ActivityPostLikesViewController.swift */; };
 		7E5F090920610173002687D0 /* PostActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5F081420610173002687D0 /* PostActivityViewController.swift */; };
 		7E5F090A20610173002687D0 /* ActivityFeedListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5F081520610173002687D0 /* ActivityFeedListViewController.swift */; };
@@ -480,7 +480,7 @@
 		7E5F080E20610173002687D0 /* ListTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ListTableViewCell.xib; sourceTree = "<group>"; };
 		7E5F080F20610173002687D0 /* UIViewExt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewExt.h; sourceTree = "<group>"; };
 		7E5F081020610173002687D0 /* ListTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListTableViewCell.m; sourceTree = "<group>"; };
-		7E5F081120610173002687D0 /* EventData.sharedInstance.attendeeId.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventData.sharedInstance.attendeeId.swift; sourceTree = "<group>"; };
+		7E5F081120610173002687D0 /* ChatContactsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatContactsViewController.swift; sourceTree = "<group>"; };
 		7E5F081320610173002687D0 /* ActivityPostLikesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityPostLikesViewController.swift; sourceTree = "<group>"; };
 		7E5F081420610173002687D0 /* PostActivityViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostActivityViewController.swift; sourceTree = "<group>"; };
 		7E5F081520610173002687D0 /* ActivityFeedListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityFeedListViewController.swift; sourceTree = "<group>"; };
@@ -1315,7 +1315,7 @@
 				7E5F080420610173002687D0 /* EditGroupDetailsViewController.swift */,
 				7E5F080520610173002687D0 /* AddMemberViewController.swift */,
 				7E5F080620610173002687D0 /* CreateGroupViewController.swift */,
-				7E5F081120610173002687D0 /* EventData.sharedInstance.attendeeId.swift */,
+				7E5F081120610173002687D0 /* ChatContactsViewController.swift */,
 				7E5F080720610173002687D0 /* ChatSelectionView */,
 			);
 			path = Chat;
@@ -2060,7 +2060,7 @@
 				7E5F08E720610173002687D0 /* FMResultSet+ResultSet.swift in Sources */,
 				7E5F08D920610173002687D0 /* NotificationViewModelController.swift in Sources */,
 				7E5F08D420610173002687D0 /* Map.swift in Sources */,
-				7E5F090720610173002687D0 /* EventData.sharedInstance.attendeeId.swift in Sources */,
+				7E5F090720610173002687D0 /* ChatContactsViewController.swift in Sources */,
 				7EB8530F2091E6C3004948AB /* ImageProcessor.swift in Sources */,
 				7E5F08CE20610173002687D0 /* EmergencyModel.swift in Sources */,
 				7E5F094120610173002687D0 /* ViewController.swift in Sources */,
@@ -2409,8 +2409,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = "My-Julia/My-Julia.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Marco Kenson (3AS5P9L25L)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Marco Kenson (3AS5P9L25L)";
 				CODE_SIGN_STYLE = Manual;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
@@ -2441,7 +2441,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.gcotechcenter.MyJulia;
 				PRODUCT_MODULE_NAME = EventApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "ce5ad652-cb58-4611-8b81-688c6a46fe0b";
+				PROVISIONING_PROFILE = "2c8ea446-3b7d-4622-bf44-2f61d867b96c";
 				PROVISIONING_PROFILE_SPECIFIER = MyJulia_Dev_Enterprise;
 				SWIFT_OBJC_BRIDGING_HEADER = Event_Briding_Header.h;
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "";
@@ -2460,8 +2460,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = "My-Julia/My-Julia.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Marco Kenson (3AS5P9L25L)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Marco Kenson (3AS5P9L25L)";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = SKDTAX4HF9;
@@ -2491,7 +2491,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.gcotechcenter.MyJulia;
 				PRODUCT_MODULE_NAME = EventApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "ce5ad652-cb58-4611-8b81-688c6a46fe0b";
+				PROVISIONING_PROFILE = "2c8ea446-3b7d-4622-bf44-2f61d867b96c";
 				PROVISIONING_PROFILE_SPECIFIER = MyJulia_Dev_Enterprise;
 				SWIFT_OBJC_BRIDGING_HEADER = Event_Briding_Header.h;
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "";

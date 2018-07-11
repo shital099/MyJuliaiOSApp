@@ -97,13 +97,11 @@ class ChatContactsViewController: UIViewController, headerDelegate, UISearchBarD
         //New Chat Started
         self.tableView.newContactSelectBlock = { (model) -> Void in
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "ChatViewController") as! ChatViewController
-//            if self.searchController.isActive && self.searchController.searchBar.text != "" {
-//                vc.chatGroupModel = model as! ChatGroupModel
-//            }
-//            else {
-                vc.chatGroupModel = model as! ChatGroupModel
-//            }
+            print("Tag  :",self.view.tag)
+            print("from id ",(model as! ChatGroupModel).name)
+            vc.chatGroupModel = model as! ChatGroupModel
             vc.isFromContactList = true
+
 //            let cModel = ChatGroupModel()
 //            cModel.groupId = personModel.personId
 //            cModel.fromId = EventData.sharedInstance.attendeeId
@@ -111,7 +109,7 @@ class ChatContactsViewController: UIViewController, headerDelegate, UISearchBarD
 //            cModel.iconUrl = personModel.iconUrl
 //            cModel.isGroupChat = false
 //            vc.chatGroupModel = cModel
-print("from id ",vc.chatGroupModel.fromId)
+            print("from id ",vc.chatGroupModel.fromId)
             print("to id ",vc.chatGroupModel.groupId)
 
             self.navigationController?.pushViewController(vc, animated: true)
