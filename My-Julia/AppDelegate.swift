@@ -382,8 +382,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
 
-        //Fetch module data from api and save into db
-        self.fetchAllUnreadNotificationMessages(flag:moduleFlag)
+       // if moduleFlag != Get_Notification_Notifications{
+            //Fetch module data from api and save into db
+            self.fetchAllUnreadNotificationMessages(flag:moduleFlag)
+       // }
     }
 
     func showNotificationAlertMessage(title : String, message : String, application: UIApplication)  {
@@ -444,19 +446,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func fetchAllUnreadNotificationMessages(flag : String) {
 
-        print(" before Fetching unread notification data : ", CommonModel.sharedInstance.getCurrentDateInMM())
         let urlStr = Get_AllNotification_url.appendingFormat("Flag=%@",flag)
-        print("Notification api url : ",urlStr)
 
         NetworkingHelper.getRequestFromUrl(name:Get_AllNotification_url, urlString: urlStr, callback: { [weak self] response in
-            print("Notification data received : ",response)
+           // print("Notification data received : ",response)
 
             let dataDict:[String: Any] = ["Order": 0, "Flag":Update_SideMenu_List]
             NotificationCenter.default.post(name: UpdateNotificationCount, object: nil, userInfo: dataDict)
 
             }, errorBack: { error in
         })
-        print("Finish Fetching unread notification data : ", CommonModel.sharedInstance.getCurrentDateInMM())
     }
 
     //MARK: - UIApplication Methods

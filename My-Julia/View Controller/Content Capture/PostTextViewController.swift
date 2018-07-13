@@ -88,7 +88,7 @@ class PostTextViewController: UIViewController, UITextViewDelegate {
     }
 
     func textViewDidEndEditing(_ textView: UITextView) {
-        print("textViewDidEndEditing activity feed text character length : ",textView.text.count)
+        //print("textViewDidEndEditing activity feed text character length : ",textView.text.count)
     }
 
     @objc func dismissKeyboard() {

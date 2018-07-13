@@ -91,6 +91,21 @@ class ActivityFeedListViewController: UIViewController, UITableViewDataSource, U
 
     override func viewDidAppear(_ animated: Bool) {
 
+        //Update all notifcation as read
+       // DBManager.sharedInstance.updateActivityFeedNotificationStatus()
+
+//        //Update actiivty read/unread data count in side menu bar
+//        let dataDict:[String: Any] = ["Order": self.view.tag, "Flag":Update_Activity_Feeds_List]
+//        NotificationCenter.default.post(name: UpdateNotificationCount, object: nil, userInfo: dataDict)
+
+//        let moduldId = CommonModel.sharedInstance.fetchModuleIdFromViewController(vc: "ActivityFeedListViewController")
+//        let moduleOrder = DBManager.sharedInstance.fetchModuleOrderFromDB(moduleId: moduldId)
+//        print("Module Order : ",moduleOrder)
+//
+//        //Update notification read/unread message count in side menu bar
+//        let dataDict:[String: Any] = ["Order": moduleOrder - 1 , "Flag":Update_Activity_Feeds_List]
+//        NotificationCenter.default.post(name: UpdateNotificationCount, object: nil, userInfo: dataDict)
+
         //Update side menu notification count
         self.feedsModelController.initializeModuleIndex(index : self.view.tag)
 
@@ -110,15 +125,13 @@ class ActivityFeedListViewController: UIViewController, UITableViewDataSource, U
             
             self.isRefreshList = false
         }
+        
 
 //        print("start updating feed count - ",CommonModel.sharedInstance.getCurrentDateInMM())
 //
 //        //Update all notifcation as read
 //        DBManager.sharedInstance.updateActivityFeedNotificationStatus()
 //
-//        //Update actiivty read/unread data count in side menu bar
-//        let dataDict:[String: Any] = ["Order": self.view.tag, "Flag":Update_Activity_Feeds_List]
-//        NotificationCenter.default.post(name: UpdateNotificationCount, object: nil, userInfo: dataDict)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -212,9 +225,9 @@ class ActivityFeedListViewController: UIViewController, UITableViewDataSource, U
                 DispatchQueue.main.async {
                 }
             } else {
-                DispatchQueue.main.async {
-                    strongSelf.tableviewObj.reloadData()
-                }
+            }
+            DispatchQueue.main.async {
+                strongSelf.tableviewObj.reloadData()
             }
         }
    }

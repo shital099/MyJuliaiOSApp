@@ -704,23 +704,20 @@ class DBManager: NSObject {
 
                     //Save Notification List Profile
                     if (dict.value(forKey:"notificationlst") as? NSNull) == nil {
-                        self.saveNotificationDataIntoDB(response: dict.value(forKey: "notificationlst") as AnyObject)
-                        // sqlQuery += self.parseAndSaveNotificationDataIntoDB(response: dict.value(forKey: "notificationlst") as AnyObject)
+                        //Gettting duplicate notiifcation issues
+                      //  self.saveNotificationDataIntoDB(response: dict.value(forKey: "notificationlst") as AnyObject)
                     }
                     //Save WiFi List Profile
                     if (dict.value(forKey:"Wifi") as? NSNull) == nil {
                         self.saveWifiDataIntoDB(response: dict.value(forKey:"Wifi") as AnyObject, isNoticationData: true)
-                        //sqlQuery += self.parseAndSaveWiFiDataIntoDB(response: dict.value(forKey:"Wifi") as AnyObject)
                     }
                     //Save Map list
                     if (dict.value(forKey:"Map") as? NSNull) == nil {
                         self.saveMapDataIntoDB(response: dict.value(forKey:"Map") as AnyObject, isNoticationData: true)
-                        // sqlQuery += self.parseAndSaveMapDataIntoDB(response: dict.value(forKey:"Map") as AnyObject)
                     }
                     //Save Document list
                     if (dict.value(forKey:"Documents") as? NSNull) == nil {
                         self.saveDocumentsDataIntoDB(response: dict.value(forKey:"Documents") as AnyObject, isNoticationData: true)
-                        //sqlQuery += self.parseAndSaveDocumentDataIntoDB(response: dict.value(forKey:"Documents") as AnyObject)
                     }
                     //Save Activity Feeds list
                     if (dict.value(forKey:"ActivityFeeds") as? NSNull) == nil {
@@ -4235,6 +4232,7 @@ class DBManager: NSObject {
         } catch {
             print("error = \(error)")
         }
+        //print("All attendee list : ",responce)
 
         var sqlQuery = "" //self.parseAttendeeData(response: responce)
 

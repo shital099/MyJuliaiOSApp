@@ -104,17 +104,15 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
     func fetchAllUnreadNotificationMessages() {
 
-        print(" before Fetching unread notification data : ", CommonModel.sharedInstance.getCurrentDateInMM())
         let urlStr = Get_AllNotification_url.appendingFormat("Flag=%@",Get_Notification_GetAllData)
         NetworkingHelper.getRequestFromUrl(name:Get_AllNotification_url, urlString: urlStr, callback: { [weak self] response in
-            print("Notification data received : ",response)
+           // print("Notification data received : ",response)
 
             let dataDict:[String: Any] = ["Order": 0, "Flag":Update_SideMenu_List]
             NotificationCenter.default.post(name: UpdateNotificationCount, object: nil, userInfo: dataDict)
 
             }, errorBack: { error in
         })
-        print("Finish Fetching unread notification data : ", CommonModel.sharedInstance.getCurrentDateInMM())
     }
 
     func addNotificationObserver()  {
@@ -503,6 +501,9 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
             CommonModel.sharedInstance.showAlertWithStatus(title: "Error", message: Internet_Error_Message, vc: self)
         }
 
+
+
+
 //        AFNetworkReachabilityManager.shared().setReachabilityStatusChange { (status: AFNetworkReachabilityStatus) -> Void in
 //            if status == .notReachable {
 //                print("Network not found..")
@@ -842,6 +843,13 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
             CommonModel.sharedInstance.dissmissActitvityIndicator()
             CommonModel.sharedInstance.showAlertWithStatus(title: "Error", message: Internet_Error_Message, vc: self)
         })
+
+        //Fetch unread messages count
+        let queue = OperationQueue()
+
+        queue.addOperation { () -> Void in
+            self.fetchAllUnreadNotificationMessages()
+        }
     }
 
     // MARK: - Notification observer Methods
@@ -996,6 +1004,8 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
             }
         }
 
+        print("Unread count : ",sideDrawerItem.dataCount)
+        
         self.tableView.reloadData()
     }
 

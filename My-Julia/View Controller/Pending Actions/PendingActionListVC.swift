@@ -43,6 +43,7 @@ class PendingActionListVC: UIViewController, UITableViewDataSource, UITableViewD
         // Dispose of any resources that can be recreated.
     }
 
+
     override func viewDidAppear(_ animated: Bool) {
         //Fetch updated status from database
         self.checkPendingActionStatus()

@@ -443,7 +443,8 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
         
         //Show Indicator
         //  CommonModel.sharedInstance.showActitvityIndicator()
-        
+        print("Chat message character length : ",message.count)
+
         let paramDict = ["FromId":AttendeeInfo.sharedInstance.attendeeId  ,"ToId":self.chatGroupModel.groupId, paramKey: message , "IsGroupChat" : self.chatGroupModel.isGroupChat, "EventId":EventData.sharedInstance.eventId] as [String : Any]
 
         NetworkingHelper.postData(urlString:Chat_Post_Message, param:paramDict as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { [weak self] response in
