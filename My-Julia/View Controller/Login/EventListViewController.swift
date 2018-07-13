@@ -243,6 +243,7 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
 
     func searchEvent() {
         CommonModel.sharedInstance.showActitvityIndicator()
+        print("Start searching event : ",CommonModel.sharedInstance.getCurrentDateInMM())
 
         let parameters : NSDictionary? = [ "SearchText": self.searchBar.text!]
         NetworkingHelper.postData(urlString:Search_Event_Url, param:parameters!, withHeader: false, isAlertShow: true, controller:self, callback: { [weak self] response in
@@ -273,7 +274,6 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
 
             let  dict = item as! NSDictionary
             let model = EventModel()
-            print("Dict : ",dict)
             
             model.eventId = DBManager.sharedInstance.isNullString(str: dict.value(forKey: "EventId") as Any)
             model.eventName = DBManager.sharedInstance.isNullString(str: dict.value(forKey: "EventName") as Any)
