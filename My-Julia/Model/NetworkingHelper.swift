@@ -12,9 +12,9 @@ import UIKit
 //BASE URL AND Auth Key
 //let BASE_URL = "http://srv01:2300/" 
 
-let BASE_URL = "http://amaresh.gcotechcenter.local:8000/"     //local machine
+//let BASE_URL = "http://amaresh.gcotechcenter.local:8000/"     //local machine
 //let BASE_URL = "http://srv01.gcotechcenter.local:1400/"  //SRV 1
-//let BASE_URL = "http://srv01.gcotechcenter.local:2400/"     //SRV 2
+let BASE_URL = "http://srv01.gcotechcenter.local:2400/"     //SRV 2
 //let BASE_URL = "https://apps.gcotechcenter.com/"
 
 //let BASE_URL = "http://srv01.gcotechcenter.local:5400/"     //Production4

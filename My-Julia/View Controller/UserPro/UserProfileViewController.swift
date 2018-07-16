@@ -66,7 +66,7 @@ class UserProfileViewController: UIViewController, UINavigationControllerDelegat
         switchSet.isOn = AttendeeInfo.sharedInstance.isvisible
         dndSwitchSet.isOn = AttendeeInfo.sharedInstance.isDND
 
-        if (AttendeeInfo.sharedInstance.iconUrl != nil) {
+        if (AttendeeInfo.sharedInstance.iconUrl != BASE_URL) {
             //Check internet connection
             if AFNetworkReachabilityManager.shared().isReachable == true {
                 SDImageCache.shared().removeImage(forKey: AttendeeInfo.sharedInstance.iconUrl, withCompletion: nil)
@@ -158,7 +158,7 @@ class UserProfileViewController: UIViewController, UINavigationControllerDelegat
         
         if let referenceUrl = info[UIImagePickerControllerReferenceURL] as? NSURL {
             
-            ALAssetsLibrary().asset(for: referenceUrl as URL!, resultBlock: { asset in
+            ALAssetsLibrary().asset(for: referenceUrl as URL?, resultBlock: { asset in
                 fileName = (asset?.defaultRepresentation().filename())!
                 //do whatever with your file name
                 print("File name", fileName )

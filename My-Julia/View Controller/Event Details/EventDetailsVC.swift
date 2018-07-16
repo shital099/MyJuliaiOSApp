@@ -108,7 +108,7 @@ class EventDetailsVC: UIViewController, UITableViewDataSource, UITableViewDelega
     @objc func leftSideMenuButtonPressed(sender: UIBarButtonItem) {
         let masterVC : UIViewController!
         if IS_IPHONE {
-            masterVC =  self.menuContainerViewController.leftMenuViewController as! MenuViewController!
+            masterVC =  self.menuContainerViewController.leftMenuViewController as! MenuViewController?
         }
         else {
             masterVC = self.splitViewController?.viewControllers.first

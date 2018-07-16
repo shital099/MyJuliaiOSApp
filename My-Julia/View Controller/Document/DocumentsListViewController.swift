@@ -83,7 +83,6 @@ class DocumentsListViewController: UIViewController, UITableViewDelegate, UITabl
 
         let urlStr = Get_AllModuleDetails_url.appendingFormat("Flag=%@",Documents_List_url)
         NetworkingHelper.getRequestFromUrl(name:Documents_List_url,  urlString:urlStr, callback: { [weak self] response in
-            print("Documents data : ",response)
             //Fetch data from Sqlite database
             self?.listArray = DBManager.sharedInstance.fetchDocumentsListFromDB().mutableCopy() as! NSMutableArray
             self?.tableView.reloadData()

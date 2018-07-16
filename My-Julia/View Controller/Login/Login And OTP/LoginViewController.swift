@@ -84,9 +84,6 @@ class LoginViewController: UIViewController {
 
         NetworkingHelper.postData(urlString:Get_AuthToken_Url, param:parameters, withHeader: false, isAlertShow: true, controller:self, callback: { [weak self] response in
 
-            //   print("\nAuth token response - ",CommonModel.sharedInstance.getCurrentDateInMM())
-
-            print("\nAuth token Details response : ", response)
             let responseCode = Int(response.value(forKey: "responseCode") as! String)
 
             if responseCode == 0 {
@@ -101,13 +98,6 @@ class LoginViewController: UIViewController {
 
                 self?.loginView.isHidden = true
                 self?.otpView.isHidden = false
-
-                //self.getEventDetailsData()
-
-                //                //Store Attendee credential for auto login
-                //                UserDefaults.standard.set("StoreCrential", forKey: "isAppUninstall")
-                //                UserDefaults.standard.synchronize()
-                //                CredentialHelper.shared.storeDefaultCredential(key: event.attendeeCode, value: event.eventId)
             }
             else {
                 CommonModel.sharedInstance.dissmissActitvityIndicator()
@@ -126,9 +116,6 @@ class LoginViewController: UIViewController {
 
         NetworkingHelper.postData(urlString:Get_AuthToken_Url, param:parameters, withHeader: false, isAlertShow: true, controller:self, callback: { [weak self] response in
 
-            //   print("\nAuth token response - ",CommonModel.sharedInstance.getCurrentDateInMM())
-
-            print("\nAuth token Details response : ", response)
             let responseCode = Int(response.value(forKey: "responseCode") as! String)
 
             if responseCode == 0 {

@@ -379,8 +379,6 @@ class EventListViewController: UIViewController, UITableViewDelegate, UITableVie
 
 
     func navigateToNextScreen() {
-        print("navigateToNextScreen method : ",CommonModel.sharedInstance.getCurrentDateInMM())
-
         //App login
         isAppLogin = true
 

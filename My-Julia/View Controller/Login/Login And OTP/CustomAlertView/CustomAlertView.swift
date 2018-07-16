@@ -171,8 +171,6 @@ class CustomAlertView: UIViewController, UITextFieldDelegate {
 
         NetworkingHelper.postData(urlString:Get_AuthToken_Url, param:parameters, withHeader: false, isAlertShow: true, controller:self, callback: {[weak self] response in
 
-            //   print("\nAuth token response - ",CommonModel.sharedInstance.getCurrentDateInMM())
-
             print("\n Auth token Details response : ", response)
             let responseCode = Int(response.value(forKey: "responseCode") as! String)
             CommonModel.sharedInstance.dissmissActitvityIndicator()
@@ -189,15 +187,6 @@ class CustomAlertView: UIViewController, UITextFieldDelegate {
                 self?.isValidateOTP = true
                 self?.noOfOtpAttempt += 1
                 Timer.scheduledTimer(timeInterval: TimeInterval(OTP_session_Time), target: self, selector:  #selector(self?.otpSessionExpired(timer:)), userInfo: nil, repeats: false)
-                // CommonModel.sharedInstance.showAlertWithStatus(title: "", message:Confirm_Attendee_code, vc: self)
-
-                //self.getEventDetailsData()
-
-//                                //Store Attendee credential for auto login
-//                                UserDefaults.standard.set("StoreCrential", forKey: "isAppUninstall")
-//                                UserDefaults.standard.synchronize()
-//                                CredentialHelper.shared.storeDefaultCredential(key: event.attendeeCode, value: event.eventId)
-
             }
             else {
                 CommonModel.sharedInstance.showAlertWithStatus(title: "", message:response.value(forKey: "responseMsg") as! String, vc: self!)

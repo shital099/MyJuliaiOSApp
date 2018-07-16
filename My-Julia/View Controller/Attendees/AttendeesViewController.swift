@@ -13,6 +13,7 @@ class AttendeesViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var bgImageView: UIImageView!
     var searchController : UISearchController!
+    @IBOutlet weak var searchView: UIView!
 
     var filtered:[PersonModel] = []
     var listArray:[PersonModel] = []
@@ -29,10 +30,6 @@ class AttendeesViewController: UIViewController, UITableViewDelegate, UITableVie
         
         //Show menu icon in ipad and iphone
         self.setupMenuBarButtonItems()
-        
-        //        if IS_IPHONE {
-        //            self.setupMenuBarButtonItems()
-        //        }
 
         //Update dyanamic height of tableview cell
         tableView.estimatedRowHeight = 600
@@ -44,15 +41,13 @@ class AttendeesViewController: UIViewController, UITableViewDelegate, UITableVie
         searchController.searchBar.delegate = self
         definesPresentationContext = true
         searchController.dimsBackgroundDuringPresentation = false
-       // self.searchController.hidesNavigationBarDuringPresentation = false;
-        //self.navigationItem.titleView = self.searchController.searchBar;
-         tableView.tableHeaderView = searchController.searchBar
+        self.searchController.hidesNavigationBarDuringPresentation = false;
+        self.searchController.searchBar.frame.origin = CGPoint(x: 0, y: 0)
+        self.searchView.addSubview(self.searchController.searchBar)
+//         tableView.tableHeaderView = searchController.searchBar
 
         //Remove extra lines from tableview
         tableView.tableFooterView = UIView()
-
-        //tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), atScrollPosition: UITableViewScrollPosition.Top, animated: false)
-        
 
         //apply application theme on screen
         CommonModel.sharedInstance.applyThemeOnScreen(viewController: self, bgImage: bgImageView)
@@ -138,7 +133,7 @@ class AttendeesViewController: UIViewController, UITableViewDelegate, UITableVie
     @objc func leftSideMenuButtonPressed(sender: UIBarButtonItem) {
         let masterVC : UIViewController!
         if IS_IPHONE {
-            masterVC =  self.menuContainerViewController.leftMenuViewController as! MenuViewController!
+            masterVC =  self.menuContainerViewController.leftMenuViewController as! MenuViewController?
         }
         else {
             masterVC = self.splitViewController?.viewControllers.first

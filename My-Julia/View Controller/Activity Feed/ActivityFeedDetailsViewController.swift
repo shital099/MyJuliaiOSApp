@@ -33,6 +33,8 @@ class ActivityFeedDetailsViewController: UIViewController, RTLabelDelegate, SFSa
         //Update dyanamic height of tableview cell
         tableViewObj.estimatedRowHeight = 1200
         tableViewObj.rowHeight = UITableViewAutomaticDimension
+
+        print("Actiivity details : ",self.feedModel.messageText)
     }
 
     // MARK: - Gesture Methods
@@ -159,7 +161,6 @@ class ActivityFeedDetailsViewController: UIViewController, RTLabelDelegate, SFSa
         if indexPath.row == 0{
             return UITableViewAutomaticDimension
         }
-
         else {
             return 360
         }
@@ -176,7 +177,7 @@ class ActivityFeedDetailsViewController: UIViewController, RTLabelDelegate, SFSa
             cell.messageLbl.lineBreakMode = RTTextLineBreakModeWordWrapping
             // cell.messageLbl.sizeToFit()
 
-            let string = feedModel.messageText.appending(String(format:"<style>body{font-family: '%@'; font-size:%fpx;}</style><br></br>",cell.messageLbl.font.fontName,cell.messageLbl.font.pointSize))
+            let string = feedModel.messageText.appending(String(format:"<style>body{font-family: '%@'; font-size:%fpx;}</style><br></br><br></br>",cell.messageLbl.font.fontName,cell.messageLbl.font.pointSize))
             cell.descLbl.attributedText = CommonModel.sharedInstance.stringFromHtml(string: string)
         }
         else {

@@ -686,16 +686,11 @@ class DBManager: NSObject {
      }*/
 
     func saveAllUnreadNotificationDataIntoDB(response: AnyObject){
-
         //print("All unread notifications : ",response)
-        print(" BEFORE insertion notification data into db : ", CommonModel.sharedInstance.getCurrentDateInMM())
-
         if openDatabase() {
             self.database.beginTransaction()
 
             if response is NSArray {
-                var sqlQuery = ""
-
                 let arr = response as! NSArray
                 let rawDict = arr[0]
 
@@ -705,7 +700,7 @@ class DBManager: NSObject {
                     //Save Notification List Profile
                     if (dict.value(forKey:"notificationlst") as? NSNull) == nil {
                         //Gettting duplicate notiifcation issues
-                      //  self.saveNotificationDataIntoDB(response: dict.value(forKey: "notificationlst") as AnyObject)
+                        self.saveNotificationDataIntoDB(response: dict.value(forKey: "notificationlst") as AnyObject)
                     }
                     //Save WiFi List Profile
                     if (dict.value(forKey:"Wifi") as? NSNull) == nil {
@@ -743,7 +738,6 @@ class DBManager: NSObject {
 //            }
             database.commit()
             database.close()
-            print(" AFTER insertion notification into db : ", CommonModel.sharedInstance.getCurrentDateInMM())
         }
     }
 
@@ -1837,7 +1831,6 @@ class DBManager: NSObject {
             if openDatabase() {
                 database.beginTransaction()
 
-                let eventId = EventData.sharedInstance.eventId
                 //Notification data save into DB
                 do {
                     let  dict = response as! NSDictionary
@@ -2741,7 +2734,6 @@ class DBManager: NSObject {
 
             while results.next() == true {
                 count = results.object(forColumnIndex: 0) as! Int
-                print("Chat unread count : ",count)
             }
             //  count = database.intForQuery(sql: querySQL)
 
@@ -3354,7 +3346,6 @@ class DBManager: NSObject {
                 try database.executeUpdate("insert or replace into Notes (EventID, title, message, date, SessionId, ActivityId, AttendeeId) VALUES (?, ?, ?, ?, ?, ?, ?)", values: [eventId, note.titleStr, note.messageStr, note.dateStr, note.sessionId, note.activityId, EventData.sharedInstance.attendeeId])
                 
             } catch {
-                print("error = \(error)")
             }
         }
         
@@ -3371,7 +3362,6 @@ class DBManager: NSObject {
                 try database.executeUpdate("UPDATE Notes SET title = ?, message = ?, date = ? WHERE id = ? AND EventID = ? AND AttendeeId = ?", values: [note.titleStr, note.messageStr, note.dateStr, note.id, eventId, EventData.sharedInstance.attendeeId])
                 
             } catch {
-                print("error = \(error)")
             }
         }
         
@@ -3386,7 +3376,6 @@ class DBManager: NSObject {
                 try database.executeUpdate("DELETE FROM Notes WHERE id = ? And EventID = ? AND AttendeeId = ?", values: [note.id, EventData.sharedInstance.eventId,EventData.sharedInstance.attendeeId])
                 
             } catch {
-                print("error = \(error)")
             }
         }
         database.close()
@@ -3450,7 +3439,6 @@ class DBManager: NSObject {
                 try database.executeUpdate("insert or replace into Reminder (EventID, Title, message, SortDate, ReminderTime,ActivityStartTime, ActivityEndTime, ActivitySessionId, ActivityId, AttendeeId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", values: [EventData.sharedInstance.eventId, reminder.title, reminder.message, reminder.sortDate, reminder.reminderTime,reminder.activityStartTime, reminder.activityEndTime, reminder.sessionId, reminder.activityId, EventData.sharedInstance.attendeeId ])
                 
             } catch {
-                print("error = \(error)")
             }
         }
         
@@ -3465,7 +3453,6 @@ class DBManager: NSObject {
                 try database.executeUpdate("DELETE FROM Reminder WHERE id = ? AND EventID = ? AND AttendeeId = ?", values: [reminder.id, EventData.sharedInstance.eventId,EventData.sharedInstance.attendeeId])
                 
             } catch {
-                print("error = \(error)")
             }
         }
         database.close()
@@ -4232,7 +4219,6 @@ class DBManager: NSObject {
         } catch {
             print("error = \(error)")
         }
-        //print("All attendee list : ",responce)
 
         var sqlQuery = "" //self.parseAttendeeData(response: responce)
 
@@ -4414,7 +4400,6 @@ class DBManager: NSObject {
             try database.executeUpdate("DELETE FROM Speaker WHERE EventID = ?", values: [eventId])
 
         } catch {
-            print("error = \(error)")
         }
         var sqlQuery = ""
 
@@ -4480,7 +4465,6 @@ class DBManager: NSObject {
 
                         //Add speaker activities in table
                         if !database.executeStatements(sqlQuery) {
-                            // print(database.lastError(), database.lastErrorMessage())
                         }
                     }
                 } catch {

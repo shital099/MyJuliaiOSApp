@@ -83,7 +83,7 @@ class SessionListViewController: UIViewController, UITableViewDataSource, UITabl
         let array = DBManager.sharedInstance.fetchCurrentActivity()
         for item in array  {
             let model = item as! SessionsModel
-            if model.sortActivityDate != nil {
+            if model.sortActivityDate != "" {
                 
                 //let dateStr = model.day.appendingFormat(", %@", CommonModel.sharedInstance.getListHeaderDate(dateStr: model.sortActivityDate))
                 let dateStr = CommonModel.sharedInstance.getListHeaderDate(dateStr: model.sortActivityDate)
@@ -167,7 +167,7 @@ class SessionListViewController: UIViewController, UITableViewDataSource, UITabl
     @objc func leftSideMenuButtonPressed(sender: UIBarButtonItem) {
         let masterVC : UIViewController!
         if IS_IPHONE {
-            masterVC =  self.menuContainerViewController.leftMenuViewController as! MenuViewController!
+            masterVC =  self.menuContainerViewController.leftMenuViewController as! MenuViewController?
         }
         else {
             masterVC = self.splitViewController?.viewControllers.first

@@ -168,28 +168,12 @@ class SpeakerActivityListViewController: UIViewController, UITableViewDataSource
         let parameter = ["EventId" : EventData.sharedInstance.eventId, "SpeakerId" : AttendeeInfo.sharedInstance.speakerId]
         print(AttendeeInfo.sharedInstance.speakerId)
         NetworkingHelper.postData(urlString: Get_Speaker_Activity_url, param: parameter as AnyObject, withHeader: true, isAlertShow: false, controller:self, callback: { [weak self] response in
-            print("Activity list :", response)
             if response is Array<Any> {
                 self?.sortData(dataArray: DBManager.sharedInstance.fetchSpeakerPollActListFromDB() as! [AgendaModel] as NSArray)
-//                self.parseSpeakerData(response: response)
             }
         }, errorBack: { error in
-            NSLog("error : %@", error)
         })
     }
-
-//    func parseSpeakerData(response : AnyObject)
-//    {
-//            for item in response as! NSArray{
-//            let dict = item as! NSDictionary
-//            let model = AgendaModel()
-//            model.activityName = dict.value(forKey: "Text") as! String!
-//            model.activityId = dict.value(forKey: "Value") as! String!
-//
-//           self.listArray.append(model)
-//        }
-//        self.tableView.reloadData()
-//    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

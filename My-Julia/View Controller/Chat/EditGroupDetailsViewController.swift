@@ -197,7 +197,6 @@ class EditGroupDetailsViewController: UIViewController, UIImagePickerControllerD
         NetworkingHelper.postData(urlString:Chat_Update_Group, param:paramDict as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { [weak self] response in
             //dissmiss Indicator
             CommonModel.sharedInstance.dissmissActitvityIndicator()
-            print("Update Chat Group response : ", response)
 
             let responseCode = Int(response.value(forKey: "responseCode") as! String)
             if responseCode == 0 {
@@ -214,7 +213,6 @@ class EditGroupDetailsViewController: UIViewController, UIImagePickerControllerD
                 self?.navigationController?.popViewController(animated: false)
             }
         }, errorBack: { error in
-            print("Error while updating group info",error)
         })
     }
 }

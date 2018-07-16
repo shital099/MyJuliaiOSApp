@@ -17,6 +17,5 @@ class PhotoGallery: NSObject {
     var postImageUrl : String = ""
 
     deinit {
-       //  print("Gallery class is deallocated")
     }
 }

@@ -88,11 +88,9 @@ class PollViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
         let urlStr = GetPoll_Question_List_url.appendingFormat("%@",self.activityId)
         NetworkingHelper.getRequestFromUrl(name:GetPoll_Question_List_url,  urlString:urlStr, callback: { [weak self] response in
-           // print("poll questions", response)
             CommonModel.sharedInstance.dissmissActitvityIndicator()
 
             if response is Array<Any> {
-              //  self.parsePollData(response: response)
                 self?.pollarray = DBManager.sharedInstance.fetchPollActivityQuestionsListFromDB(sessionId: (self?.activityId)!, activityId: (self?.activityId)!) as! [PollModel]
                 self?.fetchUserAnswerData()
 
@@ -137,53 +135,6 @@ class PollViewController: UIViewController, UITableViewDataSource, UITableViewDe
         self.tableView.reloadData()
     }
 
-    /*func parsePollData(response: AnyObject) {
-        
-        //let  arr = response as! NSDictionary
-       // var isQuestionRemaining : Bool = false
-        
-        for item in response as! NSArray{
-            let dict = item as! NSDictionary
-            
-            let model = PollModel()
-            model.questionText = dict.value(forKey: "Questions") as! String
-            model.id = dict.value(forKey: "Id") as! String
-            model.optionsArr = dict.value(forKey: "Options") as! Array<Any>
-            let qType = dict.value(forKey: "QuestionType") as! String
-            model.isUserAnswered = dict.value(forKey: "IsUserAnswered") as! Bool
-            model.userAnswerId = DBManager.sharedInstance.isNullString(str: dict.value(forKey: "UserAnswerId") as Any)
-
-            //Store in answer dictionary
-            if model.userAnswerId != "" {
-                self.answerDict.setValue(model.userAnswerId, forKey:model.id)
-            }
-            else {
-              //  isQuestionRemaining = true
-            }
-            
-            if(qType == "Rating") {
-                model.isRatingType = true
-            }
-            else {
-                model.isRatingType = false
-            }
-            
-            pollarray.append(model)
-        }
-        print("Server Poll array count : ",self.pollarray.count)
-
-        tableView.reloadData()
-        
-//        //Hide is questions answered by user
-//        if !isQuestionRemaining {
-//            sucessView.isHidden = false
-//        }
-//        else {
-//            tableView.reloadData()
-//        }
-    }
-*/
-    
     func postPollForm(selectedCell: SubmitCell) {
         
         let event = EventData.sharedInstance

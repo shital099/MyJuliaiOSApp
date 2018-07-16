@@ -199,7 +199,6 @@
 		7E5F093E20610173002687D0 /* ActivityFeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5F085E20610173002687D0 /* ActivityFeedbackViewController.swift */; };
 		7E5F093F20610173002687D0 /* NotificationDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5F086020610173002687D0 /* NotificationDetailsViewController.swift */; };
 		7E5F094020610173002687D0 /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5F086120610173002687D0 /* NotificationViewController.swift */; };
-		7E5F094120610173002687D0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5F086320610173002687D0 /* ViewController.swift */; };
 		7E5F094220610173002687D0 /* TermsAndConditionViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E5F086520610173002687D0 /* TermsAndConditionViewController_iPhone.xib */; };
 		7E5F094320610173002687D0 /* TermsAndConditionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E5F086620610173002687D0 /* TermsAndConditionsViewController.swift */; };
 		7E5F094420610173002687D0 /* TermsAndConditionViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E5F086720610173002687D0 /* TermsAndConditionViewController_iPad.xib */; };
@@ -534,7 +533,6 @@
 		7E5F085E20610173002687D0 /* ActivityFeedbackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityFeedbackViewController.swift; sourceTree = "<group>"; };
 		7E5F086020610173002687D0 /* NotificationDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationDetailsViewController.swift; sourceTree = "<group>"; };
 		7E5F086120610173002687D0 /* NotificationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
-		7E5F086320610173002687D0 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		7E5F086520610173002687D0 /* TermsAndConditionViewController_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TermsAndConditionViewController_iPhone.xib; sourceTree = "<group>"; };
 		7E5F086620610173002687D0 /* TermsAndConditionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TermsAndConditionsViewController.swift; sourceTree = "<group>"; };
 		7E5F086720610173002687D0 /* TermsAndConditionViewController_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TermsAndConditionViewController_iPad.xib; sourceTree = "<group>"; };
@@ -1548,7 +1546,6 @@
 		7E5F086220610173002687D0 /* Login */ = {
 			isa = PBXGroup;
 			children = (
-				7E5F086320610173002687D0 /* ViewController.swift */,
 				7E5F086D20610173002687D0 /* EventListViewController.swift */,
 				7E5F086820610173002687D0 /* Login And OTP */,
 				7E5F086420610173002687D0 /* Terms & Conditions */,
@@ -2063,7 +2060,6 @@
 				7E5F090720610173002687D0 /* ChatContactsViewController.swift in Sources */,
 				7EB8530F2091E6C3004948AB /* ImageProcessor.swift in Sources */,
 				7E5F08CE20610173002687D0 /* EmergencyModel.swift in Sources */,
-				7E5F094120610173002687D0 /* ViewController.swift in Sources */,
 				7E5F08F820610173002687D0 /* AttendeeDetailsViewController.swift in Sources */,
 				7EB853192091E820004948AB /* Box.swift in Sources */,
 				7E5F08EC20610173002687D0 /* AttendeeInfo.swift in Sources */,

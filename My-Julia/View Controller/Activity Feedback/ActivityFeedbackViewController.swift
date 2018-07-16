@@ -148,8 +148,7 @@ class ActivityFeedbackViewController: UIViewController, UITableViewDataSource, U
         
         let urlStr = Get_Activity_Feedback_List_url.appendingFormat("%@",activityId)
         NetworkingHelper.getRequestFromUrl(name:Get_Activity_Feedback_List_url,  urlString:urlStr, callback: { [weak self] response in
-            print("Activity Feedback List :", response)
-            
+
             self?.listArray = DBManager.sharedInstance.fetchActivityFeedbackDataFromDB(activityId:(self?.activityId)!) as! [FeedbackModel]
             self?.tableView.reloadData()
 
@@ -173,7 +172,6 @@ class ActivityFeedbackViewController: UIViewController, UITableViewDataSource, U
                 }   
             }
         }, errorBack: { error in
-            NSLog("error : %@", error)
         })
     }
 
@@ -190,7 +188,7 @@ class ActivityFeedbackViewController: UIViewController, UITableViewDataSource, U
     @objc func leftSideMenuButtonPressed(sender: UIBarButtonItem) {
         let masterVC : UIViewController!
         if IS_IPHONE {
-            masterVC =  self.menuContainerViewController.leftMenuViewController as! MenuViewController!
+            masterVC =  self.menuContainerViewController.leftMenuViewController as! MenuViewController?
         }
         else {
             masterVC = self.splitViewController?.viewControllers.first
@@ -233,7 +231,6 @@ class ActivityFeedbackViewController: UIViewController, UITableViewDataSource, U
             let paramDict = ["QuestionId": keys[index] ,"Answer":answer, "QuestionType" : "","ActivityId":self.activityId, "AttendeeId":AttendeeInfo.sharedInstance.attendeeId, "EventId":event.eventId]
             paramArr.append(paramDict)
         }
-        print("Post Activity Feedbck :",paramArr)
         
         NetworkingHelper.postData(urlString:Post_Activity_Feedback_url, param:paramArr as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { [weak self] response in
             //dissmiss Indicator
@@ -287,8 +284,6 @@ class ActivityFeedbackViewController: UIViewController, UITableViewDataSource, U
         
         let result = (textView.text as NSString?)?.replacingCharacters(in: range, with: text)
         ansDict.setValue(result, forKey: textView.accessibilityIdentifier!)
-
-        print("test character length : ",textView.text.count)
 
         //Retrict feedback text length
         if(textView.text.count > 498 && range.length == 0) {
@@ -366,7 +361,6 @@ class ActivityFeedbackViewController: UIViewController, UITableViewDataSource, U
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let model = listArray[indexPath.section] as FeedbackModel
-        print("Activity type : ",model.questionType)
 
         if model.questionType == "Multiple" {
             
@@ -587,7 +581,6 @@ class ActivityFeedbackViewController: UIViewController, UITableViewDataSource, U
         let model = listArray[cell.tag] as FeedbackModel
         model.answerText = String(button.tag)
         ansDict.setValue(button.tag, forKey: sender.accessibilityIdentifier!!)
-        // print("Ans Dict - ", self.ansDict)
     }
 }
 

@@ -66,7 +66,6 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
         //Show application version
         self.appVersionName.text = APP_VERSION
 
-        print("Menu View Did load : ",CommonModel.sharedInstance.getCurrentDateInMM())
         self.setMenuList()
     }
 
@@ -105,9 +104,7 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func fetchAllUnreadNotificationMessages() {
 
         let urlStr = Get_AllNotification_url.appendingFormat("Flag=%@",Get_Notification_GetAllData)
-        NetworkingHelper.getRequestFromUrl(name:Get_AllNotification_url, urlString: urlStr, callback: { [weak self] response in
-           // print("Notification data received : ",response)
-
+        NetworkingHelper.getRequestFromUrl(name:Get_AllNotification_url, urlString: urlStr, callback: { response in
             let dataDict:[String: Any] = ["Order": 0, "Flag":Update_SideMenu_List]
             NotificationCenter.default.post(name: UpdateNotificationCount, object: nil, userInfo: dataDict)
 
@@ -317,7 +314,7 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
         for data in listArray {
             
             let sideDrawerItem: SideDrawerMenu = SideDrawerMenu().addItemWithTitle(titleStr: data.name)
-            //sideDrawerItem.moduleIndex = data.index
+            sideDrawerItem.moduleIndex = data.moduleSequence
             sideDrawerItem.smallIconImage = data.sIconUrl
             sideDrawerItem.largeIconImage = data.lIconUrl
             sideDrawerItem.isCustomMenu = data.isCustomModule
@@ -431,7 +428,7 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     // MARK: - Button Action Method
     
-    @IBAction func onClickOfEventDetails(_ sender: Any) {
+    @IBAction func onClickOfEventDetails() {
         
         self.selectedIndexPath = IndexPath.init(row: -1, section: 0)
         
@@ -630,13 +627,12 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         let section = menuArray[indexPath.section] as! TKSideDrawerSection
         let item = section.items[indexPath.row] as! SideDrawerMenu
-        
+
         cell.nameLabel?.text = item.moduleTitle
         cell.nameLabel.textColor = item.textColor
         cell.nameLabel.font = UIFont.getFont(fontName: item.fontName, fontStyle: item.fontStyle, fontSize: CGFloat(item.fontSize))
 
-
-        //Show unread message count of chat 
+        //Show unread message count of chat
         if item.dataCount == 0 {
             cell.countLabel.isHidden = true
         }
@@ -708,7 +704,7 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         //If selected menu deselect by admin then navigation to event detail screen
         if index >= tkSection.items.count {
-            self.onClickOfEventDetails(self.eventButton)
+            self.onClickOfEventDetails()
             return
         }
         
@@ -748,20 +744,11 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
                     vc.isMySchedules = true
                 }
             }
-                //Check if myschedule selected
-//            else if viewController is NotificationViewController {
-//                    let vc = viewController as! NotificationViewController
-//                    vc.changeNotificationCount()
-//            }
         }
         
         viewController.title = item.moduleTitle
-        //viewController.accessibilityValue = String(format:"%d",index)
-        //viewController.view.tag = index         //Store row index
 
         if IS_IPHONE {
-           // viewController.view.tag = index         //Store row index
-
             self.menuContainerViewController.setMenuState(MFSideMenuStateClosed, completion: nil)
             let navController = self.menuContainerViewController.centerViewController as? UINavigationController
             navController?.viewControllers = NSArray().adding(viewController) as! [UIViewController]
@@ -772,21 +759,9 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 splitViewController?.showDetailViewController(navController, sender: nil)
             }
             else {
-//                let navController = self.storyboard?.instantiateViewController(withIdentifier: "NavigationController") as! UINavigationController
-//                print("before adding view controller to navigation ",navController.viewControllers)
-//
-//                navController.viewControllers = NSArray().adding(viewController) as! [UIViewController]
-//               // let navVC = UINavigationController.init(rootViewController: viewController)
-//                print("after adding in array ",navController.viewControllers)
-//
-//              //  viewController.view.tag = index         //Store row index
-//               // splitViewController?.showDetailViewController(navController, sender: nil)
-
-                // let navController = splitViewController?.viewControllers.last as? UINavigationController
                 splitViewController?.showDetailViewController(UINavigationController(rootViewController: viewController), sender: nil)
             }
         }
-        //}
     }
     
     func getEventModuleData() {
@@ -833,7 +808,7 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
                     self?.tableView.delegate?.tableView!((self?.tableView)!, didSelectRowAt: indexPath)
                 }
                 else {
-                    self?.onClickOfEventDetails(self?.eventButton)
+                    self?.onClickOfEventDetails()
                 }
 
            // print("After load event details on screen: ",CommonModel.sharedInstance.getCurrentDateInMM())
@@ -913,6 +888,7 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
         if filteredArray?.count != 0 {
             let sideDrawerItem = filteredArray![0] as! SideDrawerMenu
+            print("Order : ",sideDrawerItem.moduleIndex)
 
             let viewController = CommonModel.sharedInstance.fetchViewControllerObject(moduleId: notification.userInfo!["moduleId"] as! String)
 
@@ -937,8 +913,13 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 sideDrawerItem.dataCount = DBManager.sharedInstance.fetchUnreadNotificationsCount()
             }
 
-//            let indexPath = IndexPath.init(row: sideDrawerItem.moduleIndex, section: 1)
-//            self.tableView.reloadRows(at: [indexPath as IndexPath], with: UITableViewRowAnimation.automatic)
+            //Update corresponding module list 
+            if self.selectedIndexPath.row != -1 {
+                if self.selectedIndexPath.row == sideDrawerItem.moduleIndex-1 {
+                    //Call delegate method when menu item selected
+                    self.menuItemSelected(index: selectedIndexPath.row, section: selectedIndexPath.section)
+                }
+            }
 
             self.tableView.reloadData()
         }
@@ -1003,8 +984,6 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
 //                self.tableView.reloadRows(at: [indexPath as IndexPath], with: UITableViewRowAnimation.automatic)
             }
         }
-
-        print("Unread count : ",sideDrawerItem.dataCount)
         
         self.tableView.reloadData()
     }
@@ -1056,7 +1035,7 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let array = DBManager.sharedInstance.fetchAllCurrentAndFutureActivity()
         for item in array  {
             let model = item as! SessionsModel
-            if model.sortActivityDate != nil {
+            if model.sortActivityDate != "" {
                 
                 let timeInSec = Double(CommonModel.sharedInstance.getActivityTimeInSecond(dateStr: model.endActivityDate))
                 if timeInSec != 0 {

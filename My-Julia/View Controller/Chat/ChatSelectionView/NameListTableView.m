@@ -225,6 +225,9 @@
 //func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
 //    filterContentForSearchText(searchBar.text!, scope: searchBar.scopeButtonTitles![selectedScope])
 //}
+- (void)updateSearchResultsForSearchController:(UISearchController *)searchController {
+
+}
 
 -(BOOL)searchBarIsEmpty {
     // Returns true if the text is empty or nil

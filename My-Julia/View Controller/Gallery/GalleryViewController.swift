@@ -93,7 +93,7 @@ class GalleryViewController: UIViewController, UIImagePickerControllerDelegate, 
     @objc func leftSideMenuButtonPressed(sender: UIBarButtonItem) {
         let masterVC : UIViewController!
         if IS_IPHONE {
-            masterVC =  self.menuContainerViewController.leftMenuViewController as! MenuViewController!
+            masterVC =  self.menuContainerViewController.leftMenuViewController as! MenuViewController?
         }
         else {
             masterVC = self.splitViewController?.viewControllers.first
@@ -252,7 +252,6 @@ class GalleryViewController: UIViewController, UIImagePickerControllerDelegate, 
                 //Fetch data from Sqlite database
                 DBManager.sharedInstance.fetchGalleryDataFromDB(callback: { [weak self] array in
                     self?.listArray = array as! [PhotoGallery]
-                    print("After fetching from db : ",self?.listArray.count)
 
 //                    if (array as NSArray).count != 0 {
 //                        self?.listArray.removeAll()

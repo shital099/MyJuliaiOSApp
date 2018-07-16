@@ -110,7 +110,6 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
     override func viewDidAppear(_ animated: Bool) {
         print("self.splitViewController?.displayMode : ",self.splitViewController?.displayMode ?? "")
         //Show textview bottom view
-       // self.loadBaseViewsAndData()
 
         if IS_IPAD {
             //change width of bottom view according to split view 
@@ -123,7 +122,6 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
 
         let moduldId = CommonModel.sharedInstance.fetchModuleIdFromViewController(vc: "ChatListViewController")
         let moduleOrder = DBManager.sharedInstance.fetchModuleOrderFromDB(moduleId: moduldId)
-        print("Module Order : ",moduleOrder)
 
         //Update notification read/unread message count in side menu bar
         let dataDict:[String: Any] = ["Order": moduleOrder - 1 , "Flag":Update_Chat_List]
@@ -202,9 +200,7 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
         if gestureRecognizer.state == UIGestureRecognizerState.began {
             
             let touchPoint = gestureRecognizer.location(in: self.chatTableView)
-            // print("index : ", self.chatTableView?.indexPathForRow(at: touchPoint) ?? "")
             if (self.chatTableView?.indexPathForRow(at: touchPoint)) != nil {
-                print("longpressed in cell only")
                 self.changeCellStatus(touchPoint: touchPoint)
             }
             else {
@@ -231,23 +227,18 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
     func changeCellStatus(touchPoint : CGPoint) {
         print("Change status methods....")
         let indexPath : IndexPath = (self.chatTableView?.indexPathForRow(at: touchPoint))!
-        // let messageFrame = self.chatModel.dataSource[(indexPath.row)] as! UUMessageFrame
-        //if messageFrame.message.from.rawValue == 0 {
         let selectedCell = self.chatTableView?.cellForRow(at: indexPath) as! UUMessageCell
 
         //Store selected cell
         if deleteMsgArray.contains(indexPath) {
             deleteMsgArray.remove(indexPath)
-            //  selectedCell.bgSelectionImage.isHidden = true
         }
         else {
             deleteMsgArray.add(indexPath)
-            //  selectedCell.bgSelectionImage.isHidden = false
         }
         self.chatTableView?.reloadRows(at: [indexPath], with: UITableViewRowAnimation.fade)
 
-        //}
-        
+
         //If none of message selected then hide delete button
         if deleteMsgArray.count == 0 {
             self.navigationItem.rightBarButtonItems = self.chatGroupModel.isGroupChat == true ? [self.detailsBtn] : []
@@ -448,8 +439,7 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
         let paramDict = ["FromId":AttendeeInfo.sharedInstance.attendeeId  ,"ToId":self.chatGroupModel.groupId, paramKey: message , "IsGroupChat" : self.chatGroupModel.isGroupChat, "EventId":EventData.sharedInstance.eventId] as [String : Any]
 
         NetworkingHelper.postData(urlString:Chat_Post_Message, param:paramDict as AnyObject, withHeader: false, isAlertShow: true, controller:self, callback: { [weak self] response in
-            print("Post Chat message response : ", response)
-            
+
             let responseCode = Int(response.value(forKey: "responseCode") as! String)
             if responseCode == 0 {
                 
@@ -459,18 +449,6 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
                     //Check if message already exit in list
                     let  dict = response.value(forKey: "responseMsg") as! NSDictionary
                     let chatId = dict.value(forKey: "ChatId") as! String
-                    
-                    /* //Save message into db
-                     DBManager.sharedInstance.saveChatMessage(dict: dict)
-                     let messageF = DBManager.sharedInstance.fetchChatMessages(chatId: chatId, isGroupChat: self.chatGroupModel.isGroupChat, lastMessageTime: self.previousTime)
-                     if messageF.message != nil {
-                     self.chatModel.dataSource.add(messageF)
-                     self.chatTableView?.beginUpdates()
-                     self.chatTableView?.insertRows(at: [IndexPath(row: self.chatModel.dataSource.count-1, section: 0)], with: .automatic)
-                     self.chatTableView?.endUpdates()
-                     self.tableViewScrollToBottom()
-                     }
-                     */
                     
                     let predicate:NSPredicate = NSPredicate(format: "message.chatId = %@", chatId)
                     let filteredArray = listArray.filter { predicate.evaluate(with: $0) };
@@ -741,15 +719,12 @@ class ChatViewController: UIViewController, UUInputFunctionViewDelegate, UUMessa
 
     //  #pragma mark - cellDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("did select ")
     }
     
     func cellContentDidClick(_ cell: UUMessageCell!, image contentImage: UIImage!) {
-        print("cellContentDidClick ")
     }
     
     func headImageDidClick(_ cell: UUMessageCell!, userId: String!) {
         CommonModel.sharedInstance.showAlertWithStatus(title: "", message: cell.messageFrame.message.strName, vc: self)
-        print("cellContentDidClick ")
     }
 }

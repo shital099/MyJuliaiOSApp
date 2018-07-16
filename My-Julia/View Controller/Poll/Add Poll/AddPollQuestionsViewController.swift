@@ -106,7 +106,6 @@ class AddPollQuestionsViewController: UIViewController, UITableViewDataSource, U
                                     //dissmiss Indicator
                                     CommonModel.sharedInstance.dissmissActitvityIndicator()
                                     let responseCode = Int(response.value(forKey: "responseCode") as! String)
-                                    print("Add poll responce", response)
 
                                     if responseCode == 0 {
                                         DispatchQueue.main.async {
@@ -146,7 +145,6 @@ class AddPollQuestionsViewController: UIViewController, UITableViewDataSource, U
         
         NetworkingHelper.postData(urlString: Post_Update_Poll_Question, param:parameter as AnyObject, withHeader: false, isAlertShow: true, controller:self,
                                   callback: { [weak self] response in
-//                                    print("update list", response)
          //dissmiss Indicator
         CommonModel.sharedInstance.dissmissActitvityIndicator()
                                     DBManager.sharedInstance.updateSpeakerPollQuestionsDataIntoDB(question: (self?.questionModel.questionText)!, opt1: (self?.questionModel.opt1)!, opt2: (self?.questionModel.opt2)!, opt3: (self?.questionModel.opt3)!, opt4: (self?.questionModel.opt4)!, questionsId: (self?.questionModel.questionsId)!)
@@ -178,7 +176,6 @@ class AddPollQuestionsViewController: UIViewController, UITableViewDataSource, U
     }
     
      func textViewDidChange(_ textView: UITextView) {
-//        CommonModel.sharedInstance.showAlertWithStatus(title: Alert_Error, message: Update_Error_Message, vc: self)
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
@@ -235,37 +232,6 @@ class AddPollQuestionsViewController: UIViewController, UITableViewDataSource, U
         cell.opt2txt?.text = questionModel.opt2
         cell.opt3txt?.text = questionModel.opt3
         cell.opt4txt?.text = questionModel.opt4
- 
-//        for i in 0..<questionModel.optionsArr.count {
-//            print("i", i)
-//            print(questionModel.optionsArr.count)
-//            let optionDict = questionModel.optionsArr[i] as! NSDictionary
-//
-//            switch i {
-//            case 0:
-//                cell.opt1txt.text = optionDict["OptionValue"] as? String
-////                cell.opt1txt.accessibilityIdentifier = optionDict["Id"] as? String
-//                break
-//            case 1:
-//                cell.opt2txt.text = optionDict["OptionValue"] as? String
-////                cell.opt2txt.accessibilityIdentifier = optionDict["Id"] as? String
-//
-//                break
-//            case 2:
-//                cell.opt3txt.text = optionDict["OptionValue"] as? String
-////                cell.opt3txt.accessibilityIdentifier = optionDict["Id"] as? String
-//
-//                break
-//            case 3:
-//                cell.opt4txt.text = optionDict["OptionValue"] as? String
-////                cell.opt4txt.accessibilityIdentifier = optionDict["Id"] as? String
-//
-//                break
-//            default:
-//                break
-//            }
-//        }
-//
         cell.selectionStyle = UITableViewCellSelectionStyle.none
         return cell
         
@@ -274,7 +240,6 @@ class AddPollQuestionsViewController: UIViewController, UITableViewDataSource, U
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
     }
-    
     
     // MARK: - Button action methods
 
@@ -285,15 +250,7 @@ class AddPollQuestionsViewController: UIViewController, UITableViewDataSource, U
         questionModel.opt2 = tablecell.opt2txt.text!
         questionModel.opt3 = tablecell.opt3txt.text!
         questionModel.opt4 = tablecell.opt4txt.text!
-        //        else
-        //        {
-        //        tablecell.questInputView.text = ""
-        //        tablecell.opt1txt.text = ""
-        //        tablecell.opt2txt.text = ""
-        //        tablecell.opt3txt.text = ""
-        //        tablecell.opt4txt.text = ""
-        
-        //    }
+
         if (tablecell.questInputView.text?.trimmingCharacters(in: .whitespaces).isEmpty)! {
             CommonModel.sharedInstance.showAlertWithStatus(title: "", message: No_Question_Message, vc: self)
             return

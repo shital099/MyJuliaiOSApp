@@ -366,8 +366,6 @@ class CommonModel: NSObject {
         let font : UIFont = UIFont.getFont(fontName: AppTheme.sharedInstance.headerFontName, fontStyle: AppTheme.sharedInstance.headerFontStyle, fontSize: CGFloat(AppTheme.sharedInstance.headerFontSize))
         
         UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey.foregroundColor:AppTheme.sharedInstance.headerTextColor, NSAttributedStringKey.font: font ]
-        print("AppTheme.sharedInstance.isHeaderColor : ",AppTheme.sharedInstance.isHeaderColor)
-        print("headerImage : ",AppTheme.sharedInstance.headerImage)
 
         if AppTheme.sharedInstance.isHeaderColor == false {
             

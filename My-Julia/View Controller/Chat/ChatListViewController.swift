@@ -158,7 +158,7 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
     @objc func leftSideMenuButtonPressed(sender: UIBarButtonItem) {
         let masterVC : UIViewController!
         if IS_IPHONE {
-            masterVC =  self.menuContainerViewController.leftMenuViewController as! MenuViewController!
+            masterVC =  self.menuContainerViewController.leftMenuViewController as! MenuViewController?
         }
         else {
             masterVC = self.splitViewController?.viewControllers.first
@@ -228,8 +228,6 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
         let urlStr = Get_AllModuleDetails_url.appendingFormat("Flag=%@",Chat_Contact_List)
         NetworkingHelper.getRequestFromUrl(name:Chat_Contact_List,  urlString:urlStr, callback: { [weak self] response in
             if response is Array<Any> {
-                //print("Chat list ",response)
-                
                 //Fetch data from Sqlite database
                 self?.dataDict["Contacts"] = DBManager.sharedInstance.fetchChatListDataFromDB(isGroupList: false) as? [ChatGroupModel]
                 self?.dataDict["Groups"] = DBManager.sharedInstance.fetchChatListDataFromDB(isGroupList: true) as? [ChatGroupModel]
@@ -363,7 +361,6 @@ class ChatListViewController: UIViewController, UITableViewDelegate, UITableView
         
         if self.isGroupList {
             model = (self.dataDict["Groups"]?[indexPath.row])!
-          //  print("Group name : %@,\n Image Path : %@",model.name,model.iconUrl)
             if model.iconUrl.isEmpty {
                 cell.userIconImg.image = #imageLiteral(resourceName: "group_icon")
             }

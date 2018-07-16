@@ -59,38 +59,6 @@ class AddMemberViewController: UIViewController,UITableViewDelegate, UITableView
     */
     
     // MARK: - Webservice Methods
-    
-    /*func fetchAllContactsList() {
-        
-        NetworkingHelper.getRequestFromUrl(name:Chat_All_Contact_List,  urlString:Chat_All_Contact_List.appending(EventData.sharedInstance.eventId), callback: { [weak self] response in
-            print("Chat contact List :", response)
-            if response is Array<Any> {
-                self.parseChatData(response: response)
-            }
-        }, errorBack: { error in
-            NSLog("error : %@", error)
-        })
-    }
-    
-    func parseChatData(response: AnyObject) {
-        
-        //Parse chat contacts
-        for item in response as! NSArray {
-            let  dict = item as! NSDictionary
-            let model = ChatGroupModel()
-            model.groupId = dict.value(forKey: "AttendeeId") as! String!
-            model.fromId = dict.value(forKey: "AttendeeId") as! String!
-            model.name = dict.value(forKey: "Name") as! String
-            let path = dict.value(forKey: "ImgPath")
-            if (path as? NSNull) == nil {
-                model.iconUrl = BASE_URL.appending(path as! String)
-            }
-            model.isGroupChat = false
-            self.listArray.append(model)
-        }
-        
-        self.tableView.reloadData()
-    }*/
 
     func addMembersInGroup(attendeId : String) {
         

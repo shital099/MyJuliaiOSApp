@@ -73,20 +73,6 @@ class PostTextViewController: UIViewController, UITextViewDelegate {
         placeholderLabel.isHidden = !textView.text.isEmpty
     }
 
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-
-        let result = (textView.text as NSString?)?.replacingCharacters(in: range, with: text)
-
-        print("activity feed text character length : ",result?.count)
-
-//        //Retrict feedback text length
-//        if(textView.text.count > 498 && range.length == 0) {
-//            return false
-//        }
-
-        return true
-    }
-
     func textViewDidEndEditing(_ textView: UITextView) {
         //print("textViewDidEndEditing activity feed text character length : ",textView.text.count)
     }

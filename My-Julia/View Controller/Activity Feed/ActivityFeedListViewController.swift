@@ -169,7 +169,7 @@ class ActivityFeedListViewController: UIViewController, UITableViewDataSource, U
     @objc func leftSideMenuButtonPressed(sender: UIBarButtonItem) {
         let masterVC : UIViewController!
         if IS_IPHONE {
-            masterVC =  self.menuContainerViewController.leftMenuViewController as! MenuViewController!
+            masterVC =  self.menuContainerViewController.leftMenuViewController as! MenuViewController?
         }
         else {
             masterVC = self.splitViewController?.viewControllers.first
@@ -321,8 +321,6 @@ class ActivityFeedListViewController: UIViewController, UITableViewDataSource, U
         cell.commentButton.tag = indexPath.row
         cell.messageLbl.text = model.messageText
         cell.messageLbl.delegate = self
-        //cell.textLbl.attributedText =  CommonModel.sharedInstance.stringFromHtml(string: model.messageText)
-        //cell.textLbl.text = model.messageText
 
         if cell.messageLbl.optimumSize.height > 55 {
             cell.readMoreLbl.isHidden = false
@@ -346,19 +344,6 @@ class ActivityFeedListViewController: UIViewController, UITableViewDataSource, U
         cell.bgView.layer.cornerRadius = 3.0
         cell.bgView.layer.borderColor = UIColor().HexToColor(hexString: "#D7D7D7", alpha: 1.0).cgColor
         cell.bgView.layer.borderWidth = 1.0
-
-//        //Check post text message length
-//        let textSize = CGSize(width: CGFloat(cell.textLbl.frame.size.width), height: CGFloat(MAXFLOAT))
-//        let rHeight: Int = lroundf(Float(cell.textLbl.sizeThatFits(textSize).height))
-//        let charSize: Int = lroundf(Float(cell.textLbl.font.pointSize))
-//        let lineCount = rHeight / charSize
-//       // print("No of lines: ",lineCount)
-//        if lineCount > 2 {
-//            cell.readMoreLbl.isHidden = false
-//        }
-//        else {
-//            cell.readMoreLbl.isHidden = true
-//        }
 
         if model.isImageDeleted {
             cell.postImageView.image = UIImage(named: "no_image")
@@ -480,119 +465,7 @@ class ActivityFeedListViewController: UIViewController, UITableViewDataSource, U
             let viewController = self.storyboard?.instantiateViewController(withIdentifier: "PostTextViewController") as! PostTextViewController
             self.navigationController?.pushViewController(viewController, animated: true)
         }
-//        let viewController = storyboard?.instantiateViewController(withIdentifier: "ContentCaptureViewController") as! ContentCaptureViewController
-//        self.navigationController?.pushViewController(viewController, animated: true)
     }
-    
-   /* func showActionSheet() {
-        
-        actionSheetContoller = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .actionSheet)
-        
-        // 1
-        let textAction = UIAlertAction(title: "Post only text", style: .default, handler: {
-            (alert: UIAlertAction!) -> Void in
-            
-            self.isRefreshList = true
-            let viewController = self.storyboard?.instantiateViewController(withIdentifier: "PostTextViewController") as! PostTextViewController
-            self.navigationController?.pushViewController(viewController, animated: true)
-        })
-
-        // 2
-        let galleryAction = UIAlertAction(title: "Photo from library", style: .default, handler: {
-            (alert: UIAlertAction!) -> Void in
-            if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
-                self.picker.delegate = self
-                self.picker.allowsEditing = true
-                self.picker.sourceType = .photoLibrary
-                self.picker.modalPresentationStyle = .fullScreen
-                self.picker.mediaTypes = [kUTTypeImage as String] //UIImagePickerController.availableMediaTypes(for: .photoLibrary)!
-                self.present(self.picker, animated: true, completion: nil)
-            }
-        })
-        let photoAction = UIAlertAction(title: "Take photo", style: .default, handler: {
-            (alert: UIAlertAction!) -> Void in
-
-            if UIImagePickerController.isSourceTypeAvailable(.camera) {
-                    self.picker.delegate = self
-                    self.picker.sourceType = .camera;
-                    self.picker.allowsEditing = false
-//                self.picker.cameraCaptureMode = .photo
-//                self.picker.cameraDevice = .rear
-                self.present(self.picker, animated: true, completion: nil)
-            }
-        })
-        
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
-            (alert: UIAlertAction!) -> Void in
-        })
-        
-        // 4
-        actionSheetContoller.addAction(textAction)
-        actionSheetContoller.addAction(galleryAction)
-        actionSheetContoller.addAction(photoAction)
-        actionSheetContoller.addAction(cancelAction)
-    
-        // 5
-        actionSheetContoller.popoverPresentationController?.sourceView = self.postAct.customView
-        actionSheetContoller.popoverPresentationController?.barButtonItem = self.postAct
-        
-        // this is the center of the screen currently but it can be any point in the view
-        self.present(actionSheetContoller, animated: true, completion: nil)
-    }
-    
-    //MARK: - UIImagePickerController Delegates Methods
-    
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        dismiss(animated:true, completion: nil) //5
-
-        let chosenImage = info[UIImagePickerControllerOriginalImage] as! UIImage
-        var fileName = ""
-        
-        if let mediaType = info[UIImagePickerControllerMediaType] as? String {
-            
-            if mediaType  == "public.image" {
-            }
-            
-            if mediaType == "public.movie" {
-                print("Video Selected")
-                return
-            }
-        }
-        
-        if let referenceUrl = info[UIImagePickerControllerReferenceURL] as? NSURL {
-            
-            ALAssetsLibrary().asset(for: referenceUrl as URL!, resultBlock: { asset in
-                fileName = (asset?.defaultRepresentation().filename())!
-                //do whatever with your file name
-                if fileName != "" {
-                    fileName = fileName.components(separatedBy: ".").first!
-                }
-                let viewController = self.storyboard?.instantiateViewController(withIdentifier: "PostPhotoViewController") as! PostPhotoViewController
-                viewController.capturedPhoto = chosenImage
-                viewController.imageName = fileName
-                self.navigationController?.pushViewController(viewController, animated: true)
-                
-            }, failureBlock: nil)
-        }
-        else {
-            UIImageWriteToSavedPhotosAlbum(chosenImage, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
-
-            let viewController = self.storyboard?.instantiateViewController(withIdentifier: "PostPhotoViewController") as! PostPhotoViewController
-            viewController.capturedPhoto = chosenImage
-            let imageNo = Int(arc4random_uniform(1000)) + 1
-            viewController.imageName = String(format:"CapturedPhoto-%d",imageNo) //"CapturedPhoto".appendingFormat("%d", imageNo)
-            self.navigationController?.pushViewController(viewController, animated: true)
-        }
-    }
-    
-    //MARK: - Add image to Library
-    @objc func image(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
-    }
-    
-       
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        dismiss(animated:true, completion: nil) //5
-    }*/
 }
 
 // MARK: - Custom TableView Cell Class

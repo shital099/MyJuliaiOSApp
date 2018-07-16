@@ -141,9 +141,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             UIApplication.shared.cancelAllLocalNotifications()
         }
 
-        let state : UIApplicationState = application.applicationState
-        print("\nIn app delegate method app state : ",state.rawValue)
-
         return true;
     }
 
@@ -285,7 +282,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func receivedNotification(application: UIApplication, userInfo : [AnyHashable : Any], pushNotiAllow : Bool ) {
 
-        print("pushNotiAllow : ",pushNotiAllow)
         var eventId = ""
         var moduleFlag = ""
 
@@ -428,12 +424,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             alert.message = message as NSString
             //        alert.headerView.textLabel.textColor = AppTheme.sharedInstance.menuTextColor
             //        alert.contentView.fill = TKSolidFill(color: AppTheme.sharedInstance.menuBackgroundColor)
-            //        alert.headerView.fill = TKSolidFill(color: AppTheme.sharedInstance.menuBackgroundColor)
+            //        alert.headerView.fill = TKSolidFill(color: AppTheme.sharedInstance.menuBackgroundColor)
 
             alert.contentView.fill = TKSolidFill(color: .clear)
             alert.headerView.fill = TKSolidFill(color: .clear)
 
-            alert.dismissTimeout = 4
+            alert.dismissTimeout = 3
 
             alert.contentView.layer.borderColor = UIColor.gray.cgColor
             alert.contentView.layer.cornerRadius = 5.0
@@ -449,7 +445,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let urlStr = Get_AllNotification_url.appendingFormat("Flag=%@",flag)
 
         NetworkingHelper.getRequestFromUrl(name:Get_AllNotification_url, urlString: urlStr, callback: { [weak self] response in
-           // print("Notification data received : ",response)
+            print("Notification data received : ",response)
 
             let dataDict:[String: Any] = ["Order": 0, "Flag":Update_SideMenu_List]
             NotificationCenter.default.post(name: UpdateNotificationCount, object: nil, userInfo: dataDict)
@@ -475,7 +471,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
-      //  print("applicationWillEnterForeground....",self.isAppOpenFirstTime)
 
         //Refresh side menu count when application enter foreground
         if isAppLogin == true {
@@ -486,7 +481,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-//        print("applicationDidBecomeActive....",self.isAppOpenFirstTime)
         self.isAppOpenFirstTime = false
 
         //Remove all badges number

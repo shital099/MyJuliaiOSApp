@@ -194,7 +194,8 @@ CGRect CGRectMoveToCentere(CGRect rect, CGPoint center)
  @param title 弹窗标题
  message 弹窗信息
  */
-+ (void) showAlertView: (NSString*) title andMessage: (NSString *) message
+
+/*+ (void) showAlertView: (NSString*) title andMessage: (NSString *) message
 {
     dispatch_async(dispatch_get_main_queue() , ^{
         UIAlertView *alert = [[UIAlertView alloc] init];
@@ -204,7 +205,7 @@ CGRect CGRectMoveToCentere(CGRect rect, CGPoint center)
         [alert show];
         alert = nil;
     });
-}
+}*/
 
 
 

@@ -29,7 +29,7 @@ CGRect  CGRectMoveToCentere(CGRect rect, CGPoint center);
 - (void) moveBy: (CGPoint) delta;
 - (void) scaleBy: (CGFloat) scaleFactor;
 - (void) fitInSize: (CGSize) aSize;
-+ (void) showAlertView: (NSString*) title andMessage: (NSString *) message;
+//+ (void) showAlertView: (NSString*) title andMessage: (NSString *) message;
 
 
 @end
